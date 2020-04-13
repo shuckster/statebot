@@ -517,7 +517,7 @@ The Statebot logo uses the "You're Gone" font from [Typodermic Fonts](https://ty
 
 Statebot was written by [Conan Theobald](https://github.com/shuckster/).
 
-<img src="./docs/logo-small.png" style="max-width: 75px; margin: 5px;" />
+<img src="./docs/logo-small.png" width="75" />
 
 ## License
 

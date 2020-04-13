@@ -8,7 +8,7 @@ Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Fin
 
 It runs in Node and the browser.
 
-- [Full documentation](./docs/)
+- [Full documentation](https://shuckster.github.io/statebot/)
 
 There is a lot of prior-art out there, most notably [XState](https://github.com/davidkpiano/xstate) by David Khourshid, but I hope Statebot can offer a small contribution in the field of writing code that is easier to understand six-months after it has been written.
 
@@ -460,7 +460,7 @@ Here are some charts I've used while developing Statebot:
       idle
 ```
 
-The [documentation]((./docs/)) has a few examples, too.
+The [documentation]((https://shuckster.github.io/statebot/)) has a few examples, too.
 
 # Why?
 

@@ -20,7 +20,7 @@ There is a lot of prior-art out there, most notably [XState](https://github.com/
 - [Testing](#testing)
 - [Chart Syntax](#chart-syntax)
   - [Examples of real charts](#examples-of-real-charts)
-- [Why?](#why?)
+- [Why?](#why)
 - [Contributing](#contributing)
   - [Credits](#credits)
   - [License](#license)
@@ -32,7 +32,7 @@ npm i statebot
 ```
 
 ```js
-<script src="https://unpkg.com/statebot@1.0.0/dist/statebot.min.browser.js"></script>
+<script src="https://unpkg.com/statebot@1.0.6/dist/statebot.min.browser.js"></script>
 ```
 
 Or just download a script from the `dist/` folder and include it in your project. `statebot.dev.*` files include `JSDoc` comments, which IDEs like VS Code can pick-up to offer autocompletion.
@@ -460,7 +460,7 @@ Here are some charts I've used while developing Statebot:
       idle
 ```
 
-The [documentation]((https://shuckster.github.io/statebot/)) has a few examples, too.
+The [documentation](https://shuckster.github.io/statebot/) has a few examples, too.
 
 # Why?
 

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.6] - 2020-04-13
+### Fixed
+- Various post-publishing documentation fixes
+
 ## [1.0.0] - 2020-04-13
 ### Added
 - Statebot :)

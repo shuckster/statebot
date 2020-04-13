@@ -1,0 +1,6 @@
+_unsorted
+.DS_Store
+.vscode
+node_modules
+pnpm-debug.log
+vs.code-workspace

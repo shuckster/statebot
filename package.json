@@ -1,0 +1,51 @@
+{
+  "name": "statebot",
+  "description": "Write more robust and understandable programs.",
+  "version": "1.0.0",
+  "author": "Conan Theobald <npmjs@conans.co.uk>",
+  "license": "ISC",
+  "main": "./src/index.js",
+  "keywords": [
+    "finite",
+    "state",
+    "machine"
+  ],
+  "homepage": "https://github.com/shuckster/statebot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuckster/statebot"
+  },
+  "bugs": {
+    "url": "https://github.com/shuckster/statebot/issues",
+    "email": "statebot@conans.co.uk"
+  },
+  "scripts": {
+    "test": "echo TODO",
+    "build:all": "concurrently \"pnpm run build:dev\" \"pnpm run build:prod\" \"pnpm run build:dev:browser\" \"pnpm run build:prod:browser\" \"pnpm run build:docs\"",
+    "build:dev": "webpack",
+    "build:prod": "webpack --env.production",
+    "build:dev:browser": "webpack --env.BROWSER=true",
+    "build:prod:browser": "webpack --env.BROWSER=true --env.production",
+    "build:docs": "documentation build src/index.js -f html -o docs/ --theme node_modules/documentation-theme-light ; ./fix-docs.sh",
+    "build:docs:watch": "documentation build src/index.js -w -f html -o docs/ --theme node_modules/documentation-theme-light"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "concurrently": "^5.1.0",
+    "documentation": "^12.2.0",
+    "documentation-theme-light": "^1.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "events": "^3.1.0"
+  }
+}

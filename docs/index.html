@@ -1,0 +1,4208 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset='utf-8' />
+	<title>statebot 1.0.0 | Documentation</title>
+	<meta name='description' content='Write more robust and understandable programs.'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
+	<link href='assets/styles.min.css' rel='stylesheet' />
+</head>
+
+<body class='documentation'>
+<div class='px2'>
+	<div class='clearfix md-flex lg-flex flex-stretch mxn2'>
+		<div class='documentation-sidebar relative top-0 bottom-0 right-0 px2 py2 col-3 md-show'>
+			<div class='font-smaller fixed col-3 top-0 bottom-0 left-0 overflow-auto fill-light dark-link'>
+				<div class='px2'>
+					<h3 class='mb0 no-anchor'><code>statebot</code></h3>
+					<div class='mb1'><code>1.0.0</code></div>
+					<input placeholder='Filter' id='filter-input' class='col12 block input' type='text' />
+					<div id="toc">
+						
+						
+						
+						<a
+								href='#statebot'
+								class="regular block toggle-sibling">
+							<code>statebot</code>
+							<span class='icon'>▾</span>
+						</a>
+						
+						
+						<div class='toggle-target'>
+							
+							
+							<a
+									href='#statebotstatebot'
+									class='button-indent px1 quiet regular rounded block'>
+								<code>.Statebot</code>
+							</a>
+							
+							<a
+									href='#statebotisstatebot'
+									class='button-indent px1 quiet regular rounded block'>
+								<code>.isStatebot</code>
+							</a>
+							
+							<a
+									href='#statebotrouteispossible'
+									class='button-indent px1 quiet regular rounded block'>
+								<code>.routeIsPossible</code>
+							</a>
+							
+							<a
+									href='#statebotassertroute'
+									class='button-indent px1 quiet regular rounded block'>
+								<code>.assertRoute</code>
+							</a>
+							
+							<a
+									href='#statebotdecomposechart'
+									class='button-indent px1 quiet regular rounded block'>
+								<code>.decomposeChart</code>
+							</a>
+							
+							
+							
+							
+							
+						</div>
+						
+						
+						
+						
+						<a
+								href='#statebotoptions'
+								class="regular block">
+							<code>statebotOptions</code>
+							
+						</a>
+						
+						
+						
+						
+						
+						<a
+								href='#statebotchart'
+								class="regular block">
+							<code>statebotChart</code>
+							
+						</a>
+						
+						
+						
+						
+						
+						<a
+								href='#statebotfsm'
+								class="regular block toggle-sibling">
+							<code>statebotFsm</code>
+							<span class='icon'>▾</span>
+						</a>
+						
+						
+						<div class='toggle-target'>
+							
+							
+							
+							<a
+									href='#statebotfsmcantransitionto'
+									class='button-indent regular block'>
+								<code>#canTransitionTo</code>
+							</a>
+							
+							<a
+									href='#statebotfsmcurrentstate'
+									class='button-indent regular block'>
+								<code>#currentState</code>
+							</a>
+							
+							<a
+									href='#statebotfsmemit'
+									class='button-indent regular block'>
+								<code>#emit</code>
+							</a>
+							
+							<a
+									href='#emit-name'
+									class='button-indent regular block'>
+								<code>#Emit</code>
+							</a>
+							
+							<a
+									href='#statebotfsmenter'
+									class='button-indent regular block'>
+								<code>#enter</code>
+							</a>
+							
+							<a
+									href='#enter-state-1'
+									class='button-indent regular block'>
+								<code>#Enter</code>
+							</a>
+							
+							<a
+									href='#statebotfsmhistory'
+									class='button-indent regular block'>
+								<code>#history</code>
+							</a>
+							
+							<a
+									href='#statebotfsminfo'
+									class='button-indent regular block'>
+								<code>#info</code>
+							</a>
+							
+							<a
+									href='#statebotfsminspect'
+									class='button-indent regular block'>
+								<code>#inspect</code>
+							</a>
+							
+							<a
+									href='#statebotfsminstate'
+									class='button-indent regular block'>
+								<code>#inState</code>
+							</a>
+							
+							<a
+									href='#instate-state-outputwhentrue-1'
+									class='button-indent regular block'>
+								<code>#InState</code>
+							</a>
+							
+							<a
+									href='#statebotfsmname'
+									class='button-indent regular block'>
+								<code>#name</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonentered'
+									class='button-indent regular block'>
+								<code>#onEntered</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonentering'
+									class='button-indent regular block'>
+								<code>#onEntering</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonevent'
+									class='button-indent regular block'>
+								<code>#onEvent</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonexited'
+									class='button-indent regular block'>
+								<code>#onExited</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonexiting'
+									class='button-indent regular block'>
+								<code>#onExiting</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonswitched'
+									class='button-indent regular block'>
+								<code>#onSwitched</code>
+							</a>
+							
+							<a
+									href='#statebotfsmonswitching'
+									class='button-indent regular block'>
+								<code>#onSwitching</code>
+							</a>
+							
+							<a
+									href='#statebotfsmontransitions'
+									class='button-indent regular block'>
+								<code>#onTransitions</code>
+							</a>
+							
+							<a
+									href='#statebotfsmperformtransitions'
+									class='button-indent regular block'>
+								<code>#performTransitions</code>
+							</a>
+							
+							<a
+									href='#statebotfsmpreviousstate'
+									class='button-indent regular block'>
+								<code>#previousState</code>
+							</a>
+							
+							<a
+									href='#statebotfsmreset'
+									class='button-indent regular block'>
+								<code>#reset</code>
+							</a>
+							
+							<a
+									href='#statebotfsmstatesavailablefromhere'
+									class='button-indent regular block'>
+								<code>#statesAvailableFromHere</code>
+							</a>
+							
+							
+							
+							
+						</div>
+						
+						
+						
+						
+						<a
+								href='#entercallback'
+								class="regular block">
+							<code>enterCallback</code>
+							
+						</a>
+						
+						
+						
+						
+						
+						<a
+								href='#exitcallback'
+								class="regular block">
+							<code>exitCallback</code>
+							
+						</a>
+						
+						
+						
+						
+						
+						<a
+								href='#switchcallback'
+								class="regular block">
+							<code>switchCallback</code>
+							
+						</a>
+						
+						
+						
+						
+						
+						<a
+								href='#assertrouteoptions'
+								class="regular block">
+							<code>assertRouteOptions</code>
+							
+						</a>
+						
+						
+						
+					</div>
+					<div class='mt1 h6 quiet'>
+						<a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class='sm-col-12 md-col-9 lg-col-9 flex flex-column'>
+			<div class='flex-auto full-width'>
+				
+				
+				<section id='statebot'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebot'>
+			<code>
+				statebot
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<img src="./logo-full.png" style="max-width: 255px; margin: 10px 0;" />
+<p>Write more robust and understandable programs.</p>
+<p>Statebot hopes to make <a href="https://en.wikipedia.org/wiki/Finite-state_machine">Finite State Machines</a> (FSMs) a little more accessible.</p>
+<p>You're reading the documentation. Other exits are:</p>
+<ul>
+<li><a href="../README.md">The README file</a></li>
+<li><a href="https://github.com/shuckster/statebot">The Github Repo</a></li>
+</ul>
+<p>Statebot was written by <a href="https://github.com/shuckster/">Conan Theobald</a> and
+is <a href="../LICENSE">ISC licensed</a>.</p>
+<h3>Jump right in</h3>
+<p>You can install Statebot into your <code>npm</code> project:</p>
+<pre class='hljs'>npm i statebot</pre>
+<pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">'statebot'</span></pre>
+<p>Or non-<code>npm</code> project:</p>
+<pre class='hljs'>&lt;script src=<span class="hljs-string">"https://unpkg.com/shuckster/dist/statebot.min.browser.js"</span>&gt;&lt;<span class="hljs-regexp">/script&gt;</span></pre>
+<pre class='hljs'><span class="hljs-keyword">const</span> { Statebot } = statebot
+<span class="hljs-comment">// Make machines with Statebot()</span>
+
+<span class="hljs-keyword">const</span> { isStatebot, routeIsPossible, assertRoute } = statebot
+<span class="hljs-comment">// These are assertion helpers you can use for testing</span></pre>
+<h3>Open the developer-console :)</h3>
+<p>I've included Statebot in this page. Open the developer-console to
+follow along with the examples below:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'promise-like'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    // This one will behave a bit like a Promise
+    idle -&gt; pending -&gt;
+      resolved | rejected
+
+    // ...and we're done
+    resolved -&gt; done
+    rejected -&gt; done
+  `</span>,
+  <span class="hljs-attr">startIn</span>: <span class="hljs-string">'idle'</span>
+})
+
+machine.canTransitionTo(<span class="hljs-string">'pending'</span>)
+<span class="hljs-comment">// true</span>
+
+machine.enter(<span class="hljs-string">'pending'</span>)
+machine.statesAvailableFromHere()
+<span class="hljs-comment">// ["resolved", "rejected"]</span></pre>
+<p>We can hook-up events with <a href="#statebotfsmperformtransitions">.performTransitions()</a>:</p>
+<pre class='hljs'>machine.performTransitions({
+ <span class="hljs-string">'pending -&gt; resolved'</span>: {
+   <span class="hljs-attr">on</span>: <span class="hljs-string">'data-loaded'</span>
+ },
+ <span class="hljs-string">'pending -&gt; rejected'</span>: {
+   <span class="hljs-attr">on</span>: [<span class="hljs-string">'timeout'</span>, <span class="hljs-string">'data-error'</span>],
+   <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
+     <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">'Uh oh...'</span>, msg)
+   }
+ },
+ <span class="hljs-string">'resolved | rejected -&gt; done'</span>: {
+   <span class="hljs-attr">on</span>: <span class="hljs-string">'thats-all-folks'</span>
+ }
+})
+
+machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-string">'Did you hear that?'</span>)</pre>
+<p>Here's the API:</p>
+<table>
+<thead>
+<tr>
+<th>Hitchers</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#statebotfsmperformtransitions">.performTransitions()</a> / <a href="#statebotfsmonevent">.onEvent()</a></td>
+<td><a href="#statebotfsmcantransitionto">.canTransitionTo()</a> / <a href="#statebotfsmstatesavailablefromhere">.statesAvailableFromHere()</a></td>
+<td><a href="#statebotfsmemit">.emit()</a> / <a href="#emit-name">.Emit()</a></td>
+</tr>
+<tr>
+<td><a href="#statebotfsmontransitions">.onTransitions()</a></td>
+<td><a href="#statebotfsmcurrentstate">.currentState()</a> / <a href="#statebotfsmpreviousstate">.previousState()</a> / <a href="#statebotfsmhistory">.history()</a></td>
+<td><a href="#statebotfsmenter">.enter()</a> / <a href="#enter-state-1">.Enter()</a></td>
+</tr>
+<tr>
+<td><a href="#statebotfsmonentering">.onEntering()</a> / <a href="#statebotfsmonentered">.onEntered()</a></td>
+<td><a href="#statebotfsminstate">.inState()</a> / <a href="#instate-state-outputwhentrue-1">.InState()</a></td>
+<td><a href="#statebotfsmreset">.reset()</a></td>
+</tr>
+<tr>
+<td><a href="#statebotfsmonexiting">.onExiting()</a> / <a href="#statebotfsmonexited">.onExited()</a></td>
+<td><a href="#statebotfsminfo">.info()</a> / <a href="#statebotfsminspect">.inspect()</a> / <a href="#statebotfsmname">.name()</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#statebotfsmonswitching">.onSwitching()</a> / <a href="#statebotfsmonswitched">.onSwitched()</a></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<img src="./logo-small.png" style="max-width: 75px; margin: 15px 0 0 5px;" />
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+	<h4 class='caps quiet mb2 mt3'>Static Members</h4>
+	<div class="section-indent">
+  
+    <section id='statebotstatebot'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotstatebot'>
+			<code>
+				Statebot
+				<span class='gray'>(name, options)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Create a <a href="#statebotfsm">statebotFsm</a> <code>object</code>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>name</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>Give your Statebot a name. Used for logging and by 
+<a href="#statebotassertroute">assertRoute()</a>
+.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>options</code></td>
+			<td class='col-3 quiet'>
+				<a href="#statebotoptions">statebotOptions</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="#statebotfsm">statebotFsm</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'lemming'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    walking -&gt; (digging | building | falling) -&gt;
+      walking
+
+    falling -&gt; splatting
+    walking -&gt; exiting
+  `</span>
+})</code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotisstatebot'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotisstatebot'>
+			<code>
+				isStatebot
+				<span class='gray'>(object?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Tests that an object is a <a href="#statebotfsm">statebotFsm</a>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>object</code></td>
+			<td class='col-3 quiet'>
+				any?
+				
+			</td>
+			<td class='col-6'>The object to test.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(...)
+
+isStatebot(machine)
+<span class="hljs-comment">// true</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotrouteispossible'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotrouteispossible'>
+			<code>
+				routeIsPossible
+				<span class='gray'>(machine, route)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Assert that a certain route can be followed by a
+<a href="#statebotfsm">statebotFsm</a>.</p>
+<p>This merely tests that a certain path can be taken through a
+state-machine. It doesn't assert that the states are moved-through
+while the machine is working, as with
+<a href="#statebotassertroute">assertRoute()</a>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>machine</code></td>
+			<td class='col-3 quiet'>
+				<a href="#statebotfsm">statebotFsm</a>
+				
+			</td>
+			<td class='col-6'>The machine to test the route on.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>route</code></td>
+			<td class='col-3 quiet'>
+				(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)
+				
+			</td>
+			<td class='col-6'>The route to test as an arrow-delimited string:
+<p> <code>"idle -> pending -> success -> done"</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(...)
+
+routeIsPossible(machine,
+  <span class="hljs-string">'walking -&gt; falling -&gt; splatting -&gt; walking'</span>
+)
+<span class="hljs-comment">// false</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotassertroute'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotassertroute'>
+			<code>
+				assertRoute
+				<span class='gray'>(machine, expectedRoute, options?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Assert that a <a href="#statebotfsm">statebotFsm</a> traced the route specified.</p>
+<p>Whereas <a href="#statebotrouteispossible">routeIsPossible()</a> only checks
+that a particular route can be followed, <code>assertRoute</code> will hook-into
+a machine and wait for it to trace the specified path within a
+timeout period.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>machine</code></td>
+			<td class='col-3 quiet'>
+				<a href="#statebotfsm">statebotFsm</a>
+				
+			</td>
+			<td class='col-6'>The machine to run the assertion on.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>expectedRoute</code></td>
+			<td class='col-3 quiet'>
+				(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)
+				
+			</td>
+			<td class='col-6'>The expected route as an arrow-delimited string:
+<p> <code>"idle -> pending -> success -> done"</code></p>
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>options</code></td>
+			<td class='col-3 quiet'>
+				<a href="#assertrouteoptions">assertRouteOptions</a>?
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(...)
+
+assertRoute(
+  machine, <span class="hljs-string">'prepare -&gt; debounce -&gt; sending -&gt; done -&gt; idle'</span>,
+  {
+    <span class="hljs-attr">description</span>: <span class="hljs-string">'Email sent with no issues'</span>,
+    <span class="hljs-attr">fromState</span>: <span class="hljs-string">'idle'</span>,
+    <span class="hljs-attr">timeoutInMs</span>: <span class="hljs-number">1000</span> * <span class="hljs-number">20</span>,
+    <span class="hljs-attr">permittedDeviations</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">logLevel</span>: <span class="hljs-number">3</span>
+  }
+)
+.then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Assertion passed!'</span>))
+.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`Whoops: <span class="hljs-subst">${err}</span>`</span>))
+
+machine.enter(<span class="hljs-string">'idle'</span>)</code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotdecomposechart'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotdecomposechart'>
+			<code>
+				decomposeChart
+				<span class='gray'>(chart)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Decompose a <a href="#statebotchart">statebotChart</a> into an object of <code>states</code>, <code>routes</code>,
+and <code>transitions</code>.</p>
+<p>Statebot() uses this internally to parse charts. Exposed for debugging.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>chart</code></td>
+			<td class='col-3 quiet'>
+				<a href="#statebotchart">statebotChart</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> { states, routes, transitions } = decomposeChart<span class="hljs-string">`
+  pending -&gt;
+    success | failure
+`</span>
+<span class="hljs-comment">// states = ['pending', 'success', 'failure']</span>
+<span class="hljs-comment">// routes = [ 'pending-&gt;success', 'pending-&gt;failure']</span>
+<span class="hljs-comment">// transitions = [</span>
+<span class="hljs-comment">//   ['pending', 'success'],</span>
+<span class="hljs-comment">//   ['pending', 'failure']</span>
+<span class="hljs-comment">// ]</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+</div>
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='statebotoptions'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotoptions'>
+			<code>
+				statebotOptions
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Options for creating a Statebot.</p>
+
+	
+	<p>
+		Type:
+		<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-2 small caps quiet'>property</th>
+		<th class='col-2 small caps quiet'>type</th>
+		<th class='col-8 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-2 strong'>chart</td>
+			<td class='col-2 quiet'>
+				<a href="#statebotchart">statebotChart</a>
+				
+			</td>
+			<td class='col-8'>: The state-chart.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>startIn</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?
+				
+			</td>
+			<td class='col-8'>: The state in which to start. If unspecified, the first state in the
+chart will be used.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>logLevel</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+				
+			</td>
+			<td class='col-8'>: How noisy the logging is, from 1 to 3:
+<pre><code>1) console.warn
+2) console.warn/log/table
+3) console.warn/log/table/info
+</code></pre>
+<p> <code>3</code> is the default. Argument type-errors will always <code>throw</code>.</p>
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>historyLimit</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+				
+			</td>
+			<td class='col-8'>: Limit how much history the state-machine keeps. Accessed via
+
+<a href="#statebotfsmhistory">statebotFsm#history()</a>
+.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>events</td>
+			<td class='col-2 quiet'>
+				<a href="https://nodejs.org/api/all.html#all_events">events</a>?
+				
+			</td>
+			<td class='col-8'>: If you wish to have your Statebots listen to events coming from
+a shared EventEmitter, you can pass it in here. The 
+<code>emit()</code>
+/
+<code>onEvent()</code>
+/
+
+<code>performTransitions()</code>
+ methods will use it.
+<p> It should have the same signature as <a href="https://nodejs.org/api/events.html#events_class_eventemitter">EventEmitter</a>.</p>
+</td>
+		</tr>
+
+		
+		
+	</table>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='statebotchart'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotchart'>
+			<code>
+				statebotChart
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>A description of all the states in a machine, plus all of the
+permitted transitions between them.</p>
+<p>This is defined using a <code>string</code> or an <code>array</code> of strings, but
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">Template Literals</a>
+are much more convenient.</p>
+<p>An arrow <code>-></code> configures a <strong>permitted transition</strong> between two states:</p>
+<pre><code>from-state -> to-state
+</code></pre>
+<p>It's the only operator needed to build any chart:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
+  pending -&gt; resolved
+  pending -&gt; rejected
+  resolved -&gt; done
+  rejected -&gt; done
+`</span></pre>
+<p>The "OR" operator <code>|</code> can help us remove some redundancy from the above example:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
+  pending -&gt; resolved | rejected
+  resolved | rejected -&gt; done
+`</span></pre>
+<p>In both charts, <code>pending</code> can transition to <code>resolved</code> or <code>rejected</code>, and
+<code>resolved</code> or <code>rejected</code> can both transition to <code>done</code>.</p>
+<p>We can streamline this even further:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
+  pending -&gt; (resolved | rejected) -&gt; done
+`</span></pre>
+<p>Again, this is exactly equivalent to the previous two examples.</p>
+<p>Notice in this one that we have parentheses <code>(</code> <code>)</code> surrounding <code>resolved</code>
+and <code>rejected</code>. They are actually completely ignored by the parser, and
+you can use them as you please to help make your charts more readable.</p>
+<p>A chart works exactly the same without them:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
+  pending -&gt; resolved | rejected -&gt; done
+`</span></pre>
+<p>Charts can also be split across multiple-lines:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
+  pending -&gt;
+  resolved |
+  rejected -&gt;
+  done
+`</span></pre>
+<p>Notice that all white-space is ignored on either side of the <code>-></code>
+and <code>|</code>.</p>
+<p><code>// Comments of this kind are allowed, too:</code></p>
+<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
+  pending -&gt; // Where do we go from here?
+    (resolved | rejected) -&gt; // Ah, yes
+
+  // And now we're all finished
+  done
+`</span></pre>
+<p>Finally, here's a more full example:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> dragDropChart = <span class="hljs-string">`
+  idle -&gt;
+    drag-detect -&gt;
+      (dragging | clicked)
+
+  // Just a click, bail-out!
+  clicked -&gt; idle
+
+  // Drag detected!
+  dragging -&gt;
+    drag-wait -&gt; dragged -&gt; drag-wait
+
+  // Drag finished...
+  (drag-wait | dragged) -&gt;
+    (drag-done | drag-cancel) -&gt;
+      idle
+`</span></pre>
+
+	
+	<p>
+		Type:
+		(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='statebotfsm'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsm'>
+			<code>
+				statebotFsm
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>A state-machine object created by
+<a href="#statebotstatebot">Statebot()</a>.</p>
+
+	
+	<p>
+		Type:
+		<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+	<h4 class='caps quiet mb2 mt3'>Instance Members</h4>
+	<div class="section-indent">
+  
+    <section id='statebotfsmcantransitionto'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmcantransitionto'>
+			<code>
+				canTransitionTo
+				<span class='gray'>(states)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Tests to see if we can transition to the specified state from
+the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
+<p>If more than one state is specified, <code>true</code> is returned only if
+<strong>ALL</strong> states are available.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>states</code></td>
+			<td class='col-3 quiet'>
+				(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'game-menus'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    loading -&gt;
+      menu -&gt;
+        play |
+        options |
+        sound |
+        quit
+
+    // Go back to menu
+    play | options | sound -&gt; menu
+
+    // Can quit from main game, too
+    play -&gt; quit
+  `</span>
+})
+
+machine.canTransitionTo(<span class="hljs-string">'play'</span>)
+<span class="hljs-comment">// false</span>
+
+machine.enter(<span class="hljs-string">'menu'</span>)
+machine.canTransitionTo([<span class="hljs-string">'play'</span>, <span class="hljs-string">'options'</span>])
+<span class="hljs-comment">// true</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmcurrentstate'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmcurrentstate'>
+			<code>
+				currentState
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns the current state.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'button'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; clicked
+  `</span>
+})
+
+machine.currentState()
+<span class="hljs-comment">// "idle"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmemit'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmemit'>
+			<code>
+				emit
+				<span class='gray'>(eventName, args?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Immediately emits an event, firing any listeners added using
+<a href="#statebotfsmperformtransitions">.performTransitions()</a> or <a href="#statebotfsmonevent">.onEvent()</a>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>eventName</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>args</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Optional arguments to pass to listeners.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+	:
+	<span class='force-inline'>Whether or not the event had listeners.
+<p> See: <a href="https://nodejs.org/api/events.html#events_emitter_emit_eventname_args">Node Events</a>
+for more information.</p>
+<p>Statebot imports <code>EventEmitter</code> from the
+<a href="https://www.npmjs.com/package/events">events</a>
+package for dealing with events in the browser.</p>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'basic-form'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending -&gt; redirect
+  `</span>
+})
+
+machine.performTransitions({
+  <span class="hljs-string">'idle -&gt; sending'</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">'post-data'</span>,
+    <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Event args: '</span>, args)
+      <span class="hljs-comment">// setTimeout(machine.Enter('redirect'), 5000)</span>
+    }
+  }
+})
+
+machine.emit(<span class="hljs-string">'post-data'</span>, <span class="hljs-string">'Hello, world!'</span>)
+<span class="hljs-comment">// Event args: ["Hello, world!"]</span>
+
+machine.currentState()
+<span class="hljs-comment">// "sending"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmemit'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#emit-name'>
+			<code>
+				Emit
+				<span class='gray'>(eventName)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Creates a function that emits the specified event.</p>
+<p>(This is essentially a convenience wrapper around <a href="#statebotfsmemit">.emit()</a>.)</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>eventName</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The desired event to 
+<a href="#statebotfsmemit">.emit()</a>
+.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that emits that event.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'traffic-lights'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    go -&gt;
+      prepare-to-stop -&gt;
+      stop
+
+    // ...gotta keep that traffic flowing
+    stop -&gt;
+      prepare-to-go -&gt;
+      go
+  `</span>,
+  <span class="hljs-attr">startIn</span>: <span class="hljs-string">'stop'</span>
+})
+
+machine.performTransitions({
+  <span class="hljs-string">'stop -&gt; prepare-to-go'</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
+  <span class="hljs-string">'prepare-to-go -&gt; go'</span>:     { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
+  <span class="hljs-string">'go -&gt; prepare-to-stop'</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
+  <span class="hljs-string">'prepare-to-stop -&gt; stop'</span>: { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> }
+})
+
+<span class="hljs-keyword">var</span> nextTrafficLight = machine.Emit(<span class="hljs-string">'timer'</span>)
+machine.currentState()
+<span class="hljs-comment">// "stop"</span>
+
+nextTrafficLight()
+nextTrafficLight()
+nextTrafficLight()
+
+machine.currentState()
+<span class="hljs-comment">// "prepare-to-stop"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmenter'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmenter'>
+			<code>
+				enter
+				<span class='gray'>(state)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Immediately changes to the specified state, so long as it is
+accessible from the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The desired state to switch-to.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+	:
+	<span class='force-inline'>Whether or not the state changed.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'dialog'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; showing-modal -&gt; (saving | idle)
+      saving -&gt; idle
+  `</span>
+})
+
+machine.currentState()
+<span class="hljs-comment">// "idle"</span>
+
+machine.enter(<span class="hljs-string">'saving'</span>)
+<span class="hljs-comment">// false</span>
+
+<span class="hljs-comment">// [dialog]: Invalid transition "idle-&gt;saving", not switching</span>
+<span class="hljs-comment">// &gt; Previous transition: "[undefined]-&gt;idle"</span>
+<span class="hljs-comment">// &gt; From "idle", valid states are: ["showing-modal"]</span>
+
+machine.enter(<span class="hljs-string">'showing-modal'</span>)
+<span class="hljs-comment">// true</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmenter'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#enter-state-1'>
+			<code>
+				Enter
+				<span class='gray'>(state)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Creates a function that changes to the specified state, so long
+as it is accessible from the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
+<p>(This is essentially a convenience wrapper around <a href="#statebotfsmenter">.enter()</a>.)</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The desired state to switch-to.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that can change the state when called.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'popup-menu'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; menu-opened -&gt;
+      (item-clicked | idle)
+
+    item-clicked -&gt; idle
+  `</span>,
+  <span class="hljs-attr">startIn</span>: <span class="hljs-string">'menu-opened'</span>
+})
+
+button.onclick = machine.Enter(<span class="hljs-string">'item-clicked'</span>)
+machine.currentState()
+<span class="hljs-comment">// "menu-opened"</span>
+
+button.onclick()
+machine.currentState()
+<span class="hljs-comment">// "item-clicked"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmhistory'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmhistory'>
+			<code>
+				history
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns all states the machine has been in so far, up to a limit set
+by <code>historyLimit</code> in <a href="#statebotoptions">statebotOptions</a>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></code>
+	:
+	<span class='force-inline'>A copy of the state-history.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'downloader'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    loading -&gt; (failure | success)
+      failure -&gt; loading
+      success -&gt; done
+  `</span>,
+  <span class="hljs-attr">historyLimit</span>: <span class="hljs-number">4</span>
+})
+
+machine.enter(<span class="hljs-string">'failure'</span>)
+machine.enter(<span class="hljs-string">'loading'</span>)
+machine.enter(<span class="hljs-string">'success'</span>)
+machine.enter(<span class="hljs-string">'done'</span>)
+machine.history()
+<span class="hljs-comment">// ["failure", "loading", "success", "done"]</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsminfo'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsminfo'>
+			<code>
+				info
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Print information about the current machine to the console.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.info()
+<span class="hljs-comment">// [half-duplex]: Information about this state-machine.</span>
+<span class="hljs-comment">// [half-duplex]: Listening for the following state-changes:</span>
+<span class="hljs-comment">// ┌─────────┬─────────────┬────────┐</span>
+<span class="hljs-comment">// │ (index) │   states    │   #    │</span>
+<span class="hljs-comment">// ├─────────┼─────────────┼────────┤</span>
+<span class="hljs-comment">// │    0    │   'done'    │ 'None' │</span>
+<span class="hljs-comment">// │    1    │   'idle'    │ 'None' │</span>
+<span class="hljs-comment">// │    2    │ 'receiving' │ 'None' │</span>
+<span class="hljs-comment">// │    3    │  'sending'  │ 'None' │</span>
+<span class="hljs-comment">// └─────────┴─────────────┴────────┘</span>
+<span class="hljs-comment">// [half-duplex] Listening for the following transitions:</span>
+<span class="hljs-comment">// ┌─────────┬───────────────────┬────────┐</span>
+<span class="hljs-comment">// │ (index) │    transitions    │   #    │</span>
+<span class="hljs-comment">// ├─────────┼───────────────────┼────────┤</span>
+<span class="hljs-comment">// │    0    │ 'idle-&gt;receiving' │ 'None' │</span>
+<span class="hljs-comment">// │    1    │  'idle-&gt;sending'  │ 'None' │</span>
+<span class="hljs-comment">// │    2    │ 'receiving-&gt;done' │ 'None' │</span>
+<span class="hljs-comment">// │    3    │  'sending-&gt;done'  │ 'None' │</span>
+<span class="hljs-comment">// └─────────┴───────────────────┴────────┘</span>
+<span class="hljs-comment">// [half-duplex]: Listening for the following events:</span>
+<span class="hljs-comment">// (No information)</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsminspect'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsminspect'>
+			<code>
+				inspect
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Get information about the current machine.</p>
+<p>Same details as <a href="#statebotfsminfo">.info()</a> in object-form.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.inspect()
+<span class="hljs-comment">// Will return an object with the following signature:</span>
+<span class="hljs-comment">//  { states, transitions, events }</span>
+
+<span class="hljs-comment">// These will each have key-values, the key being the name</span>
+<span class="hljs-comment">// and the value being the number of listeners attached.</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsminstate'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsminstate'>
+			<code>
+				inState
+				<span class='gray'>(state, outputWhenTrue?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Checks if the <a href="#statebotfsmcurrentstate">.currentState()</a>
+matches the specified <code>state</code>, immediately returning either
+<code>true</code> or <code>false</code>.</p>
+<p>If <code>outputWhenTrue</code> is specified, then it will be returned
+instead of <code>true</code>, and <code>null</code> will be returned instead of
+<code>false</code>.</p>
+<p>If a function is specified, then its return-value will be used
+as the <code>true</code>-value.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The state to test against.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>outputWhenTrue</code></td>
+			<td class='col-3 quiet'>
+				(any | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)?
+				
+			</td>
+			<td class='col-6'>Optional 
+<code>true</code>
+-value. If a function is specified, it will be
+called and its return value will be used.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | null | any)</code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'little-revver'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt;
+      (gear-1 | gear-2 | reverse) -&gt;
+    idle
+  `</span>
+})
+
+machine.inState(<span class="hljs-string">'idle'</span>)
+<span class="hljs-comment">// true</span>
+
+machine.inState(<span class="hljs-string">'idle'</span>, <span class="hljs-string">'Purrrr...'</span>)
+<span class="hljs-comment">// "Purrrr..."</span>
+
+machine.enter(<span class="hljs-string">'gear-1'</span>)
+machine.inState(<span class="hljs-string">'idle'</span>, () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Idling!'</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'Purrrr...'</span>
+})
+<span class="hljs-comment">// null</span>
+<span class="hljs-comment">// ^ the function is not called at all in the `false` case,</span>
+<span class="hljs-comment">//   so no console.log either.</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsminstate'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#instate-state-outputwhentrue-1'>
+			<code>
+				InState
+				<span class='gray'>(state, outputWhenTrue?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns a function which, when run, tests that
+<a href="#statebotfsmcurrentstate">.currentState()</a> matches the
+specified state, returning either <code>true</code> or <code>false</code>.</p>
+<p>If <code>outputWhenTrue</code> is specified, then it will be returned
+instead of <code>true</code>, and <code>null</code> will be returned instead of
+<code>false</code>.</p>
+<p>(This is essentially a convenience wrapper around <a href="#statebotfsminstate">.inState()</a>.)</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The state to test against.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>outputWhenTrue</code></td>
+			<td class='col-3 quiet'>
+				(any | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)?
+				
+			</td>
+			<td class='col-6'>Optional 
+<code>true</code>
+-value. If a function is specified, it will be
+called and its return value will be used.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that calls 
+<a href="#statebotfsminstate">.inState()</a>
+.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'little-revver'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt;
+      (gear-1 | gear-2 | reverse) -&gt;
+    idle
+  `</span>
+})
+
+<span class="hljs-keyword">var</span> idling = machine.InState(<span class="hljs-string">'idle'</span>)
+<span class="hljs-keyword">var</span> purring = machine.InState(<span class="hljs-string">'idle'</span>, () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Idling!'</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'Purrrr...'</span>
+})
+
+idling()
+<span class="hljs-comment">// true</span>
+
+purring()
+<span class="hljs-comment">// Idling!</span>
+<span class="hljs-comment">// "Purrrr..."</span>
+
+machine.enter(<span class="hljs-string">'gear-1'</span>)
+purring()
+<span class="hljs-comment">// null</span>
+<span class="hljs-comment">// ^ the function is not called at all in the `false` case,</span>
+<span class="hljs-comment">//   so no console.log either.</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmname'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmname'>
+			<code>
+				name
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns the name of the state-machine.</p>
+<p>Used for logging and also by <a href="#statebotassertroute">assertRoute()</a>
+for the same.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+	:
+	<span class='force-inline'>The name of the state-machine.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'Ay, there’s the rub.'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    the-question -&gt; (to-be | not-to-be)
+      not-to-be -&gt; perchance-to-dream
+  `</span>
+})
+
+machine.name()
+<span class="hljs-comment">// "Ay, there’s the rub."</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonentered'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonentered'>
+			<code>
+				onEntered
+				<span class='gray'>(state, cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately <strong>AFTER</strong> the
+specified-state becomes the current one.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The state.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="#entercallback">enterCallback</a>
+				
+			</td>
+			<td class='col-6'>A callback function with the signature:
+<p> <code>(fromState, ...args?)</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onEntered(<span class="hljs-string">'done'</span>, fromState =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Entered from:'</span>, fromState)
+})
+
+machine.enter(<span class="hljs-string">'receiving'</span>)
+machine.enter(<span class="hljs-string">'done'</span>)
+<span class="hljs-comment">// Entered from: receiving</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonentering'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonentering'>
+			<code>
+				onEntering
+				<span class='gray'>(state, cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately <strong>BEFORE</strong> the
+specified-state becomes the current one.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The state.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="#entercallback">enterCallback</a>
+				
+			</td>
+			<td class='col-6'>A callback function with the signature:
+<p> <code>(fromState, ...args?)</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onEntered(<span class="hljs-string">'done'</span>, () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'We made it!'</span>)
+})
+
+machine.onEntering(<span class="hljs-string">'done'</span>, fromState =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Entering from:'</span>, fromState)
+})
+
+machine.enter(<span class="hljs-string">'sending'</span>)
+machine.enter(<span class="hljs-string">'done'</span>)
+<span class="hljs-comment">// Entering from: sending</span>
+<span class="hljs-comment">// We made it!</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonevent'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonevent'>
+			<code>
+				onEvent
+				<span class='gray'>(name, cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately after the specified
+event is called.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>name</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The event name.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>
+				
+			</td>
+			<td class='col-6'>The callback.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'traffic-lights'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    go -&gt;
+      prepare-to-stop -&gt;
+      stop
+
+    // ...gotta keep that traffic flowing
+    stop -&gt;
+      prepare-to-go -&gt;
+      go
+  `</span>
+})
+
+machine.performTransitions({
+  <span class="hljs-string">'stop -&gt; prepare-to-go -&gt; go'</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
+  <span class="hljs-string">'go -&gt; prepare-to-stop -&gt; stop'</span>: { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
+})
+
+machine.onEvent(<span class="hljs-string">'timer'</span>, () =&gt; {
+  redrawTrafficLights()
+})
+
+setInterval(machine.Emit(<span class="hljs-string">'timer'</span>), <span class="hljs-number">2000</span>)</code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonexited'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonexited'>
+			<code>
+				onExited
+				<span class='gray'>(state, cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately <strong>AFTER</strong> the
+specified-state is no longer the current one.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The state.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="#exitcallback">exitCallback</a>
+				
+			</td>
+			<td class='col-6'>A callback function with the signature:
+<p> <code>(toState, ...args?)</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onExited(<span class="hljs-string">'idle'</span>, toState =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'We are heading to:'</span>, toState)
+})
+
+machine.enter(<span class="hljs-string">'sending'</span>)
+<span class="hljs-comment">// We are heading to: sending</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonexiting'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonexiting'>
+			<code>
+				onExiting
+				<span class='gray'>(state, cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately <strong>BEFORE</strong> the
+specified-state is no longer the current one.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'>The state.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="#exitcallback">exitCallback</a>
+				
+			</td>
+			<td class='col-6'>A callback function with the signature:
+<p> <code>(toState, ...args?)</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onExited(<span class="hljs-string">'idle'</span>, () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Peace out!'</span>)
+})
+
+machine.onExiting(<span class="hljs-string">'idle'</span>, toState =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Heading to:'</span>, toState)
+})
+
+machine.enter(<span class="hljs-string">'receiving'</span>)
+machine.enter(<span class="hljs-string">'done'</span>)
+<span class="hljs-comment">// Heading to: receiving</span>
+<span class="hljs-comment">// Peace out!</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonswitched'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonswitched'>
+			<code>
+				onSwitched
+				<span class='gray'>(cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately after <strong>ANY</strong>
+state-change.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="#switchcallback">switchCallback</a>
+				
+			</td>
+			<td class='col-6'>A callback function with the signature:
+<p> <code>(toState, fromState, ...args?)</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onSwitched(<span class="hljs-function">(<span class="hljs-params">toState, fromState</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`We went from "<span class="hljs-subst">${fromState}</span>" to "<span class="hljs-subst">${toState}</span>"`</span>)
+})
+
+machine.enter(<span class="hljs-string">'receiving'</span>)
+<span class="hljs-comment">// We went from "idle" to "receiving"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmonswitching'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmonswitching'>
+			<code>
+				onSwitching
+				<span class='gray'>(cb)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Adds a listener that runs a callback immediately before <strong>ANY</strong>
+state-change.</p>
+<p>A function is returned that will remove the listener.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>cb</code></td>
+			<td class='col-3 quiet'>
+				<a href="#switchcallback">switchCallback</a>
+				
+			</td>
+			<td class='col-6'>A callback function with the signature:
+<p> <code>(toState, fromState, ...args?)</code></p>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes the listener.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onSwitching(<span class="hljs-function">(<span class="hljs-params">toState, fromState</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Going from "<span class="hljs-subst">${fromState}</span>" to "<span class="hljs-subst">${toState}</span>"`</span>)
+})
+
+machine.enter(<span class="hljs-string">'receiving'</span>)
+<span class="hljs-comment">// Going from "idle" to "receiving"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmontransitions'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmontransitions'>
+			<code>
+				onTransitions
+				<span class='gray'>(transitions)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Run callbacks when transitions happen.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>transitions</code></td>
+			<td class='col-3 quiet'>
+				(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)
+				
+			</td>
+			<td class='col-6'>Configuration in the form of an object, or a function that
+returns an object. If a function is used, there will be a single
+argument passed-in: an object with the following methods
+attached as a convenience:
+<ul>
+<li>{<a href="#statebotfsmenter">.enter()</a>, <a href="#statebotfsmemit">.emit()</a>, <a href="#enter-state-1">.Enter()</a>, <a href="#emit-name">.Emit()</a>}</li>
+</ul>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes all listeners added
+by this method.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.onTransitions({
+  <span class="hljs-string">'idle -&gt; sending'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    sendData()
+      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
+      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+  },
+  <span class="hljs-string">'idle -&gt; receiving'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    receiveData()
+      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
+      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+  },
+  <span class="hljs-string">'sending | receiving -&gt; done'</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'All finished: '</span>, whatHappened)
+  }
+})
+
+machine.enter(<span class="hljs-string">'sending'</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendData</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    setTimeout(resolve, <span class="hljs-number">1000</span>)
+    setTimeout(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
+  })
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">receiveData</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    setTimeout(resolve, <span class="hljs-number">1000</span>)
+    setTimeout(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
+  })
+}</code></pre>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-comment">// The above example using a function for config</span>
+machine.onTransitions(<span class="hljs-function">(<span class="hljs-params">{ enter }</span>) =&gt;</span> ({
+  <span class="hljs-string">'idle -&gt; sending'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    sendData()
+      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
+      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+  },
+  <span class="hljs-string">'idle -&gt; receiving'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    receiveData()
+      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
+      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+  },
+  <span class="hljs-string">'sending | receiving -&gt; done'</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'All finished: '</span>, whatHappened)
+  }
+}))
+
+<span class="hljs-comment">// etc...</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmperformtransitions'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmperformtransitions'>
+			<code>
+				performTransitions
+				<span class='gray'>(transitions)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Perform transitions when events happen.</p>
+<p>Use <code>then</code> to optionally add callbacks to those transitions.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>transitions</code></td>
+			<td class='col-3 quiet'>
+				(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)
+				
+			</td>
+			<td class='col-6'>Configuration in the form of an object, or a function that
+returns an object. If a function is used, there will be a single
+argument passed-in: an object with the following methods
+attached as a convenience:
+<ul>
+<li>{<a href="#statebotfsmenter">.enter()</a>, <a href="#statebotfsmemit">.emit()</a>, <a href="#enter-state-1">.Enter()</a>, <a href="#emit-name">.Emit()</a>}</li>
+</ul>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
+	:
+	<span class='force-inline'>A function that removes all listeners added
+by this method.
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'complex-form'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt;
+      update
+
+    // Maybe things take a long time...
+    update -&gt;
+      waiting -&gt; waiting-a-while
+
+    // Which path will we take?
+    waiting | waiting-a-while -&gt;
+      success | failed | timeout
+
+    // All done!
+    success | failed | timeout -&gt;
+      done
+  `</span>
+})
+
+machine.performTransitions(<span class="hljs-function">(<span class="hljs-params">{ Enter, emit }</span>) =&gt;</span> ({
+  <span class="hljs-string">'idle -&gt; update'</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">'user-saved'</span>,
+    <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Sending data: '</span>, data)
+
+      sendData(data)
+        .then(Enter(<span class="hljs-string">'success'</span>))
+        .catch(Enter(<span class="hljs-string">'failed'</span>))
+
+      emit(<span class="hljs-string">'data-sent'</span>)
+    }
+  },
+  <span class="hljs-string">'update -&gt; waiting'</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">'data-sent'</span>,
+    <span class="hljs-attr">then</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      setTimeout(Enter(<span class="hljs-string">'waiting-a-while'</span>), <span class="hljs-number">750</span>)
+      setTimeout(Enter(<span class="hljs-string">'timeout'</span>), <span class="hljs-number">5000</span>)
+    }
+  }
+}))
+
+<span class="hljs-comment">// Just to illustrate that you can mix n' match with onTransitions:</span>
+machine.onTransitions({
+  <span class="hljs-string">'waiting | waiting-a-while -&gt; success'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Lovely!'</span>)
+  },
+  <span class="hljs-string">'waiting | waiting-a-while -&gt; timeout'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Well, at least you have your shoes'</span>)
+  }
+})
+
+machine.emit(<span class="hljs-string">'user-saved'</span>, [<span class="hljs-string">'some'</span>, <span class="hljs-string">'data'</span>])
+<span class="hljs-comment">// Sending data: ["some", "data"]</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendData</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    setTimeout(resolve, <span class="hljs-number">1000</span>)
+    setTimeout(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
+  })
+}</code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmpreviousstate'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmpreviousstate'>
+			<code>
+				previousState
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns the previous state.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a>)</code>
+	:
+	<span class='force-inline'>The previous state, or 
+<code>undefined</code>
+ if there isn't one (ie; you
+have just called 
+<a href="#statebotfsmreset">.reset()</a>
+, or the
+machine has just started.)
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'simple-sender'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending -&gt; done
+  `</span>
+})
+
+machine.enter(<span class="hljs-string">'sending'</span>)
+machine.previousState()
+<span class="hljs-comment">// "idle"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmreset'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmreset'>
+			<code>
+				reset
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns the state-machine to its starting-state and clears the
+state-history.</p>
+<p>All listeners will still be attached, but no events or transitions will be fired.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'carousel'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    page-1 -&gt;
+    page-2 -&gt;
+    page-3 -&gt;
+    page-4 -&gt; page-1
+  `</span>
+})
+
+machine.enter(<span class="hljs-string">'page-2'</span>)
+machine.reset()
+machine.currentState()
+<span class="hljs-comment">// "page-1"</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmstatesavailablefromhere'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmstatesavailablefromhere'>
+			<code>
+				statesAvailableFromHere
+				<span class='gray'>(state?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Return an <code>array</code> of states accessible from the state specified.
+If no state is passed-in, the <a href="#statebotfsmcurrentstate">.currentState()</a> is used.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>state</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?
+				
+			</td>
+			<td class='col-6'>The state to check. 
+<a href="#statebotfsmcurrentstate">.currentState()</a>
+
+if unspecified.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; sending | receiving -&gt; done
+  `</span>
+})
+
+machine.statesAvailableFromHere()
+<span class="hljs-comment">// ["sending", "receiving"]</span>
+
+machine.statesAvailableFromHere(<span class="hljs-string">'receiving'</span>)
+<span class="hljs-comment">// ["done"]</span></code></pre>
+	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+</div>
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='entercallback'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#entercallback'>
+			<code>
+				enterCallback
+				<span class='gray'>(fromState, args?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p><a href="#statebotfsmonentering">.onEntering()</a> /
+<a href="#statebotfsmonentered">.onEntered()</a> callback signature.</p>
+
+	
+	<p>
+		Type:
+		<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>fromState</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>args</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments passed-down from 
+<a href="#statebotfsmenter">.enter()</a>
+ or
+
+<a href="#statebotfsmemit">.emit()</a>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='exitcallback'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#exitcallback'>
+			<code>
+				exitCallback
+				<span class='gray'>(toState, args?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p><a href="#statebotfsmonexiting">.onExiting()</a> /
+<a href="#statebotfsmonexited">.onExited()</a> callback signature.</p>
+
+	
+	<p>
+		Type:
+		<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>toState</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>args</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments passed-down from 
+<a href="#statebotfsmenter">.enter()</a>
+ or
+
+<a href="#statebotfsmemit">.emit()</a>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='switchcallback'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#switchcallback'>
+			<code>
+				switchCallback
+				<span class='gray'>(toState, fromState, args?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p><a href="#statebotfsmonswitching">.onSwitching()</a> /
+<a href="#statebotfsmonswitched">.onSwitched()</a> callback signature.</p>
+
+	
+	<p>
+		Type:
+		<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>toState</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>fromState</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>args</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments passed-down from 
+<a href="#statebotfsmenter">.enter()</a>
+ or
+
+<a href="#statebotfsmemit">.emit()</a>
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+				
+				<section id='assertrouteoptions'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#assertrouteoptions'>
+			<code>
+				assertRouteOptions
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p><a href="#statebotassertroute">assertRoute()</a> options.</p>
+
+	
+	<p>
+		Type:
+		<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+	</p>
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-2 small caps quiet'>property</th>
+		<th class='col-2 small caps quiet'>type</th>
+		<th class='col-8 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-2 strong'>description</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?
+				
+			</td>
+			<td class='col-8'>: Describe the success-condition for this assertion.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>fromState</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?
+				
+			</td>
+			<td class='col-8'>: Wait for the machine to be in this state before assertion begins.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>run</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>?
+				
+			</td>
+			<td class='col-8'>: Run this function just before starting the assertion.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>permittedDeviations</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+				
+			</td>
+			<td class='col-8'>: If we hit an unexpected state during assertion, this is a "deviation".
+It might be that the FSM will come back to the expected state again
+after a certain number of these. For example, if your FSM has a
+"retry" route configured, this number can account for it.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>timeoutInMs</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+				
+			</td>
+			<td class='col-8'>: Permitted length of time for the entire assertion, in milliseconds.
+</td>
+		</tr>
+
+		
+		
+		<tr>
+			<td class='col-2 strong'>logLevel</td>
+			<td class='col-2 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+				
+			</td>
+			<td class='col-8'>: Normally we want logs for assertions, right? Well, you can tune
+them just like you can with 
+<a href="#statebotoptions">statebotOptions</a>
+.
+</td>
+		</tr>
+
+		
+		
+	</table>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+				
+				
+			</div>
+		</div>
+	</div>
+</div>
+<script src='assets/scripts.min.js'></script>
+ 
+      <script src="./statebot.min.browser.js"></script> 
+      <script> 
+        var Statebot = statebot.Statebot; 
+        var isStatebot = statebot.isStatebot; 
+        var routeIsPossible = statebot.routeIsPossible; 
+        var assertRoute = statebot.assertRoute; 
+        var decomposeChart = statebot.decomposeChart; 
+        function help() { 
+          console.info( 
+            '\nExperiment with Statebot in your browser!\n\n' 
+          ); 
+          console.info( 
+            '\nvar machine = Statebot(name, { chart: \'idle -> go | abort\' })\n' + 
+            '\n' + 
+            'Hitchers:\n' + 
+            '  .performTransitions() / .onEvent()\n' + 
+            '  .onTransitions()\n' + 
+            '  .onEntering() / .onEntered()\n' + 
+            '  .onExiting() / .onExited()\n' + 
+            '  .onSwitching() / .onSwitched()\n' + 
+            '\n' + 
+            'Status:\n' + 
+            '  .canTransitionTo() / .statesAvailableFromHere()\n' + 
+            '  .currentState() / .previousState() / .history()\n' + 
+            '  .inState() / .InState()\n' + 
+            '  .info() / .inspect() / .name()\n' + 
+            '\n' + 
+            'Actions:\n' + 
+            '  .emit() / .Emit()\n' + 
+            '  .enter() / .Enter()\n' + 
+            '  .reset()\n' + 
+            '\n' 
+          ) 
+          console.info( 
+            '\nEnter help() to show this message again.\n\n' 
+          ); 
+        } 
+        help(); 
+      </script> 
+    </body> 
+    
+</html>

@@ -1,6 +1,6 @@
 # Statebot
 
-<img src="./docs/logo-full.png" style="max-width: 255px; margin: 0 0 5px 0;" />
+<img src="./docs/logo-full.png" width="255" />
 
 Write more robust and understandable programs.
 

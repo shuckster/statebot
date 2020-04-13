@@ -1,7 +1,7 @@
 {
   "name": "statebot",
   "description": "Write more robust and understandable programs.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Conan Theobald <npmjs@conans.co.uk>",
   "license": "ISC",
   "main": "./src/index.js",

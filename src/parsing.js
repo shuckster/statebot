@@ -6,7 +6,7 @@
 const cxPipe = '|'
 const cxArrow = '->'
 
-const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:\-_+=<>|~\\.§]/gi
+const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi
 const rxCRLF = /[\r\n]/
 const rxComment = /(\/\/[^\n\r]*)/
 
@@ -58,10 +58,10 @@ function decomposeChart (templateLiteral) {
   const lines = condenseLines(codeOnly)
   const linesToProcess = sanitiseLines(lines)
   const linesOfRoutes = linesToProcess
-    .map(decomposeLinesIntoRoutes)
+    .map(decomposeLineIntoRoute)
     .flat(1)
   const linesOfTransitions = linesOfRoutes
-    .map(decomposeRoutesIntoTransitions)
+    .map(decomposeRouteIntoTransition)
     .flat(1)
   const states = []
   const routeKeys = linesOfTransitions.map(route => {
@@ -114,19 +114,21 @@ function sanitiseLines (lines) {
     .map(part => part.trim())))
 }
 
-function decomposeLinesIntoRoutes (input) {
-  return input.reduce((acc, states) => acc === false
-    ? {
-      previousStates: [...states],
-      pairs: []
-    }
-    : {
-      previousStates: [...states],
-      pairs: [...acc.pairs, [[...acc.previousStates], [...states]]]
-    }, false).pairs
+function decomposeLineIntoRoute (line) {
+  return line.reduce((acc, states) =>
+    acc === false
+      ? {
+        previousStates: [...states],
+        pairs: []
+      }
+      : {
+        previousStates: [...states],
+        pairs: [...acc.pairs, [[...acc.previousStates], [...states]]]
+      }, false)
+    .pairs
 }
 
-function decomposeRoutesIntoTransitions ([fromStates, toStates]) {
+function decomposeRouteIntoTransition ([fromStates, toStates]) {
   return fromStates.reduce((acc, fromState) => [
     ...acc,
     ...toStates.map(toState => {

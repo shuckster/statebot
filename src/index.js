@@ -16,8 +16,9 @@ const { decomposeChart } = require('./parsing')
  *
  * You're reading the documentation. Other exits are:
  *
- * - [The README file](https://github.com/shuckster/statebot/blob/master/README.md)
- * - [The Github Repo](https://github.com/shuckster/statebot)
+ * - The [README file](https://github.com/shuckster/statebot/blob/master/README.md)
+ * - The [Github Repo](https://github.com/shuckster/statebot)
+ * - The shell-script version, [Statebot-sh](https://github.com/shuckster/statebot-sh)
  *
  * Statebot was written by [Conan Theobald](https://github.com/shuckster/) and
  * is [ISC licensed](../LICENSE).

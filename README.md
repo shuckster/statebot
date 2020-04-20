@@ -6,7 +6,7 @@ Write more robust and understandable programs.
 
 Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible.
 
-It runs in Node and the browser.
+It runs in Node and the browser, and is now a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 

@@ -1436,14 +1436,14 @@ machine.canTransitionTo([<span class="hljs-string">'play'</span>, <span class="h
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'button'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'coroutine'</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
-    idle -&gt; clicked
+    suspended -&gt; running -&gt; (suspended | dead)
   `</span>
 })
 
 machine.currentState()
-<span class="hljs-comment">// "idle"</span></code></pre>
+<span class="hljs-comment">// "suspended"</span></code></pre>
 	
 	
 

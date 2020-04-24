@@ -791,14 +791,14 @@ function Statebot (name, options) {
      * @returns {string}
      *
      * @example
-     * var machine = Statebot('button', {
+     * var machine = Statebot('coroutine', {
      *   chart: `
-     *     idle -> clicked
+     *     suspended -> running -> (suspended | dead)
      *   `
      * })
      *
      * machine.currentState()
-     * // "idle"
+     * // "suspended"
      */
     currentState: currentState,
 

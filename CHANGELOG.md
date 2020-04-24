@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2020-04-24
+### Fixed
+- Browser build now uses 'var' webpack option rather than 'umd'
+
+### Changed
+- Lua inspired 'coroutine' chart in the JSDocs
+
 ## [2.0.0] - 2020-04-20
 ### Changed
 - Updated disallowed characters for cross-env compatibility of charts.

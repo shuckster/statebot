@@ -38,13 +38,13 @@ module.exports = env => {
     }
   }
 
-  return {
+  const config = {
     mode: 'production',
     entry: './src/index.js',
     output: {
       path: path.resolve(__dirname, './dist'),
       filename: fileName,
-      libraryTarget: 'umd',
+      libraryTarget: BROWSER ? 'var' : 'umd',
       library: 'statebot'
     },
     module: {
@@ -63,4 +63,6 @@ module.exports = env => {
     },
     ...restConfig
   }
+
+  return config
 }

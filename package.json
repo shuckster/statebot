@@ -31,10 +31,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
     "babel-loader": "^8.1.0",
-    "concurrently": "^5.1.0",
-    "documentation": "^12.2.0",
+    "concurrently": "^5.2.0",
+    "documentation": "^12.3.0",
     "documentation-theme-light": "^1.1.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
@@ -42,7 +42,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "webpack": "^4.42.1",
+    "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {

@@ -30,13 +30,13 @@
     "build:docs:watch": "documentation build src/index.js -w -f html -o docs/ --theme node_modules/documentation-theme-light"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "babel-loader": "^8.1.0",
     "concurrently": "^5.2.0",
-    "documentation": "^12.3.0",
+    "documentation": "^13.0.0",
     "documentation-theme-light": "^1.1.1",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",

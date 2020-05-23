@@ -294,7 +294,7 @@ function Statebot (name, options) {
     // performTransitions 2/3...
     const decomposedEvents = Object.entries(events)
       .reduce((acc, [eventName, _configs]) => {
-        const { states, routes, configs } = decomposeConfigs(_configs)
+        const { states, routes, configs } = decomposeConfigs(_configs, canWarn)
         if (canWarn()) {
           allStates.push(...states)
           allRoutes.push(...routes)
@@ -335,7 +335,7 @@ function Statebot (name, options) {
     )
 
     // onTransitions 3/3...
-    const transitionConfigs = decomposeConfigs(transitions)
+    const transitionConfigs = decomposeConfigs(transitions, canWarn)
 
     if (canWarn()) {
       allStates.push(...transitionConfigs.states)
@@ -372,33 +372,6 @@ function Statebot (name, options) {
     }
 
     return () => allCleanupFns.forEach(fn => fn())
-  }
-
-  function decomposeConfigs (configs) {
-    const allStates = []
-    const allRoutes = []
-
-    const _configs = configs.reduce((acc, config) => {
-      const { routeChart, action } = config
-      const { states, routes, transitions } = decomposeChart(routeChart)
-      if (canWarn()) {
-        allStates.push(...states)
-        allRoutes.push(...routes)
-      }
-      return [
-        ...acc,
-        ...transitions.map(transition => {
-          const [fromState, toState] = transition
-          return { fromState, toState, action }
-        })
-      ]
-    }, [])
-
-    return {
-      configs: _configs,
-      states: allStates,
-      routes: allRoutes
-    }
   }
 
   function previousState () {
@@ -1696,4 +1669,31 @@ function isStatebot (machine) {
     isPojo(machine) &&
     typeof machine.__STATEBOT__ === 'number'
   )
+}
+
+function decomposeConfigs (configs, canWarn) {
+  const allStates = []
+  const allRoutes = []
+
+  const _configs = configs.reduce((acc, config) => {
+    const { routeChart, action } = config
+    const { states, routes, transitions } = decomposeChart(routeChart)
+    if (canWarn()) {
+      allStates.push(...states)
+      allRoutes.push(...routes)
+    }
+    return [
+      ...acc,
+      ...transitions.map(transition => {
+        const [fromState, toState] = transition
+        return { fromState, toState, action }
+      })
+    ]
+  }, [])
+
+  return {
+    configs: _configs,
+    states: allStates,
+    routes: allRoutes
+  }
 }

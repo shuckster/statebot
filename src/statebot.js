@@ -149,17 +149,20 @@ module.exports = {
 const EventEmitter = require('events')
 
 const {
+  isArray,
+  isEventEmitter,
+  isFunction,
   isPojo,
+  isString,
   ArgTypeError,
   Logger,
-  isEventEmitter,
   ReferenceCounter
 } = require('./utils')
 
 const { decomposeChart, cxArrow } = require('./parsing')
 
 function Statebot (name, options) {
-  if (typeof name !== 'string') {
+  if (!isString(name)) {
     throw TypeError('\nStatebot: Please specify a name for this machine')
   }
 
@@ -245,7 +248,7 @@ function Statebot (name, options) {
   // Interprets onTransitions() and performTransitions()
   function applyHitcher (hitcher, fnName) {
     const hitcherActions =
-      typeof hitcher === 'function'
+      isFunction(hitcher)
         ? hitcher({ enter, emit, Enter, Emit })
         : isPojo(hitcher)
           ? hitcher
@@ -263,7 +266,7 @@ function Statebot (name, options) {
     Object.entries(hitcherActions)
       .forEach(([routeChart, actionOrConfig]) => {
         // onTransitions 1/3...
-        if (typeof actionOrConfig === 'function') {
+        if (isFunction(actionOrConfig)) {
           transitions.push({ routeChart, action: actionOrConfig })
         } else if (!isPojo(actionOrConfig)) {
           return
@@ -271,13 +274,13 @@ function Statebot (name, options) {
 
         // performTransitions 1/3...
         const { on: _on, then: _then } = actionOrConfig
-        if (typeof _on === 'string' || Array.isArray(_on)) {
+        if (isString(_on) || isArray(_on)) {
           const eventNames = [_on].flat()
           eventNames.forEach(eventName => {
             events[eventName] = events[eventName] || []
             events[eventName].push({ routeChart, action: _then })
           })
-        } else if (typeof _then === 'function') {
+        } else if (isFunction(_then)) {
           // onTransitions 2/3...
           // (Behave like onTransitions if a config is specified, but
           //  there is no "on" event...)
@@ -315,7 +318,7 @@ function Statebot (name, options) {
                 ({ fromState, toState, action }) => {
                   const passed = inState(fromState, () => {
                     enter(toState, ...args)
-                    if (typeof action === 'function') {
+                    if (isFunction(action)) {
                       action(...args)
                     }
                     return true
@@ -407,7 +410,7 @@ function Statebot (name, options) {
   }
 
   function inState (state, anyOrFn, ...fnArgs) {
-    const err = argTypeError('inState', { state: 'string' }, state)
+    const err = argTypeError('inState', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
@@ -418,7 +421,7 @@ function Statebot (name, options) {
       if (!conditionMatches) {
         return null
       }
-      if (typeof anyOrFn === 'function') {
+      if (isFunction(anyOrFn)) {
         return anyOrFn(...fnArgs)
       }
       return anyOrFn
@@ -438,7 +441,7 @@ function Statebot (name, options) {
 
   function canTransitionTo (...states) {
     const testStates = states.flat()
-    const err = argTypeError('canTransitionTo', { state: 'string' }, testStates[0])
+    const err = argTypeError('canTransitionTo', { state: isString }, testStates[0])
     if (err) {
       throw TypeError(err)
     }
@@ -456,7 +459,7 @@ function Statebot (name, options) {
       ? state
       : currentState()
 
-    const err = argTypeError('statesAvailableFromHere', { state: 'string' }, _state)
+    const err = argTypeError('statesAvailableFromHere', { state: isString }, _state)
     if (err) {
       throw TypeError(err)
     }
@@ -484,7 +487,7 @@ function Statebot (name, options) {
   }
 
   function emit (eventName, ...args) {
-    const err = argTypeError('emit', { eventName: 'string' }, eventName)
+    const err = argTypeError('emit', { eventName: isString }, eventName)
     if (err) {
       throw TypeError(err)
     }
@@ -504,7 +507,7 @@ function Statebot (name, options) {
   }
 
   function enter (state, ...args) {
-    const err = argTypeError('enter', { state: 'string' }, state)
+    const err = argTypeError('enter', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
@@ -544,13 +547,13 @@ function Statebot (name, options) {
   }
 
   function onEvent (eventName, cb) {
-    const err = argTypeError('onEvent', { eventName: 'string', cb: 'function' }, eventName, cb)
+    const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb)
     if (err) {
       throw TypeError(err)
     }
 
     events.addListener(eventName, cb)
-    return function () {
+    return () => {
       events.removeListener(eventName, cb)
     }
   }

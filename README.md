@@ -32,7 +32,7 @@ npm i statebot
 ```
 
 ```js
-<script src="https://unpkg.com/statebot@2.1.0/dist/statebot.min.browser.js"></script>
+<script src="https://unpkg.com/statebot@2.1.1/dist/statebot.min.browser.js"></script>
 ```
 
 Or just download a script from the `dist/` folder and include it in your project. `statebot.dev.*` files include `JSDoc` comments, which IDEs like VS Code can pick-up to offer autocompletion.
@@ -48,23 +48,37 @@ const { Statebot } = require('statebot')
 
 const machine = Statebot('promise-like', {
   chart: `
-    // This one behaves a bit like a Promise
-    idle -> pending ->
-      resolved | rejected
 
-    // ...and we're done
-    resolved -> done
-    rejected -> done
+    idle ->
+      // This one behaves a bit like a Promise
+      pending ->
+        (resolved | rejected) ->
+      done
+
   `,
-  startIn: 'idle'
+  startIn: 'pending'
 })
 
-machine.canTransitionTo('pending')
-// true
+machine.performTransitions({
+  'pending -> resolved': {
+    on: 'success'
+  }
+})
 
-machine.enter('pending')
+machine.onTransitions({
+  'pending -> resolved': function () {
+    console.log('Sweet!')
+  }
+})
+
+machine.canTransitionTo('done')
+// false
+
 machine.statesAvailableFromHere()
 // ["resolved", "rejected"]
+
+machine.emit('success')
+// "Sweet!"
 ```
 
 ### Events
@@ -78,9 +92,9 @@ machine.performTransitions({
   }
 })
 
-// ^∵]-> This API is designed to read like this:
-//       machine, perform transition "pending to
-//       resolved" on "data-loaded".
+// ^ This API is designed to read like this:
+//   machine, perform transition "pending to
+//   resolved" on "data-loaded".
 ```
 
 Let's do a little more:
@@ -94,25 +108,25 @@ machine.performTransitions({
     }
   },
 
-// ^∵]-> We can run something after a transition
-//       happens with "then". Notice this will
-//       happen after the "data-error" OR
-//       "timeout" events.
+// ^ We can run something after a transition
+//   happens with "then". Notice this will
+//   happen after the "data-error" OR
+//   "timeout" events.
 
   'resolved | rejected -> done': {
     on: 'finished'
   }
 
-// ^∵]-> We can configure lots of transitions inside
-//       one `performTransitions`. Here's one that
-//       will switch from "resolved to done" OR
-//       "rejected to done" when the "finished"
-//       event is emitted.
+// ^ We can configure lots of transitions inside
+//   one `performTransitions`. Here's one that
+//   will switch from "resolved to done" OR
+//   "rejected to done" when the "finished"
+//   event is emitted.
 
 })
 
-// In this API, when events are emitted, they can
-// pass arguments to the "then" method.
+// In this API, when events are emitted they
+// can pass arguments to the "then" method.
 
 // See the section below on "Passing data around".
 ```
@@ -143,36 +157,37 @@ Let's do a little more:
 machine.onTransitions(({ emit, Emit }) => ({
   'idle -> pending': function () {
 
-// ^∵]-> This API is designed to read like this:
-//       machine, on transition "idle to pending",
-//       run a callback.
+// ^ This API is designed to read like this:
+//   machine, on transition "idle to pending",
+//   run a callback.
 
     getSomeData().then(
       (...args) => emit('data-loaded', ...args)
     )
 
-// ^∵]-> emit() or Emit()? Which one to use? Maybe
-//       you can infer the different meanings from
-//       the .catch() of this Promise below:
+// ^ emit() or Emit()? Which one to use? Maybe
+//   you can infer the different meanings from
+//   the .catch() of this Promise:
 
     .catch(Emit('data-error'))
 
-// ^∵]-> Got it? Emit() is shorthand for:
-//        (...args) => emit('event', ...args)
-//       So emit() fires immediately, and Emit()
-//       generates an emitter-method.
+// ^ Got it? Emit() is shorthand for:
+//     (...args) => emit('event', ...args)
+//
+//   So emit() fires immediately, and Emit()
+//   generates an emitter-method.
 
   }
 }))
 
 // In this API, the state-switching functions
-// enter() and Enter() can pass arguments to these
-// callbacks.
+// enter() and Enter() can pass arguments to
+// these callbacks.
 
 // See the section below on "Passing data around".
 ```
 
-**Note**: Both `performTransitions` and `onTransitions` can take objects, or functions that return objects.
+Both `performTransitions` and `onTransitions` can take objects, or functions that return objects.
 
 In the latter case the function arguments will include helpers for **emitting events** and **entering states**. In the example above, we're pulling-in the event-emitting helpers `emit` and `Emit`.
 
@@ -291,7 +306,7 @@ const machine = Statebot('example', {
 
 # Testing
 
-`assertRoute` can be used to test if an FSM traces a particular route:
+`assertRoute` can be used to test if an FSM traced a particular route:
 
 ```js
 const { assertRoute } = require('statebot')
@@ -328,21 +343,47 @@ The method itself produces output using `console.table`:
 └─────────┴────────────┴────────────┴───────────────────────┴──────────────────┘
 ```
 
-That `aId<1>` means `assertRoute` has run once so far.
+`aId<1>` means `assertRoute` has run once so far.
+
+You can also check if a certain route can be followed with `routeIsPossible`:
+
+```js
+const { routeIsPossible } = require('statebot')
+
+routeIsPossible(machine, 'pending -> resolved -> pending')
+// false
+```
 
 # Chart Syntax
 
-Statebot charts are just strings, or arrays of strings.
+Statebot charts are just strings, or arrays of strings:
 
-This means we can use [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to make more readable charts in modern JavaScript.
+```js
+var oneLiner = '-> idle -> done'
+var multiLiner = [
+  '-> idle',
+  'idle -> done'
+]
+```
 
-They contain the names of all the _states_ and the allowed _transitions_ between them using `->`.
+We can use [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to make more readable charts in modern JavaScript:
+
+```js
+const chart = `
+  -> idle
+  idle -> done
+`
+```
+
+Charts list all _states_ and the allowed _transitions_ between them using `->`.
 
 ```js
 const fsm = Statebot('just a name', {
   chart: `
+
     -> idle
     idle -> done
+
   `,
   startIn: 'idle'
 })
@@ -359,7 +400,7 @@ This...
   resolved | rejected -> done
 ```
 
-...is shorthand for these transitions...
+...is shorthand for this...
 
 ```
   pending -> resolved
@@ -405,7 +446,7 @@ Indentation has no meaning.
 
 ## Examples of real charts
 
-Here are some charts I've used while developing Statebot:
+Here are some charts I've used with Statebot:
 
 ### Web-server:
 
@@ -460,7 +501,7 @@ Here are some charts I've used while developing Statebot:
       idle
 ```
 
-The [documentation](https://shuckster.github.io/statebot/) has a few examples, too.
+The [documentation](https://shuckster.github.io/statebot/) has a few more examples.
 
 # Why?
 
@@ -490,9 +531,9 @@ With Statebot, code can be marshalled into a shape that "fans-out":
 
 Statebot charts look the way they do because I wanted to try to express, in code, the visualisation tools often used to represent FSMs.
 
-Frankly, this does add a bit of redundancy when using Statebot. Transition are repeated between charts and hitchers, and there can be a bit of to-ing and fro-ing between them to get them right. But for me, the pay-off of being able to jump-in to an old piece of code and grok it quickly is worth it.
+Frankly, this does add a bit of redundancy when using Statebot. Transitions are repeated between charts and hitchers, and there can be a bit of to-ing and fro-ing to get them right. But for me, the pay-off of being able to jump-in to an old piece of code and grok it quickly is worth it.
 
-I guess the bottom-line with any tool is use it sparingly and appropriately, and the same rule applies with Statebot.
+I guess the bottom-line with any tool is to use it sparingly and appropriately, and the same applies with Statebot.
 
 # Contributing
 

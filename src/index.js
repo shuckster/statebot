@@ -38,7 +38,7 @@ const { decomposeChart } = require('./parsing')
  * Or non-`npm` project:
  *
  * ```js
- * <script src="https://unpkg.com/statebot@2.1.0/dist/statebot.min.browser.js"></script>
+ * <script src="https://unpkg.com/statebot@2.1.1/dist/statebot.min.browser.js"></script>
  * ```
  *
  * ```js

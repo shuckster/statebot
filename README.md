@@ -48,23 +48,37 @@ const { Statebot } = require('statebot')
 
 const machine = Statebot('promise-like', {
   chart: `
-    // This one behaves a bit like a Promise
-    idle -> pending ->
-      resolved | rejected
 
-    // ...and we're done
-    resolved -> done
-    rejected -> done
+    idle ->
+      // This one behaves a bit like a Promise
+      pending ->
+        (resolved | rejected) ->
+      done
+
   `,
-  startIn: 'idle'
+  startIn: 'pending'
 })
 
-machine.canTransitionTo('pending')
-// true
+machine.performTransitions({
+  'pending -> resolved': {
+    on: 'success'
+  }
+})
 
-machine.enter('pending')
+machine.onTransitions({
+  'pending -> resolved': function () {
+    console.log('Sweet!')
+  }
+})
+
+machine.canTransitionTo('done')
+// false
+
 machine.statesAvailableFromHere()
 // ["resolved", "rejected"]
+
+machine.emit('success')
+// "Sweet!"
 ```
 
 ### Events

@@ -92,9 +92,9 @@ machine.performTransitions({
   }
 })
 
-// ^∵]-> This API is designed to read like this:
-//       machine, perform transition "pending to
-//       resolved" on "data-loaded".
+// ^ This API is designed to read like this:
+//   machine, perform transition "pending to
+//   resolved" on "data-loaded".
 ```
 
 Let's do a little more:
@@ -108,25 +108,25 @@ machine.performTransitions({
     }
   },
 
-// ^∵]-> We can run something after a transition
-//       happens with "then". Notice this will
-//       happen after the "data-error" OR
-//       "timeout" events.
+// ^ We can run something after a transition
+//   happens with "then". Notice this will
+//   happen after the "data-error" OR
+//   "timeout" events.
 
   'resolved | rejected -> done': {
     on: 'finished'
   }
 
-// ^∵]-> We can configure lots of transitions inside
-//       one `performTransitions`. Here's one that
-//       will switch from "resolved to done" OR
-//       "rejected to done" when the "finished"
-//       event is emitted.
+// ^ We can configure lots of transitions inside
+//   one `performTransitions`. Here's one that
+//   will switch from "resolved to done" OR
+//   "rejected to done" when the "finished"
+//   event is emitted.
 
 })
 
-// In this API, when events are emitted, they can
-// pass arguments to the "then" method.
+// In this API, when events are emitted they
+// can pass arguments to the "then" method.
 
 // See the section below on "Passing data around".
 ```
@@ -157,31 +157,32 @@ Let's do a little more:
 machine.onTransitions(({ emit, Emit }) => ({
   'idle -> pending': function () {
 
-// ^∵]-> This API is designed to read like this:
-//       machine, on transition "idle to pending",
-//       run a callback.
+// ^ This API is designed to read like this:
+//   machine, on transition "idle to pending",
+//   run a callback.
 
     getSomeData().then(
       (...args) => emit('data-loaded', ...args)
     )
 
-// ^∵]-> emit() or Emit()? Which one to use? Maybe
-//       you can infer the different meanings from
-//       the .catch() of this Promise below:
+// ^ emit() or Emit()? Which one to use? Maybe
+//   you can infer the different meanings from
+//   the .catch() of this Promise:
 
     .catch(Emit('data-error'))
 
-// ^∵]-> Got it? Emit() is shorthand for:
-//        (...args) => emit('event', ...args)
-//       So emit() fires immediately, and Emit()
-//       generates an emitter-method.
+// ^ Got it? Emit() is shorthand for:
+//     (...args) => emit('event', ...args)
+//
+//   So emit() fires immediately, and Emit()
+//   generates an emitter-method.
 
   }
 }))
 
 // In this API, the state-switching functions
-// enter() and Enter() can pass arguments to these
-// callbacks.
+// enter() and Enter() can pass arguments to
+// these callbacks.
 
 // See the section below on "Passing data around".
 ```

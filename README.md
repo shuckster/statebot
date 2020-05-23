@@ -356,17 +356,34 @@ routeIsPossible(machine, 'pending -> resolved -> pending')
 
 # Chart Syntax
 
-Statebot charts are just strings, or arrays of strings.
+Statebot charts are just strings, or arrays of strings:
 
-This means we can use [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to make more readable charts in modern JavaScript.
+```js
+var oneLiner = '-> idle -> done'
+var multiLiner = [
+  '-> idle',
+  'idle -> done'
+]
+```
 
-They contain the names of all the _states_ and the allowed _transitions_ between them using `->`.
+We can use [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to make more readable charts in modern JavaScript:
+
+```js
+const chart = `
+  -> idle
+  idle -> done
+`
+```
+
+Charts list all _states_ and the allowed _transitions_ between them using `->`.
 
 ```js
 const fsm = Statebot('just a name', {
   chart: `
+
     -> idle
     idle -> done
+
   `,
   startIn: 'idle'
 })

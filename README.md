@@ -187,7 +187,7 @@ machine.onTransitions(({ emit, Emit }) => ({
 // See the section below on "Passing data around".
 ```
 
-**Note**: Both `performTransitions` and `onTransitions` can take objects, or functions that return objects.
+Both `performTransitions` and `onTransitions` can take objects, or functions that return objects.
 
 In the latter case the function arguments will include helpers for **emitting events** and **entering states**. In the example above, we're pulling-in the event-emitting helpers `emit` and `Emit`.
 
@@ -306,7 +306,7 @@ const machine = Statebot('example', {
 
 # Testing
 
-`assertRoute` can be used to test if an FSM traces a particular route:
+`assertRoute` can be used to test if an FSM traced a particular route:
 
 ```js
 const { assertRoute } = require('statebot')
@@ -400,7 +400,7 @@ This...
   resolved | rejected -> done
 ```
 
-...is shorthand for these transitions...
+...is shorthand for this...
 
 ```
   pending -> resolved
@@ -446,7 +446,7 @@ Indentation has no meaning.
 
 ## Examples of real charts
 
-Here are some charts I've used while developing Statebot:
+Here are some charts I've used with Statebot:
 
 ### Web-server:
 
@@ -501,7 +501,7 @@ Here are some charts I've used while developing Statebot:
       idle
 ```
 
-The [documentation](https://shuckster.github.io/statebot/) has a few examples, too.
+The [documentation](https://shuckster.github.io/statebot/) has a few more examples.
 
 # Why?
 
@@ -531,9 +531,9 @@ With Statebot, code can be marshalled into a shape that "fans-out":
 
 Statebot charts look the way they do because I wanted to try to express, in code, the visualisation tools often used to represent FSMs.
 
-Frankly, this does add a bit of redundancy when using Statebot. Transition are repeated between charts and hitchers, and there can be a bit of to-ing and fro-ing between them to get them right. But for me, the pay-off of being able to jump-in to an old piece of code and grok it quickly is worth it.
+Frankly, this does add a bit of redundancy when using Statebot. Transitions are repeated between charts and hitchers, and there can be a bit of to-ing and fro-ing to get them right. But for me, the pay-off of being able to jump-in to an old piece of code and grok it quickly is worth it.
 
-I guess the bottom-line with any tool is use it sparingly and appropriately, and the same rule applies with Statebot.
+I guess the bottom-line with any tool is to use it sparingly and appropriately, and the same applies with Statebot.
 
 # Contributing
 

@@ -110,17 +110,18 @@ function tokenisedLines (lines) {
 }
 
 function decomposeRouteFromTokens (line) {
-  return line.reduce((acc, states) =>
-    acc === false
-      ? {
-        previousStates: [...states],
-        pairs: []
-      }
-      : {
-        previousStates: [...states],
-        pairs: [...acc.pairs, [[...acc.previousStates], [...states]]]
-      }, false)
-    .pairs
+  const output = []
+
+  line.reduce((previousStates, states) => {
+    if (previousStates === false) {
+      return [...states]
+    }
+
+    output.push([previousStates, [...states]])
+    return [...states]
+  }, false)
+
+  return output
 }
 
 function decomposeTransitionsFromRoute ([fromStates, toStates]) {

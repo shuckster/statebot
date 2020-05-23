@@ -4,8 +4,11 @@
 //
 
 module.exports = {
+  isArray,
   isEventEmitter,
+  isFunction,
   isPojo,
+  isString,
   isTemplateLiteral,
   uniq,
   Defer,
@@ -16,28 +19,44 @@ module.exports = {
   Logger
 }
 
+function isArray (obj) {
+  return Array.isArray(obj)
+}
+
+function isFunction (obj) {
+  return typeof obj === 'function'
+}
+
+function isString (obj) {
+  return typeof obj === 'string'
+}
+
+function isObject (obj) {
+  return typeof obj === 'object'
+}
+
 function isEventEmitter (obj) {
   return (
-    typeof obj === 'object' &&
-    typeof obj.emit === 'function' &&
-    typeof obj.addListener === 'function' &&
-    typeof obj.removeListener === 'function'
+    isObject(obj) &&
+    isFunction(obj.emit) &&
+    isFunction(obj.addListener) &&
+    isFunction(obj.removeListener)
   )
 }
 
 function isPojo (obj) {
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || (!isObject(obj))) {
     return false
   }
   return Object.getPrototypeOf(obj) === Object.prototype
 }
 
 function isTemplateLiteral (obj) {
-  if (typeof obj === 'string') {
+  if (isString(obj)) {
     return true
   }
-  if (Array.isArray(obj)) {
-    return obj.every(item => typeof item === 'string')
+  if (isArray(obj)) {
+    return obj.every(item => isString(item))
   }
   return false
 }
@@ -146,7 +165,7 @@ function ArgTypeError (errPrefix = '') {
         let typeName
         let typeMatches
 
-        if (typeof argType === 'function') {
+        if (isFunction(argType)) {
           typeMatches = argType(arg) === true
           typeName = argType.name
           errorDesc = `${typeName}(${argName}) did not return true`
@@ -178,7 +197,7 @@ function ArgTypeError (errPrefix = '') {
 
 function Logger (level) {
   let _level = level
-  if (typeof _level === 'string') {
+  if (isString(_level)) {
     _level = ({
       info: 3,
       log: 2,

@@ -343,7 +343,16 @@ The method itself produces output using `console.table`:
 └─────────┴────────────┴────────────┴───────────────────────┴──────────────────┘
 ```
 
-That `aId<1>` means `assertRoute` has run once so far.
+`aId<1>` means `assertRoute` has run once so far.
+
+You can also check if a certain route can be followed with `routeIsPossible`:
+
+```js
+const { routeIsPossible } = require('statebot')
+
+routeIsPossible(machine, 'pending -> resolved -> pending')
+// false
+```
 
 # Chart Syntax
 

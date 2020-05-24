@@ -203,20 +203,10 @@ function Statebot (name, options) {
   }
 
   function emitInternalEvent (eventName, ...args) {
-    const err = argTypeError('emitInternalEvent', { eventName: 'string' }, eventName)
-    if (err) {
-      throw TypeError(err)
-    }
-
     return internalEvents.emit(eventName, ...args)
   }
 
   function onInternalEvent (eventName, fn) {
-    const err = argTypeError('onInternalEvent', { eventName: 'string', fn: 'function' }, eventName, fn)
-    if (err) {
-      throw TypeError(err)
-    }
-
     internalEvents.addListener(eventName, fn)
     return function () {
       internalEvents.removeListener(eventName, fn)

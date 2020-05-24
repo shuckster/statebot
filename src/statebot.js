@@ -186,11 +186,7 @@ function Statebot (name, options) {
     routes = []
   } = chart ? decomposeChart(chart) : options
 
-  let { startIn } = options
-  if (startIn === undefined) {
-    startIn = states[0]
-  }
-
+  const { startIn = states[0] } = options
   if (!states.includes(startIn)) {
     throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
@@ -310,8 +306,8 @@ function Statebot (name, options) {
     // performTransitions 3/3...
     allCleanupFns.push(
       ...Object.entries(decomposedEvents)
-        .map(([eventName, configs]) => {
-          return [
+        .map(([eventName, configs]) =>
+          [
             eventsHandled.increase(eventName),
             onEvent(eventName, (...args) => {
               const eventWasHandled = configs.some(
@@ -331,7 +327,7 @@ function Statebot (name, options) {
               }
             })
           ]
-        }).flat()
+        ).flat()
     )
 
     // onTransitions 3/3...

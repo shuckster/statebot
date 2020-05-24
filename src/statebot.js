@@ -198,8 +198,8 @@ function Statebot (name, options) {
 
   const internalEvents = new EventEmitter()
   const INTERNAL_EVENTS = {
-    STATE_CHANGING: '(ANY)state:changing',
-    STATE_CHANGED: '(ANY)state:changed'
+    onSwitching: '(ANY)state:changing',
+    onSwitched: '(ANY)state:changed'
   }
 
   function emitInternalEvent (eventName, ...args) {
@@ -498,9 +498,9 @@ function Statebot (name, options) {
       stateHistory.shift()
     }
 
-    emitInternalEvent(INTERNAL_EVENTS.STATE_CHANGING, toState, inState, ...args)
+    emitInternalEvent(INTERNAL_EVENTS.onSwitching, toState, inState, ...args)
     emitInternalEvent(nextRoute, ...args)
-    emitInternalEvent(INTERNAL_EVENTS.STATE_CHANGED, toState, inState, ...args)
+    emitInternalEvent(INTERNAL_EVENTS.onSwitched, toState, inState, ...args)
 
     return true
   }
@@ -517,127 +517,71 @@ function Statebot (name, options) {
     }
   }
 
-  function onSwitching (cb) {
-    const err = argTypeError('onSwitching', { cb: 'function' }, cb)
-    if (err) {
-      throw TypeError(err)
-    }
+  const switchMethods = Object.keys(INTERNAL_EVENTS)
+    .reduce((obj, methodName) => {
+      return {
+        ...obj,
+        [methodName]: function (cb) {
+          const err = argTypeError(methodName, { cb: isFunction }, cb)
+          if (err) {
+            throw TypeError(err)
+          }
 
-    const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS.STATE_CHANGING)
-    const removeEvent = onInternalEvent(
-      INTERNAL_EVENTS.STATE_CHANGING,
-      (toState, fromState, ...args) => {
-        cb(toState, fromState, ...args)
+          const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName])
+          const removeEvent = onInternalEvent(
+            INTERNAL_EVENTS[methodName],
+            (toState, fromState, ...args) => {
+              cb(toState, fromState, ...args)
+            }
+          )
+          return () => {
+            removeEvent()
+            decreaseRefCount()
+          }
+        }
       }
-    )
-    return () => {
-      removeEvent()
-      decreaseRefCount()
-    }
-  }
+    }, {})
 
-  function onSwitched (cb) {
-    const err = argTypeError('onSwitched', { cb: 'function' }, cb)
-    if (err) {
-      throw TypeError(err)
-    }
+  const enterExitMethods = [
+    ['Exiting', 'onSwitching'],
+    ['Entering', 'onSwitching'],
+    ['Exited', 'onSwitched'],
+    ['Entered', 'onSwitched']
+  ]
+    .reduce((obj, names) => {
+      const [name, switchMethod] = names
+      const methodName = `on${name}`
+      const eventName = name.toLowerCase()
+      return {
+        ...obj,
+        [methodName]: function (state, cb) {
+          const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb)
+          if (err) {
+            throw TypeError(err)
+          }
 
-    const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS.STATE_CHANGED)
-    const removeEvent = onInternalEvent(
-      INTERNAL_EVENTS.STATE_CHANGED,
-      (toState, fromState, ...args) => {
-        cb(toState, fromState, ...args)
+          const decreaseRefCounts = [
+            statesHandled.increase(state),
+            statesHandled.increase(`${state}:${eventName}`)
+          ]
+          const removeEvent = switchMethods[switchMethod]((toState, fromState, ...args) => {
+            if (name.indexOf('Exit') === 0) {
+              if (state === fromState) {
+                cb(toState, ...args)
+              }
+            } else {
+              if (state === toState) {
+                cb(fromState, ...args)
+              }
+            }
+          })
+          return () => {
+            removeEvent()
+            decreaseRefCounts.map(fn => fn())
+          }
+        }
       }
-    )
-    return () => {
-      removeEvent()
-      decreaseRefCount()
-    }
-  }
-
-  function onExiting (state, cb) {
-    const err = argTypeError('onExiting', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:exiting`)
-    ]
-    const removeEvent = onSwitching((toState, fromState, ...args) => {
-      if (state === fromState) {
-        cb(toState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
-
-  function onExited (state, cb) {
-    const err = argTypeError('onExited', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:exited`)
-    ]
-    const removeEvent = onSwitched((toState, fromState, ...args) => {
-      if (state === fromState) {
-        cb(toState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
-
-  function onEntering (state, cb) {
-    const err = argTypeError('onEntering', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:entering`)
-    ]
-    const removeEvent = onSwitching((toState, fromState, ...args) => {
-      if (state === toState) {
-        cb(fromState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
-
-  function onEntered (state, cb) {
-    const err = argTypeError('onEntered', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:entered`)
-    ]
-    const removeEvent = onSwitched((toState, fromState, ...args) => {
-      if (state === toState) {
-        cb(fromState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
+    }, {})
 
   function reset () {
     console.warn(`${logPrefix}: State-machine reset!`)
@@ -1165,7 +1109,7 @@ function Statebot (name, options) {
      * machine.enter('done')
      * // Entered from: receiving
      */
-    onEntered: onEntered,
+    onEntered: enterExitMethods.onEntered,
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -1203,7 +1147,7 @@ function Statebot (name, options) {
      * // Entering from: sending
      * // We made it!
      */
-    onEntering: onEntering,
+    onEntering: enterExitMethods.onEntering,
 
     /**
      * {@link #statebotfsmonentering .onEntering()} /
@@ -1286,7 +1230,7 @@ function Statebot (name, options) {
      * machine.enter('sending')
      * // We are heading to: sending
      */
-    onExited: onExited,
+    onExited: enterExitMethods.onExited,
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -1324,7 +1268,7 @@ function Statebot (name, options) {
      * // Heading to: receiving
      * // Peace out!
      */
-    onExiting: onExiting,
+    onExiting: enterExitMethods.onExiting,
 
     /**
      * {@link #statebotfsmonexiting .onExiting()} /
@@ -1366,7 +1310,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // We went from "idle" to "receiving"
      */
-    onSwitched: onSwitched,
+    onSwitched: switchMethods.onSwitched,
 
     /**
      * Adds a listener that runs a callback immediately before **ANY**
@@ -1397,7 +1341,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // Going from "idle" to "receiving"
      */
-    onSwitching: onSwitching,
+    onSwitching: switchMethods.onSwitching,
 
     /**
      * {@link #statebotfsmonswitching .onSwitching()} /

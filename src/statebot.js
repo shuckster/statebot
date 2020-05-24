@@ -368,36 +368,6 @@ function Statebot (name, options) {
     return stateHistory[stateHistory.length - 1]
   }
 
-  function inState (state, anyOrFn, ...fnArgs) {
-    const err = argTypeError('inState', { state: isString }, state)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const conditionMatches = currentState() === state
-
-    if (anyOrFn !== undefined) {
-      if (!conditionMatches) {
-        return null
-      }
-      if (isFunction(anyOrFn)) {
-        return anyOrFn(...fnArgs)
-      }
-      return anyOrFn
-    }
-
-    return conditionMatches
-  }
-
-  function InState (state, anyOrFn) {
-    const err = argTypeError('InState', { state: 'string' }, state)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    return (...fnArgs) => inState(state, anyOrFn, ...fnArgs)
-  }
-
   function canTransitionTo (...states) {
     const testStates = states.flat()
     const err = argTypeError('canTransitionTo', { state: isString }, testStates[0])
@@ -434,15 +404,25 @@ function Statebot (name, options) {
     }, [])
   }
 
-  function Emit (eventName) {
-    const err = argTypeError('Emit', { eventName: 'string' }, eventName)
+  function inState (state, anyOrFn, ...fnArgs) {
+    const err = argTypeError('inState', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
 
-    return function (...args) {
-      return emit(eventName, ...args)
+    const conditionMatches = currentState() === state
+
+    if (anyOrFn !== undefined) {
+      if (!conditionMatches) {
+        return null
+      }
+      if (isFunction(anyOrFn)) {
+        return anyOrFn(...fnArgs)
+      }
+      return anyOrFn
     }
+
+    return conditionMatches
   }
 
   function emit (eventName, ...args) {
@@ -452,17 +432,6 @@ function Statebot (name, options) {
     }
 
     return events.emit(eventName, ...args)
-  }
-
-  function Enter (state) {
-    const err = argTypeError('Enter', { state: 'string' }, state)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    return function (...args) {
-      return enter(state, ...args)
-    }
   }
 
   function enter (state, ...args) {
@@ -512,9 +481,7 @@ function Statebot (name, options) {
     }
 
     events.addListener(eventName, cb)
-    return () => {
-      events.removeListener(eventName, cb)
-    }
+    return () => events.removeListener(eventName, cb)
   }
 
   const switchMethods = Object.keys(INTERNAL_EVENTS)
@@ -582,6 +549,33 @@ function Statebot (name, options) {
         }
       }
     }, {})
+
+  function Emit (eventName) {
+    const err = argTypeError('Emit', { eventName: isString }, eventName)
+    if (err) {
+      throw TypeError(err)
+    }
+
+    return (...args) => emit(eventName, ...args)
+  }
+
+  function Enter (state) {
+    const err = argTypeError('Enter', { state: isString }, state)
+    if (err) {
+      throw TypeError(err)
+    }
+
+    return (...args) => enter(state, ...args)
+  }
+
+  function InState (state, anyOrFn) {
+    const err = argTypeError('InState', { state: isString }, state)
+    if (err) {
+      throw TypeError(err)
+    }
+
+    return (...fnArgs) => inState(state, anyOrFn, ...fnArgs)
+  }
 
   function reset () {
     console.warn(`${logPrefix}: State-machine reset!`)

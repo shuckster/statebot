@@ -6,7 +6,7 @@ Write more robust and understandable programs.
 
 Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible.
 
-It runs in Node and the browser, and is now a [shell-script](https://github.com/shuckster/statebot-sh/) too.
+It's <8K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 
@@ -32,7 +32,7 @@ npm i statebot
 ```
 
 ```js
-<script src="https://unpkg.com/statebot@2.1.1/dist/statebot.min.browser.js"></script>
+<script src="https://unpkg.com/statebot@2.1.1/dist/browser/statebot.min.js"></script>
 ```
 
 Or just download a script from the `dist/` folder and include it in your project. `statebot.dev.*` files include `JSDoc` comments, which IDEs like VS Code can pick-up to offer autocompletion.

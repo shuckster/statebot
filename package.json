@@ -2,13 +2,24 @@
   "name": "statebot",
   "description": "Write more robust and understandable programs.",
   "version": "2.1.1",
-  "author": "Conan Theobald <npmjs@conans.co.uk>",
+  "author": "Conan Theobald <statebot@conans.co.uk>",
   "license": "ISC",
-  "main": "./src/index.js",
+  "main": "index.js",
+  "files": [
+    "dist/**/*.js",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
   "keywords": [
     "finite",
     "state",
-    "machine"
+    "machine",
+    "fsm"
   ],
   "homepage": "https://shuckster.github.io/statebot/",
   "repository": {
@@ -21,29 +32,32 @@
   },
   "scripts": {
     "test": "echo TODO",
-    "build:all": "concurrently \"pnpm run build:dev\" \"pnpm run build:prod\" \"pnpm run build:dev:browser\" \"pnpm run build:prod:browser\" \"pnpm run build:docs\"",
-    "build:dev": "webpack",
-    "build:prod": "webpack --env.production",
-    "build:dev:browser": "webpack --env.BROWSER=true",
-    "build:prod:browser": "webpack --env.BROWSER=true --env.production",
+    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" ; pnpm run build:docs",
+    "build:browser": "rollup --config rollup.config.browser.js",
+    "build:node": "rollup --config rollup.config.node.js",
     "build:docs": "documentation build src/index.js -f html -o docs/ --theme node_modules/documentation-theme-light ; ./fix-docs.sh",
     "build:docs:watch": "documentation build src/index.js -w -f html -o docs/ --theme node_modules/documentation-theme-light"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
-    "babel-loader": "^8.1.0",
+    "@rollup/plugin-babel": "^5.0.2",
+    "@rollup/plugin-commonjs": "^12.0.0",
+    "@rollup/plugin-json": "^4.0.3",
+    "@rollup/plugin-node-resolve": "^8.0.0",
     "concurrently": "^5.2.0",
     "documentation": "^13.0.0",
     "documentation-theme-light": "^1.1.1",
-    "eslint": "^7.0.0",
+    "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "rollup": "^2.10.9",
+    "rollup-plugin-cleanup": "^3.1.1",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-terser": "6.1.0"
   },
   "dependencies": {
     "events": "^3.1.0"

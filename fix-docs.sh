@@ -3,7 +3,7 @@
 # Copy logo + min-script over
 cp ./_unsorted/logo-full.png ./docs/
 cp ./_unsorted/logo-small.png ./docs/
-cp ./dist/statebot.min.browser.js ./docs/
+cp ./dist/browser/statebot.min.js ./docs/statebot.min.browser.js
 
 # Remove fonts that aren't really monospaced
 sed -e 's/Consolas,//g' -i .bak ./docs/assets/styles.min.css

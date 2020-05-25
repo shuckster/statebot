@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2020-05-25
+### Changed
+- Migrated from Webpack to Rollup; smaller min builds, UMD build
+- Add "files" to package.json to reduce npm module size
+- Reduce code-size a little
+
 ## [2.1.1] - 2020-05-23
 ### Changed
 - README tweaks

@@ -149,17 +149,20 @@ module.exports = {
 const EventEmitter = require('events')
 
 const {
+  isArray,
+  isEventEmitter,
+  isFunction,
   isPojo,
+  isString,
   ArgTypeError,
   Logger,
-  isEventEmitter,
   ReferenceCounter
 } = require('./utils')
 
 const { decomposeChart, cxArrow } = require('./parsing')
 
 function Statebot (name, options) {
-  if (typeof name !== 'string') {
+  if (!isString(name)) {
     throw TypeError('\nStatebot: Please specify a name for this machine')
   }
 
@@ -183,11 +186,7 @@ function Statebot (name, options) {
     routes = []
   } = chart ? decomposeChart(chart) : options
 
-  let { startIn } = options
-  if (startIn === undefined) {
-    startIn = states[0]
-  }
-
+  const { startIn = states[0] } = options
   if (!states.includes(startIn)) {
     throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
@@ -199,25 +198,15 @@ function Statebot (name, options) {
 
   const internalEvents = new EventEmitter()
   const INTERNAL_EVENTS = {
-    STATE_CHANGING: '(ANY)state:changing',
-    STATE_CHANGED: '(ANY)state:changed'
+    onSwitching: '(ANY)state:changing',
+    onSwitched: '(ANY)state:changed'
   }
 
   function emitInternalEvent (eventName, ...args) {
-    const err = argTypeError('emitInternalEvent', { eventName: 'string' }, eventName)
-    if (err) {
-      throw TypeError(err)
-    }
-
     return internalEvents.emit(eventName, ...args)
   }
 
   function onInternalEvent (eventName, fn) {
-    const err = argTypeError('onInternalEvent', { eventName: 'string', fn: 'function' }, eventName, fn)
-    if (err) {
-      throw TypeError(err)
-    }
-
     internalEvents.addListener(eventName, fn)
     return function () {
       internalEvents.removeListener(eventName, fn)
@@ -245,7 +234,7 @@ function Statebot (name, options) {
   // Interprets onTransitions() and performTransitions()
   function applyHitcher (hitcher, fnName) {
     const hitcherActions =
-      typeof hitcher === 'function'
+      isFunction(hitcher)
         ? hitcher({ enter, emit, Enter, Emit })
         : isPojo(hitcher)
           ? hitcher
@@ -263,7 +252,7 @@ function Statebot (name, options) {
     Object.entries(hitcherActions)
       .forEach(([routeChart, actionOrConfig]) => {
         // onTransitions 1/3...
-        if (typeof actionOrConfig === 'function') {
+        if (isFunction(actionOrConfig)) {
           transitions.push({ routeChart, action: actionOrConfig })
         } else if (!isPojo(actionOrConfig)) {
           return
@@ -271,13 +260,13 @@ function Statebot (name, options) {
 
         // performTransitions 1/3...
         const { on: _on, then: _then } = actionOrConfig
-        if (typeof _on === 'string' || Array.isArray(_on)) {
+        if (isString(_on) || isArray(_on)) {
           const eventNames = [_on].flat()
           eventNames.forEach(eventName => {
             events[eventName] = events[eventName] || []
             events[eventName].push({ routeChart, action: _then })
           })
-        } else if (typeof _then === 'function') {
+        } else if (isFunction(_then)) {
           // onTransitions 2/3...
           // (Behave like onTransitions if a config is specified, but
           //  there is no "on" event...)
@@ -291,7 +280,7 @@ function Statebot (name, options) {
     // performTransitions 2/3...
     const decomposedEvents = Object.entries(events)
       .reduce((acc, [eventName, _configs]) => {
-        const { states, routes, configs } = decomposeConfigs(_configs)
+        const { states, routes, configs } = decomposeConfigs(_configs, canWarn)
         if (canWarn()) {
           allStates.push(...states)
           allRoutes.push(...routes)
@@ -307,15 +296,15 @@ function Statebot (name, options) {
     // performTransitions 3/3...
     allCleanupFns.push(
       ...Object.entries(decomposedEvents)
-        .map(([eventName, configs]) => {
-          return [
+        .map(([eventName, configs]) =>
+          [
             eventsHandled.increase(eventName),
             onEvent(eventName, (...args) => {
               const eventWasHandled = configs.some(
                 ({ fromState, toState, action }) => {
                   const passed = inState(fromState, () => {
                     enter(toState, ...args)
-                    if (typeof action === 'function') {
+                    if (isFunction(action)) {
                       action(...args)
                     }
                     return true
@@ -328,11 +317,11 @@ function Statebot (name, options) {
               }
             })
           ]
-        }).flat()
+        ).flat()
     )
 
     // onTransitions 3/3...
-    const transitionConfigs = decomposeConfigs(transitions)
+    const transitionConfigs = decomposeConfigs(transitions, canWarn)
 
     if (canWarn()) {
       allStates.push(...transitionConfigs.states)
@@ -371,33 +360,6 @@ function Statebot (name, options) {
     return () => allCleanupFns.forEach(fn => fn())
   }
 
-  function decomposeConfigs (configs) {
-    const allStates = []
-    const allRoutes = []
-
-    const _configs = configs.reduce((acc, config) => {
-      const { routeChart, action } = config
-      const { states, routes, transitions } = decomposeChart(routeChart)
-      if (canWarn()) {
-        allStates.push(...states)
-        allRoutes.push(...routes)
-      }
-      return [
-        ...acc,
-        ...transitions.map(transition => {
-          const [fromState, toState] = transition
-          return { fromState, toState, action }
-        })
-      ]
-    }, [])
-
-    return {
-      configs: _configs,
-      states: allStates,
-      routes: allRoutes
-    }
-  }
-
   function previousState () {
     return stateHistory[stateHistory.length - 2]
   }
@@ -406,39 +368,9 @@ function Statebot (name, options) {
     return stateHistory[stateHistory.length - 1]
   }
 
-  function inState (state, anyOrFn, ...fnArgs) {
-    const err = argTypeError('inState', { state: 'string' }, state)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const conditionMatches = currentState() === state
-
-    if (anyOrFn !== undefined) {
-      if (!conditionMatches) {
-        return null
-      }
-      if (typeof anyOrFn === 'function') {
-        return anyOrFn(...fnArgs)
-      }
-      return anyOrFn
-    }
-
-    return conditionMatches
-  }
-
-  function InState (state, anyOrFn) {
-    const err = argTypeError('InState', { state: 'string' }, state)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    return (...fnArgs) => inState(state, anyOrFn, ...fnArgs)
-  }
-
   function canTransitionTo (...states) {
     const testStates = states.flat()
-    const err = argTypeError('canTransitionTo', { state: 'string' }, testStates[0])
+    const err = argTypeError('canTransitionTo', { state: isString }, testStates[0])
     if (err) {
       throw TypeError(err)
     }
@@ -456,7 +388,7 @@ function Statebot (name, options) {
       ? state
       : currentState()
 
-    const err = argTypeError('statesAvailableFromHere', { state: 'string' }, _state)
+    const err = argTypeError('statesAvailableFromHere', { state: isString }, _state)
     if (err) {
       throw TypeError(err)
     }
@@ -472,19 +404,29 @@ function Statebot (name, options) {
     }, [])
   }
 
-  function Emit (eventName) {
-    const err = argTypeError('Emit', { eventName: 'string' }, eventName)
+  function inState (state, anyOrFn, ...fnArgs) {
+    const err = argTypeError('inState', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
 
-    return function (...args) {
-      return emit(eventName, ...args)
+    const conditionMatches = currentState() === state
+
+    if (anyOrFn !== undefined) {
+      if (!conditionMatches) {
+        return null
+      }
+      if (isFunction(anyOrFn)) {
+        return anyOrFn(...fnArgs)
+      }
+      return anyOrFn
     }
+
+    return conditionMatches
   }
 
   function emit (eventName, ...args) {
-    const err = argTypeError('emit', { eventName: 'string' }, eventName)
+    const err = argTypeError('emit', { eventName: isString }, eventName)
     if (err) {
       throw TypeError(err)
     }
@@ -492,19 +434,8 @@ function Statebot (name, options) {
     return events.emit(eventName, ...args)
   }
 
-  function Enter (state) {
-    const err = argTypeError('Enter', { state: 'string' }, state)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    return function (...args) {
-      return enter(state, ...args)
-    }
-  }
-
   function enter (state, ...args) {
-    const err = argTypeError('enter', { state: 'string' }, state)
+    const err = argTypeError('enter', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
@@ -536,145 +467,114 @@ function Statebot (name, options) {
       stateHistory.shift()
     }
 
-    emitInternalEvent(INTERNAL_EVENTS.STATE_CHANGING, toState, inState, ...args)
+    emitInternalEvent(INTERNAL_EVENTS.onSwitching, toState, inState, ...args)
     emitInternalEvent(nextRoute, ...args)
-    emitInternalEvent(INTERNAL_EVENTS.STATE_CHANGED, toState, inState, ...args)
+    emitInternalEvent(INTERNAL_EVENTS.onSwitched, toState, inState, ...args)
 
     return true
   }
 
   function onEvent (eventName, cb) {
-    const err = argTypeError('onEvent', { eventName: 'string', cb: 'function' }, eventName, cb)
+    const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb)
     if (err) {
       throw TypeError(err)
     }
 
     events.addListener(eventName, cb)
-    return function () {
-      events.removeListener(eventName, cb)
-    }
+    return () => events.removeListener(eventName, cb)
   }
 
-  function onSwitching (cb) {
-    const err = argTypeError('onSwitching', { cb: 'function' }, cb)
+  const switchMethods = Object.keys(INTERNAL_EVENTS)
+    .reduce((obj, methodName) => {
+      return {
+        ...obj,
+        [methodName]: function (cb) {
+          const err = argTypeError(methodName, { cb: isFunction }, cb)
+          if (err) {
+            throw TypeError(err)
+          }
+
+          const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName])
+          const removeEvent = onInternalEvent(
+            INTERNAL_EVENTS[methodName],
+            (toState, fromState, ...args) => {
+              cb(toState, fromState, ...args)
+            }
+          )
+          return () => {
+            removeEvent()
+            decreaseRefCount()
+          }
+        }
+      }
+    }, {})
+
+  const enterExitMethods = [
+    ['Exiting', 'onSwitching'],
+    ['Entering', 'onSwitching'],
+    ['Exited', 'onSwitched'],
+    ['Entered', 'onSwitched']
+  ]
+    .reduce((obj, names) => {
+      const [name, switchMethod] = names
+      const methodName = `on${name}`
+      const eventName = name.toLowerCase()
+      return {
+        ...obj,
+        [methodName]: function (state, cb) {
+          const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb)
+          if (err) {
+            throw TypeError(err)
+          }
+
+          const decreaseRefCounts = [
+            statesHandled.increase(state),
+            statesHandled.increase(`${state}:${eventName}`)
+          ]
+          const removeEvent = switchMethods[switchMethod]((toState, fromState, ...args) => {
+            if (name.indexOf('Exit') === 0) {
+              if (state === fromState) {
+                cb(toState, ...args)
+              }
+            } else {
+              if (state === toState) {
+                cb(fromState, ...args)
+              }
+            }
+          })
+          return () => {
+            removeEvent()
+            decreaseRefCounts.map(fn => fn())
+          }
+        }
+      }
+    }, {})
+
+  function Emit (eventName) {
+    const err = argTypeError('Emit', { eventName: isString }, eventName)
     if (err) {
       throw TypeError(err)
     }
 
-    const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS.STATE_CHANGING)
-    const removeEvent = onInternalEvent(
-      INTERNAL_EVENTS.STATE_CHANGING,
-      (toState, fromState, ...args) => {
-        cb(toState, fromState, ...args)
-      }
-    )
-    return () => {
-      removeEvent()
-      decreaseRefCount()
-    }
+    return (...args) => emit(eventName, ...args)
   }
 
-  function onSwitched (cb) {
-    const err = argTypeError('onSwitched', { cb: 'function' }, cb)
+  function Enter (state) {
+    const err = argTypeError('Enter', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
 
-    const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS.STATE_CHANGED)
-    const removeEvent = onInternalEvent(
-      INTERNAL_EVENTS.STATE_CHANGED,
-      (toState, fromState, ...args) => {
-        cb(toState, fromState, ...args)
-      }
-    )
-    return () => {
-      removeEvent()
-      decreaseRefCount()
-    }
+    return (...args) => enter(state, ...args)
   }
 
-  function onExiting (state, cb) {
-    const err = argTypeError('onExiting', { state: 'string', cb: 'function' }, state, cb)
+  function InState (state, anyOrFn) {
+    const err = argTypeError('InState', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
 
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:exiting`)
-    ]
-    const removeEvent = onSwitching((toState, fromState, ...args) => {
-      if (state === fromState) {
-        cb(toState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
-
-  function onExited (state, cb) {
-    const err = argTypeError('onExited', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:exited`)
-    ]
-    const removeEvent = onSwitched((toState, fromState, ...args) => {
-      if (state === fromState) {
-        cb(toState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
-
-  function onEntering (state, cb) {
-    const err = argTypeError('onEntering', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:entering`)
-    ]
-    const removeEvent = onSwitching((toState, fromState, ...args) => {
-      if (state === toState) {
-        cb(fromState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
-  }
-
-  function onEntered (state, cb) {
-    const err = argTypeError('onEntered', { state: 'string', cb: 'function' }, state, cb)
-    if (err) {
-      throw TypeError(err)
-    }
-
-    const decreaseRefCounts = [
-      statesHandled.increase(state),
-      statesHandled.increase(`${state}:entered`)
-    ]
-    const removeEvent = onSwitched((toState, fromState, ...args) => {
-      if (state === toState) {
-        cb(fromState, ...args)
-      }
-    })
-    return () => {
-      removeEvent()
-      decreaseRefCounts.map(fn => fn())
-    }
+    return (...fnArgs) => inState(state, anyOrFn, ...fnArgs)
   }
 
   function reset () {
@@ -1203,7 +1103,7 @@ function Statebot (name, options) {
      * machine.enter('done')
      * // Entered from: receiving
      */
-    onEntered: onEntered,
+    onEntered: enterExitMethods.onEntered,
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -1241,7 +1141,7 @@ function Statebot (name, options) {
      * // Entering from: sending
      * // We made it!
      */
-    onEntering: onEntering,
+    onEntering: enterExitMethods.onEntering,
 
     /**
      * {@link #statebotfsmonentering .onEntering()} /
@@ -1324,7 +1224,7 @@ function Statebot (name, options) {
      * machine.enter('sending')
      * // We are heading to: sending
      */
-    onExited: onExited,
+    onExited: enterExitMethods.onExited,
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -1362,7 +1262,7 @@ function Statebot (name, options) {
      * // Heading to: receiving
      * // Peace out!
      */
-    onExiting: onExiting,
+    onExiting: enterExitMethods.onExiting,
 
     /**
      * {@link #statebotfsmonexiting .onExiting()} /
@@ -1404,7 +1304,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // We went from "idle" to "receiving"
      */
-    onSwitched: onSwitched,
+    onSwitched: switchMethods.onSwitched,
 
     /**
      * Adds a listener that runs a callback immediately before **ANY**
@@ -1435,7 +1335,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // Going from "idle" to "receiving"
      */
-    onSwitching: onSwitching,
+    onSwitching: switchMethods.onSwitching,
 
     /**
      * {@link #statebotfsmonswitching .onSwitching()} /
@@ -1693,4 +1593,31 @@ function isStatebot (machine) {
     isPojo(machine) &&
     typeof machine.__STATEBOT__ === 'number'
   )
+}
+
+function decomposeConfigs (configs, canWarn) {
+  const allStates = []
+  const allRoutes = []
+
+  const _configs = configs.reduce((acc, config) => {
+    const { routeChart, action } = config
+    const { states, routes, transitions } = decomposeChart(routeChart)
+    if (canWarn()) {
+      allStates.push(...states)
+      allRoutes.push(...routes)
+    }
+    return [
+      ...acc,
+      ...transitions.map(transition => {
+        const [fromState, toState] = transition
+        return { fromState, toState, action }
+      })
+    ]
+  }, [])
+
+  return {
+    configs: _configs,
+    states: allStates,
+    routes: allRoutes
+  }
 }

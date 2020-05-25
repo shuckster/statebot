@@ -3,18 +3,16 @@
 // STATEBOT CHART/ROUTE PARSING
 //
 
+const rxCRLF = /[\r\n]/
 const cxPipe = '|'
 const cxArrow = '->'
-
-const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi
-const rxCRLF = /[\r\n]/
-const rxComment = /(\/\/[^\n\r]*)/
-
 const rxOperators = [cxPipe, cxArrow]
   .map(rxUnsafe => rxUnsafe.replace('|', '\\|'))
   .join('|')
 
 const rxLineContinations = new RegExp(`(${rxOperators})$`)
+const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi
+const rxComment = /(\/\/[^\n\r]*)/
 
 module.exports = {
   cxPipe,
@@ -37,10 +35,8 @@ function decomposeRoute (templateLiteral) {
     throw TypeError(err)
   }
 
-  const rawLines = [templateLiteral].flat()
-  const codeOnly = removeComments(rawLines)
-  const lines = condenseLines(codeOnly)
-  const flattenedRoute = sanitiseLines(lines).flat(2)
+  const lines = condensedLines(templateLiteral)
+  const flattenedRoute = tokenisedLines(lines).flat(2)
   return flattenedRoute
 }
 
@@ -53,21 +49,22 @@ function decomposeChart (templateLiteral) {
     throw TypeError(err)
   }
 
-  const rawLines = [templateLiteral].flat()
-  const codeOnly = removeComments(rawLines)
-  const lines = condenseLines(codeOnly)
-  const linesToProcess = sanitiseLines(lines)
-  const linesOfRoutes = linesToProcess
-    .map(decomposeLineIntoRoute)
+  const lines = condensedLines(templateLiteral)
+  const linesOfTokens = tokenisedLines(lines)
+  const linesOfRoutes = linesOfTokens
+    .map(decomposeRouteFromTokens)
     .flat(1)
+
   const linesOfTransitions = linesOfRoutes
-    .map(decomposeRouteIntoTransition)
+    .map(decomposeTransitionsFromRoute)
     .flat(1)
+
   const states = []
   const routeKeys = linesOfTransitions.map(route => {
     states.push(...route)
     return route.join(cxArrow)
   })
+
   const filteredRoutes = uniq(routeKeys)
   const filteredStates = uniq(states)
   return {
@@ -77,58 +74,57 @@ function decomposeChart (templateLiteral) {
   }
 }
 
-function removeComments (arrayOfStrings) {
-  return arrayOfStrings
-    .reduce((acc, string) => {
-      if (typeof string !== 'string') {
-        return acc
-      }
-      return [
-        ...acc,
-        ...string.split(rxCRLF).map(part => part
-          .replace(rxComment, ''))
-      ]
-    }, [])
-    .filter(Boolean)
+function linesFrom (strOrArr) {
+  return [strOrArr]
+    .flat()
+    .reduce((acc, line) => [...acc, line.split(rxCRLF)], [])
+    .flat()
 }
 
-function condenseLines (lines) {
-  return lines.reduce((acc, line) => rxLineContinations.test(line.trim())
-    ? {
-      lines: acc.lines,
-      currentLine: acc.currentLine + line
+function condensedLines (strOrArr) {
+  const input = linesFrom(strOrArr)
+  const output = []
+
+  input.reduce((condensedLine, line) => {
+    const sanitisedLine = line
+      .replace(rxComment, '')
+      .replace(rxDisallowedCharacters, '')
+
+    if (!sanitisedLine) {
+      return condensedLine
     }
-    : {
-      lines: [...acc.lines, acc.currentLine + line],
-      currentLine: ''
-    }, {
-    lines: [],
-    currentLine: ''
-  }).lines
+
+    if (rxLineContinations.test(sanitisedLine)) {
+      return condensedLine + sanitisedLine
+    }
+
+    output.push(condensedLine + sanitisedLine)
+    return ''
+  }, '')
+
+  return output
 }
 
-function sanitiseLines (lines) {
-  return lines.map(line => line.split(cxArrow).map(str => str
-    .replace(rxDisallowedCharacters, '')
-    .split(cxPipe)
-    .map(part => part.trim())))
+function tokenisedLines (lines) {
+  return lines.map(line => line.split(cxArrow).map(str => str.split(cxPipe)))
 }
 
-function decomposeLineIntoRoute (line) {
-  return line.reduce((acc, states) =>
-    acc === false
-      ? {
-        previousStates: [...states],
-        pairs: []
-      }
-      : {
-        previousStates: [...states],
-        pairs: [...acc.pairs, [[...acc.previousStates], [...states]]]
-      }, false)
-    .pairs
+function decomposeRouteFromTokens (line) {
+  const output = []
+
+  line.reduce((previousStates, states) => {
+    if (previousStates === false) {
+      return [...states]
+    }
+
+    output.push([previousStates, [...states]])
+    return [...states]
+  }, false)
+
+  return output
 }
 
-function decomposeRouteIntoTransition ([fromStates, toStates]) {
+function decomposeTransitionsFromRoute ([fromStates, toStates]) {
   return fromStates.reduce((acc, fromState) => [
     ...acc,
     ...toStates.map(toState => {

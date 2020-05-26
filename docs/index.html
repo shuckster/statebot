@@ -124,7 +124,7 @@
 							</a>
 							
 							<a
-									href='#emit-name'
+									href='#emit-eventname'
 									class='button-indent regular block'>
 								<code>#Emit</code>
 							</a>
@@ -136,7 +136,7 @@
 							</a>
 							
 							<a
-									href='#enter-state-1'
+									href='#enter-state'
 									class='button-indent regular block'>
 								<code>#Enter</code>
 							</a>
@@ -401,12 +401,12 @@ machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-st
 <tr>
 <td><a href="#statebotfsmperformtransitions">.performTransitions()</a> / <a href="#statebotfsmonevent">.onEvent()</a></td>
 <td><a href="#statebotfsmcantransitionto">.canTransitionTo()</a> / <a href="#statebotfsmstatesavailablefromhere">.statesAvailableFromHere()</a></td>
-<td><a href="#statebotfsmemit">.emit()</a> / <a href="#emit-name">.Emit()</a></td>
+<td><a href="#statebotfsmemit">.emit()</a> / <a href="#emit-eventname">.Emit()</a></td>
 </tr>
 <tr>
 <td><a href="#statebotfsmontransitions">.onTransitions()</a></td>
 <td><a href="#statebotfsmcurrentstate">.currentState()</a> / <a href="#statebotfsmpreviousstate">.previousState()</a> / <a href="#statebotfsmhistory">.history()</a></td>
-<td><a href="#statebotfsmenter">.enter()</a> / <a href="#enter-state-1">.Enter()</a></td>
+<td><a href="#statebotfsmenter">.enter()</a> / <a href="#enter-state">.Enter()</a></td>
 </tr>
 <tr>
 <td><a href="#statebotfsmonentering">.onEntering()</a> / <a href="#statebotfsmonentered">.onEntered()</a></td>
@@ -514,15 +514,6 @@ machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-st
 	
 
 	
-	
-	<h4 class='caps quiet mb1 mt3'>Returns</h4>
-	<code><a href="#statebotfsm">statebotFsm</a></code>
-	:
-	<span class='force-inline'>
-</span>
-	
-	
-	
 
 	
 
@@ -563,7 +554,7 @@ machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-st
 		<a class='black' href='#statebotisstatebot'>
 			<code>
 				isStatebot
-				<span class='gray'>(object?)</span>
+				<span class='gray'>(object)</span>
 			</code>
 		</a>
 	</h3>
@@ -590,7 +581,7 @@ machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-st
 		<tr>
 			<td class='col-3 strong'><code>object</code></td>
 			<td class='col-3 quiet'>
-				any?
+				any
 				
 			</td>
 			<td class='col-6'>The object to test.
@@ -1583,7 +1574,7 @@ machine.currentState()
 	</div>
 
 	<h3 class='regular'>
-		<a class='black' href='#emit-name'>
+		<a class='black' href='#emit-eventname'>
 			<code>
 				Emit
 				<span class='gray'>(eventName)</span>
@@ -1701,7 +1692,7 @@ machine.currentState()
 		<a class='black' href='#statebotfsmenter'>
 			<code>
 				enter
-				<span class='gray'>(state)</span>
+				<span class='gray'>(state, args?)</span>
 			</code>
 		</a>
 	</h3>
@@ -1733,6 +1724,17 @@ accessible from the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 				
 			</td>
 			<td class='col-6'>The desired state to switch-to.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>args</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Optional arguments to pass to transition callbacks.
 </td>
 		</tr>
 		
@@ -1799,7 +1801,7 @@ machine.enter(<span class="hljs-string">'showing-modal'</span>)
 	</div>
 
 	<h3 class='regular'>
-		<a class='black' href='#enter-state-1'>
+		<a class='black' href='#enter-state'>
 			<code>
 				Enter
 				<span class='gray'>(state)</span>

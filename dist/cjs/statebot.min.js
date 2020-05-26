@@ -1,6 +1,6 @@
 /*
  * Statebot
- * v2.2.0
+ * v2.2.1
  * https://shuckster.github.io/statebot/
  * License: ISC
  */

@@ -7,14 +7,14 @@ BEGIN {
   if ($0 ~ /#statebotfsmemit/) {
     emit_index++
     if (emit_index==2 || emit_index==5) {
-      sub(/#statebotfsmemit/, "#emit-name")
+      sub(/#statebotfsmemit/, "#emit-eventname")
     }
   }
 
   if ($0 ~ /#statebotfsmenter/) {
     enter_index++
     if (enter_index==2 || enter_index==5) {
-      sub(/#statebotfsmenter/, "#enter-state-1")
+      sub(/#statebotfsmenter/, "#enter-state")
     }
   }
 

@@ -640,7 +640,11 @@ function Statebot (name, options) {
    */
 
   return {
-    // For identifying Statebot objects
+    /**
+     * For identifying Statebot objects.
+     *
+     * @private
+     */
     __STATEBOT__: 1,
 
     /**

@@ -14,7 +14,7 @@ module.exports = {
  * @typedef {Object} statebotOptions
  * @property {statebotChart} chart
  *  The state-chart.
- * @property {string} [startIn=<auto>]
+ * @property {string} [startIn=auto]
  *  The state in which to start. If unspecified, the first state in the
  *  chart will be used.
  * @property {number} [logLevel=3]

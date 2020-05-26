@@ -14,7 +14,7 @@ BEGIN {
   if ($0 ~ /#statebotfsmenter/) {
     enter_index++
     if (enter_index==2 || enter_index==5) {
-      sub(/#statebotfsmenter/, "#enter-state-1")
+      sub(/#statebotfsmenter/, "#enter-state")
     }
   }
 

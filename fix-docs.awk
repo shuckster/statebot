@@ -7,7 +7,7 @@ BEGIN {
   if ($0 ~ /#statebotfsmemit/) {
     emit_index++
     if (emit_index==2 || emit_index==5) {
-      sub(/#statebotfsmemit/, "#emit-name")
+      sub(/#statebotfsmemit/, "#emit-eventname")
     }
   }
 

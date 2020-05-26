@@ -161,6 +161,27 @@ const {
 
 const { decomposeChart, cxArrow } = require('./parsing')
 
+/**
+ * Create a {@link #statebotfsm|statebotFsm} `object`.
+ *
+ * @memberof statebot
+ * @function
+ * @example
+ * var machine = Statebot('lemming', {
+ *   chart: `
+ *     walking -> (digging | building | falling) ->
+ *       walking
+ *
+ *     falling -> splatting
+ *     walking -> exiting
+ *   `
+ * })
+ *
+ * @param {string} name
+ *  Give your Statebot a name. Used for logging and by {@link #statebotassertroute|assertRoute()}.
+ * @param {statebotOptions} options
+ */
+
 function Statebot (name, options) {
   if (!isString(name)) {
     throw TypeError('\nStatebot: Please specify a name for this machine')
@@ -806,6 +827,8 @@ function Statebot (name, options) {
      * @instance
      * @function
      * @param {string} state The desired state to switch-to.
+     * @param {...*} [args]
+     *  Optional arguments to pass to transition callbacks.
      * @returns {boolean} Whether or not the state changed.
      *
      * @example
@@ -1592,13 +1615,6 @@ function Statebot (name, options) {
   }
 }
 
-function isStatebot (machine) {
-  return (
-    isPojo(machine) &&
-    typeof machine.__STATEBOT__ === 'number'
-  )
-}
-
 function decomposeConfigs (configs, canWarn) {
   const allStates = []
   const allRoutes = []
@@ -1624,4 +1640,26 @@ function decomposeConfigs (configs, canWarn) {
     states: allStates,
     routes: allRoutes
   }
+}
+
+/**
+ * Tests that an object is a {@link #statebotfsm|statebotFsm}.
+ *
+ * @memberof statebot
+ * @function
+ * @example
+ * var machine = Statebot(...)
+ *
+ * isStatebot(machine)
+ * // true
+ *
+ * @param {any} object The object to test.
+ * @returns {boolean}
+ */
+
+function isStatebot (object) {
+  return (
+    isPojo(object) &&
+    typeof object.__STATEBOT__ === 'number'
+  )
 }

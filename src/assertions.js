@@ -21,21 +21,51 @@ const {
 
 const argTypeError = ArgTypeError('statebot.')
 
-function routeIsPossible (machine, expectedRoute) {
+/**
+ * Assert that a certain route can be followed by a
+ * {@link #statebotfsm|statebotFsm}.
+ *
+ * This merely tests that a certain path can be taken through a
+ * state-machine. It doesn't assert that the states are moved-through
+ * while the machine is working, as with
+ * {@link #statebotassertroute|assertRoute()}.
+ *
+ * @memberof statebot
+ * @function
+ * @param {statebotFsm} machine
+ *  The machine to test the route on.
+ * @param {string|string[]} route
+ *  The route to test as an arrow-delimited string:
+ *
+ *  `
+ *  "idle -> pending -> success -> done"
+ *  `
+ * @returns {boolean}
+ *
+ * @example
+ * var machine = Statebot(...)
+ *
+ * routeIsPossible(machine,
+ *   'walking -> falling -> splatting -> walking'
+ * )
+ * // false
+ */
+
+function routeIsPossible (machine, route) {
   const err = argTypeError('routeIsPossible',
-    { machine: isStatebot, expectedRoute: isTemplateLiteral },
-    machine, expectedRoute
+    { machine: isStatebot, route: isTemplateLiteral },
+    machine, route
   )
   if (err) {
     throw TypeError(err)
   }
 
-  const route = decomposeRoute(expectedRoute)
-  return route.every((state, index) => {
-    if (index === route.length - 1) {
+  const _route = decomposeRoute(route)
+  return _route.every((state, index) => {
+    if (index === _route.length - 1) {
       return true
     } else {
-      const nextState = route[index + 1]
+      const nextState = _route[index + 1]
       const availableStates = machine.statesAvailableFromHere(state)
       const passes = availableStates.includes(nextState)
       return passes
@@ -64,6 +94,47 @@ let assertionId = 0
  * @property {number} [logLevel=3]
  *  Normally we want logs for assertions, right? Well, you can tune
  *  them just like you can with {@link #statebotoptions|statebotOptions}.
+ */
+
+/**
+ * Assert that a {@link #statebotfsm|statebotFsm} traced the route specified.
+ *
+ * Whereas {@link #statebotrouteispossible|routeIsPossible()} only checks
+ * that a particular route can be followed, `assertRoute` will hook-into
+ * a machine and wait for it to trace the specified path within a
+ * timeout period.
+ *
+ * @memberof statebot
+ * @function
+ * @async
+ * @param {statebotFsm} machine
+ *  The machine to run the assertion on.
+ * @param {string|string[]} expectedRoute
+ *  The expected route as an arrow-delimited string:
+ *
+ *  `
+ *  "idle -> pending -> success -> done"
+ *  `
+ * @param {assertRouteOptions} [options]
+ * @returns {Promise}
+ *
+ * @example
+ * var machine = Statebot(...)
+ *
+ * assertRoute(
+ *   machine, 'prepare -> debounce -> sending -> done -> idle',
+ *   {
+ *     description: 'Email sent with no issues',
+ *     fromState: 'idle',
+ *     timeoutInMs: 1000 * 20,
+ *     permittedDeviations: 0,
+ *     logLevel: 3
+ *   }
+ * )
+ * .then(() => console.log('Assertion passed!'))
+ * .catch(err => console.error(`Whoops: ${err}`))
+ *
+ * machine.enter('idle')
  */
 
 function assertRoute (machine, expectedRoute, options) {

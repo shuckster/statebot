@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2020-05-26
+### Fixed
+- A few JSDoc links weren't working
+- VS Code autocomplete wasn't working fully
+
 ## [2.2.0] - 2020-05-25
 ### Changed
 - Migrated from Webpack to Rollup; smaller min builds, UMD build

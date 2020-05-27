@@ -571,31 +571,32 @@ function Statebot (name, options) {
       }
     }, {})
 
-  function Emit (eventName) {
+  function Emit (eventName, ...curriedArgs) {
     const err = argTypeError('Emit', { eventName: isString }, eventName)
     if (err) {
       throw TypeError(err)
     }
 
-    return (...args) => emit(eventName, ...args)
+    return (...args) => emit(eventName, ...[...curriedArgs, ...args])
   }
 
-  function Enter (state) {
+  function Enter (state, ...curriedArgs) {
     const err = argTypeError('Enter', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
 
-    return (...args) => enter(state, ...args)
+    return (...args) => enter(state, ...[...curriedArgs, ...args])
   }
 
-  function InState (state, anyOrFn) {
+  function InState (state, anyOrFn, ...curriedFnArgs) {
     const err = argTypeError('InState', { state: isString }, state)
     if (err) {
       throw TypeError(err)
     }
 
-    return (...fnArgs) => inState(state, anyOrFn, ...fnArgs)
+    return (...fnArgs) =>
+      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
   }
 
   function reset () {
@@ -782,6 +783,9 @@ function Statebot (name, options) {
      * @function
      * @param {string} eventName
      *  The desired event to {@link #statebotfsmemit|.emit()}.
+     * @param {...*} [curriedArgs]
+     *  Arguments that will curry into the returned `emit()` function
+     *  whenever it is called.
      * @returns {function} A function that emits that event.
      *
      * @example
@@ -864,6 +868,9 @@ function Statebot (name, options) {
      * @instance
      * @function
      * @param {string} state The desired state to switch-to.
+     * @param {...*} [curriedArgs]
+     *  Arguments that will curry into the returned `enter()` function
+     *  whenever it is called.
      * @returns {function}
      *  A function that can change the state when called.
      *
@@ -996,6 +1003,9 @@ function Statebot (name, options) {
      * @param {any|function} [outputWhenTrue]
      *  Optional `true`-value. If a function is specified, it will be
      *  called and its return value will be used.
+     * @param {...*} [fnArgs]
+     *  Arguments that will pass into `outputWhenTrue()` if it has
+     *  been defined as a function.
      * @returns {boolean|null|*}
      *
      * @example
@@ -1042,6 +1052,9 @@ function Statebot (name, options) {
      * @param {any|function} [outputWhenTrue]
      *  Optional `true`-value. If a function is specified, it will be
      *  called and its return value will be used.
+     * @param {...*} [curriedFnArgs]
+     *  Arguments that will curry into `outputWhenTrue()` if it has
+     *  been defined as a function.
      * @returns {function}
      *  A function that calls {@link #statebotfsminstate|.inState()}.
      *
@@ -1403,13 +1416,13 @@ function Statebot (name, options) {
      * machine.onTransitions({
      *   'idle -> sending': () => {
      *     sendData()
-     *       .then(() => machine.enter('done', 'sent'))
-     *       .catch(() => machine.enter('done', 'failed'))
+     *       .then(machine.Enter('done', 'sent'))
+     *       .catch(machine.Enter('done', 'failed'))
      *   },
      *   'idle -> receiving': () => {
      *     receiveData()
-     *       .then(() => machine.enter('done', 'received'))
-     *       .catch(() => machine.enter('done', 'failed'))
+     *       .then(machine.Enter('done', 'received'))
+     *       .catch(machine.Enter('done', 'failed'))
      *   },
      *   'sending | receiving -> done': whatHappened => {
      *     console.log('All finished: ', whatHappened)
@@ -1434,16 +1447,16 @@ function Statebot (name, options) {
      *
      * @example
      * // The above example using a function for config
-     * machine.onTransitions(({ enter }) => ({
+     * machine.onTransitions(({ Enter }) => ({
      *   'idle -> sending': () => {
      *     sendData()
-     *       .then(() => enter('done', 'sent'))
-     *       .catch(() => enter('done', 'failed'))
+     *       .then(Enter('done', 'sent'))
+     *       .catch(Enter('done', 'failed'))
      *   },
      *   'idle -> receiving': () => {
      *     receiveData()
-     *       .then(() => enter('done', 'received'))
-     *       .catch(() => enter('done', 'failed'))
+     *       .then(Enter('done', 'received'))
+     *       .catch(Enter('done', 'failed'))
      *   },
      *   'sending | receiving -> done': whatHappened => {
      *     console.log('All finished: ', whatHappened)

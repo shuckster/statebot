@@ -1,7 +1,7 @@
 {
   "name": "statebot",
   "description": "Write more robust and understandable programs.",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "author": "Conan Theobald <statebot@conans.co.uk>",
   "license": "ISC",
   "main": "index.js",

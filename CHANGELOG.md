@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.1] - 2020-05-27
+### Fixed
+- Fix docs for updated Enter/Emit
+
 ## [2.3.0] - 2020-05-27
 ### Added
 - Enter/Emit can accept arguments that will curry into the functions

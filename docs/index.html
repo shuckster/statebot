@@ -124,7 +124,7 @@
 							</a>
 							
 							<a
-									href='#emit-eventname'
+									href='#emit-eventname-curriedargs'
 									class='button-indent regular block'>
 								<code>#Emit</code>
 							</a>
@@ -136,7 +136,7 @@
 							</a>
 							
 							<a
-									href='#enter-state'
+									href='#enter-state-curriedargs'
 									class='button-indent regular block'>
 								<code>#Enter</code>
 							</a>
@@ -166,7 +166,7 @@
 							</a>
 							
 							<a
-									href='#instate-state-outputwhentrue-1'
+									href='#instate-state-outputwhentrue-curriedfnargs'
 									class='button-indent regular block'>
 								<code>#InState</code>
 							</a>
@@ -410,7 +410,7 @@ machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-st
 </tr>
 <tr>
 <td><a href="#statebotfsmonentering">.onEntering()</a> / <a href="#statebotfsmonentered">.onEntered()</a></td>
-<td><a href="#statebotfsminstate">.inState()</a> / <a href="#instate-state-outputwhentrue-1">.InState()</a></td>
+<td><a href="#statebotfsminstate">.inState()</a> / <a href="#instate-state-outputwhentrue-curriedfnargs">.InState()</a></td>
 <td><a href="#statebotfsmreset">.reset()</a></td>
 </tr>
 <tr>
@@ -1574,10 +1574,10 @@ machine.currentState()
 	</div>
 
 	<h3 class='regular'>
-		<a class='black' href='#emit-eventname'>
+		<a class='black' href='#emit-eventname-curriedargs'>
 			<code>
 				Emit
-				<span class='gray'>(eventName)</span>
+				<span class='gray'>(eventName, curriedArgs?)</span>
 			</code>
 		</a>
 	</h3>
@@ -1611,6 +1611,20 @@ machine.currentState()
 			<td class='col-6'>The desired event to 
 <a href="#statebotfsmemit">.emit()</a>
 .
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>curriedArgs</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments that will curry into the returned 
+<code>emit()</code>
+ function
+whenever it is called.
 </td>
 		</tr>
 		
@@ -1801,10 +1815,10 @@ machine.enter(<span class="hljs-string">'showing-modal'</span>)
 	</div>
 
 	<h3 class='regular'>
-		<a class='black' href='#enter-state'>
+		<a class='black' href='#enter-state-curriedargs'>
 			<code>
 				Enter
-				<span class='gray'>(state)</span>
+				<span class='gray'>(state, curriedArgs?)</span>
 			</code>
 		</a>
 	</h3>
@@ -1837,6 +1851,20 @@ as it is accessible from the <a href="#statebotfsmcurrentstate">.currentState()<
 				
 			</td>
 			<td class='col-6'>The desired state to switch-to.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>curriedArgs</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments that will curry into the returned 
+<code>enter()</code>
+ function
+whenever it is called.
 </td>
 		</tr>
 		
@@ -2135,7 +2163,7 @@ machine.inspect()
 		<a class='black' href='#statebotfsminstate'>
 			<code>
 				inState
-				<span class='gray'>(state, outputWhenTrue?)</span>
+				<span class='gray'>(state, outputWhenTrue?, fnArgs?)</span>
 			</code>
 		</a>
 	</h3>
@@ -2187,6 +2215,20 @@ as the <code>true</code>-value.</p>
 <code>true</code>
 -value. If a function is specified, it will be
 called and its return value will be used.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>fnArgs</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments that will pass into 
+<code>outputWhenTrue()</code>
+ if it has
+been defined as a function.
 </td>
 		</tr>
 		
@@ -2256,10 +2298,10 @@ machine.inState(<span class="hljs-string">'idle'</span>, () =&gt; {
 	</div>
 
 	<h3 class='regular'>
-		<a class='black' href='#instate-state-outputwhentrue-1'>
+		<a class='black' href='#instate-state-outputwhentrue-curriedfnargs'>
 			<code>
 				InState
-				<span class='gray'>(state, outputWhenTrue?)</span>
+				<span class='gray'>(state, outputWhenTrue?, curriedFnArgs?)</span>
 			</code>
 		</a>
 	</h3>
@@ -2310,6 +2352,20 @@ instead of <code>true</code>, and <code>null</code> will be returned instead of
 <code>true</code>
 -value. If a function is specified, it will be
 called and its return value will be used.
+</td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>curriedFnArgs</code></td>
+			<td class='col-3 quiet'>
+				...any?
+				
+			</td>
+			<td class='col-6'>Arguments that will curry into 
+<code>outputWhenTrue()</code>
+ if it has
+been defined as a function.
 </td>
 		</tr>
 		
@@ -3283,13 +3339,13 @@ by this method.
 machine.onTransitions({
   <span class="hljs-string">'idle -&gt; sending'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     sendData()
-      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
-      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
+      .catch(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
   },
   <span class="hljs-string">'idle -&gt; receiving'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     receiveData()
-      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
-      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> machine.enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
+      .catch(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
   },
   <span class="hljs-string">'sending | receiving -&gt; done'</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'All finished: '</span>, whatHappened)
@@ -3314,16 +3370,16 @@ machine.enter(<span class="hljs-string">'sending'</span>)
 	
 	
 	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-comment">// The above example using a function for config</span>
-machine.onTransitions(<span class="hljs-function">(<span class="hljs-params">{ enter }</span>) =&gt;</span> ({
+machine.onTransitions(<span class="hljs-function">(<span class="hljs-params">{ Enter }</span>) =&gt;</span> ({
   <span class="hljs-string">'idle -&gt; sending'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     sendData()
-      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
-      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
+      .catch(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
   },
   <span class="hljs-string">'idle -&gt; receiving'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     receiveData()
-      .then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
-      .catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
+      .catch(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
   },
   <span class="hljs-string">'sending | receiving -&gt; done'</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'All finished: '</span>, whatHappened)

@@ -6,7 +6,7 @@ Write more robust and understandable programs.
 
 Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible.
 
-It's <8K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
+It's less than 8K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 
@@ -41,15 +41,17 @@ Or just download a script from the `dist/` folder and include it in your project
 
 ### Charts
 
-**Statebot** creates FSMs from `charts`:
+**Statebot** creates state-machines from `charts`:
 
 ```js
 const { Statebot } = require('statebot')
 
+// Describe states + transitions
 const machine = Statebot('promise-like', {
   chart: `
 
     idle ->
+
       // This one behaves a bit like a Promise
       pending ->
         (resolved | rejected) ->
@@ -59,16 +61,22 @@ const machine = Statebot('promise-like', {
   startIn: 'pending'
 })
 
+// Handle events...
 machine.performTransitions({
   'pending -> resolved': {
     on: 'success'
   }
 })
 
+// ...and/or transitions
 machine.onTransitions({
-  'pending -> resolved': function () {
+  'pending -> resolved | rejected': () => {
     console.log('Sweet!')
   }
+})
+
+machine.onExiting('pending', toState => {
+  console.log(`Off we go to: ${toState}`)
 })
 
 machine.canTransitionTo('done')
@@ -78,6 +86,7 @@ machine.statesAvailableFromHere()
 // ["resolved", "rejected"]
 
 machine.emit('success')
+// "Off we go to: resolved"
 // "Sweet!"
 ```
 
@@ -187,9 +196,35 @@ machine.onTransitions(({ emit, Emit }) => ({
 // See the section below on "Passing data around".
 ```
 
-Both `performTransitions` and `onTransitions` can take objects, or functions that return objects.
+Both `performTransitions` and `onTransitions` take objects or functions that return objects in order to configure them.
 
-In the latter case the function arguments will include helpers for **emitting events** and **entering states**. In the example above, we're pulling-in the event-emitting helpers `emit` and `Emit`.
+Object:
+
+```js
+machine.onTransitions({
+  'idle -> pending': // etc...
+```
+
+Function:
+
+```js
+machine.onTransitions(({ emit, enter, Emit, Enter }) => ({
+  'idle -> pending': // etc...
+```
+
+In the case of a function, a single argument is passed-in: An object containing helpers for **emitting events** and **entering states**. In the above example we're pulling-in the helpers `emit` and `enter`, and also their corresponding factories: `Emit` and `Enter`.
+
+Of course, you don't have to use an "implicit return":
+
+```js
+machine.onTransitions(({ emit, Emit, enter, Enter }) => {
+  // Setup, closure gubbins and so on...
+
+  return {
+    'idle -> pending': // etc...
+  }
+})
+```
 
 `performTransitions` hitches onto events, and `onTransitions` hitches onto state-transitions.
 

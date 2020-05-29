@@ -10,7 +10,7 @@ const rxOperators = [cxPipe, cxArrow]
   .map(rxUnsafe => rxUnsafe.replace('|', '\\|'))
   .join('|')
 
-const rxLineContinations = new RegExp(`(${rxOperators})$`)
+const rxLineContinuations = new RegExp(`(${rxOperators})$`)
 const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi
 const rxComment = /(\/\/[^\n\r]*)/
 
@@ -118,7 +118,7 @@ function condensedLines (strOrArr) {
       return condensedLine
     }
 
-    if (rxLineContinations.test(sanitisedLine)) {
+    if (rxLineContinuations.test(sanitisedLine)) {
       return condensedLine + sanitisedLine
     }
 

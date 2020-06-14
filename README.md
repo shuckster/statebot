@@ -4,7 +4,7 @@
 
 Write more robust and understandable programs.
 
-Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible.
+Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible by focussing on their organisational benefits in a simplified way.
 
 It's less than 8K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
@@ -14,8 +14,9 @@ There is a lot of prior-art out there, most notably [XState](https://github.com/
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-  - [Charts](#charts)
-  - [Events](#events)
+  - [React example](#react-example)
+  - [Node.js example](#nodejs-example)
+- [Events](#events)
 - [Passing data around](#passing-data-around)
 - [Testing](#testing)
 - [Chart Syntax](#chart-syntax)
@@ -39,9 +40,62 @@ Or just download a script from the `dist/` folder and include it in your project
 
 ## Quick Start:
 
-### Charts
+### React example:
 
-**Statebot** creates state-machines from `charts`:
+(You can play around with this in a [CodeSandbox](https://codesandbox.io/s/statebot-react-ot3xe?file=/src/Loader.js).)
+
+```jsx
+import React, { useState, useEffect } from 'react'
+import { Statebot } from 'statebot'
+
+// Using Statebot with React requires a 3-line Hook:
+function useStatebot(bot) {
+  const [state, setState] = useState(bot.currentState())
+  useEffect(() => bot.onSwitched(setState), [bot])
+  return [state]
+}
+
+const loader$bot = Statebot('loader', {
+  chart: `
+    idle ->
+      loading -> (loaded | failed) ->
+      idle
+  `
+})
+
+loader$bot.performTransitions(({ Emit }) => ({
+  'idle -> loading': {
+    on: 'start-loading',
+    then: () => setTimeout(Emit('success'), 1000)
+  },
+  'loading -> loaded': {
+    on: 'success'
+  },
+  'loading -> failed': {
+    on: 'error'
+  }
+}))
+
+const { Enter, Emit, inState } = loader$bot
+
+function LoadingButton() {
+  const [state] = useStatebot(loader$bot)
+
+  return (
+    <button
+      className={state}
+      onClick={Emit('start-loading')}
+      disabled={inState('loading')}
+    >
+      {inState('idle', 'Load')}
+      {inState('loading', 'Please wait...')}
+      {inState('loaded', 'Done!')} ({state})
+    </button>
+  )
+}
+```
+
+### Node.js example:
 
 ```js
 const { Statebot } = require('statebot')
@@ -49,14 +103,12 @@ const { Statebot } = require('statebot')
 // Describe states + transitions
 const machine = Statebot('promise-like', {
   chart: `
-
     idle ->
 
       // This one behaves a bit like a Promise
       pending ->
         (resolved | rejected) ->
       done
-
   `,
   startIn: 'pending'
 })
@@ -90,9 +142,9 @@ machine.emit('success')
 // "Sweet!"
 ```
 
-### Events
+# Events
 
-We can switch states `on` events using `performTransitions`:
+**Statebot** creates state-machines from `charts`, and we can switch states `on` events using `performTransitions`:
 
 ```js
 machine.performTransitions({

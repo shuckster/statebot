@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.3] - 2020-06-14
+### Added
+- Include a React example in docs + README
+
 ## [2.3.2] - 2020-05-29
 ### Fixed
 - Typo in code

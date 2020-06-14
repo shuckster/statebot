@@ -25,6 +25,8 @@ const { decomposeChart } = require('./parsing')
  *
  * ### Jump right in
  *
+ * Play around with an example that uses React in [this CodeSandbox](https://codesandbox.io/s/statebot-react-ot3xe?file=/src/Loader.js).
+ *
  * You can install Statebot into your `npm` project:
  *
  * ```sh

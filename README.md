@@ -48,7 +48,8 @@ Or just download a script from the `dist/` folder and include it in your project
 import React, { useState, useEffect } from 'react'
 import { Statebot } from 'statebot'
 
-// Using Statebot with React requires a 3-line Hook:
+// Statebot is framework agnostic. To use it with React,
+// you might use something like this 3-line Hook:
 function useStatebot(bot) {
   const [state, setState] = useState(bot.currentState())
   useEffect(() => bot.onSwitched(setState), [bot])

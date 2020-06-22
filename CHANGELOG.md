@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [2.3.4] - 2020-06-22
+### Added
+- Build documentation.js JSON in `docs/` for tinkering
+
 ### Fixed
 - Compatibility with projects using Rollup
 
 ### Updated
+- Emphasise in docs that Statebot isn't bound to a particular framework
 - Updated babel, documentation, eslint, rollup
 
 ## [2.3.3] - 2020-06-14

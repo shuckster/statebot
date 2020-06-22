@@ -15,14 +15,12 @@ export default {
       file: 'dist/cjs/statebot.dev.js',
       banner: banner(pkg),
       format: 'cjs',
-      exports: 'named',
       sourcemap: 'inline'
     },
     {
       file: 'dist/cjs/statebot.min.js',
       banner: banner(pkg),
       format: 'cjs',
-      exports: 'named',
       plugins: [terser(terserConfig)]
     }
   ],

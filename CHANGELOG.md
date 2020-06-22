@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.5] - 2020-06-22
+### Fixed
+- Fix require().default regression in Rollup config
+
 ## [2.3.4] - 2020-06-22
 ### Added
 - Build documentation.js JSON in `docs/` for tinkering

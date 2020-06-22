@@ -32,10 +32,12 @@
   },
   "scripts": {
     "test": "echo TODO",
-    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" ; pnpm run build:docs",
+    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" ; pnpm run build:docs:all",
     "build:browser": "rollup --config rollup.config.browser.js",
     "build:node": "rollup --config rollup.config.node.js",
-    "build:docs": "documentation build src/index.js -f html -o docs/ --theme node_modules/documentation-theme-light ; ./fix-docs.sh",
+    "build:docs:all": "concurrently \"pnpm run build:docs:html\" \"pnpm run build:docs:json\"",
+    "build:docs:html": "documentation build src/index.js -f html -o docs/ --theme node_modules/documentation-theme-light ; ./fix-docs.sh",
+    "build:docs:json": "documentation build src/index.js -f json -o docs/documentation-js.json",
     "build:docs:watch": "documentation build src/index.js -w -f html -o docs/ --theme node_modules/documentation-theme-light"
   },
   "devDependencies": {

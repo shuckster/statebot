@@ -1,4 +1,4 @@
-export function banner(pkg) {
+export function banner (pkg) {
   return `
 /*
  * Statebot

@@ -43,6 +43,22 @@ export default {
       name: 'statebot',
       exports: 'named',
       plugins: [terser(terserConfig)]
+    },
+    {
+      file: 'dist/esm/statebot.dev.mjs',
+      banner: banner(pkg),
+      format: 'es',
+      name: 'statebot',
+      exports: 'named',
+      sourcemap: 'inline'
+    },
+    {
+      file: 'dist/esm/statebot.min.mjs',
+      banner: banner(pkg),
+      format: 'es',
+      name: 'statebot',
+      exports: 'named',
+      plugins: [terser(terserConfig)]
     }
   ],
   plugins: [

@@ -6,7 +6,7 @@ import builtins from 'rollup-plugin-node-builtins'
 import cleanup from 'rollup-plugin-cleanup'
 import { terser } from 'rollup-plugin-terser'
 
-import pkg from './package.json'
+import pkg from '../package.json'
 import { banner, terserConfig } from './rollup.common.js'
 
 export default {
@@ -40,22 +40,6 @@ export default {
       file: 'dist/umd/statebot.min.js',
       banner: banner(pkg),
       format: 'umd',
-      name: 'statebot',
-      exports: 'named',
-      plugins: [terser(terserConfig)]
-    },
-    {
-      file: 'dist/esm/statebot.dev.mjs',
-      banner: banner(pkg),
-      format: 'es',
-      name: 'statebot',
-      exports: 'named',
-      sourcemap: 'inline'
-    },
-    {
-      file: 'dist/esm/statebot.min.mjs',
-      banner: banner(pkg),
-      format: 'es',
       name: 'statebot',
       exports: 'named',
       plugins: [terser(terserConfig)]

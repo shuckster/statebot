@@ -1,5 +1,10 @@
 #!/bin/sh
 
+cd "${0%/*}" || exit
+# (^- change the working-directory to where this script is)
+
+cd .. || exit
+
 # Copy logo + min-script over
 cp ./_unsorted/logo-full.png ./docs/
 cp ./_unsorted/logo-small.png ./docs/
@@ -15,5 +20,5 @@ rm ./docs/assets/*.bak
 # or inState/InState.
 #
 # This fixes it:
-awk -f fix-docs.awk ./docs/index.html > ./docs/index.html.fixed
+awk -f ./build-utils/fix-docs.awk ./docs/index.html > ./docs/index.html.fixed
 mv ./docs/index.html.fixed ./docs/index.html

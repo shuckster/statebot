@@ -5,7 +5,7 @@
   "author": "Conan Theobald <statebot@conans.co.uk>",
   "license": "ISC",
   "main": "index.js",
-  "module": "dist/esm/statebot.min.js",
+  "module": "dist/esm/statebot.min.mjs",
   "files": [
     "dist/**/*.js",
     "CHANGELOG.md",
@@ -33,13 +33,14 @@
   },
   "scripts": {
     "test": "echo TODO",
-    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" ; pnpm run build:docs:all",
-    "build:browser": "rollup --config rollup.config.browser.js",
-    "build:node": "rollup --config rollup.config.node.js",
+    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" \"pnpm run build:esm\" ; pnpm run build:docs:all",
+    "build:browser": "rollup --config ./build-config/rollup.config.browser.js",
+    "build:node": "rollup --config ./build-config/rollup.config.node.js",
+    "build:esm": "rollup --config ./build-config/rollup.config.esm.js",
     "build:docs:all": "concurrently \"pnpm run build:docs:html\" \"pnpm run build:docs:json\"",
-    "build:docs:html": "documentation build src/index.js -f html -o docs/ --theme node_modules/documentation-theme-light ; ./fix-docs.sh",
-    "build:docs:json": "documentation build src/index.js -f json -o docs/documentation-js.json",
-    "build:docs:watch": "documentation build src/index.js -w -f html -o docs/ --theme node_modules/documentation-theme-light"
+    "build:docs:html": "documentation build ./src/index.js -f html -o ./docs/ --theme node_modules/documentation-theme-light ; ./build-utils/fix-docs.sh",
+    "build:docs:json": "documentation build ./src/index.js -f json -o ./docs/documentation-js.json",
+    "build:docs:watch": "documentation build ./src/index.js -w -f html -o ./docs/ --theme node_modules/documentation-theme-light"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",

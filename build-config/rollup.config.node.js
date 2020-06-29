@@ -5,7 +5,7 @@ import builtins from 'rollup-plugin-node-builtins'
 import cleanup from 'rollup-plugin-cleanup'
 import { terser } from 'rollup-plugin-terser'
 
-import pkg from './package.json'
+import pkg from '../package.json'
 import { banner, terserConfig } from './rollup.common.js'
 
 export default {

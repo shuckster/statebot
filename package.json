@@ -32,7 +32,8 @@
     "email": "statebot@conans.co.uk"
   },
   "scripts": {
-    "test": "echo TODO",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" \"pnpm run build:esm\" ; pnpm run build:docs:all",
     "build:browser": "rollup --config ./build-config/rollup.config.browser.js",
     "build:node": "rollup --config ./build-config/rollup.config.node.js",

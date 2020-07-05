@@ -15,7 +15,7 @@ export default {
       file: 'dist/cjs/statebot.dev.js',
       banner: banner(pkg),
       format: 'cjs',
-      sourcemap: 'inline'
+      sourcemap: true
     },
     {
       file: 'dist/cjs/statebot.min.js',

@@ -16,6 +16,7 @@ export default {
       format: 'es',
       name: 'statebot',
       exports: 'named',
+      sourcemap: true
     }
   ],
   plugins: [

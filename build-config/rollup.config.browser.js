@@ -18,7 +18,7 @@ export default {
       format: 'iife',
       name: 'statebot',
       exports: 'named',
-      sourcemap: 'inline'
+      sourcemap: true
     },
     {
       file: 'dist/browser/statebot.min.js',
@@ -34,7 +34,7 @@ export default {
       format: 'umd',
       name: 'statebot',
       exports: 'named',
-      sourcemap: 'inline'
+      sourcemap: true
     },
     {
       file: 'dist/umd/statebot.min.js',

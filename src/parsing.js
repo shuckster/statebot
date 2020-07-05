@@ -14,7 +14,7 @@ const rxLineContinuations = new RegExp(`(${rxOperators})$`)
 const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi
 const rxComment = /(\/\/[^\n\r]*)/
 
-module.exports = {
+export {
   cxPipe,
   cxArrow,
   rxDisallowedCharacters,
@@ -22,7 +22,7 @@ module.exports = {
   decomposeRoute
 }
 
-const { uniq, ArgTypeError, isTemplateLiteral } = require('./utils')
+import { uniq, ArgTypeError, isTemplateLiteral } from './utils'
 
 const argTypeError = ArgTypeError('statebot.')
 

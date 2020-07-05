@@ -3,9 +3,9 @@
 // STATEBOT EXPORTS
 //
 
-const { Statebot, isStatebot } = require('./statebot')
-const { assertRoute, routeIsPossible } = require('./assertions')
-const { decomposeChart } = require('./parsing')
+import { Statebot, isStatebot } from './statebot'
+import { assertRoute, routeIsPossible } from './assertions'
+import { decomposeChart } from './parsing'
 
 /**
  * <img src="./logo-full.png" style="max-width: 255px; margin: 10px 0;" />
@@ -114,7 +114,7 @@ const { decomposeChart } = require('./parsing')
  * @module statebot
  */
 
-module.exports = {
+export {
   Statebot,
   isStatebot,
   routeIsPossible,

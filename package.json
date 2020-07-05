@@ -5,7 +5,7 @@
   "author": "Conan Theobald <statebot@conans.co.uk>",
   "license": "ISC",
   "main": "index.js",
-  "module": "dist/esm/statebot.min.mjs",
+  "module": "dist/esm/statebot.mjs",
   "files": [
     "dist/**/*.js",
     "CHANGELOG.md",

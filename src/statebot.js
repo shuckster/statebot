@@ -3,7 +3,7 @@
 // STATEBOT FSM
 //
 
-module.exports = {
+export {
   Statebot,
   isStatebot
 }
@@ -146,9 +146,9 @@ module.exports = {
  */
 
 // https://www.npmjs.com/package/events
-const EventEmitter = require('events')
+import EventEmitter from 'events'
 
-const {
+import {
   isArray,
   isEventEmitter,
   isFunction,
@@ -157,9 +157,9 @@ const {
   ArgTypeError,
   Logger,
   ReferenceCounter
-} = require('./utils')
+} from './utils'
 
-const { decomposeChart, cxArrow } = require('./parsing')
+import { decomposeChart, cxArrow } from './parsing'
 
 /**
  * Create a {@link #statebotfsm|statebotFsm} `object`.

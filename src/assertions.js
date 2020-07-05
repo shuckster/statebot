@@ -3,21 +3,21 @@
 // STATEBOT ASSERTION HELPERS
 //
 
-module.exports = {
+export {
   routeIsPossible,
   assertRoute
 }
 
-const { isStatebot } = require('./statebot')
-const { decomposeRoute } = require('./parsing')
-const {
+import { isStatebot } from './statebot'
+import { decomposeRoute } from './parsing'
+import {
   Defer,
   Once,
   Revokable,
   Logger,
   ArgTypeError,
   isTemplateLiteral
-} = require('./utils')
+} from './utils'
 
 const argTypeError = ArgTypeError('statebot.')
 

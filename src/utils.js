@@ -3,7 +3,7 @@
 // STATEBOT UTILS
 //
 
-module.exports = {
+export {
   isArray,
   isEventEmitter,
   isFunction,

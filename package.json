@@ -7,7 +7,7 @@
   "main": "index.js",
   "module": "dist/esm/statebot.mjs",
   "files": [
-    "dist/**/*.js",
+    "dist/",
     "CHANGELOG.md",
     "README.md",
     "LICENSE",

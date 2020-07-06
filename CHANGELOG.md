@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.6] - 2020-07-06
+### Changed
+- Use ES6 import/export syntax in source-files (slightly small dist/ files resulted)
+- Put dev source-maps in their own files
+
+### Added
+- Build ES6 module in dist/esm
+- Got started with some basic tests
+- React Hooks :) and Mithril ones, too
+
 ## [2.3.5] - 2020-06-22
 ### Fixed
 - Fix require().default regression in Rollup config

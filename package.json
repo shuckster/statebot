@@ -11,7 +11,8 @@
     "CHANGELOG.md",
     "README.md",
     "LICENSE",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">=10"

@@ -5,7 +5,8 @@
   "author": "Conan Theobald <statebot@conans.co.uk>",
   "license": "ISC",
   "main": "index.js",
-  "module": "dist/esm/statebot.mjs",
+  "module": "dist/esm/statebot.js",
+  "types": "index.d.ts",
   "files": [
     "dist/**/*.js",
     "dist/**/*.map",
@@ -36,10 +37,12 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" \"pnpm run build:esm\" ; pnpm run build:docs:all",
+    "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" \"pnpm run build:esm\" ; pnpm run build:typedefs-from-esm-build ; pnpm run build:docs:all",
+    "build:typedefs": "pnpm run build:esm ; pnpm run build:typedefs-from-esm-build",
     "build:browser": "rollup --config ./build-config/rollup.config.browser.js",
     "build:node": "rollup --config ./build-config/rollup.config.node.js",
     "build:esm": "rollup --config ./build-config/rollup.config.esm.js",
+    "build:typedefs-from-esm-build": "pnpx tsc --emitDeclarationOnly --allowJs --declaration --outFile ./index.d.ts ./dist/esm/statebot.js",
     "build:docs:all": "concurrently \"pnpm run build:docs:html\" \"pnpm run build:docs:json\"",
     "build:docs:html": "documentation build ./src/index.js -f html -o ./docs/ --theme node_modules/documentation-theme-light ; ./build-utils/fix-docs.sh",
     "build:docs:json": "documentation build ./src/index.js -f json -o ./docs/documentation-js.json",
@@ -66,7 +69,8 @@
     "rollup": "^2.19.0",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-terser": "6.1.0"
+    "rollup-plugin-terser": "6.1.0",
+    "typescript": "^3.9.6"
   },
   "dependencies": {
     "events": "^3.1.0"

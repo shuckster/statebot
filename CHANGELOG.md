@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.7] - 2020-07-06
+### Fixed
+- .DS_Store snuck into dist/
+- Build index.d.ts automatically, fixing broken autocompletion
+- ESM build renamed from .mjs to .js, since tsc won't read it to build index.d.ts otherwise
+
 ## [2.3.6] - 2020-07-06
 ### Changed
 - Use ES6 import/export syntax in source-files (slightly small dist/ files resulted)

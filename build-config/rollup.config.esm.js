@@ -11,7 +11,7 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      file: 'dist/esm/statebot.mjs',
+      file: 'dist/esm/statebot.js',
       banner: banner(pkg),
       format: 'es',
       name: 'statebot',

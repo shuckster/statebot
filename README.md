@@ -10,6 +10,11 @@ It's less than 8K gzipped, runs in Node and the browser, and is a [shell-script]
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 
+There are Hooks for these frameworks, too:
+
+- [React Hooks](https://github.com/shuckster/statebot-react-hooks)
+- [Mithril Hooks](https://github.com/shuckster/statebot-mithril-hooks)
+
 There is a lot of prior-art out there, most notably [XState](https://github.com/davidkpiano/xstate) by David Khourshid, but I hope Statebot can offer a small contribution in the field of writing code that is easier to understand six-months after it has been written.
 
 - [Installation](#installation)

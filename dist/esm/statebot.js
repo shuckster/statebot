@@ -2385,4 +2385,4 @@ function TimeTaken () {
 }
 
 export { Statebot, assertRoute, decomposeChart, isStatebot, routeIsPossible };
-//# sourceMappingURL=statebot.mjs.map
+//# sourceMappingURL=statebot.js.map

@@ -58,7 +58,7 @@ import { Statebot } from 'statebot'
 function useStatebot(bot) {
   const [state, setState] = useState(bot.currentState())
   useEffect(() => bot.onSwitched(setState), [bot])
-  return [state]
+  return state
 }
 
 const loader$bot = Statebot('loader', {
@@ -85,7 +85,7 @@ loader$bot.performTransitions(({ Emit }) => ({
 const { Enter, Emit, inState } = loader$bot
 
 function LoadingButton() {
-  const [state] = useStatebot(loader$bot)
+  const state = useStatebot(loader$bot)
 
   return (
     <button

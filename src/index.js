@@ -18,6 +18,7 @@ import { decomposeChart } from './parsing'
  *
  * - The [README file](https://github.com/shuckster/statebot/blob/master/README.md)
  * - The [Github Repo](https://github.com/shuckster/statebot)
+ * - `useStatebot` with [React](https://github.com/shuckster/statebot-react-hooks) and [Mithril](https://github.com/shuckster/statebot-mithril-hooks) Hooks
  * - The shell-script version, [Statebot-sh](https://github.com/shuckster/statebot-sh)
  *
  * Statebot was written by [Conan Theobald](https://github.com/shuckster/) and

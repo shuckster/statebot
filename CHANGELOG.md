@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.8] - 2020-07-11
+### Fixed
+- Charts with empty-strings for states were not always parsing properly
+
+### Added
+- Added tests for charts with empty-strings
+- Added tests for callback-counts + ordering
+- Tweak Hook-examples in the README
+
 ## [2.3.7] - 2020-07-06
 ### Fixed
 - .DS_Store snuck into dist/

@@ -219,9 +219,7 @@ function decomposeRoute (templateLiteral) {
   if (err) {
     throw TypeError(err)
   }
-  const lines = condensedLines(templateLiteral);
-  const flattenedRoute = tokenisedLines(lines).flat(2);
-  return flattenedRoute
+  return decomposeChart(templateLiteral).states
 }
 /**
  * Decompose a {@link statebotChart} into an object of `states`, `routes`,
@@ -262,17 +260,19 @@ function decomposeChart (chart) {
   const linesOfTransitions = linesOfRoutes
     .map(decomposeTransitionsFromRoute)
     .flat(1);
-  const states = [];
+  let emptyStateFound = false;
   const routeKeys = linesOfTransitions.map(route => {
-    states.push(...route);
+    if (route.includes('')) {
+      emptyStateFound = true;
+    }
     return route.join(cxArrow)
   });
   const filteredRoutes = uniq(routeKeys);
-  const filteredStates = uniq(states);
+  const filteredStates = uniq(linesOfTokens.flat(3));
   return {
     transitions: filteredRoutes.map(route => route.split(cxArrow)),
     routes: filteredRoutes,
-    states: filteredStates
+    states: !emptyStateFound ? filteredStates.filter(Boolean) : filteredStates
   }
 }
 function linesFrom (strOrArr) {
@@ -284,7 +284,7 @@ function linesFrom (strOrArr) {
 function condensedLines (strOrArr) {
   const input = linesFrom(strOrArr);
   const output = [];
-  input.reduce((condensedLine, line) => {
+  const finalCondensedLine = input.reduce((condensedLine, line) => {
     const sanitisedLine = line
       .replace(rxComment, '')
       .replace(rxDisallowedCharacters, '');
@@ -297,7 +297,7 @@ function condensedLines (strOrArr) {
     output.push(condensedLine + sanitisedLine);
     return ''
   }, '');
-  return output
+  return [...output, finalCondensedLine]
 }
 function tokenisedLines (lines) {
   return lines.map(line => line.split(cxArrow).map(str => str.split(cxPipe)))

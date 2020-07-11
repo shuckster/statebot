@@ -855,9 +855,7 @@
       throw TypeError(err);
     }
 
-    var lines = condensedLines(templateLiteral);
-    var flattenedRoute = tokenisedLines(lines).flat(2);
-    return flattenedRoute;
+    return decomposeChart(templateLiteral).states;
   }
   /**
    * Decompose a {@link statebotChart} into an object of `states`, `routes`,
@@ -897,19 +895,22 @@
     var linesOfTokens = tokenisedLines(lines);
     var linesOfRoutes = linesOfTokens.map(decomposeRouteFromTokens).flat(1);
     var linesOfTransitions = linesOfRoutes.map(decomposeTransitionsFromRoute).flat(1);
-    var states = [];
+    var emptyStateFound = false;
     var routeKeys = linesOfTransitions.map(function (route) {
-      states.push.apply(states, _toConsumableArray(route));
+      if (route.includes('')) {
+        emptyStateFound = true;
+      }
+
       return route.join(cxArrow);
     });
     var filteredRoutes = uniq(routeKeys);
-    var filteredStates = uniq(states);
+    var filteredStates = uniq(linesOfTokens.flat(3));
     return {
       transitions: filteredRoutes.map(function (route) {
         return route.split(cxArrow);
       }),
       routes: filteredRoutes,
-      states: filteredStates
+      states: !emptyStateFound ? filteredStates.filter(Boolean) : filteredStates
     };
   }
 
@@ -922,7 +923,7 @@
   function condensedLines(strOrArr) {
     var input = linesFrom(strOrArr);
     var output = [];
-    input.reduce(function (condensedLine, line) {
+    var finalCondensedLine = input.reduce(function (condensedLine, line) {
       var sanitisedLine = line.replace(rxComment, '').replace(rxDisallowedCharacters, '');
 
       if (!sanitisedLine) {
@@ -936,7 +937,7 @@
       output.push(condensedLine + sanitisedLine);
       return '';
     }, '');
-    return output;
+    return [].concat(output, [finalCondensedLine]);
   }
 
   function tokenisedLines(lines) {

@@ -143,3 +143,43 @@ SEMANTICALLY_IDENTICAL_CHARTS.forEach(chartTests => {
     })
   })
 })
+
+const CHARTS_WITH_EMPTY_STRINGS_FOR_STATES_SHOULD_BE_FINE = [
+  {
+    chart: 'idle ->',
+    states: ['idle', '']
+  },
+  {
+    chart: 'idle -> ->',
+    states: ['idle', '']
+  },
+  {
+    chart: '-> idle -> ->',
+    states: ['', 'idle']
+  },
+  {
+    chart: 'idle -> -> done',
+    states: ['idle', '', 'done']
+  },
+  {
+    chart: 'idle -> waiting',
+    states: ['idle', 'waiting']
+  },
+  {
+    chart: 'idle -> waiting ->',
+    states: ['idle', 'waiting', '']
+  },
+  {
+    chart: 'idle -> waiting -> done',
+    states: ['idle', 'waiting', 'done']
+  },
+]
+
+CHARTS_WITH_EMPTY_STRINGS_FOR_STATES_SHOULD_BE_FINE.forEach(regressionTest => {
+  const { chart, states: testStates } = regressionTest
+  const { states } = decomposeChart(chart)
+
+  test(`decomposeChart() :: empty-strings are valid states\n${chart}`, () => {
+    expect(states).toEqual(testStates)
+  })
+})

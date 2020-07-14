@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.3.8
+ * v2.3.9
  * https://shuckster.github.io/statebot/
  * License: ISC
  */
@@ -582,7 +582,10 @@ function decomposeRoute (templateLiteral) {
   if (err) {
     throw TypeError(err)
   }
-  return decomposeChart(templateLiteral).states
+  const lines = condensedLines(templateLiteral);
+  const linesOfTokens = tokenisedLines(lines);
+  const route = linesOfTokens.flat(2);
+  return route
 }
 /**
  * Decompose a {@link statebotChart} into an object of `states`, `routes`,
@@ -647,6 +650,7 @@ function linesFrom (strOrArr) {
 function condensedLines (strOrArr) {
   const input = linesFrom(strOrArr);
   const output = [];
+  let previousLineHasContinuation = false;
   const finalCondensedLine = input.reduce((condensedLine, line) => {
     const sanitisedLine = line
       .replace(rxComment, '')
@@ -654,13 +658,17 @@ function condensedLines (strOrArr) {
     if (!sanitisedLine) {
       return condensedLine
     }
-    if (rxLineContinuations.test(sanitisedLine)) {
+    previousLineHasContinuation = rxLineContinuations.test(sanitisedLine);
+    if (previousLineHasContinuation) {
       return condensedLine + sanitisedLine
     }
     output.push(condensedLine + sanitisedLine);
     return ''
   }, '');
-  return [...output, finalCondensedLine]
+  if (previousLineHasContinuation || finalCondensedLine) {
+    return [...output, finalCondensedLine]
+  }
+  return [...output]
 }
 function tokenisedLines (lines) {
   return lines.map(line => line.split(cxArrow).map(str => str.split(cxPipe)))

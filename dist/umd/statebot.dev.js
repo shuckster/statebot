@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.3.8
+ * v2.3.9
  * https://shuckster.github.io/statebot/
  * License: ISC
  */
@@ -855,7 +855,10 @@
       throw TypeError(err);
     }
 
-    return decomposeChart(templateLiteral).states;
+    var lines = condensedLines(templateLiteral);
+    var linesOfTokens = tokenisedLines(lines);
+    var route = linesOfTokens.flat(2);
+    return route;
   }
   /**
    * Decompose a {@link statebotChart} into an object of `states`, `routes`,
@@ -923,6 +926,7 @@
   function condensedLines(strOrArr) {
     var input = linesFrom(strOrArr);
     var output = [];
+    var previousLineHasContinuation = false;
     var finalCondensedLine = input.reduce(function (condensedLine, line) {
       var sanitisedLine = line.replace(rxComment, '').replace(rxDisallowedCharacters, '');
 
@@ -930,14 +934,21 @@
         return condensedLine;
       }
 
-      if (rxLineContinuations.test(sanitisedLine)) {
+      previousLineHasContinuation = rxLineContinuations.test(sanitisedLine);
+
+      if (previousLineHasContinuation) {
         return condensedLine + sanitisedLine;
       }
 
       output.push(condensedLine + sanitisedLine);
       return '';
     }, '');
-    return [].concat(output, [finalCondensedLine]);
+
+    if (previousLineHasContinuation || finalCondensedLine) {
+      return [].concat(output, [finalCondensedLine]);
+    }
+
+    return [].concat(output);
   }
 
   function tokenisedLines(lines) {

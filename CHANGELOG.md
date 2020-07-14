@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.9] - 2020-07-14
+### Fixed
+- routeIsPossible() did not support "backtracking" in some cases
+
+### Added
+- Basic tests for backtracking
+
 ## [2.3.8] - 2020-07-11
 ### Fixed
 - Charts with empty-strings for states were not always parsing properly

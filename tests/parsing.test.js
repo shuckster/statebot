@@ -1,6 +1,6 @@
 
 const { Statebot } = require('../src/statebot')
-const { decomposeChart } = require('../src/parsing')
+const { decomposeChart, decomposeRoute } = require('../src/parsing')
 const { routeIsPossible } = require('../src/assertions')
 
 const SEMANTICALLY_IDENTICAL_CHARTS = [
@@ -182,4 +182,23 @@ CHARTS_WITH_EMPTY_STRINGS_FOR_STATES_SHOULD_BE_FINE.forEach(regressionTest => {
   test(`decomposeChart() :: empty-strings are valid states\n${chart}`, () => {
     expect(states).toEqual(testStates)
   })
+})
+
+const DECOMPOSED_ROUTES = [
+  {
+    route: 'hidden -> prompt -> submitting -> failed -> submitting -> confirmed -> hidden ->',
+    expectedStates: ['hidden', 'prompt', 'submitting', 'failed', 'submitting', 'confirmed', 'hidden', ''],
+    description: 'empty-string state should be in this route'
+  },
+  {
+    route: 'hidden -> prompt -> submitting -> failed -> submitting -> confirmed -> hidden',
+    expectedStates: ['hidden', 'prompt', 'submitting', 'failed', 'submitting', 'confirmed', 'hidden'],
+    description: 'empty-string state should NOT be in this route'
+  },
+]
+
+DECOMPOSED_ROUTES.forEach(({ route, expectedStates, description }) => {
+  test(`decomposeRoute() :: ${description}\n${route}`,
+    () => expect(decomposeRoute(route)).toEqual(expectedStates)
+  )
 })

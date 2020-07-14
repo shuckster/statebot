@@ -35,7 +35,11 @@ function decomposeRoute (templateLiteral) {
     throw TypeError(err)
   }
 
-  return decomposeChart(templateLiteral).states
+  const lines = condensedLines(templateLiteral)
+  const linesOfTokens = tokenisedLines(lines)
+  const route = linesOfTokens.flat(2)
+
+  return route
 }
 
 /**
@@ -110,6 +114,8 @@ function condensedLines (strOrArr) {
   const input = linesFrom(strOrArr)
   const output = []
 
+  let previousLineHasContinuation = false
+
   const finalCondensedLine = input.reduce((condensedLine, line) => {
     const sanitisedLine = line
       .replace(rxComment, '')
@@ -119,7 +125,8 @@ function condensedLines (strOrArr) {
       return condensedLine
     }
 
-    if (rxLineContinuations.test(sanitisedLine)) {
+    previousLineHasContinuation = rxLineContinuations.test(sanitisedLine)
+    if (previousLineHasContinuation) {
       return condensedLine + sanitisedLine
     }
 
@@ -127,7 +134,11 @@ function condensedLines (strOrArr) {
     return ''
   }, '')
 
-  return [...output, finalCondensedLine]
+  if (previousLineHasContinuation || finalCondensedLine) {
+    return [...output, finalCondensedLine]
+  }
+
+  return [...output]
 }
 
 function tokenisedLines (lines) {

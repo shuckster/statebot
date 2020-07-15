@@ -2,9 +2,41 @@
 
 <img src="./docs/logo-full.png" width="255" />
 
-Write more robust and understandable programs.
+Write more robust and understandable programs:
 
-Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible by focussing on their organisational benefits in a simplified way.
+Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible by focussing on their organisational benefits in a simplified way:
+
+```js
+import { Statebot } from 'statebot'
+
+const machine = Statebot('traffic-lights', {
+  chart: `
+    go ->
+      prepare-to-stop ->
+      stop
+
+    // ...gotta keep that traffic flowing
+    stop ->
+      prepare-to-go ->
+      go
+  `
+})
+
+machine.performTransitions({
+  'stop -> prepare-to-go -> go':   { on: 'timer' },
+  'go -> prepare-to-stop -> stop': { on: 'timer' }
+})
+
+machine.onEvent('timer', () => {
+  redrawTrafficLights()
+})
+
+machine.onEntered('stop', () => {
+  console.log('One moment, please...')
+})
+
+setInterval(machine.Emit('timer'), 2000)
+```
 
 It's less than 8K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 

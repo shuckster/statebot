@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.10] - 2020-07-15
+### Updated
+- Put an example at the top of the README to get to the point more quickly :P
+
 ## [2.3.9] - 2020-07-14
 ### Fixed
 - routeIsPossible() did not support "backtracking" in some cases

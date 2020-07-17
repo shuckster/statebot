@@ -215,8 +215,8 @@ function Statebot (name, options) {
   let transitionId = 0
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
-  const events = isEventEmitter(options.events) ? options.events : new EventEmitter()
 
+  const events = isEventEmitter(options.events) ? options.events : new EventEmitter()
   const internalEvents = new EventEmitter()
   const INTERNAL_EVENTS = {
     onSwitching: '(ANY)state:changing',

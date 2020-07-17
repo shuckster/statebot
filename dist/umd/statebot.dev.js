@@ -1389,13 +1389,7 @@
         }
 
         var decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName]);
-        var removeEvent = onInternalEvent(INTERNAL_EVENTS[methodName], function (toState, fromState) {
-          for (var _len7 = arguments.length, args = new Array(_len7 > 2 ? _len7 - 2 : 0), _key7 = 2; _key7 < _len7; _key7++) {
-            args[_key7 - 2] = arguments[_key7];
-          }
-
-          cb.apply(void 0, [toState, fromState].concat(args));
-        });
+        var removeEvent = onInternalEvent(INTERNAL_EVENTS[methodName], cb);
         return function () {
           removeEvent();
           decreaseRefCount();
@@ -1421,8 +1415,8 @@
 
         var decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase("".concat(state, ":").concat(eventName))];
         var removeEvent = switchMethods[switchMethod](function (toState, fromState) {
-          for (var _len8 = arguments.length, args = new Array(_len8 > 2 ? _len8 - 2 : 0), _key8 = 2; _key8 < _len8; _key8++) {
-            args[_key8 - 2] = arguments[_key8];
+          for (var _len7 = arguments.length, args = new Array(_len7 > 2 ? _len7 - 2 : 0), _key7 = 2; _key7 < _len7; _key7++) {
+            args[_key7 - 2] = arguments[_key7];
           }
 
           if (name.indexOf('Exit') === 0) {
@@ -1445,8 +1439,8 @@
     }, {});
 
     function Emit(eventName) {
-      for (var _len9 = arguments.length, curriedArgs = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
-        curriedArgs[_key9 - 1] = arguments[_key9];
+      for (var _len8 = arguments.length, curriedArgs = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+        curriedArgs[_key8 - 1] = arguments[_key8];
       }
 
       var err = argTypeError('Emit', {
@@ -1458,8 +1452,8 @@
       }
 
       return function () {
-        for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-          args[_key10] = arguments[_key10];
+        for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+          args[_key9] = arguments[_key9];
         }
 
         return emit.apply(void 0, [eventName].concat([].concat(curriedArgs, args)));
@@ -1467,8 +1461,8 @@
     }
 
     function Enter(state) {
-      for (var _len11 = arguments.length, curriedArgs = new Array(_len11 > 1 ? _len11 - 1 : 0), _key11 = 1; _key11 < _len11; _key11++) {
-        curriedArgs[_key11 - 1] = arguments[_key11];
+      for (var _len10 = arguments.length, curriedArgs = new Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
+        curriedArgs[_key10 - 1] = arguments[_key10];
       }
 
       var err = argTypeError('Enter', {
@@ -1480,8 +1474,8 @@
       }
 
       return function () {
-        for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-          args[_key12] = arguments[_key12];
+        for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+          args[_key11] = arguments[_key11];
         }
 
         return enter.apply(void 0, [state].concat([].concat(curriedArgs, args)));
@@ -1489,8 +1483,8 @@
     }
 
     function InState(state, anyOrFn) {
-      for (var _len13 = arguments.length, curriedFnArgs = new Array(_len13 > 2 ? _len13 - 2 : 0), _key13 = 2; _key13 < _len13; _key13++) {
-        curriedFnArgs[_key13 - 2] = arguments[_key13];
+      for (var _len12 = arguments.length, curriedFnArgs = new Array(_len12 > 2 ? _len12 - 2 : 0), _key12 = 2; _key12 < _len12; _key12++) {
+        curriedFnArgs[_key12 - 2] = arguments[_key12];
       }
 
       var err = argTypeError('InState', {
@@ -1502,8 +1496,8 @@
       }
 
       return function () {
-        for (var _len14 = arguments.length, fnArgs = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-          fnArgs[_key14] = arguments[_key14];
+        for (var _len13 = arguments.length, fnArgs = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+          fnArgs[_key13] = arguments[_key13];
         }
 
         return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));

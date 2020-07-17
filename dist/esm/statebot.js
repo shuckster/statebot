@@ -751,7 +751,7 @@ function Statebot (name, options) {
   }
   function onInternalEvent (eventName, fn) {
     internalEvents.addListener(eventName, fn);
-    return function () {
+    return () => {
       internalEvents.removeListener(eventName, fn);
     }
   }
@@ -984,10 +984,7 @@ function Statebot (name, options) {
           }
           const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName]);
           const removeEvent = onInternalEvent(
-            INTERNAL_EVENTS[methodName],
-            (toState, fromState, ...args) => {
-              cb(toState, fromState, ...args);
-            }
+            INTERNAL_EVENTS[methodName], cb
           );
           return () => {
             removeEvent();

@@ -47,7 +47,6 @@ test(`expecting this many callbacks to have run`, () => {
 
 cleanupFns.forEach(fn => fn())
 
-bot.reset()
 bot.emit('step')
 bot.emit('step')
 bot.emit('step')

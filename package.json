@@ -49,16 +49,16 @@
     "build:docs:watch": "documentation build ./src/index.js -w -f html -o ./docs/ --theme node_modules/documentation-theme-light"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
-    "@rollup/plugin-babel": "^5.0.4",
-    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-babel": "^5.1.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^8.1.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
     "concurrently": "^5.2.0",
     "documentation": "^13.0.2",
     "documentation-theme-light": "^1.1.1",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^23.18.0",
@@ -66,11 +66,11 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.1.0",
-    "rollup": "^2.19.0",
+    "rollup": "^2.22.1",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-terser": "6.1.0",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
   },
   "dependencies": {
     "events": "^3.1.0"

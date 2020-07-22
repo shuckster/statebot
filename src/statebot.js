@@ -267,19 +267,20 @@ function Statebot (name, options) {
       )
     }
 
+    // For: performTransitions()
     const events = {}
+
+    // For: onTransitions()
     const transitions = []
 
     Object.entries(hitcherActions)
       .forEach(([routeChart, actionOrConfig]) => {
-        // onTransitions 1/3...
         if (isFunction(actionOrConfig)) {
           transitions.push({ routeChart, action: actionOrConfig })
         } else if (!isPojo(actionOrConfig)) {
           return
         }
 
-        // performTransitions 1/3...
         const { on: _on, then: _then } = actionOrConfig
         if (isString(_on) || isArray(_on)) {
           const eventNames = [_on].flat()
@@ -288,17 +289,17 @@ function Statebot (name, options) {
             events[eventName].push({ routeChart, action: _then })
           })
         } else if (isFunction(_then)) {
-          // onTransitions 2/3...
-          // (Behave like onTransitions if a config is specified, but
-          //  there is no "on" event...)
+          // Behave like onTransitions() if a "then" is specified but
+          // there is no "on" event that triggers it
           transitions.push({ routeChart, action: actionOrConfig })
         }
       })
 
     const allStates = []
     const allRoutes = []
+    const allCleanupFns = []
 
-    // performTransitions 2/3...
+    // performTransitions()
     const decomposedEvents = Object.entries(events)
       .reduce((acc, [eventName, _configs]) => {
         const { states, routes, configs } = decomposeConfigs(_configs, canWarn)
@@ -312,36 +313,33 @@ function Statebot (name, options) {
         }
       }, {})
 
-    const allCleanupFns = []
-
-    // performTransitions 3/3...
     allCleanupFns.push(
       ...Object.entries(decomposedEvents)
-        .map(([eventName, configs]) =>
-          [
-            eventsHandled.increase(eventName),
-            onEvent(eventName, (...args) => {
-              const eventWasHandled = configs.some(
-                ({ fromState, toState, action }) => {
-                  const passed = inState(fromState, () => {
-                    enter(toState, ...args)
-                    if (isFunction(action)) {
-                      action(...args)
-                    }
-                    return true
-                  })
-                  return !!passed
+        .map(([eventName, configs]) => [
+          eventsHandled.increase(eventName),
+          onEvent(eventName, (...args) => {
+            const eventWasHandled = configs.some(
+              ({ fromState, toState, action }) => {
+                const passed = inState(fromState, () => {
+                  enter(toState, ...args)
+                  if (isFunction(action)) {
+                    action(...args)
+                  }
+                  return true
                 })
 
-              if (!eventWasHandled) {
-                transitionNoOp(`Event not handled: "${eventName}"`)
-              }
-            })
-          ]
-        ).flat()
+                return !!passed
+              })
+
+            if (!eventWasHandled) {
+              transitionNoOp(`Event not handled: "${eventName}"`)
+            }
+          })
+        ])
+        .flat()
     )
 
-    // onTransitions 3/3...
+    // onTransitions()
     const transitionConfigs = decomposeConfigs(transitions, canWarn)
 
     if (canWarn()) {
@@ -350,14 +348,16 @@ function Statebot (name, options) {
     }
 
     allCleanupFns.push(
-      ...transitionConfigs.configs.map(transition => {
-        const { fromState, toState, action } = transition
-        const route = `${fromState}->${toState}`
-        return [
-          routesHandled.increase(route),
-          onInternalEvent(route, action)
-        ]
-      }).flat()
+      ...transitionConfigs.configs
+        .map(transition => {
+          const { fromState, toState, action } = transition
+          const route = `${fromState}->${toState}`
+          return [
+            routesHandled.increase(route),
+            onInternalEvent(route, action)
+          ]
+        })
+        .flat()
     )
 
     // Debugging, if we're at the right level

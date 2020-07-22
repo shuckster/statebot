@@ -108,35 +108,33 @@ bot.onEntering('finished', Called('finished :: onEntering'))
 bot.onExited('finished', Called('finished :: onExited'))
 bot.onExiting('finished', Called('finished :: onExiting'))
 
-//
-// Emit more events than required in order to test transition-guarding
-//
-
-bot.emit('start')
-bot.emit('start')
-bot.emit('start')
-bot.emit('pass')
-bot.emit('pass')
-bot.emit('pass')
-bot.emit('done')
-bot.emit('done')
-bot.emit('done')
-
-bot.reset()
-
-bot.emit('start')
-bot.emit('start')
-bot.emit('start')
-bot.emit('fail')
-bot.emit('fail')
-bot.emit('fail')
-bot.emit('done')
-bot.emit('done')
-bot.emit('done')
-
-// ...
-
 test(`expecting callbacks to appear in this order`, () => {
+  //
+  // Emit more events than required in order to test transition-guarding
+  //
+
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('pass')
+  bot.emit('pass')
+  bot.emit('pass')
+  bot.emit('done')
+  bot.emit('done')
+  bot.emit('done')
+
+  bot.reset()
+
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('fail')
+  bot.emit('fail')
+  bot.emit('fail')
+  bot.emit('done')
+  bot.emit('done')
+  bot.emit('done')
+
   expect(calls.length).toEqual(EXPECTED_CALL_ORDER.length)
   expect(calls).toEqual(expect.arrayContaining(EXPECTED_CALL_ORDER))
   expect(calls.join('/')).toEqual(EXPECTED_CALL_ORDER.join('/'))

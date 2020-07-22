@@ -68,35 +68,33 @@ bot.onEntered('finished', bumpCallCount)
 bot.onExiting('finished', bumpCallCount)
 bot.onExited('finished', bumpCallCount)
 
-//
-// Emit more events than required in order to test transition-guarding
-//
-
-bot.emit('start')
-bot.emit('start')
-bot.emit('start')
-bot.emit('pass')
-bot.emit('pass')
-bot.emit('pass')
-bot.emit('done')
-bot.emit('done')
-bot.emit('done')
-
-bot.reset()
-
-bot.emit('start')
-bot.emit('start')
-bot.emit('start')
-bot.emit('fail')
-bot.emit('fail')
-bot.emit('fail')
-bot.emit('done')
-bot.emit('done')
-bot.emit('done')
-
-// ...
-
 test(`expecting this many callbacks to have run`, () => {
+  //
+  // Emit more events than required in order to test transition-guarding
+  //
+
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('pass')
+  bot.emit('pass')
+  bot.emit('pass')
+  bot.emit('done')
+  bot.emit('done')
+  bot.emit('done')
+
+  bot.reset()
+
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('start')
+  bot.emit('fail')
+  bot.emit('fail')
+  bot.emit('fail')
+  bot.emit('done')
+  bot.emit('done')
+  bot.emit('done')
+
   expect(callCount).toEqual(EXPECTED_CALL_COUNT)
 })
 

@@ -37,20 +37,20 @@ const cleanupFns = [
 
 const EXPECTED_CALL_COUNT = 20
 
-bot.emit('step')
-bot.emit('step')
-bot.emit('step')
-
 test(`expecting this many callbacks to have run`, () => {
+  bot.emit('step')
+  bot.emit('step')
+  bot.emit('step')
+
   expect(callCount).toEqual(EXPECTED_CALL_COUNT)
 })
 
-cleanupFns.forEach(fn => fn())
-
-bot.emit('step')
-bot.emit('step')
-bot.emit('step')
-
 test(`still expecting this many callbacks to have run`, () => {
+  cleanupFns.forEach(fn => fn())
+
+  bot.emit('step')
+  bot.emit('step')
+  bot.emit('step')
+
   expect(callCount).toEqual(EXPECTED_CALL_COUNT)
 })

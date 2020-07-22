@@ -16,7 +16,8 @@ export {
   Revokable,
   ReferenceCounter,
   ArgTypeError,
-  Logger
+  Logger,
+  Pausables
 }
 
 function isArray (obj) {
@@ -98,6 +99,26 @@ function Revokable (fn) {
     revoke: () => {
       revoked = true
     }
+  }
+}
+
+function Pausables (startPaused = false) {
+  let paused = !!startPaused
+
+  function Pausable (fn) {
+    return (...args) => {
+      if (paused) {
+        return false
+      }
+      return fn(...args)
+    }
+  }
+
+  return {
+    Pausable,
+    paused: () => paused,
+    pause: () => { paused = true },
+    resume: () => { paused = false },
   }
 }
 

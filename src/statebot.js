@@ -156,7 +156,8 @@ import {
   isString,
   ArgTypeError,
   Logger,
-  ReferenceCounter
+  ReferenceCounter,
+  Pausables
 } from './utils'
 
 import { decomposeChart, cxArrow } from './parsing'
@@ -223,14 +224,16 @@ function Statebot (name, options) {
     onSwitched: '(ANY)state:changed'
   }
 
-  function emitInternalEvent (eventName, ...args) {
-    return internalEvents.emit(eventName, ...args)
-  }
+  const { pause, resume, paused, Pausable } = Pausables()
 
-  function onInternalEvent (eventName, fn) {
-    internalEvents.addListener(eventName, fn)
+  const emitInternalEvent = Pausable((eventName, ...args) => {
+    return internalEvents.emit(eventName, ...args)
+  })
+
+  function onInternalEvent (eventName, cb) {
+    internalEvents.addListener(eventName, cb)
     return () => {
-      internalEvents.removeListener(eventName, fn)
+      internalEvents.removeListener(eventName, cb)
     }
   }
 
@@ -446,16 +449,16 @@ function Statebot (name, options) {
     return conditionMatches
   }
 
-  function emit (eventName, ...args) {
+  const emit = Pausable((eventName, ...args) => {
     const err = argTypeError('emit', { eventName: isString }, eventName)
     if (err) {
       throw TypeError(err)
     }
 
     return events.emit(eventName, ...args)
-  }
+  })
 
-  function enter (state, ...args) {
+  const enter = Pausable((state, ...args) => {
     const err = argTypeError('enter', { state: isString }, state)
     if (err) {
       throw TypeError(err)
@@ -493,7 +496,7 @@ function Statebot (name, options) {
     emitInternalEvent(INTERNAL_EVENTS.onSwitched, toState, inState, ...args)
 
     return true
-  }
+  })
 
   function onEvent (eventName, cb) {
     const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb)
@@ -1465,6 +1468,26 @@ function Statebot (name, options) {
     onTransitions: transitions => applyHitcher(transitions, 'onTransitions'),
 
     /**
+     * Pause the machine. {@link #statebotfsmemit|.emit()} and {@link #statebotfsmenter|.enter()} will be no-ops until
+     * the machine is resumed.
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     */
+    pause,
+
+    /**
+     * Returns `true` if the machine is {@link #statebotfsmpause|.pause()}'d
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     * @returns {boolean}
+     */
+    paused,
+
+    /**
      * Perform transitions when events happen.
      *
      * Use `then` to optionally add callbacks to those transitions.
@@ -1575,7 +1598,8 @@ function Statebot (name, options) {
      * Returns the state-machine to its starting-state and clears the
      * state-history.
      *
-     * All listeners will still be attached, but no events or transitions will be fired.
+     * All listeners will still be attached, but no events or
+     * transitions will be fired. The pause-state will be maintained.
      *
      * @memberof statebotFsm
      * @instance
@@ -1597,6 +1621,15 @@ function Statebot (name, options) {
      * // "page-1"
      */
     reset: reset,
+
+    /**
+     * Resume a {@link #statebotfsmpause|.pause()}'d machine.
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     */
+    resume,
 
     /**
      * Return an `array` of states accessible from the state specified.

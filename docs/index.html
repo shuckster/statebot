@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset='utf-8' />
-	<title>statebot 2.3.10 | Documentation</title>
+	<title>statebot 2.4.0 | Documentation</title>
 	<meta name='description' content='Write more robust and understandable programs.'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
 	<link href='assets/styles.min.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
 			<div class='font-smaller fixed col-3 top-0 bottom-0 left-0 overflow-auto fill-light dark-link'>
 				<div class='px2'>
 					<h3 class='mb0 no-anchor'><code>statebot</code></h3>
-					<div class='mb1'><code>2.3.10</code></div>
+					<div class='mb1'><code>2.4.0</code></div>
 					<input placeholder='Filter' id='filter-input' class='col12 block input' type='text' />
 					<div id="toc">
 						
@@ -226,6 +226,18 @@
 							</a>
 							
 							<a
+									href='#statebotfsmpause'
+									class='button-indent regular block'>
+								<code>#pause</code>
+							</a>
+							
+							<a
+									href='#statebotfsmpaused'
+									class='button-indent regular block'>
+								<code>#paused</code>
+							</a>
+							
+							<a
 									href='#statebotfsmperformtransitions'
 									class='button-indent regular block'>
 								<code>#performTransitions</code>
@@ -241,6 +253,12 @@
 									href='#statebotfsmreset'
 									class='button-indent regular block'>
 								<code>#reset</code>
+							</a>
+							
+							<a
+									href='#statebotfsmresume'
+									class='button-indent regular block'>
+								<code>#resume</code>
 							</a>
 							
 							<a
@@ -345,7 +363,7 @@ is <a href="../LICENSE">ISC licensed</a>.</p>
 <pre class='hljs'>npm i statebot</pre>
 <pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">'statebot'</span></pre>
 <p>Or non-<code>npm</code> project:</p>
-<pre class='hljs'>&lt;script src=<span class="hljs-string">"https://unpkg.com/statebot@2.3.10/dist/browser/statebot.min.js"</span>&gt;&lt;<span class="hljs-regexp">/script&gt;</span></pre>
+<pre class='hljs'>&lt;script src=<span class="hljs-string">"https://unpkg.com/statebot@2.4.0/dist/browser/statebot.min.js"</span>&gt;&lt;<span class="hljs-regexp">/script&gt;</span></pre>
 <pre class='hljs'><span class="hljs-keyword">const</span> { Statebot } = statebot
 <span class="hljs-comment">// Make machines with Statebot()</span>
 
@@ -3402,6 +3420,110 @@ machine.onTransitions(<span class="hljs-function">(<span class="hljs-params">{ E
 </section>
 
   
+    <section id='statebotfsmpause'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmpause'>
+			<code>
+				pause
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Pause the machine. <a href="#statebotfsmemit">.emit()</a> and <a href="#statebotfsmenter">.enter()</a> will be no-ops until
+the machine is <a href="#statebotfsmresume">.resume()</a>'d.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmpaused'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmpaused'>
+			<code>
+				paused
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Returns <code>true</code> if the machine is <a href="#statebotfsmpause">.pause()</a>'d</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+	:
+	<span class='force-inline'>
+</span>
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
     <section id='statebotfsmperformtransitions'class='mt2 mb2 px3 py1 keyline-top'>
 
 	<div class='right py2'>
@@ -3645,7 +3767,8 @@ machine.previousState()
 
 	<p>Returns the state-machine to its starting-state and clears the
 state-history.</p>
-<p>All listeners will still be attached, but no events or transitions will be fired.</p>
+<p>All listeners will still be attached, but no events or
+transitions will be fired. The pause-state will be maintained.</p>
 
 	
 
@@ -3682,6 +3805,53 @@ machine.reset()
 machine.currentState()
 <span class="hljs-comment">// "page-1"</span></code></pre>
 	
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmresume'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmresume'>
+			<code>
+				resume
+				<span class='gray'>()</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Resume a <a href="#statebotfsmpause">.pause()</a>'d machine.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+
+	
+
+	
+
 	
 
 	

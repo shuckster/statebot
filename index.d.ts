@@ -159,7 +159,7 @@ declare module "statebot" {
          * machine.currentState()
          * // "sending"
          */
-        emit: (eventName: any, ...args: any[]) => any;
+        emit: (...args: any[]) => any;
         /**
          * Creates a function that emits the specified event.
          *
@@ -242,7 +242,7 @@ declare module "statebot" {
          * machine.enter('showing-modal')
          * // true
          */
-        enter: (state: any, ...args: any[]) => boolean;
+        enter: (...args: any[]) => any;
         /**
          * Creates a function that changes to the specified state, so long
          * as it is accessible from the {@link #statebotfsmcurrentstate|.currentState()}.
@@ -278,7 +278,7 @@ declare module "statebot" {
          * machine.currentState()
          * // "item-clicked"
          */
-        Enter: (state: any, ...curriedArgs: any[]) => (...args: any[]) => boolean;
+        Enter: (state: any, ...curriedArgs: any[]) => (...args: any[]) => any;
         /**
          * Returns all states the machine has been in so far, up to a limit set
          * by `historyLimit` in {@link statebotOptions}.
@@ -835,6 +835,24 @@ declare module "statebot" {
          */
         onTransitions: (transitions: object | Function) => Function;
         /**
+         * Pause the machine. {@link #statebotfsmemit|.emit()} and {@link #statebotfsmenter|.enter()} will be no-ops until
+         * the machine is {@link #statebotfsmresume|.resume()}'d.
+         *
+         * @memberof statebotFsm
+         * @instance
+         * @function
+         */
+        pause: () => void;
+        /**
+         * Returns `true` if the machine is {@link #statebotfsmpause|.pause()}'d
+         *
+         * @memberof statebotFsm
+         * @instance
+         * @function
+         * @returns {boolean}
+         */
+        paused: () => boolean;
+        /**
          * Perform transitions when events happen.
          *
          * Use `then` to optionally add callbacks to those transitions.
@@ -943,7 +961,8 @@ declare module "statebot" {
          * Returns the state-machine to its starting-state and clears the
          * state-history.
          *
-         * All listeners will still be attached, but no events or transitions will be fired.
+         * All listeners will still be attached, but no events or
+         * transitions will be fired. The pause-state will be maintained.
          *
          * @memberof statebotFsm
          * @instance
@@ -965,6 +984,14 @@ declare module "statebot" {
          * // "page-1"
          */
         reset: () => void;
+        /**
+         * Resume a {@link #statebotfsmpause|.pause()}'d machine.
+         *
+         * @memberof statebotFsm
+         * @instance
+         * @function
+         */
+        resume: () => void;
         /**
          * Return an `array` of states accessible from the state specified.
          * If no state is passed-in, the {@link #statebotfsmcurrentstate|.currentState()} is used.

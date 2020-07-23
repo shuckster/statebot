@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.3.10
+ * v2.4.0
  * https://shuckster.github.io/statebot/
  * License: ISC
  */
@@ -661,6 +661,37 @@
     };
   }
 
+  function Pausables() {
+    var startPaused = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    var onPauseCall = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+    var _paused = !!startPaused;
+
+    function Pausable(fn) {
+      return function () {
+        if (_paused) {
+          onPauseCall();
+          return false;
+        }
+
+        return fn.apply(void 0, arguments);
+      };
+    }
+
+    return {
+      Pausable: Pausable,
+      paused: function paused() {
+        return _paused;
+      },
+      pause: function pause() {
+        _paused = true;
+      },
+      resume: function resume() {
+        _paused = false;
+      }
+    };
+  }
+
   function ReferenceCounter(name, kind, description) {
     var _refs = {};
 
@@ -1051,18 +1082,26 @@
       onSwitched: '(ANY)state:changed'
     };
 
-    function emitInternalEvent(eventName) {
+    var _Pausables = Pausables(false, function () {
+      console.warn("".concat(logPrefix, ": Ignoring callback, paused"));
+    }),
+        pause = _Pausables.pause,
+        resume = _Pausables.resume,
+        paused = _Pausables.paused,
+        Pausable = _Pausables.Pausable;
+
+    var emitInternalEvent = Pausable(function (eventName) {
       for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         args[_key - 1] = arguments[_key];
       }
 
       return internalEvents.emit.apply(internalEvents, [eventName].concat(args));
-    }
+    });
 
-    function onInternalEvent(eventName, fn) {
-      internalEvents.addListener(eventName, fn);
+    function onInternalEvent(eventName, cb) {
+      internalEvents.addListener(eventName, cb);
       return function () {
-        internalEvents.removeListener(eventName, fn);
+        internalEvents.removeListener(eventName, cb);
       };
     }
 
@@ -1119,6 +1158,7 @@
       });
       var allStates = [];
       var allRoutes = [];
+      var allCleanupFns = [];
       var decomposedEvents = Object.entries(events).reduce(function (acc, _ref5) {
         var _ref6 = _slicedToArray(_ref5, 2),
             eventName = _ref6[0],
@@ -1136,7 +1176,6 @@
 
         return _objectSpread2(_objectSpread2({}, acc), {}, _defineProperty({}, eventName, configs));
       }, {});
-      var allCleanupFns = [];
       allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(function (_ref7) {
         var _ref8 = _slicedToArray(_ref7, 2),
             eventName = _ref8[0],
@@ -1300,7 +1339,7 @@
       return conditionMatches;
     }
 
-    function emit(eventName) {
+    var emit = Pausable(function (eventName) {
       var err = argTypeError('emit', {
         eventName: isString
       }, eventName);
@@ -1314,9 +1353,8 @@
       }
 
       return events.emit.apply(events, [eventName].concat(args));
-    }
-
-    function enter(state) {
+    });
+    var enter = Pausable(function (state) {
       var err = argTypeError('enter', {
         state: isString
       }, state);
@@ -1360,7 +1398,7 @@
       emitInternalEvent.apply(void 0, [nextRoute].concat(args));
       emitInternalEvent.apply(void 0, [INTERNAL_EVENTS.onSwitched, toState, inState].concat(args));
       return true;
-    }
+    });
 
     function onEvent(eventName, cb) {
       var err = argTypeError('onEvent', {
@@ -2377,6 +2415,26 @@
       },
 
       /**
+       * Pause the machine. {@link #statebotfsmemit|.emit()} and {@link #statebotfsmenter|.enter()} will be no-ops until
+       * the machine is {@link #statebotfsmresume|.resume()}'d.
+       *
+       * @memberof statebotFsm
+       * @instance
+       * @function
+       */
+      pause: pause,
+
+      /**
+       * Returns `true` if the machine is {@link #statebotfsmpause|.pause()}'d
+       *
+       * @memberof statebotFsm
+       * @instance
+       * @function
+       * @returns {boolean}
+       */
+      paused: paused,
+
+      /**
        * Perform transitions when events happen.
        *
        * Use `then` to optionally add callbacks to those transitions.
@@ -2489,7 +2547,8 @@
        * Returns the state-machine to its starting-state and clears the
        * state-history.
        *
-       * All listeners will still be attached, but no events or transitions will be fired.
+       * All listeners will still be attached, but no events or
+       * transitions will be fired. The pause-state will be maintained.
        *
        * @memberof statebotFsm
        * @instance
@@ -2511,6 +2570,15 @@
        * // "page-1"
        */
       reset: reset,
+
+      /**
+       * Resume a {@link #statebotfsmpause|.pause()}'d machine.
+       *
+       * @memberof statebotFsm
+       * @instance
+       * @function
+       */
+      resume: resume,
 
       /**
        * Return an `array` of states accessible from the state specified.

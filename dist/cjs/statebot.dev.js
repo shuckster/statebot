@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.3.10
+ * v2.4.0
  * https://shuckster.github.io/statebot/
  * License: ISC
  */
@@ -83,6 +83,24 @@ function Revokable (fn) {
     revoke: () => {
       revoked = true;
     }
+  }
+}
+function Pausables (startPaused = false, onPauseCall = () => {}) {
+  let paused = !!startPaused;
+  function Pausable (fn) {
+    return (...args) => {
+      if (paused) {
+        onPauseCall();
+        return false
+      }
+      return fn(...args)
+    }
+  }
+  return {
+    Pausable,
+    paused: () => paused,
+    pause: () => { paused = true; },
+    resume: () => { paused = false; },
   }
 }
 function ReferenceCounter (name, kind, description, ...expecting) {
@@ -383,13 +401,16 @@ function Statebot (name, options) {
     onSwitching: '(ANY)state:changing',
     onSwitched: '(ANY)state:changed'
   };
-  function emitInternalEvent (eventName, ...args) {
+  const { pause, resume, paused, Pausable } = Pausables(false, () => {
+    console.warn(`${logPrefix}: Ignoring callback, paused`);
+  });
+  const emitInternalEvent = Pausable((eventName, ...args) => {
     return internalEvents.emit(eventName, ...args)
-  }
-  function onInternalEvent (eventName, fn) {
-    internalEvents.addListener(eventName, fn);
+  });
+  function onInternalEvent (eventName, cb) {
+    internalEvents.addListener(eventName, cb);
     return () => {
-      internalEvents.removeListener(eventName, fn);
+      internalEvents.removeListener(eventName, cb);
     }
   }
   const statesHandled = ReferenceCounter(
@@ -443,6 +464,7 @@ function Statebot (name, options) {
       });
     const allStates = [];
     const allRoutes = [];
+    const allCleanupFns = [];
     const decomposedEvents = Object.entries(events)
       .reduce((acc, [eventName, _configs]) => {
         const { states, routes, configs } = decomposeConfigs(_configs, canWarn);
@@ -455,30 +477,28 @@ function Statebot (name, options) {
           [eventName]: configs
         }
       }, {});
-    const allCleanupFns = [];
     allCleanupFns.push(
       ...Object.entries(decomposedEvents)
-        .map(([eventName, configs]) =>
-          [
-            eventsHandled.increase(eventName),
-            onEvent(eventName, (...args) => {
-              const eventWasHandled = configs.some(
-                ({ fromState, toState, action }) => {
-                  const passed = inState(fromState, () => {
-                    enter(toState, ...args);
-                    if (isFunction(action)) {
-                      action(...args);
-                    }
-                    return true
-                  });
-                  return !!passed
+        .map(([eventName, configs]) => [
+          eventsHandled.increase(eventName),
+          onEvent(eventName, (...args) => {
+            const eventWasHandled = configs.some(
+              ({ fromState, toState, action }) => {
+                const passed = inState(fromState, () => {
+                  enter(toState, ...args);
+                  if (isFunction(action)) {
+                    action(...args);
+                  }
+                  return true
                 });
-              if (!eventWasHandled) {
-                transitionNoOp(`Event not handled: "${eventName}"`);
-              }
-            })
-          ]
-        ).flat()
+                return !!passed
+              });
+            if (!eventWasHandled) {
+              transitionNoOp(`Event not handled: "${eventName}"`);
+            }
+          })
+        ])
+        .flat()
     );
     const transitionConfigs = decomposeConfigs(transitions, canWarn);
     if (canWarn()) {
@@ -486,14 +506,16 @@ function Statebot (name, options) {
       allRoutes.push(...transitionConfigs.routes);
     }
     allCleanupFns.push(
-      ...transitionConfigs.configs.map(transition => {
-        const { fromState, toState, action } = transition;
-        const route = `${fromState}->${toState}`;
-        return [
-          routesHandled.increase(route),
-          onInternalEvent(route, action)
-        ]
-      }).flat()
+      ...transitionConfigs.configs
+        .map(transition => {
+          const { fromState, toState, action } = transition;
+          const route = `${fromState}->${toState}`;
+          return [
+            routesHandled.increase(route),
+            onInternalEvent(route, action)
+          ]
+        })
+        .flat()
     );
     if (canWarn()) {
       const invalidStates = allStates.filter(state => !states.includes(state));
@@ -565,14 +587,14 @@ function Statebot (name, options) {
     }
     return conditionMatches
   }
-  function emit (eventName, ...args) {
+  const emit = Pausable((eventName, ...args) => {
     const err = argTypeError('emit', { eventName: isString }, eventName);
     if (err) {
       throw TypeError(err)
     }
     return events.emit(eventName, ...args)
-  }
-  function enter (state, ...args) {
+  });
+  const enter = Pausable((state, ...args) => {
     const err = argTypeError('enter', { state: isString }, state);
     if (err) {
       throw TypeError(err)
@@ -601,7 +623,7 @@ function Statebot (name, options) {
     emitInternalEvent(nextRoute, ...args);
     emitInternalEvent(INTERNAL_EVENTS.onSwitched, toState, inState, ...args);
     return true
-  }
+  });
   function onEvent (eventName, cb) {
     const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb);
     if (err) {
@@ -1527,6 +1549,24 @@ function Statebot (name, options) {
      */
     onTransitions: transitions => applyHitcher(transitions, 'onTransitions'),
     /**
+     * Pause the machine. {@link #statebotfsmemit|.emit()} and {@link #statebotfsmenter|.enter()} will be no-ops until
+     * the machine is {@link #statebotfsmresume|.resume()}'d.
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     */
+    pause,
+    /**
+     * Returns `true` if the machine is {@link #statebotfsmpause|.pause()}'d
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     * @returns {boolean}
+     */
+    paused,
+    /**
      * Perform transitions when events happen.
      *
      * Use `then` to optionally add callbacks to those transitions.
@@ -1635,7 +1675,8 @@ function Statebot (name, options) {
      * Returns the state-machine to its starting-state and clears the
      * state-history.
      *
-     * All listeners will still be attached, but no events or transitions will be fired.
+     * All listeners will still be attached, but no events or
+     * transitions will be fired. The pause-state will be maintained.
      *
      * @memberof statebotFsm
      * @instance
@@ -1657,6 +1698,14 @@ function Statebot (name, options) {
      * // "page-1"
      */
     reset: reset,
+    /**
+     * Resume a {@link #statebotfsmpause|.pause()}'d machine.
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     */
+    resume,
     /**
      * Return an `array` of states accessible from the state specified.
      * If no state is passed-in, the {@link #statebotfsmcurrentstate|.currentState()} is used.

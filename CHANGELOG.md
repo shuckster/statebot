@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.4.0] - 2020-07-23
 ### Updated
-- Events updated from 3.1.0 -> 3.2.0
+- Dependencies
 
 ### Added
 - pause/paused/resume methods, tests, docs

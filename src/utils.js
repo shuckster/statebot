@@ -102,12 +102,13 @@ function Revokable (fn) {
   }
 }
 
-function Pausables (startPaused = false) {
+function Pausables (startPaused = false, onPauseCall = () => {}) {
   let paused = !!startPaused
 
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
+        onPauseCall()
         return false
       }
       return fn(...args)

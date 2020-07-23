@@ -224,7 +224,9 @@ function Statebot (name, options) {
     onSwitched: '(ANY)state:changed'
   }
 
-  const { pause, resume, paused, Pausable } = Pausables()
+  const { pause, resume, paused, Pausable } = Pausables(false, () => {
+    console.warn(`${logPrefix}: Ignoring callback, paused`)
+  })
 
   const emitInternalEvent = Pausable((eventName, ...args) => {
     return internalEvents.emit(eventName, ...args)

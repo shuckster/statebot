@@ -1471,7 +1471,7 @@ function Statebot (name, options) {
 
     /**
      * Pause the machine. {@link #statebotfsmemit|.emit()} and {@link #statebotfsmenter|.enter()} will be no-ops until
-     * the machine is resumed.
+     * the machine is {@link #statebotfsmresume|.resume()}'d.
      *
      * @memberof statebotFsm
      * @instance

@@ -234,9 +234,8 @@ function Statebot (name, options) {
 
   function onInternalEvent (eventName, cb) {
     internalEvents.addListener(eventName, cb)
-    return () => {
-      internalEvents.removeListener(eventName, cb)
-    }
+    return () => internalEvents.removeListener(eventName, cb)
+
   }
 
   const statesHandled = ReferenceCounter(

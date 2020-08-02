@@ -1098,7 +1098,7 @@ var statebot = (function (exports) {
     function onInternalEvent(eventName, cb) {
       internalEvents.addListener(eventName, cb);
       return function () {
-        internalEvents.removeListener(eventName, cb);
+        return internalEvents.removeListener(eventName, cb);
       };
     }
 

@@ -9,7 +9,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.statebot = {}));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.statebot = {}));
 }(this, (function (exports) { 'use strict';
 
   function _typeof(obj) {
@@ -1101,7 +1101,7 @@
     function onInternalEvent(eventName, cb) {
       internalEvents.addListener(eventName, cb);
       return function () {
-        internalEvents.removeListener(eventName, cb);
+        return internalEvents.removeListener(eventName, cb);
       };
     }
 

@@ -437,17 +437,17 @@ function Statebot (name, options) {
 
     const conditionMatches = currentState() === state
 
-    if (anyOrFn !== undefined) {
-      if (!conditionMatches) {
-        return null
-      }
-      if (isFunction(anyOrFn)) {
-        return anyOrFn(...fnArgs)
-      }
-      return anyOrFn
+    if (anyOrFn === undefined) {
+      return conditionMatches
+    }
+    if (!conditionMatches) {
+      return null
+    }
+    if (isFunction(anyOrFn)) {
+      return anyOrFn(...fnArgs)
     }
 
-    return conditionMatches
+    return anyOrFn
   }
 
   const emit = Pausable((eventName, ...args) => {

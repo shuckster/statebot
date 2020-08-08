@@ -6,7 +6,7 @@
  * License: ISC
  */
 /* exported statebot */
-/* eslint-disable no-func-assign, no-unsafe-finally */
+/* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */
 var statebot = (function (exports) {
   'use strict';
 

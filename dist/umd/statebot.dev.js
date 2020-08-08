@@ -5,8 +5,8 @@
  * https://shuckster.github.io/statebot/
  * License: ISC
  */
-/* global define */
-/* eslint-disable no-func-assign, no-unsafe-finally */
+/* global define, globalThis */
+/* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :

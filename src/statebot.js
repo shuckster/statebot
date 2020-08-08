@@ -203,10 +203,9 @@ function Statebot (name, options) {
   const console = Logger(logLevel)
   const { canWarn } = console
 
-  const {
-    states = [],
-    routes = []
-  } = chart ? decomposeChart(chart) : options
+  const { states = [], routes = [] } = chart
+    ? decomposeChart(chart)
+    : options
 
   const { startIn = states[0] } = options
   if (!states.includes(startIn)) {
@@ -217,20 +216,23 @@ function Statebot (name, options) {
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
 
-  const events = isEventEmitter(options.events) ? options.events : new EventEmitter()
+  const events = isEventEmitter(options.events)
+    ? options.events
+    : new EventEmitter()
+
   const internalEvents = new EventEmitter()
   const INTERNAL_EVENTS = {
     onSwitching: '(ANY)state:changing',
     onSwitched: '(ANY)state:changed'
   }
 
-  const { pause, resume, paused, Pausable } = Pausables(false, () => {
+  const { pause, resume, paused, Pausable } = Pausables(false, () =>
     console.warn(`${logPrefix}: Ignoring callback, paused`)
-  })
+  )
 
-  const emitInternalEvent = Pausable((eventName, ...args) => {
-    return internalEvents.emit(eventName, ...args)
-  })
+  const emitInternalEvent = Pausable((eventName, ...args) =>
+    internalEvents.emit(eventName, ...args)
+  )
 
   function onInternalEvent (eventName, cb) {
     internalEvents.addListener(eventName, cb)
@@ -519,10 +521,13 @@ function Statebot (name, options) {
             throw TypeError(err)
           }
 
-          const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName])
+          const decreaseRefCount = statesHandled.increase(
+            INTERNAL_EVENTS[methodName]
+          )
           const removeEvent = onInternalEvent(
             INTERNAL_EVENTS[methodName], cb
           )
+
           return () => {
             removeEvent()
             decreaseRefCount()
@@ -553,17 +558,21 @@ function Statebot (name, options) {
             statesHandled.increase(state),
             statesHandled.increase(`${state}:${eventName}`)
           ]
-          const removeEvent = switchMethods[switchMethod]((toState, fromState, ...args) => {
-            if (name.indexOf('Exit') === 0) {
-              if (state === fromState) {
-                cb(toState, ...args)
-              }
-            } else {
-              if (state === toState) {
-                cb(fromState, ...args)
+
+          const removeEvent = switchMethods[switchMethod](
+            (toState, fromState, ...args) => {
+              if (name.indexOf('Exit') === 0) {
+                if (state === fromState) {
+                  cb(toState, ...args)
+                }
+              } else {
+                if (state === toState) {
+                  cb(fromState, ...args)
+                }
               }
             }
-          })
+          )
+
           return () => {
             removeEvent()
             decreaseRefCounts.map(fn => fn())
@@ -610,7 +619,8 @@ function Statebot (name, options) {
   function transitionNoOp (message) {
     const lastState = previousState()
     const inState = currentState()
-    const prevRoute = `${lastState === undefined ? '[undefined]' : lastState}->${inState}`
+    const prevRoute =
+      `${lastState === undefined ? '[undefined]' : lastState}->${inState}`
 
     const availableStates = statesAvailableFromHere()
     if (!availableStates.length) {

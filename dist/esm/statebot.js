@@ -747,10 +747,9 @@ function Statebot (name, options) {
   const argTypeError = ArgTypeError(`${logPrefix}#`);
   const console = Logger(logLevel);
   const { canWarn } = console;
-  const {
-    states = [],
-    routes = []
-  } = chart ? decomposeChart(chart) : options;
+  const { states = [], routes = [] } = chart
+    ? decomposeChart(chart)
+    : options;
   const { startIn = states[0] } = options;
   if (!states.includes(startIn)) {
     throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
@@ -758,18 +757,20 @@ function Statebot (name, options) {
   let transitionId = 0;
   const stateHistory = [startIn];
   const stateHistoryLimit = Math.max(historyLimit, 2);
-  const events = isEventEmitter(options.events) ? options.events : new EventEmitter();
+  const events = isEventEmitter(options.events)
+    ? options.events
+    : new EventEmitter();
   const internalEvents = new EventEmitter();
   const INTERNAL_EVENTS = {
     onSwitching: '(ANY)state:changing',
     onSwitched: '(ANY)state:changed'
   };
-  const { pause, resume, paused, Pausable } = Pausables(false, () => {
-    console.warn(`${logPrefix}: Ignoring callback, paused`);
-  });
-  const emitInternalEvent = Pausable((eventName, ...args) => {
-    return internalEvents.emit(eventName, ...args)
-  });
+  const { pause, resume, paused, Pausable } = Pausables(false, () =>
+    console.warn(`${logPrefix}: Ignoring callback, paused`)
+  );
+  const emitInternalEvent = Pausable((eventName, ...args) =>
+    internalEvents.emit(eventName, ...args)
+  );
   function onInternalEvent (eventName, cb) {
     internalEvents.addListener(eventName, cb);
     return () => internalEvents.removeListener(eventName, cb)
@@ -795,9 +796,7 @@ function Statebot (name, options) {
     const hitcherActions =
       isFunction(hitcher)
         ? hitcher({ enter, emit, Enter, Emit })
-        : isPojo(hitcher)
-          ? hitcher
-          : null;
+        : isPojo(hitcher) ? hitcher : null;
     if (!isPojo(hitcherActions)) {
       throw TypeError(
         `Statebot[${name}]#${fnName}(): Expected an object, or a function that returns an object`
@@ -838,22 +837,20 @@ function Statebot (name, options) {
           [eventName]: configs
         }
       }, {});
+    const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
+      inState(fromState, () => {
+        enter(toState, ...args);
+        isFunction(action) && action(...args);
+        return true
+      });
     allCleanupFns.push(
       ...Object.entries(decomposedEvents)
         .map(([eventName, configs]) => [
           eventsHandled.increase(eventName),
           onEvent(eventName, (...args) => {
-            const eventWasHandled = configs.some(
-              ({ fromState, toState, action }) => {
-                const passed = inState(fromState, () => {
-                  enter(toState, ...args);
-                  if (isFunction(action)) {
-                    action(...args);
-                  }
-                  return true
-                });
-                return !!passed
-              });
+            const eventWasHandled = configs
+              .map(config => ({ ...config, args }))
+              .some(ifStateThenEnterState);
             if (!eventWasHandled) {
               transitionNoOp(`Event not handled: "${eventName}"`);
             }
@@ -925,10 +922,9 @@ function Statebot (name, options) {
     return routes.reduce((acc, route) => {
       const [fromState, toState] = route.split(cxArrow)
         .map(state => state.trim());
-      if (fromState === _state) {
-        return [...acc, toState]
-      }
-      return acc
+      return (fromState === _state)
+        ? [...acc, toState]
+        : acc
     }, [])
   }
   function inState (state, anyOrFn, ...fnArgs) {
@@ -937,16 +933,16 @@ function Statebot (name, options) {
       throw TypeError(err)
     }
     const conditionMatches = currentState() === state;
-    if (anyOrFn !== undefined) {
-      if (!conditionMatches) {
-        return null
-      }
-      if (isFunction(anyOrFn)) {
-        return anyOrFn(...fnArgs)
-      }
-      return anyOrFn
+    if (anyOrFn === undefined) {
+      return conditionMatches
     }
-    return conditionMatches
+    if (!conditionMatches) {
+      return null
+    }
+    if (isFunction(anyOrFn)) {
+      return anyOrFn(...fnArgs)
+    }
+    return anyOrFn
   }
   const emit = Pausable((eventName, ...args) => {
     const err = argTypeError('emit', { eventName: isString }, eventName);
@@ -993,26 +989,27 @@ function Statebot (name, options) {
     events.addListener(eventName, cb);
     return () => events.removeListener(eventName, cb)
   }
-  const switchMethods = Object.keys(INTERNAL_EVENTS)
-    .reduce((obj, methodName) => {
-      return {
-        ...obj,
-        [methodName]: function (cb) {
-          const err = argTypeError(methodName, { cb: isFunction }, cb);
-          if (err) {
-            throw TypeError(err)
-          }
-          const decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName]);
-          const removeEvent = onInternalEvent(
-            INTERNAL_EVENTS[methodName], cb
-          );
-          return () => {
-            removeEvent();
-            decreaseRefCount();
-          }
+  const switchMethods = Object
+    .keys(INTERNAL_EVENTS)
+    .reduce((obj, methodName) => ({
+      ...obj,
+      [methodName]: cb => {
+        const err = argTypeError(methodName, { cb: isFunction }, cb);
+        if (err) {
+          throw TypeError(err)
+        }
+        const decreaseRefCount = statesHandled.increase(
+          INTERNAL_EVENTS[methodName]
+        );
+        const removeEvent = onInternalEvent(
+          INTERNAL_EVENTS[methodName], cb
+        );
+        return () => {
+          removeEvent();
+          decreaseRefCount();
         }
       }
-    }, {});
+    }), {});
   const enterExitMethods = [
     ['Exiting', 'onSwitching'],
     ['Entering', 'onSwitching'],
@@ -1025,7 +1022,7 @@ function Statebot (name, options) {
       const eventName = name.toLowerCase();
       return {
         ...obj,
-        [methodName]: function (state, cb) {
+        [methodName]: (state, cb) => {
           const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb);
           if (err) {
             throw TypeError(err)
@@ -1034,17 +1031,19 @@ function Statebot (name, options) {
             statesHandled.increase(state),
             statesHandled.increase(`${state}:${eventName}`)
           ];
-          const removeEvent = switchMethods[switchMethod]((toState, fromState, ...args) => {
-            if (name.indexOf('Exit') === 0) {
-              if (state === fromState) {
-                cb(toState, ...args);
-              }
-            } else {
-              if (state === toState) {
-                cb(fromState, ...args);
+          const removeEvent = switchMethods[switchMethod](
+            (toState, fromState, ...args) => {
+              if (name.indexOf('Exit') === 0) {
+                if (state === fromState) {
+                  cb(toState, ...args);
+                }
+              } else {
+                if (state === toState) {
+                  cb(fromState, ...args);
+                }
               }
             }
-          });
+          );
           return () => {
             removeEvent();
             decreaseRefCounts.map(fn => fn());
@@ -1082,7 +1081,8 @@ function Statebot (name, options) {
   function transitionNoOp (message) {
     const lastState = previousState();
     const inState = currentState();
-    const prevRoute = `${lastState === undefined ? '[undefined]' : lastState}->${inState}`;
+    const prevRoute =
+      `${lastState === undefined ? '[undefined]' : lastState}->${inState}`;
     const availableStates = statesAvailableFromHere();
     if (!availableStates.length) {
       console.info(

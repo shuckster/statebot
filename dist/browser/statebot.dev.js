@@ -1080,7 +1080,7 @@ var statebot = (function (exports) {
     };
 
     var _Pausables = Pausables(false, function () {
-      console.warn("".concat(logPrefix, ": Ignoring callback, paused"));
+      return console.warn("".concat(logPrefix, ": Ignoring callback, paused"));
     }),
         pause = _Pausables.pause,
         resume = _Pausables.resume,
@@ -1173,31 +1173,34 @@ var statebot = (function (exports) {
 
         return _objectSpread2(_objectSpread2({}, acc), {}, _defineProperty({}, eventName, configs));
       }, {});
-      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(function (_ref7) {
-        var _ref8 = _slicedToArray(_ref7, 2),
-            eventName = _ref8[0],
-            configs = _ref8[1];
+
+      var ifStateThenEnterState = function ifStateThenEnterState(_ref7) {
+        var fromState = _ref7.fromState,
+            toState = _ref7.toState,
+            action = _ref7.action,
+            args = _ref7.args;
+        return inState(fromState, function () {
+          enter.apply(void 0, [toState].concat(_toConsumableArray(args)));
+          isFunction(action) && action.apply(void 0, _toConsumableArray(args));
+          return true;
+        });
+      };
+
+      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(function (_ref8) {
+        var _ref9 = _slicedToArray(_ref8, 2),
+            eventName = _ref9[0],
+            configs = _ref9[1];
 
         return [eventsHandled.increase(eventName), onEvent(eventName, function () {
           for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
             args[_key2] = arguments[_key2];
           }
 
-          var eventWasHandled = configs.some(function (_ref9) {
-            var fromState = _ref9.fromState,
-                toState = _ref9.toState,
-                action = _ref9.action;
-            var passed = inState(fromState, function () {
-              enter.apply(void 0, [toState].concat(args));
-
-              if (isFunction(action)) {
-                action.apply(void 0, args);
-              }
-
-              return true;
+          var eventWasHandled = configs.map(function (config) {
+            return _objectSpread2(_objectSpread2({}, config), {}, {
+              args: args
             });
-            return !!passed;
-          });
+          }).some(ifStateThenEnterState);
 
           if (!eventWasHandled) {
             transitionNoOp("Event not handled: \"".concat(eventName, "\""));
@@ -1298,11 +1301,7 @@ var statebot = (function (exports) {
             fromState = _route$split$map2[0],
             toState = _route$split$map2[1];
 
-        if (fromState === _state) {
-          return [].concat(_toConsumableArray(acc), [toState]);
-        }
-
-        return acc;
+        return fromState === _state ? [].concat(_toConsumableArray(acc), [toState]) : acc;
       }, []);
     }
 
@@ -1317,23 +1316,23 @@ var statebot = (function (exports) {
 
       var conditionMatches = currentState() === state;
 
-      if (anyOrFn !== undefined) {
-        if (!conditionMatches) {
-          return null;
-        }
-
-        if (isFunction(anyOrFn)) {
-          for (var _len4 = arguments.length, fnArgs = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
-            fnArgs[_key4 - 2] = arguments[_key4];
-          }
-
-          return anyOrFn.apply(void 0, fnArgs);
-        }
-
-        return anyOrFn;
+      if (anyOrFn === undefined) {
+        return conditionMatches;
       }
 
-      return conditionMatches;
+      if (!conditionMatches) {
+        return null;
+      }
+
+      if (isFunction(anyOrFn)) {
+        for (var _len4 = arguments.length, fnArgs = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
+          fnArgs[_key4 - 2] = arguments[_key4];
+        }
+
+        return anyOrFn.apply(void 0, fnArgs);
+      }
+
+      return anyOrFn;
     }
 
     var emit = Pausable(function (eventName) {

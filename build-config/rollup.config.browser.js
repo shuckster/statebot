@@ -9,12 +9,14 @@ import { terser } from 'rollup-plugin-terser'
 import pkg from '../package.json'
 import { banner, terserConfig } from './rollup.common.js'
 
+const eslintComment = '/* eslint-disable no-func-assign, no-unsafe-finally */'
+
 export default {
   input: 'src/index.js',
   output: [
     {
       file: 'dist/browser/statebot.dev.js',
-      banner: banner(pkg),
+      banner: banner(pkg, `/* exported statebot */\n${eslintComment}`),
       format: 'iife',
       name: 'statebot',
       exports: 'named',
@@ -30,7 +32,7 @@ export default {
     },
     {
       file: 'dist/umd/statebot.dev.js',
-      banner: banner(pkg),
+      banner: banner(pkg, `/* global define */\n${eslintComment}`),
       format: 'umd',
       name: 'statebot',
       exports: 'named',

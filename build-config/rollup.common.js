@@ -1,4 +1,4 @@
-export function banner (pkg) {
+export function banner (pkg, extra = '') {
   return `
 /*
  * Statebot
@@ -6,7 +6,7 @@ export function banner (pkg) {
  * ${pkg.homepage}
  * License: ${pkg.license}
  */
-`
+${extra}`
 }
 
 export const terserConfig = {

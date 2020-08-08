@@ -5,7 +5,8 @@
  * https://shuckster.github.io/statebot/
  * License: ISC
  */
-
+/* exported statebot */
+/* eslint-disable no-func-assign, no-unsafe-finally */
 var statebot = (function (exports) {
   'use strict';
 

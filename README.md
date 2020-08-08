@@ -3,9 +3,21 @@
 <img src="./docs/logo-full.png" width="255" />
 
 <p>
-  <img alt="ISC license" src="https://img.shields.io/npm/l/statebot" />
-  <img alt="Version" src="https://img.shields.io/npm/v/statebot" />
-  <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/statebot" />
+  <a href="https://github.com/shuckster/statebot/blob/master/LICENSE">
+    <img
+      alt="ISC license"
+      src="https://img.shields.io/npm/l/statebot"
+    /></a>
+  <a href="https://bundlephobia.com/result?p=statebot">
+    <img
+      alt="npm bundle size"
+      src="https://img.shields.io/bundlephobia/minzip/statebot"
+    /></a>
+  <a href="https://github.com/shuckster/statebot/releases">
+    <img
+      alt="Version"
+      src="https://img.shields.io/npm/v/statebot"
+    /></a>
 </p>
 
 Write more robust and understandable programs:

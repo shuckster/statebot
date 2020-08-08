@@ -2,6 +2,12 @@
 
 <img src="./docs/logo-full.png" width="255" />
 
+<p>
+  <img alt="ISC license" src="https://img.shields.io/npm/l/statebot" />
+  <img alt="Version" src="https://img.shields.io/npm/v/statebot" />
+  <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/minzip/statebot" />
+</p>
+
 Write more robust and understandable programs:
 
 Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible by focussing on their organisational benefits in a simplified way:

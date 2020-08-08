@@ -263,9 +263,7 @@ function Statebot (name, options) {
     const hitcherActions =
       isFunction(hitcher)
         ? hitcher({ enter, emit, Enter, Emit })
-        : isPojo(hitcher)
-          ? hitcher
-          : null
+        : isPojo(hitcher) ? hitcher : null
 
     if (!isPojo(hitcherActions)) {
       throw TypeError(
@@ -319,23 +317,21 @@ function Statebot (name, options) {
         }
       }, {})
 
+    const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
+      inState(fromState, () => {
+        enter(toState, ...args)
+        isFunction(action) && action(...args)
+        return true
+      })
+
     allCleanupFns.push(
       ...Object.entries(decomposedEvents)
         .map(([eventName, configs]) => [
           eventsHandled.increase(eventName),
           onEvent(eventName, (...args) => {
-            const eventWasHandled = configs.some(
-              ({ fromState, toState, action }) => {
-                const passed = inState(fromState, () => {
-                  enter(toState, ...args)
-                  if (isFunction(action)) {
-                    action(...args)
-                  }
-                  return true
-                })
-
-                return !!passed
-              })
+            const eventWasHandled = configs
+              .map(config => ({ ...config, args }))
+              .some(ifStateThenEnterState)
 
             if (!eventWasHandled) {
               transitionNoOp(`Event not handled: "${eventName}"`)
@@ -424,10 +420,9 @@ function Statebot (name, options) {
       const [fromState, toState] = route.split(cxArrow)
         .map(state => state.trim())
 
-      if (fromState === _state) {
-        return [...acc, toState]
-      }
-      return acc
+      return (fromState === _state)
+        ? [...acc, toState]
+        : acc
     }, [])
   }
 
@@ -511,30 +506,29 @@ function Statebot (name, options) {
     return () => events.removeListener(eventName, cb)
   }
 
-  const switchMethods = Object.keys(INTERNAL_EVENTS)
-    .reduce((obj, methodName) => {
-      return {
-        ...obj,
-        [methodName]: function (cb) {
-          const err = argTypeError(methodName, { cb: isFunction }, cb)
-          if (err) {
-            throw TypeError(err)
-          }
+  const switchMethods = Object
+    .keys(INTERNAL_EVENTS)
+    .reduce((obj, methodName) => ({
+      ...obj,
+      [methodName]: cb => {
+        const err = argTypeError(methodName, { cb: isFunction }, cb)
+        if (err) {
+          throw TypeError(err)
+        }
 
-          const decreaseRefCount = statesHandled.increase(
-            INTERNAL_EVENTS[methodName]
-          )
-          const removeEvent = onInternalEvent(
-            INTERNAL_EVENTS[methodName], cb
-          )
+        const decreaseRefCount = statesHandled.increase(
+          INTERNAL_EVENTS[methodName]
+        )
+        const removeEvent = onInternalEvent(
+          INTERNAL_EVENTS[methodName], cb
+        )
 
-          return () => {
-            removeEvent()
-            decreaseRefCount()
-          }
+        return () => {
+          removeEvent()
+          decreaseRefCount()
         }
       }
-    }, {})
+    }), {})
 
   const enterExitMethods = [
     ['Exiting', 'onSwitching'],
@@ -546,9 +540,10 @@ function Statebot (name, options) {
       const [name, switchMethod] = names
       const methodName = `on${name}`
       const eventName = name.toLowerCase()
+
       return {
         ...obj,
-        [methodName]: function (state, cb) {
+        [methodName]: (state, cb) => {
           const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb)
           if (err) {
             throw TypeError(err)

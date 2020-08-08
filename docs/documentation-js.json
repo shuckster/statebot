@@ -2275,13 +2275,13 @@
                   "children": [
                     {
                       "type": "link",
-                      "url": "#statebotfsmreset",
+                      "url": "#statebotfsmpause",
                       "title": null,
                       "jsdoc": true,
                       "children": [
                         {
                           "type": "text",
-                          "value": ".reset()"
+                          "value": ".pause()"
                         }
                       ],
                       "position": {
@@ -2297,6 +2297,48 @@
                         },
                         "indent": []
                       }
+                    },
+                    {
+                      "type": "text",
+                      "value": " / ",
+                      "position": {
+                        "start": {
+                          "line": 99,
+                          "column": 235,
+                          "offset": 3215
+                        },
+                        "end": {
+                          "line": 99,
+                          "column": 238,
+                          "offset": 3218
+                        },
+                        "indent": []
+                      }
+                    },
+                    {
+                      "type": "link",
+                      "url": "#statebotfsmresume",
+                      "title": null,
+                      "jsdoc": true,
+                      "children": [
+                        {
+                          "type": "text",
+                          "value": ".resume()"
+                        }
+                      ],
+                      "position": {
+                        "start": {
+                          "line": 99,
+                          "column": 238,
+                          "offset": 3218
+                        },
+                        "end": {
+                          "line": 99,
+                          "column": 274,
+                          "offset": 3254
+                        },
+                        "indent": []
+                      }
                     }
                   ],
                   "position": {
@@ -2307,8 +2349,8 @@
                     },
                     "end": {
                       "line": 99,
-                      "column": 235,
-                      "offset": 3215
+                      "column": 274,
+                      "offset": 3254
                     },
                     "indent": []
                   }
@@ -2322,8 +2364,8 @@
                 },
                 "end": {
                   "line": 99,
-                  "column": 237,
-                  "offset": 3217
+                  "column": 276,
+                  "offset": 3256
                 },
                 "indent": []
               }
@@ -2349,12 +2391,12 @@
                         "start": {
                           "line": 100,
                           "column": 3,
-                          "offset": 3220
+                          "offset": 3259
                         },
                         "end": {
                           "line": 100,
                           "column": 45,
-                          "offset": 3262
+                          "offset": 3301
                         },
                         "indent": []
                       }
@@ -2366,12 +2408,12 @@
                         "start": {
                           "line": 100,
                           "column": 45,
-                          "offset": 3262
+                          "offset": 3301
                         },
                         "end": {
                           "line": 100,
                           "column": 48,
-                          "offset": 3265
+                          "offset": 3304
                         },
                         "indent": []
                       }
@@ -2391,12 +2433,12 @@
                         "start": {
                           "line": 100,
                           "column": 48,
-                          "offset": 3265
+                          "offset": 3304
                         },
                         "end": {
                           "line": 100,
                           "column": 88,
-                          "offset": 3305
+                          "offset": 3344
                         },
                         "indent": []
                       }
@@ -2406,12 +2448,12 @@
                     "start": {
                       "line": 100,
                       "column": 3,
-                      "offset": 3220
+                      "offset": 3259
                     },
                     "end": {
                       "line": 100,
                       "column": 88,
-                      "offset": 3305
+                      "offset": 3344
                     },
                     "indent": []
                   }
@@ -2434,12 +2476,12 @@
                         "start": {
                           "line": 100,
                           "column": 91,
-                          "offset": 3308
+                          "offset": 3347
                         },
                         "end": {
                           "line": 100,
                           "column": 123,
-                          "offset": 3340
+                          "offset": 3379
                         },
                         "indent": []
                       }
@@ -2451,12 +2493,12 @@
                         "start": {
                           "line": 100,
                           "column": 123,
-                          "offset": 3340
+                          "offset": 3379
                         },
                         "end": {
                           "line": 100,
                           "column": 126,
-                          "offset": 3343
+                          "offset": 3382
                         },
                         "indent": []
                       }
@@ -2476,12 +2518,12 @@
                         "start": {
                           "line": 100,
                           "column": 126,
-                          "offset": 3343
+                          "offset": 3382
                         },
                         "end": {
                           "line": 100,
                           "column": 164,
-                          "offset": 3381
+                          "offset": 3420
                         },
                         "indent": []
                       }
@@ -2493,12 +2535,12 @@
                         "start": {
                           "line": 100,
                           "column": 164,
-                          "offset": 3381
+                          "offset": 3420
                         },
                         "end": {
                           "line": 100,
                           "column": 167,
-                          "offset": 3384
+                          "offset": 3423
                         },
                         "indent": []
                       }
@@ -2518,12 +2560,12 @@
                         "start": {
                           "line": 100,
                           "column": 167,
-                          "offset": 3384
+                          "offset": 3423
                         },
                         "end": {
                           "line": 100,
                           "column": 199,
-                          "offset": 3416
+                          "offset": 3455
                         },
                         "indent": []
                       }
@@ -2533,29 +2575,55 @@
                     "start": {
                       "line": 100,
                       "column": 91,
-                      "offset": 3308
+                      "offset": 3347
                     },
                     "end": {
                       "line": 100,
                       "column": 199,
-                      "offset": 3416
+                      "offset": 3455
                     },
                     "indent": []
                   }
                 },
                 {
                   "type": "tableCell",
-                  "children": [],
+                  "children": [
+                    {
+                      "type": "link",
+                      "url": "#statebotfsmreset",
+                      "title": null,
+                      "jsdoc": true,
+                      "children": [
+                        {
+                          "type": "text",
+                          "value": ".reset()"
+                        }
+                      ],
+                      "position": {
+                        "start": {
+                          "line": 100,
+                          "column": 202,
+                          "offset": 3458
+                        },
+                        "end": {
+                          "line": 100,
+                          "column": 236,
+                          "offset": 3492
+                        },
+                        "indent": []
+                      }
+                    }
+                  ],
                   "position": {
                     "start": {
                       "line": 100,
-                      "column": 203,
-                      "offset": 3420
+                      "column": 202,
+                      "offset": 3458
                     },
                     "end": {
                       "line": 100,
-                      "column": 203,
-                      "offset": 3420
+                      "column": 236,
+                      "offset": 3492
                     },
                     "indent": []
                   }
@@ -2565,12 +2633,12 @@
                 "start": {
                   "line": 100,
                   "column": 1,
-                  "offset": 3218
+                  "offset": 3257
                 },
                 "end": {
                   "line": 100,
-                  "column": 204,
-                  "offset": 3421
+                  "column": 238,
+                  "offset": 3494
                 },
                 "indent": []
               }
@@ -2596,12 +2664,12 @@
                         "start": {
                           "line": 101,
                           "column": 3,
-                          "offset": 3424
+                          "offset": 3497
                         },
                         "end": {
                           "line": 101,
                           "column": 49,
-                          "offset": 3470
+                          "offset": 3543
                         },
                         "indent": []
                       }
@@ -2613,12 +2681,12 @@
                         "start": {
                           "line": 101,
                           "column": 49,
-                          "offset": 3470
+                          "offset": 3543
                         },
                         "end": {
                           "line": 101,
                           "column": 52,
-                          "offset": 3473
+                          "offset": 3546
                         },
                         "indent": []
                       }
@@ -2638,12 +2706,12 @@
                         "start": {
                           "line": 101,
                           "column": 52,
-                          "offset": 3473
+                          "offset": 3546
                         },
                         "end": {
                           "line": 101,
                           "column": 96,
-                          "offset": 3517
+                          "offset": 3590
                         },
                         "indent": []
                       }
@@ -2653,12 +2721,55 @@
                     "start": {
                       "line": 101,
                       "column": 3,
-                      "offset": 3424
+                      "offset": 3497
                     },
                     "end": {
                       "line": 101,
                       "column": 96,
-                      "offset": 3517
+                      "offset": 3590
+                    },
+                    "indent": []
+                  }
+                },
+                {
+                  "type": "tableCell",
+                  "children": [
+                    {
+                      "type": "link",
+                      "url": "#statebotfsmpaused",
+                      "title": null,
+                      "jsdoc": true,
+                      "children": [
+                        {
+                          "type": "text",
+                          "value": ".paused()"
+                        }
+                      ],
+                      "position": {
+                        "start": {
+                          "line": 101,
+                          "column": 99,
+                          "offset": 3593
+                        },
+                        "end": {
+                          "line": 101,
+                          "column": 135,
+                          "offset": 3629
+                        },
+                        "indent": []
+                      }
+                    }
+                  ],
+                  "position": {
+                    "start": {
+                      "line": 101,
+                      "column": 99,
+                      "offset": 3593
+                    },
+                    "end": {
+                      "line": 101,
+                      "column": 136,
+                      "offset": 3630
                     },
                     "indent": []
                   }
@@ -2669,30 +2780,13 @@
                   "position": {
                     "start": {
                       "line": 101,
-                      "column": 100,
-                      "offset": 3521
+                      "column": 140,
+                      "offset": 3634
                     },
                     "end": {
                       "line": 101,
-                      "column": 100,
-                      "offset": 3521
-                    },
-                    "indent": []
-                  }
-                },
-                {
-                  "type": "tableCell",
-                  "children": [],
-                  "position": {
-                    "start": {
-                      "line": 101,
-                      "column": 103,
-                      "offset": 3524
-                    },
-                    "end": {
-                      "line": 101,
-                      "column": 103,
-                      "offset": 3524
+                      "column": 140,
+                      "offset": 3634
                     },
                     "indent": []
                   }
@@ -2702,12 +2796,12 @@
                 "start": {
                   "line": 101,
                   "column": 1,
-                  "offset": 3422
+                  "offset": 3495
                 },
                 "end": {
                   "line": 101,
-                  "column": 104,
-                  "offset": 3525
+                  "column": 141,
+                  "offset": 3635
                 },
                 "indent": []
               }
@@ -2721,8 +2815,8 @@
             },
             "end": {
               "line": 101,
-              "column": 104,
-              "offset": 3525
+              "column": 141,
+              "offset": 3635
             },
             "indent": [
               1,
@@ -2741,12 +2835,12 @@
             "start": {
               "line": 103,
               "column": 1,
-              "offset": 3527
+              "offset": 3637
             },
             "end": {
               "line": 103,
               "column": 78,
-              "offset": 3604
+              "offset": 3714
             },
             "indent": []
           }
@@ -2761,7 +2855,7 @@
         "end": {
           "line": 103,
           "column": 78,
-          "offset": 3604
+          "offset": 3714
         }
       }
     },

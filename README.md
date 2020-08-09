@@ -11,12 +11,12 @@
   <a href="https://bundlephobia.com/result?p=statebot">
     <img
       alt="npm bundle size"
-      src="https://img.shields.io/bundlephobia/minzip/statebot"
+      src="https://img.shields.io/bundlephobia/minzip/statebot?style=plastic"
     /></a>
-  <a href="https://github.com/shuckster/statebot/releases">
+  <a href="https://www.npmjs.com/package/statebot">
     <img
       alt="Version"
-      src="https://img.shields.io/npm/v/statebot"
+      src="https://img.shields.io/npm/v/statebot?style=plastic"
     /></a>
 </p>
 

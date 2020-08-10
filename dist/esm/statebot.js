@@ -393,8 +393,8 @@ function isEventEmitter (obj) {
   return (
     isObject(obj) &&
     isFunction(obj.emit) &&
-    isFunction(obj.addListener) &&
-    isFunction(obj.removeListener)
+    (isFunction(obj.addListener) || isFunction(obj.on)) &&
+    (isFunction(obj.removeListener) || isFunction(obj.off))
   )
 }
 function isPojo (obj) {
@@ -744,9 +744,12 @@ function Statebot (name, options) {
     logLevel = 3,
     historyLimit = 2
   } = options || {};
-  const argTypeError = ArgTypeError(`${logPrefix}#`);
-  const console = Logger(logLevel);
-  const { canWarn } = console;
+  const events = options.events === undefined
+    ? new EventEmitter()
+    : isEventEmitter(options.events) && wrapEmitter(options.events);
+  if (!events) {
+    throw TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
+  }
   const { states = [], routes = [] } = chart
     ? decomposeChart(chart)
     : options;
@@ -754,17 +757,17 @@ function Statebot (name, options) {
   if (!states.includes(startIn)) {
     throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
-  let transitionId = 0;
+  const argTypeError = ArgTypeError(`${logPrefix}#`);
+  const console = Logger(logLevel);
+  const { canWarn } = console;
   const stateHistory = [startIn];
   const stateHistoryLimit = Math.max(historyLimit, 2);
-  const events = isEventEmitter(options.events)
-    ? options.events
-    : new EventEmitter();
   const internalEvents = new EventEmitter();
   const INTERNAL_EVENTS = {
     onSwitching: '(ANY)state:changing',
     onSwitched: '(ANY)state:changed'
   };
+  let transitionId = 0;
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
@@ -2136,6 +2139,14 @@ function isStatebot (object) {
     isPojo(object) &&
     typeof object.__STATEBOT__ === 'number'
   )
+}
+function wrapEmitter (events) {
+  const addListener = events.addListener || events.on;
+  const removeListener = events.removeListener || events.off;
+  return {
+    addListener,
+    removeListener
+  }
 }
 
 const argTypeError$1 = ArgTypeError('statebot.');

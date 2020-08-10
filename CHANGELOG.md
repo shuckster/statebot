@@ -5,12 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.5.0] - 2020-08-10
 ### Updated
 - Dependencies
+- Throws if invalid event-emitter passed-in
 
 ### Added
+- Compatibility with mitt event-emitter library
 - inState + statesAvailableFromHere tests
 - More links for pause/resume/paused in docs
+- Build-comments for CodeFactor
 
 ## [2.4.0] - 2020-07-23
 ### Updated

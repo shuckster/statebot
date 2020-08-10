@@ -34,6 +34,8 @@ export {
  *  `performTransitions()` methods will use it.
  *
  *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
+ *
+ * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
  */
 
 /**

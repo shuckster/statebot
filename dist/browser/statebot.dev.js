@@ -577,7 +577,7 @@ var statebot = (function (exports) {
   }
 
   function isEventEmitter(obj) {
-    return isObject(obj) && isFunction(obj.emit) && isFunction(obj.addListener) && isFunction(obj.removeListener);
+    return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
   }
 
   function isPojo(obj) {
@@ -1053,9 +1053,11 @@ var statebot = (function (exports) {
         _ref$historyLimit = _ref.historyLimit,
         historyLimit = _ref$historyLimit === void 0 ? 2 : _ref$historyLimit;
 
-    var argTypeError = ArgTypeError("".concat(logPrefix, "#"));
-    var console = Logger(logLevel);
-    var canWarn = console.canWarn;
+    var events = options.events === undefined ? new EventEmitter() : isEventEmitter(options.events) && wrapEmitter(options.events);
+
+    if (!events) {
+      throw TypeError("\n".concat(logPrefix, ": Invalid event-emitter specified in options"));
+    }
 
     var _ref2 = chart ? decomposeChart(chart) : options,
         _ref2$states = _ref2.states,
@@ -1070,15 +1072,17 @@ var statebot = (function (exports) {
       throw Error("".concat(logPrefix, ": Starting-state not in chart: \"").concat(startIn, "\""));
     }
 
-    var transitionId = 0;
+    var argTypeError = ArgTypeError("".concat(logPrefix, "#"));
+    var console = Logger(logLevel);
+    var canWarn = console.canWarn;
     var stateHistory = [startIn];
     var stateHistoryLimit = Math.max(historyLimit, 2);
-    var events = isEventEmitter(options.events) ? options.events : new EventEmitter();
     var internalEvents = new EventEmitter();
     var INTERNAL_EVENTS = {
       onSwitching: '(ANY)state:changing',
       onSwitched: '(ANY)state:changed'
     };
+    var transitionId = 0;
 
     var _Pausables = Pausables(false, function () {
       return console.warn("".concat(logPrefix, ": Ignoring callback, paused"));
@@ -2659,6 +2663,15 @@ var statebot = (function (exports) {
 
   function isStatebot(object) {
     return isPojo(object) && typeof object.__STATEBOT__ === 'number';
+  }
+
+  function wrapEmitter(events) {
+    var addListener = events.addListener || events.on;
+    var removeListener = events.removeListener || events.off;
+    return {
+      addListener: addListener,
+      removeListener: removeListener
+    };
   }
 
   var argTypeError$1 = ArgTypeError('statebot.');

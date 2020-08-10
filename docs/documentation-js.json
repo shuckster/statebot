@@ -3078,22 +3078,22 @@
           ],
           "loc": {
             "start": {
-              "line": 165,
+              "line": 167,
               "column": 0
             },
             "end": {
-              "line": 184,
+              "line": 186,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 186,
+                "line": 188,
                 "column": 0
               },
               "end": {
-                "line": 1665,
+                "line": 1673,
                 "column": 1
               }
             },
@@ -3382,22 +3382,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1694,
+              "line": 1702,
               "column": 0
             },
             "end": {
-              "line": 1707,
+              "line": 1715,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1709,
+                "line": 1717,
                 "column": 0
               },
               "end": {
-                "line": 1714,
+                "line": 1722,
                 "column": 1
               }
             },
@@ -5143,7 +5143,7 @@
       },
       {
         "title": "property",
-        "description": "If you wish to have your Statebots listen to events coming from\n a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/\n `performTransitions()` methods will use it.\n\n It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.",
+        "description": "If you wish to have your Statebots listen to events coming from\n a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/\n `performTransitions()` methods will use it.\n\n It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.\n\nSince Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.",
         "lineNumber": 20,
         "type": {
           "type": "OptionalType",
@@ -5161,18 +5161,18 @@
         "column": 0
       },
       "end": {
-        "line": 37,
+        "line": 39,
         "column": 3
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 149,
+          "line": 151,
           "column": 0
         },
         "end": {
-          "line": 149,
+          "line": 151,
           "column": 33
         }
       },
@@ -5839,6 +5839,83 @@
                 },
                 "indent": []
               }
+            },
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Since Statebot 2.5.0 ",
+                  "position": {
+                    "start": {
+                      "line": 7,
+                      "column": 1,
+                      "offset": 307
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 22,
+                      "offset": 328
+                    },
+                    "indent": []
+                  }
+                },
+                {
+                  "type": "link",
+                  "url": "https://npmjs.com/mitt",
+                  "title": null,
+                  "jsdoc": true,
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "mitt"
+                    }
+                  ],
+                  "position": {
+                    "start": {
+                      "line": 7,
+                      "column": 22,
+                      "offset": 328
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 57,
+                      "offset": 363
+                    },
+                    "indent": []
+                  }
+                },
+                {
+                  "type": "text",
+                  "value": " is also compatible.",
+                  "position": {
+                    "start": {
+                      "line": 7,
+                      "column": 57,
+                      "offset": 363
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 77,
+                      "offset": 383
+                    },
+                    "indent": []
+                  }
+                }
+              ],
+              "position": {
+                "start": {
+                  "line": 7,
+                  "column": 1,
+                  "offset": 307
+                },
+                "end": {
+                  "line": 7,
+                  "column": 77,
+                  "offset": 383
+                },
+                "indent": []
+              }
             }
           ],
           "position": {
@@ -5848,9 +5925,9 @@
               "offset": 0
             },
             "end": {
-              "line": 5,
-              "column": 121,
-              "offset": 305
+              "line": 7,
+              "column": 77,
+              "offset": 383
             }
           }
         },
@@ -7300,22 +7377,22 @@
     ],
     "loc": {
       "start": {
-        "line": 39,
+        "line": 41,
         "column": 0
       },
       "end": {
-        "line": 146,
+        "line": 148,
         "column": 3
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 149,
+          "line": 151,
           "column": 0
         },
         "end": {
-          "line": 149,
+          "line": 151,
           "column": 33
         }
       },
@@ -7483,22 +7560,22 @@
     ],
     "loc": {
       "start": {
-        "line": 664,
+        "line": 672,
         "column": 2
       },
       "end": {
-        "line": 668,
+        "line": 676,
         "column": 5
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 670,
+          "line": 678,
           "column": 2
         },
         "end": {
-          "line": 1664,
+          "line": 1672,
           "column": 3
         }
       },
@@ -7810,22 +7887,22 @@
           ],
           "loc": {
             "start": {
-              "line": 678,
+              "line": 686,
               "column": 4
             },
             "end": {
-              "line": 714,
+              "line": 722,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 715,
+                "line": 723,
                 "column": 4
               },
               "end": {
-                "line": 715,
+                "line": 723,
                 "column": 36
               }
             },
@@ -8008,22 +8085,22 @@
           ],
           "loc": {
             "start": {
-              "line": 717,
+              "line": 725,
               "column": 4
             },
             "end": {
-              "line": 734,
+              "line": 742,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 735,
+                "line": 743,
                 "column": 4
               },
               "end": {
-                "line": 735,
+                "line": 743,
                 "column": 30
               }
             },
@@ -8291,22 +8368,22 @@
           ],
           "loc": {
             "start": {
-              "line": 737,
+              "line": 745,
               "column": 4
             },
             "end": {
-              "line": 779,
+              "line": 787,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 780,
+                "line": 788,
                 "column": 4
               },
               "end": {
-                "line": 780,
+                "line": 788,
                 "column": 14
               }
             },
@@ -8874,22 +8951,22 @@
           ],
           "loc": {
             "start": {
-              "line": 782,
+              "line": 790,
               "column": 4
             },
             "end": {
-              "line": 829,
+              "line": 837,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 830,
+                "line": 838,
                 "column": 4
               },
               "end": {
-                "line": 830,
+                "line": 838,
                 "column": 14
               }
             },
@@ -9359,22 +9436,22 @@
           ],
           "loc": {
             "start": {
-              "line": 832,
+              "line": 840,
               "column": 4
             },
             "end": {
-              "line": 864,
+              "line": 872,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 865,
+                "line": 873,
                 "column": 4
               },
               "end": {
-                "line": 865,
+                "line": 873,
                 "column": 16
               }
             },
@@ -9841,22 +9918,22 @@
           ],
           "loc": {
             "start": {
-              "line": 867,
+              "line": 875,
               "column": 4
             },
             "end": {
-              "line": 901,
+              "line": 909,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 902,
+                "line": 910,
                 "column": 4
               },
               "end": {
-                "line": 902,
+                "line": 910,
                 "column": 16
               }
             },
@@ -10302,22 +10379,22 @@
           ],
           "loc": {
             "start": {
-              "line": 904,
+              "line": 912,
               "column": 4
             },
             "end": {
-              "line": 929,
+              "line": 937,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 930,
+                "line": 938,
                 "column": 4
               },
               "end": {
-                "line": 930,
+                "line": 938,
                 "column": 36
               }
             },
@@ -10502,22 +10579,22 @@
           ],
           "loc": {
             "start": {
-              "line": 932,
+              "line": 940,
               "column": 4
             },
             "end": {
-              "line": 966,
+              "line": 974,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 967,
+                "line": 975,
                 "column": 4
               },
               "end": {
-                "line": 967,
+                "line": 975,
                 "column": 22
               }
             },
@@ -10719,22 +10796,22 @@
           ],
           "loc": {
             "start": {
-              "line": 969,
+              "line": 977,
               "column": 4
             },
             "end": {
-              "line": 990,
+              "line": 998,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 991,
+                "line": 999,
                 "column": 4
               },
               "end": {
-                "line": 991,
+                "line": 999,
                 "column": 28
               }
             },
@@ -11349,22 +11426,22 @@
           ],
           "loc": {
             "start": {
-              "line": 993,
+              "line": 1001,
               "column": 4
             },
             "end": {
-              "line": 1040,
+              "line": 1048,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1041,
+                "line": 1049,
                 "column": 4
               },
               "end": {
-                "line": 1041,
+                "line": 1049,
                 "column": 20
               }
             },
@@ -12226,22 +12303,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1043,
+              "line": 1051,
               "column": 4
             },
             "end": {
-              "line": 1094,
+              "line": 1102,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1095,
+                "line": 1103,
                 "column": 4
               },
               "end": {
-                "line": 1095,
+                "line": 1103,
                 "column": 20
               }
             },
@@ -12832,22 +12909,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1097,
+              "line": 1105,
               "column": 4
             },
             "end": {
-              "line": 1118,
+              "line": 1126,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1119,
+                "line": 1127,
                 "column": 4
               },
               "end": {
-                "line": 1119,
+                "line": 1127,
                 "column": 20
               }
             },
@@ -13149,22 +13226,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1121,
+              "line": 1129,
               "column": 4
             },
             "end": {
-              "line": 1151,
+              "line": 1159,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1152,
+                "line": 1160,
                 "column": 4
               },
               "end": {
-                "line": 1152,
+                "line": 1160,
                 "column": 41
               }
             },
@@ -13641,22 +13718,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1154,
+              "line": 1162,
               "column": 4
             },
             "end": {
-              "line": 1189,
+              "line": 1197,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1190,
+                "line": 1198,
                 "column": 4
               },
               "end": {
-                "line": 1190,
+                "line": 1198,
                 "column": 43
               }
             },
@@ -14081,22 +14158,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1203,
+              "line": 1211,
               "column": 4
             },
             "end": {
-              "line": 1240,
+              "line": 1248,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1241,
+                "line": 1249,
                 "column": 4
               },
               "end": {
-                "line": 1241,
+                "line": 1249,
                 "column": 20
               }
             },
@@ -14521,22 +14598,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1243,
+              "line": 1251,
               "column": 4
             },
             "end": {
-              "line": 1272,
+              "line": 1280,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1273,
+                "line": 1281,
                 "column": 4
               },
               "end": {
-                "line": 1273,
+                "line": 1281,
                 "column": 39
               }
             },
@@ -15013,22 +15090,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1275,
+              "line": 1283,
               "column": 4
             },
             "end": {
-              "line": 1310,
+              "line": 1318,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1311,
+                "line": 1319,
                 "column": 4
               },
               "end": {
-                "line": 1311,
+                "line": 1319,
                 "column": 41
               }
             },
@@ -15495,22 +15572,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1324,
+              "line": 1332,
               "column": 4
             },
             "end": {
-              "line": 1352,
+              "line": 1360,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1353,
+                "line": 1361,
                 "column": 4
               },
               "end": {
-                "line": 1353,
+                "line": 1361,
                 "column": 40
               }
             },
@@ -15916,22 +15993,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1355,
+              "line": 1363,
               "column": 4
             },
             "end": {
-              "line": 1383,
+              "line": 1391,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1384,
+                "line": 1392,
                 "column": 4
               },
               "end": {
-                "line": 1384,
+                "line": 1392,
                 "column": 42
               }
             },
@@ -16260,22 +16337,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1398,
+              "line": 1406,
               "column": 4
             },
             "end": {
-              "line": 1473,
+              "line": 1481,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1474,
+                "line": 1482,
                 "column": 4
               },
               "end": {
-                "line": 1474,
+                "line": 1482,
                 "column": 76
               }
             },
@@ -16912,22 +16989,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1476,
+              "line": 1484,
               "column": 4
             },
             "end": {
-              "line": 1483,
+              "line": 1491,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1484,
+                "line": 1492,
                 "column": 4
               },
               "end": {
-                "line": 1484,
+                "line": 1492,
                 "column": 9
               }
             },
@@ -17125,22 +17202,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1486,
+              "line": 1494,
               "column": 4
             },
             "end": {
-              "line": 1493,
+              "line": 1501,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1494,
+                "line": 1502,
                 "column": 4
               },
               "end": {
-                "line": 1494,
+                "line": 1502,
                 "column": 10
               }
             },
@@ -17379,22 +17456,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1496,
+              "line": 1504,
               "column": 4
             },
             "end": {
-              "line": 1576,
+              "line": 1584,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1577,
+                "line": 1585,
                 "column": 4
               },
               "end": {
-                "line": 1577,
+                "line": 1585,
                 "column": 86
               }
             },
@@ -17920,22 +17997,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1579,
+              "line": 1587,
               "column": 4
             },
             "end": {
-              "line": 1600,
+              "line": 1608,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1601,
+                "line": 1609,
                 "column": 4
               },
               "end": {
-                "line": 1601,
+                "line": 1609,
                 "column": 32
               }
             },
@@ -18251,22 +18328,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1603,
+              "line": 1611,
               "column": 4
             },
             "end": {
-              "line": 1628,
+              "line": 1636,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1629,
+                "line": 1637,
                 "column": 4
               },
               "end": {
-                "line": 1629,
+                "line": 1637,
                 "column": 16
               }
             },
@@ -18425,22 +18502,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1631,
+              "line": 1639,
               "column": 4
             },
             "end": {
-              "line": 1637,
+              "line": 1645,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1638,
+                "line": 1646,
                 "column": 4
               },
               "end": {
-                "line": 1638,
+                "line": 1646,
                 "column": 10
               }
             },
@@ -18669,22 +18746,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1640,
+              "line": 1648,
               "column": 4
             },
             "end": {
-              "line": 1662,
+              "line": 1670,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1663,
+                "line": 1671,
                 "column": 4
               },
               "end": {
-                "line": 1663,
+                "line": 1671,
                 "column": 52
               }
             },
@@ -19043,22 +19120,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1192,
+        "line": 1200,
         "column": 4
       },
       "end": {
-        "line": 1201,
+        "line": 1209,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1241,
+          "line": 1249,
           "column": 4
         },
         "end": {
-          "line": 1241,
+          "line": 1249,
           "column": 20
         }
       },
@@ -19402,22 +19479,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1313,
+        "line": 1321,
         "column": 4
       },
       "end": {
-        "line": 1322,
+        "line": 1330,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1353,
+          "line": 1361,
           "column": 4
         },
         "end": {
-          "line": 1353,
+          "line": 1361,
           "column": 40
         }
       },
@@ -19771,22 +19848,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1386,
+        "line": 1394,
         "column": 4
       },
       "end": {
-        "line": 1396,
+        "line": 1404,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1474,
+          "line": 1482,
           "column": 4
         },
         "end": {
-          "line": 1474,
+          "line": 1482,
           "column": 76
         }
       },

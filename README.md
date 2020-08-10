@@ -3,10 +3,10 @@
 <img src="./docs/logo-full.png" width="255" />
 
 <p>
-  <a href="https://github.com/shuckster/statebot/blob/master/LICENSE">
+  <a href="https://www.codefactor.io/repository/github/shuckster/statebot">
     <img
-      alt="ISC license"
-      src="https://img.shields.io/npm/l/statebot"
+      alt="David"
+      src="https://img.shields.io/david/shuckster/statebot?style=plastic"
     /></a>
   <a href="https://bundlephobia.com/result?p=statebot">
     <img

@@ -1,7 +1,7 @@
 
 const { Statebot } = require('../src/statebot')
 
-const bot = Statebot('test-events-and-ordering', {
+const bot = Statebot('test-events-only', {
   chart: `
 
     idle -> pending ->

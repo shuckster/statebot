@@ -1712,3 +1712,12 @@ function isStatebot (object) {
     typeof object.__STATEBOT__ === 'number'
   )
 }
+
+function wrapEmitter (events) {
+  const addListener = events.addListener || events.on
+  const removeListener = events.removeListener || events.off
+  return {
+    addListener,
+    removeListener
+  }
+}

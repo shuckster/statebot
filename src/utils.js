@@ -40,8 +40,8 @@ function isEventEmitter (obj) {
   return (
     isObject(obj) &&
     isFunction(obj.emit) &&
-    isFunction(obj.addListener) &&
-    isFunction(obj.removeListener)
+    (isFunction(obj.addListener) || isFunction(obj.on)) &&
+    (isFunction(obj.removeListener) || isFunction(obj.off))
   )
 }
 

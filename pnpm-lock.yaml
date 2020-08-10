@@ -18,6 +18,7 @@ devDependencies:
   eslint-plugin-promise: 4.2.1
   eslint-plugin-standard: 4.0.1_eslint@7.6.0
   jest: 26.2.2
+  mitt: 2.1.0
   rollup: 2.23.1
   rollup-plugin-cleanup: 3.1.1_rollup@2.23.1
   rollup-plugin-node-builtins: 2.1.2
@@ -5382,6 +5383,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  /mitt/2.1.0:
+    dev: true
+    resolution:
+      integrity: sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg==
   /mixin-deep/1.3.2:
     dependencies:
       for-in: 1.0.2
@@ -8019,6 +8024,7 @@ specifiers:
   eslint-plugin-standard: ^4.0.1
   events: ^3.2.0
   jest: ^26.2.2
+  mitt: ^2.1.0
   rollup: ^2.23.1
   rollup-plugin-cleanup: ^3.1.1
   rollup-plugin-node-builtins: ^2.1.2

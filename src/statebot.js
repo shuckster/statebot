@@ -199,32 +199,38 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {}
 
-  const argTypeError = ArgTypeError(`${logPrefix}#`)
-  const console = Logger(logLevel)
-  const { canWarn } = console
+  const events = options.events === undefined
+    ? new EventEmitter()
+    : isEventEmitter(options.events) && wrapEmitter(options.events)
+
+  if (!events) {
+    throw TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
+  }
 
   const { states = [], routes = [] } = chart
     ? decomposeChart(chart)
     : options
 
   const { startIn = states[0] } = options
+
   if (!states.includes(startIn)) {
     throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
 
-  let transitionId = 0
+  const argTypeError = ArgTypeError(`${logPrefix}#`)
+  const console = Logger(logLevel)
+  const { canWarn } = console
+
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
-
-  const events = isEventEmitter(options.events)
-    ? options.events
-    : new EventEmitter()
 
   const internalEvents = new EventEmitter()
   const INTERNAL_EVENTS = {
     onSwitching: '(ANY)state:changing',
     onSwitched: '(ANY)state:changed'
   }
+
+  let transitionId = 0
 
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     console.warn(`${logPrefix}: Ignoring callback, paused`)

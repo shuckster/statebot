@@ -2666,9 +2666,22 @@ var statebot = (function (exports) {
   }
 
   function wrapEmitter(events) {
-    var addListener = events.addListener || events.on;
-    var removeListener = events.removeListener || events.off;
+    var emit = function emit() {
+      return events.emit.apply(events, arguments);
+    };
+
+    var addListener = events.addListener ? function () {
+      return events.addListener.apply(events, arguments);
+    } : function () {
+      return events.on.apply(events, arguments);
+    };
+    var removeListener = events.removeListener ? function () {
+      return events.removeListener.apply(events, arguments);
+    } : function () {
+      return events.off.apply(events, arguments);
+    };
     return {
+      emit: emit,
       addListener: addListener,
       removeListener: removeListener
     };

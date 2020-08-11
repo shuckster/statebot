@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.1] - 2020-08-11
+### Fixed
+- Custom event-emitter support broken in previous commit (emit not working)
+
 ## [2.5.0] - 2020-08-10
 ### Updated
 - Dependencies

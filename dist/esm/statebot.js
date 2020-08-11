@@ -2141,9 +2141,16 @@ function isStatebot (object) {
   )
 }
 function wrapEmitter (events) {
-  const addListener = events.addListener || events.on;
-  const removeListener = events.removeListener || events.off;
+  const emit = (...args) =>
+    events.emit(...args);
+  const addListener = events.addListener
+    ? (...args) => events.addListener(...args)
+    : (...args) => events.on(...args);
+  const removeListener = events.removeListener
+    ? (...args) => events.removeListener(...args)
+    : (...args) => events.off(...args);
   return {
+    emit,
     addListener,
     removeListener
   }

@@ -6,7 +6,7 @@ const EXPECTED_CALL_COUNT = 20
 let bot, callCount, cleanup
 
 test(`expecting this many callbacks to have run`, () => {
-  ;({ bot, callCount, cleanup } = initStatebot())
+  ({ bot, callCount, cleanup } = initStatebot())
   bot.emit('step')
   bot.emit('step')
   bot.emit('step')

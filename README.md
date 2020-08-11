@@ -5,7 +5,7 @@
 <p>
   <a href="https://github.com/shuckster/statebot/blob/master/LICENSE">
     <img
-      alt="ISC license"
+      alt="MIT license"
       src="https://img.shields.io/npm/l/statebot?style=plastic"
     /></a>
   <a href="https://bundlephobia.com/result?p=statebot">
@@ -705,4 +705,4 @@ Statebot was written by [Conan Theobald](https://github.com/shuckster/).
 
 ## License
 
-Statebot is [ISC licensed](./LICENSE).
+Statebot is [MIT licensed](./LICENSE).

@@ -743,7 +743,7 @@
               "children": [
                 {
                   "type": "text",
-                  "value": "ISC licensed",
+                  "value": "MIT licensed",
                   "position": {
                     "start": {
                       "line": 15,

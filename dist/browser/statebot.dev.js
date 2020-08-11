@@ -3,7 +3,7 @@
  * Statebot
  * v2.5.1
  * https://shuckster.github.io/statebot/
- * License: ISC
+ * License: MIT
  */
 /* exported statebot */
 /* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */

@@ -3,7 +3,7 @@
   "description": "Write more robust and understandable programs.",
   "version": "2.5.1",
   "author": "Conan Theobald <statebot@conans.co.uk>",
-  "license": "ISC",
+  "license": "MIT",
   "main": "index.js",
   "module": "dist/esm/statebot.js",
   "types": "index.d.ts",

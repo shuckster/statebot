@@ -22,7 +22,7 @@ import { decomposeChart } from './parsing'
  * - The shell-script version, [Statebot-sh](https://github.com/shuckster/statebot-sh)
  *
  * Statebot was written by [Conan Theobald](https://github.com/shuckster/) and
- * is [ISC licensed](../LICENSE).
+ * is [MIT licensed](../LICENSE).
  *
  * ### Jump right in
  *

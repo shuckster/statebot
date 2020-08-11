@@ -88,7 +88,7 @@ npm i statebot
 ```
 
 ```js
-<script src="https://unpkg.com/statebot@2.5.0/dist/browser/statebot.min.js"></script>
+<script src="https://unpkg.com/statebot@2.5.1/dist/browser/statebot.min.js"></script>
 ```
 
 Or just download a script from the `dist/` folder and include it in your project. `statebot.dev.js` files include `JSDoc` comments, which IDEs like VS Code can pick-up to offer autocompletion.

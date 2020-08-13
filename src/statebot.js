@@ -147,7 +147,6 @@ export {
  * @typedef {string|string[]} statebotChart
  */
 
-// https://www.npmjs.com/package/events
 import EventEmitter from 'events'
 
 import {
@@ -201,13 +200,15 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {}
 
-  const events = options.events === undefined
+  const eventOption = options.events === undefined
     ? new EventEmitter()
-    : isEventEmitter(options.events) && wrapEmitter(options.events)
+    : isEventEmitter(options.events) && options.events
 
-  if (!events) {
+  if (!eventOption) {
     throw TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
   }
+
+  const events = wrapEmitter(eventOption)
 
   const { states = [], routes = [] } = chart
     ? decomposeChart(chart)
@@ -226,7 +227,7 @@ function Statebot (name, options) {
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
 
-  const internalEvents = new EventEmitter()
+  const internalEvents = wrapEmitter(new EventEmitter())
   const INTERNAL_EVENTS = {
     onSwitching: '(ANY)state:changing',
     onSwitched: '(ANY)state:changed'
@@ -239,13 +240,17 @@ function Statebot (name, options) {
   )
 
   const emitInternalEvent = Pausable((eventName, ...args) =>
-    internalEvents.emit(eventName, ...args)
+    internalEvents.emit(eventName, args)
   )
 
   function onInternalEvent (eventName, cb) {
-    internalEvents.addListener(eventName, cb)
-    return () => internalEvents.removeListener(eventName, cb)
-
+    // curried to support mitt, which only
+    // allows two arguments to be passed to emit(),
+    // rather than an arbitrary number.
+    // Not actually using mitt internally, yet! :)
+    const cbWithCurriedArgs = args => cb(...args)
+    internalEvents.addListener(eventName, cbWithCurriedArgs)
+    return () => internalEvents.removeListener(eventName, cbWithCurriedArgs)
   }
 
   const statesHandled = ReferenceCounter(

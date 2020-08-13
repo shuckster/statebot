@@ -147,6 +147,18 @@ export {
  * @typedef {string|string[]} statebotChart
  */
 
+const ON_EXITING = 'onExiting'
+const ON_ENTERING = 'onEntering'
+const ON_EXITED = 'onExited'
+const ON_ENTERED = 'onEntered'
+const ON_SWITCHING = 'onSwitching'
+const ON_SWITCHED = 'onSwitched'
+
+const INTERNAL_EVENTS = {
+  [ON_SWITCHING]: '(ANY)state:changing',
+  [ON_SWITCHED]: '(ANY)state:changed'
+}
+
 import EventEmitter from 'events'
 
 import {
@@ -162,11 +174,6 @@ import {
 } from './utils'
 
 import { decomposeChart, cxArrow } from './parsing'
-
-const INTERNAL_EVENTS = {
-  onSwitching: '(ANY)state:changing',
-  onSwitched: '(ANY)state:changed'
-}
 
 /**
  * Create a {@link #statebotfsm|statebotFsm} `object`.
@@ -506,9 +513,9 @@ function Statebot (name, options) {
       stateHistory.shift()
     }
 
-    emitInternalEvent(INTERNAL_EVENTS.onSwitching, toState, inState, ...args)
+    emitInternalEvent(INTERNAL_EVENTS[ON_SWITCHING], toState, inState, ...args)
     emitInternalEvent(nextRoute, ...args)
-    emitInternalEvent(INTERNAL_EVENTS.onSwitched, toState, inState, ...args)
+    emitInternalEvent(INTERNAL_EVENTS[ON_SWITCHED], toState, inState, ...args)
 
     return true
   })
@@ -548,14 +555,14 @@ function Statebot (name, options) {
     }), {})
 
   const enterExitMethods = [
-    ['Exiting', 'onSwitching'],
-    ['Entering', 'onSwitching'],
-    ['Exited', 'onSwitched'],
-    ['Entered', 'onSwitched']
+    [ON_EXITING, ON_SWITCHING],
+    [ON_ENTERING, ON_SWITCHING],
+    [ON_EXITED, ON_SWITCHED],
+    [ON_ENTERED, ON_SWITCHED]
   ]
     .reduce((obj, names) => {
-      const [name, switchMethod] = names
-      const methodName = `on${name}`
+      const [methodName, switchMethod] = names
+      const name = methodName.slice(2)
       const eventName = name.toLowerCase()
 
       return {
@@ -1162,7 +1169,7 @@ function Statebot (name, options) {
      * machine.enter('done')
      * // Entered from: receiving
      */
-    onEntered: enterExitMethods.onEntered,
+    onEntered: enterExitMethods[ON_ENTERED],
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -1200,7 +1207,7 @@ function Statebot (name, options) {
      * // Entering from: sending
      * // We made it!
      */
-    onEntering: enterExitMethods.onEntering,
+    onEntering: enterExitMethods[ON_ENTERING],
 
     /**
      * {@link #statebotfsmonentering .onEntering()} /
@@ -1283,7 +1290,7 @@ function Statebot (name, options) {
      * machine.enter('sending')
      * // We are heading to: sending
      */
-    onExited: enterExitMethods.onExited,
+    onExited: enterExitMethods[ON_EXITED],
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -1321,7 +1328,7 @@ function Statebot (name, options) {
      * // Heading to: receiving
      * // Peace out!
      */
-    onExiting: enterExitMethods.onExiting,
+    onExiting: enterExitMethods[ON_EXITING],
 
     /**
      * {@link #statebotfsmonexiting .onExiting()} /
@@ -1363,7 +1370,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // We went from "idle" to "receiving"
      */
-    onSwitched: switchMethods.onSwitched,
+    onSwitched: switchMethods[ON_SWITCHED],
 
     /**
      * Adds a listener that runs a callback immediately before **ANY**
@@ -1394,7 +1401,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // Going from "idle" to "receiving"
      */
-    onSwitching: switchMethods.onSwitching,
+    onSwitching: switchMethods[ON_SWITCHING],
 
     /**
      * {@link #statebotfsmonswitching .onSwitching()} /

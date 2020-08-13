@@ -33,6 +33,152 @@ declare module "statebot" {
         logLevel?: number;
     };
     /**
+     * Options for creating a Statebot.
+     */
+    export type statebotOptions = {
+        /**
+         * The state-chart.
+         */
+        chart: statebotChart;
+        /**
+         * The state in which to start. If unspecified, the first state in the
+         * chart will be used.
+         */
+        startIn?: string;
+        /**
+         * How noisy the logging is, from 1 to 3:
+         * ```
+         * 1) console.warn
+         * 2) console.warn/log/table
+         * 3) console.warn/log/table/info
+         * ```
+         * `3` is the default. Argument type-errors will always `throw`.
+         */
+        logLevel?: number;
+        /**
+         * Limit how much history the state-machine keeps. Accessed via
+         * {@link #statebotfsmhistory|statebotFsm#history()}.
+         */
+        historyLimit?: number;
+        /**
+         * If you wish to have your Statebots listen to events coming from
+         * a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/
+         * `performTransitions()` methods will use it.
+         *
+         * It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
+         *
+         * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+         */
+        events?: any;
+    };
+    /**
+     * A description of all the states in a machine, plus all of the
+     * permitted transitions between them.
+     *
+     * This is defined using a `string` or an `array` of strings, but
+     *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
+     * are much more convenient.
+     *
+     * An arrow `->` configures a **permitted transition** between two states:
+     *
+     * ```
+     * from-state -> to-state
+     * ```
+     *
+     * It's the only operator needed to build any chart:
+     *
+     * ```js
+     * var promiseLikeChart = `
+     *    pending -> resolved
+     *    pending -> rejected
+     *    resolved -> done
+     *    rejected -> done
+     * `
+     * ```
+     *
+     * The "OR" operator `|` can help us remove some redundancy from the above example:
+     *
+     * ```js
+     * var promiseLikeChart = `
+     *    pending -> resolved | rejected
+     *    resolved | rejected -> done
+     * `
+     * ```
+     *
+     * In both charts, `pending` can transition to `resolved` or `rejected`, and
+     * `resolved` or `rejected` can both transition to `done`.
+     *
+     * We can streamline this even further:
+     *
+     * ```js
+     * var promiseLikeChart = `
+     *    pending -> (resolved | rejected) -> done
+     * `
+     * ```
+     *
+     * Again, this is exactly equivalent to the previous two examples.
+     *
+     * Notice in this one that we have parentheses `(` `)` surrounding `resolved`
+     * and `rejected`. They are actually completely ignored by the parser, and
+     * you can use them as you please to help make your charts more readable.
+     *
+     * A chart works exactly the same without them:
+     *
+     * ```js
+     * var promiseLikeChart = `
+     *    pending -> resolved | rejected -> done
+     * `
+     * ```
+     *
+     * Charts can also be split across multiple-lines:
+     *
+     * ```js
+     * var promiseLikeChart = `
+     *    pending ->
+     *    resolved |
+     *    rejected ->
+     *    done
+     * `
+     * ```
+     * Notice that all white-space is ignored on either side of the `->`
+     * and `|`.
+     *
+     * `// Comments of this kind are allowed, too:`
+     *
+     * ```js
+     * var promiseLikeChart = `
+     *    pending -> // Where do we go from here?
+     *      (resolved | rejected) -> // Ah, yes
+     *
+     *    // And now we're all finished
+     *    done
+     * `
+     * ```
+     *
+     * Finally, here's a more full example:
+     *
+     * ```js
+     * var dragDropChart = `
+     *    idle ->
+     *      drag-detect ->
+     *        (dragging | clicked)
+     *
+     *    // Just a click, bail-out!
+     *    clicked -> idle
+     *
+     *    // Drag detected!
+     *    dragging ->
+     *      drag-wait -> dragged -> drag-wait
+     *
+     *    // Drag finished...
+     *    (drag-wait | dragged) ->
+     *      (drag-done | drag-cancel) ->
+     *        idle
+     * `
+     * ```
+     */
+    export type statebotChart = string | string[];
+    /**
      * Create a {@link #statebotfsm|statebotFsm} `object`.
      *
      * @memberof statebot
@@ -52,7 +198,7 @@ declare module "statebot" {
      *  Give your Statebot a name. Used for logging and by {@link #statebotassertroute|assertRoute()}.
      * @param {statebotOptions} options
      */
-    export function Statebot(name: string, options: any): {
+    export function Statebot(name: string, options: statebotOptions): {
         /**
          * For identifying Statebot objects.
          *
@@ -1101,7 +1247,7 @@ declare module "statebot" {
      * //   ['pending', 'failure']
      * // ]
      */
-    export function decomposeChart(chart: any): any;
+    export function decomposeChart(chart: statebotChart): any;
     /**
      * Tests that an object is a {@link #statebotfsm|statebotFsm}.
      *

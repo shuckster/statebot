@@ -99,7 +99,9 @@ function decomposeChart (chart) {
   return {
     transitions: filteredRoutes.map(route => route.split(cxArrow)),
     routes: filteredRoutes,
-    states: !emptyStateFound ? filteredStates.filter(Boolean) : filteredStates
+    states: !emptyStateFound
+      ? filteredStates.filter(Boolean)
+      : filteredStates
   }
 }
 
@@ -116,23 +118,26 @@ function condensedLines (strOrArr) {
 
   let previousLineHasContinuation = false
 
-  const finalCondensedLine = input.reduce((condensedLine, line) => {
-    const sanitisedLine = line
-      .replace(rxComment, '')
-      .replace(rxDisallowedCharacters, '')
+  const finalCondensedLine = input
+    .reduce((condensedLine, line) => {
+      const sanitisedLine = line
+        .replace(rxComment, '')
+        .replace(rxDisallowedCharacters, '')
 
-    if (!sanitisedLine) {
-      return condensedLine
-    }
+      if (!sanitisedLine) {
+        return condensedLine
+      }
 
-    previousLineHasContinuation = rxLineContinuations.test(sanitisedLine)
-    if (previousLineHasContinuation) {
-      return condensedLine + sanitisedLine
-    }
+      previousLineHasContinuation = rxLineContinuations
+        .test(sanitisedLine)
 
-    output.push(condensedLine + sanitisedLine)
-    return ''
-  }, '')
+      if (previousLineHasContinuation) {
+        return condensedLine + sanitisedLine
+      }
+
+      output.push(condensedLine + sanitisedLine)
+      return ''
+    }, '')
 
   if (previousLineHasContinuation || finalCondensedLine) {
     return [...output, finalCondensedLine]
@@ -142,7 +147,11 @@ function condensedLines (strOrArr) {
 }
 
 function tokenisedLines (lines) {
-  return lines.map(line => line.split(cxArrow).map(str => str.split(cxPipe)))
+  return lines
+    .map(line => line
+      .split(cxArrow)
+      .map(str => str.split(cxPipe))
+    )
 }
 
 function decomposeRouteFromTokens (line) {
@@ -163,8 +172,6 @@ function decomposeRouteFromTokens (line) {
 function decomposeTransitionsFromRoute ([fromStates, toStates]) {
   return fromStates.reduce((acc, fromState) => [
     ...acc,
-    ...toStates.map(toState => {
-      return [fromState, toState]
-    })
+    ...toStates.map(toState => [fromState, toState])
   ], [])
 }

@@ -63,7 +63,12 @@ function isTemplateLiteral (obj) {
 }
 
 function uniq (input) {
-  return input.reduce((acc, one) => (acc.indexOf(one) === -1 ? [...acc, one] : acc), [])
+  return input.reduce((acc, one) =>
+    acc.indexOf(one) === -1
+      ? [...acc, one]
+      : acc
+    , []
+  )
 }
 
 function defer (fn, ...args) {
@@ -72,6 +77,7 @@ function defer (fn, ...args) {
     clearTimeout(timer)
   }
 }
+
 function Defer (fn) {
   return (...args) => defer(fn, ...args)
 }
@@ -102,13 +108,13 @@ function Revokable (fn) {
   }
 }
 
-function Pausables (startPaused = false, onPauseCall = () => {}) {
+function Pausables (startPaused = false, runWhenPaused = () => {}) {
   let paused = !!startPaused
 
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
-        onPauseCall()
+        runWhenPaused()
         return false
       }
       return fn(...args)
@@ -159,22 +165,20 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     }
   }
   return {
-    increase: increase,
-    decrease: decrease,
-    countOf: countOf,
-    toValue: toValue,
-    refs: refs
+    increase,
+    decrease,
+    countOf,
+    toValue,
+    refs
   }
 }
 
 function ArgTypeError (errPrefix = '') {
   return function (fnName, typeMap, ...args) {
-    const argMap = Object.entries(typeMap)
-      .map(([argName, argType]) => {
-        return { argName, argType }
-      })
-
     const signature = Object.keys(typeMap).join(', ')
+    const argMap = Object
+      .entries(typeMap)
+      .map(([argName, argType]) => ({ argName, argType }))
 
     const err = args
       .map((arg, index) => {
@@ -207,13 +211,13 @@ function ArgTypeError (errPrefix = '') {
       .filter(Boolean)
 
     if (!err.length) {
-      return undefined
-    } else {
-      return (
-        `\n${errPrefix}${fnName}(${signature}):\n` +
-        `${err.map(err => `> ${err}`).join('\n')}`
-      )
+      return
     }
+
+    return (
+      `\n${errPrefix}${fnName}(${signature}):\n` +
+      `${err.map(err => `> ${err}`).join('\n')}`
+    )
   }
 }
 

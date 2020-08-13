@@ -163,6 +163,11 @@ import {
 
 import { decomposeChart, cxArrow } from './parsing'
 
+const INTERNAL_EVENTS = {
+  onSwitching: '(ANY)state:changing',
+  onSwitched: '(ANY)state:changed'
+}
+
 /**
  * Create a {@link #statebotfsm|statebotFsm} `object`.
  *
@@ -226,12 +231,7 @@ function Statebot (name, options) {
 
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
-
   const internalEvents = wrapEmitter(new EventEmitter())
-  const INTERNAL_EVENTS = {
-    onSwitching: '(ANY)state:changing',
-    onSwitched: '(ANY)state:changed'
-  }
 
   let transitionId = 0
 
@@ -249,8 +249,8 @@ function Statebot (name, options) {
     // rather than an arbitrary number.
     // Not actually using mitt internally, yet! :)
     const cbWithCurriedArgs = args => cb(...args)
-    internalEvents.addListener(eventName, cbWithCurriedArgs)
-    return () => internalEvents.removeListener(eventName, cbWithCurriedArgs)
+    internalEvents.on(eventName, cbWithCurriedArgs)
+    return () => internalEvents.off(eventName, cbWithCurriedArgs)
   }
 
   const statesHandled = ReferenceCounter(
@@ -271,6 +271,13 @@ function Statebot (name, options) {
     'Listening for the following events'
   )
 
+  const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
+    inState(fromState, () => {
+      enter(toState, ...args)
+      isFunction(action) && action(...args)
+      return true
+    })
+
   // Interprets onTransitions() and performTransitions()
   function applyHitcher (hitcher, fnName) {
     const hitcherActions =
@@ -290,8 +297,9 @@ function Statebot (name, options) {
     // For: onTransitions()
     const transitions = []
 
-    Object.entries(hitcherActions)
-      .forEach(([routeChart, actionOrConfig]) => {
+    Object
+      .entries(hitcherActions)
+      .map(([routeChart, actionOrConfig]) => {
         if (isFunction(actionOrConfig)) {
           transitions.push({ routeChart, action: actionOrConfig })
         } else if (!isPojo(actionOrConfig)) {
@@ -301,7 +309,7 @@ function Statebot (name, options) {
         const { on: _on, then: _then } = actionOrConfig
         if (isString(_on) || isArray(_on)) {
           const eventNames = [_on].flat()
-          eventNames.forEach(eventName => {
+          eventNames.map(eventName => {
             events[eventName] = events[eventName] || []
             events[eventName].push({ routeChart, action: _then })
           })
@@ -317,7 +325,8 @@ function Statebot (name, options) {
     const allCleanupFns = []
 
     // performTransitions()
-    const decomposedEvents = Object.entries(events)
+    const decomposedEvents = Object
+      .entries(events)
       .reduce((acc, [eventName, _configs]) => {
         const { states, routes, configs } = decomposeConfigs(_configs, canWarn)
         if (canWarn()) {
@@ -330,15 +339,9 @@ function Statebot (name, options) {
         }
       }, {})
 
-    const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
-      inState(fromState, () => {
-        enter(toState, ...args)
-        isFunction(action) && action(...args)
-        return true
-      })
-
     allCleanupFns.push(
-      ...Object.entries(decomposedEvents)
+      ...Object
+        .entries(decomposedEvents)
         .map(([eventName, configs]) => [
           eventsHandled.increase(eventName),
           onEvent(eventName, (...args) => {
@@ -393,7 +396,7 @@ function Statebot (name, options) {
       }
     }
 
-    return () => allCleanupFns.forEach(fn => fn())
+    return () => allCleanupFns.map(fn => fn())
   }
 
   function previousState () {
@@ -430,7 +433,8 @@ function Statebot (name, options) {
     }
 
     return routes.reduce((acc, route) => {
-      const [fromState, toState] = route.split(cxArrow)
+      const [fromState, toState] = route
+        .split(cxArrow)
         .map(state => state.trim())
 
       return (fromState === _state)
@@ -515,8 +519,8 @@ function Statebot (name, options) {
       throw TypeError(err)
     }
 
-    events.addListener(eventName, cb)
-    return () => events.removeListener(eventName, cb)
+    events.on(eventName, cb)
+    return () => events.off(eventName, cb)
   }
 
   const switchMethods = Object
@@ -570,13 +574,9 @@ function Statebot (name, options) {
           const removeEvent = switchMethods[switchMethod](
             (toState, fromState, ...args) => {
               if (name.indexOf('Exit') === 0) {
-                if (state === fromState) {
-                  cb(toState, ...args)
-                }
+                state === fromState && cb(toState, ...args)
               } else {
-                if (state === toState) {
-                  cb(fromState, ...args)
-                }
+                state === toState && cb(fromState, ...args)
               }
             }
           )
@@ -725,7 +725,7 @@ function Statebot (name, options) {
      * machine.canTransitionTo(['play', 'options'])
      * // true
      */
-    canTransitionTo: canTransitionTo,
+    canTransitionTo,
 
     /**
      * Returns the current state.
@@ -745,7 +745,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "suspended"
      */
-    currentState: currentState,
+    currentState,
 
     /**
      * Immediately emits an event, firing any listeners added using
@@ -790,7 +790,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "sending"
      */
-    emit: emit,
+    emit,
 
     /**
      * Creates a function that emits the specified event.
@@ -840,7 +840,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "prepare-to-stop"
      */
-    Emit: Emit,
+    Emit,
 
     /**
      * Immediately changes to the specified state, so long as it is
@@ -875,7 +875,7 @@ function Statebot (name, options) {
      * machine.enter('showing-modal')
      * // true
      */
-    enter: enter,
+    enter,
 
     /**
      * Creates a function that changes to the specified state, so long
@@ -912,7 +912,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "item-clicked"
      */
-    Enter: Enter,
+    Enter,
 
     /**
      * Returns all states the machine has been in so far, up to a limit set
@@ -1051,7 +1051,7 @@ function Statebot (name, options) {
      * // ^ the function is not called at all in the `false` case,
      * //   so no console.log either.
      */
-    inState: inState,
+    inState,
 
     /**
      * Returns a function which, when run, tests that
@@ -1105,7 +1105,7 @@ function Statebot (name, options) {
      * // ^ the function is not called at all in the `false` case,
      * //   so no console.log either.
      */
-    InState: InState,
+    InState,
 
     /**
      * Returns the name of the state-machine.
@@ -1251,7 +1251,7 @@ function Statebot (name, options) {
      *
      * setInterval(machine.Emit('timer'), 2000)
      */
-    onEvent: onEvent,
+    onEvent,
 
     /**
      * Adds a listener that runs a callback immediately **AFTER** the
@@ -1611,7 +1611,7 @@ function Statebot (name, options) {
      * machine.previousState()
      * // "idle"
      */
-    previousState: previousState,
+    previousState,
 
     /**
      * Returns the state-machine to its starting-state and clears the
@@ -1639,7 +1639,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "page-1"
      */
-    reset: reset,
+    reset,
 
     /**
      * Resume a {@link #statebotfsmpause|.pause()}'d machine.
@@ -1673,7 +1673,7 @@ function Statebot (name, options) {
      * machine.statesAvailableFromHere('receiving')
      * // ["done"]
      */
-    statesAvailableFromHere: statesAvailableFromHere
+    statesAvailableFromHere
   }
 }
 
@@ -1690,10 +1690,9 @@ function decomposeConfigs (configs, canWarn) {
     }
     return [
       ...acc,
-      ...transitions.map(transition => {
-        const [fromState, toState] = transition
-        return { fromState, toState, action }
-      })
+      ...transitions.map(([fromState, toState]) =>
+        ({ fromState, toState, action })
+      )
     ]
   }, [])
 
@@ -1730,17 +1729,17 @@ function wrapEmitter (events) {
   const emit = (...args) =>
     events.emit(...args)
 
-  const addListener = events.addListener
+  const on = events.addListener
     ? (...args) => events.addListener(...args)
     : (...args) => events.on(...args)
 
-  const removeListener = events.removeListener
+  const off = events.removeListener
     ? (...args) => events.removeListener(...args)
     : (...args) => events.off(...args)
 
   return {
     emit,
-    addListener,
-    removeListener
+    on,
+    off
   }
 }

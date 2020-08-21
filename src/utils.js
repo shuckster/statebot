@@ -130,10 +130,10 @@ function Pausables (startPaused = false, runWhenPaused = () => {}) {
 }
 
 function ReferenceCounter (name, kind, description, ...expecting) {
-  const _refs = {};
-  [...expecting].flat().forEach(ref => {
-    _refs[ref] = 0
-  })
+  const _refs = [...expecting]
+    .flat()
+    .reduce((acc, ref) => ({ ...acc, [ref]: 0 }), {})
+
   function increase (ref) {
     _refs[ref] = countOf(ref) + 1
     return () => decrease(ref)

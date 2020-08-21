@@ -3078,22 +3078,22 @@
           ],
           "loc": {
             "start": {
-              "line": 167,
+              "line": 178,
               "column": 0
             },
             "end": {
-              "line": 186,
+              "line": 197,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 188,
+                "line": 199,
                 "column": 0
               },
               "end": {
-                "line": 1673,
+                "line": 1685,
                 "column": 1
               }
             },
@@ -3382,22 +3382,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1702,
+              "line": 1713,
               "column": 0
             },
             "end": {
-              "line": 1715,
+              "line": 1726,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1717,
+                "line": 1728,
                 "column": 0
               },
               "end": {
-                "line": 1722,
+                "line": 1733,
                 "column": 1
               }
             },
@@ -4939,7 +4939,7 @@
                 "column": 0
               },
               "end": {
-                "line": 104,
+                "line": 106,
                 "column": 1
               }
             },
@@ -5168,12 +5168,12 @@
     "context": {
       "loc": {
         "start": {
-          "line": 151,
+          "line": 150,
           "column": 0
         },
         "end": {
-          "line": 151,
-          "column": 33
+          "line": 150,
+          "column": 30
         }
       },
       "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -7388,12 +7388,12 @@
     "context": {
       "loc": {
         "start": {
-          "line": 151,
+          "line": 150,
           "column": 0
         },
         "end": {
-          "line": 151,
-          "column": 33
+          "line": 150,
+          "column": 30
         }
       },
       "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -7560,22 +7560,22 @@
     ],
     "loc": {
       "start": {
-        "line": 672,
+        "line": 684,
         "column": 2
       },
       "end": {
-        "line": 676,
+        "line": 688,
         "column": 5
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 678,
+          "line": 690,
           "column": 2
         },
         "end": {
-          "line": 1672,
+          "line": 1684,
           "column": 3
         }
       },
@@ -7887,23 +7887,23 @@
           ],
           "loc": {
             "start": {
-              "line": 686,
+              "line": 698,
               "column": 4
             },
             "end": {
-              "line": 722,
+              "line": 734,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 723,
+                "line": 735,
                 "column": 4
               },
               "end": {
-                "line": 723,
-                "column": 36
+                "line": 735,
+                "column": 19
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -8085,23 +8085,23 @@
           ],
           "loc": {
             "start": {
-              "line": 725,
+              "line": 737,
               "column": 4
             },
             "end": {
-              "line": 742,
+              "line": 754,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 743,
+                "line": 755,
                 "column": 4
               },
               "end": {
-                "line": 743,
-                "column": 30
+                "line": 755,
+                "column": 16
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -8368,23 +8368,23 @@
           ],
           "loc": {
             "start": {
-              "line": 745,
+              "line": 757,
               "column": 4
             },
             "end": {
-              "line": 787,
+              "line": 799,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 788,
+                "line": 800,
                 "column": 4
               },
               "end": {
-                "line": 788,
-                "column": 14
+                "line": 800,
+                "column": 8
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -8951,23 +8951,23 @@
           ],
           "loc": {
             "start": {
-              "line": 790,
+              "line": 802,
               "column": 4
             },
             "end": {
-              "line": 837,
+              "line": 849,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 838,
+                "line": 850,
                 "column": 4
               },
               "end": {
-                "line": 838,
-                "column": 14
+                "line": 850,
+                "column": 8
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -9436,23 +9436,23 @@
           ],
           "loc": {
             "start": {
-              "line": 840,
+              "line": 852,
               "column": 4
             },
             "end": {
-              "line": 872,
+              "line": 884,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 873,
+                "line": 885,
                 "column": 4
               },
               "end": {
-                "line": 873,
-                "column": 16
+                "line": 885,
+                "column": 9
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -9918,23 +9918,23 @@
           ],
           "loc": {
             "start": {
-              "line": 875,
+              "line": 887,
               "column": 4
             },
             "end": {
-              "line": 909,
+              "line": 921,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 910,
+                "line": 922,
                 "column": 4
               },
               "end": {
-                "line": 910,
-                "column": 16
+                "line": 922,
+                "column": 9
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -10379,22 +10379,22 @@
           ],
           "loc": {
             "start": {
-              "line": 912,
+              "line": 924,
               "column": 4
             },
             "end": {
-              "line": 937,
+              "line": 949,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 938,
+                "line": 950,
                 "column": 4
               },
               "end": {
-                "line": 938,
+                "line": 950,
                 "column": 36
               }
             },
@@ -10579,22 +10579,22 @@
           ],
           "loc": {
             "start": {
-              "line": 940,
+              "line": 952,
               "column": 4
             },
             "end": {
-              "line": 974,
+              "line": 986,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 975,
+                "line": 987,
                 "column": 4
               },
               "end": {
-                "line": 975,
+                "line": 987,
                 "column": 22
               }
             },
@@ -10796,22 +10796,22 @@
           ],
           "loc": {
             "start": {
-              "line": 977,
+              "line": 989,
               "column": 4
             },
             "end": {
-              "line": 998,
+              "line": 1010,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 999,
+                "line": 1011,
                 "column": 4
               },
               "end": {
-                "line": 999,
+                "line": 1011,
                 "column": 28
               }
             },
@@ -11426,23 +11426,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1001,
+              "line": 1013,
               "column": 4
             },
             "end": {
-              "line": 1048,
+              "line": 1060,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1049,
+                "line": 1061,
                 "column": 4
               },
               "end": {
-                "line": 1049,
-                "column": 20
+                "line": 1061,
+                "column": 11
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -12303,23 +12303,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1051,
+              "line": 1063,
               "column": 4
             },
             "end": {
-              "line": 1102,
+              "line": 1114,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1103,
+                "line": 1115,
                 "column": 4
               },
               "end": {
-                "line": 1103,
-                "column": 20
+                "line": 1115,
+                "column": 11
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -12909,22 +12909,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1105,
+              "line": 1117,
               "column": 4
             },
             "end": {
-              "line": 1126,
+              "line": 1138,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1127,
+                "line": 1139,
                 "column": 4
               },
               "end": {
-                "line": 1127,
+                "line": 1139,
                 "column": 20
               }
             },
@@ -13226,23 +13226,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1129,
+              "line": 1141,
               "column": 4
             },
             "end": {
-              "line": 1159,
+              "line": 1171,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1160,
+                "line": 1172,
                 "column": 4
               },
               "end": {
-                "line": 1160,
-                "column": 41
+                "line": 1172,
+                "column": 43
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -13718,23 +13718,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1162,
+              "line": 1174,
               "column": 4
             },
             "end": {
-              "line": 1197,
+              "line": 1209,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1198,
+                "line": 1210,
                 "column": 4
               },
               "end": {
-                "line": 1198,
-                "column": 43
+                "line": 1210,
+                "column": 45
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -14158,23 +14158,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1211,
+              "line": 1223,
               "column": 4
             },
             "end": {
-              "line": 1248,
+              "line": 1260,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1249,
+                "line": 1261,
                 "column": 4
               },
               "end": {
-                "line": 1249,
-                "column": 20
+                "line": 1261,
+                "column": 11
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -14598,23 +14598,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1251,
+              "line": 1263,
               "column": 4
             },
             "end": {
-              "line": 1280,
+              "line": 1292,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1281,
+                "line": 1293,
                 "column": 4
               },
               "end": {
-                "line": 1281,
-                "column": 39
+                "line": 1293,
+                "column": 41
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -15090,23 +15090,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1283,
+              "line": 1295,
               "column": 4
             },
             "end": {
-              "line": 1318,
+              "line": 1330,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1319,
+                "line": 1331,
                 "column": 4
               },
               "end": {
-                "line": 1319,
-                "column": 41
+                "line": 1331,
+                "column": 43
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -15572,23 +15572,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1332,
+              "line": 1344,
               "column": 4
             },
             "end": {
-              "line": 1360,
+              "line": 1372,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1361,
+                "line": 1373,
                 "column": 4
               },
               "end": {
-                "line": 1361,
-                "column": 40
+                "line": 1373,
+                "column": 42
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -15993,23 +15993,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1363,
+              "line": 1375,
               "column": 4
             },
             "end": {
-              "line": 1391,
+              "line": 1403,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1392,
+                "line": 1404,
                 "column": 4
               },
               "end": {
-                "line": 1392,
-                "column": 42
+                "line": 1404,
+                "column": 44
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -16337,22 +16337,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1406,
+              "line": 1418,
               "column": 4
             },
             "end": {
-              "line": 1481,
+              "line": 1493,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1482,
+                "line": 1494,
                 "column": 4
               },
               "end": {
-                "line": 1482,
+                "line": 1494,
                 "column": 76
               }
             },
@@ -16989,22 +16989,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1484,
+              "line": 1496,
               "column": 4
             },
             "end": {
-              "line": 1491,
+              "line": 1503,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1492,
+                "line": 1504,
                 "column": 4
               },
               "end": {
-                "line": 1492,
+                "line": 1504,
                 "column": 9
               }
             },
@@ -17202,22 +17202,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1494,
+              "line": 1506,
               "column": 4
             },
             "end": {
-              "line": 1501,
+              "line": 1513,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1502,
+                "line": 1514,
                 "column": 4
               },
               "end": {
-                "line": 1502,
+                "line": 1514,
                 "column": 10
               }
             },
@@ -17456,22 +17456,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1504,
+              "line": 1516,
               "column": 4
             },
             "end": {
-              "line": 1584,
+              "line": 1596,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1585,
+                "line": 1597,
                 "column": 4
               },
               "end": {
-                "line": 1585,
+                "line": 1597,
                 "column": 86
               }
             },
@@ -17997,23 +17997,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1587,
+              "line": 1599,
               "column": 4
             },
             "end": {
-              "line": 1608,
+              "line": 1620,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1609,
+                "line": 1621,
                 "column": 4
               },
               "end": {
-                "line": 1609,
-                "column": 32
+                "line": 1621,
+                "column": 17
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -18328,23 +18328,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1611,
+              "line": 1623,
               "column": 4
             },
             "end": {
-              "line": 1636,
+              "line": 1648,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1637,
+                "line": 1649,
                 "column": 4
               },
               "end": {
-                "line": 1637,
-                "column": 16
+                "line": 1649,
+                "column": 9
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -18502,22 +18502,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1639,
+              "line": 1651,
               "column": 4
             },
             "end": {
-              "line": 1645,
+              "line": 1657,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1646,
+                "line": 1658,
                 "column": 4
               },
               "end": {
-                "line": 1646,
+                "line": 1658,
                 "column": 10
               }
             },
@@ -18746,23 +18746,23 @@
           ],
           "loc": {
             "start": {
-              "line": 1648,
+              "line": 1660,
               "column": 4
             },
             "end": {
-              "line": 1670,
+              "line": 1682,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1671,
+                "line": 1683,
                 "column": 4
               },
               "end": {
-                "line": 1671,
-                "column": 52
+                "line": 1683,
+                "column": 27
               }
             },
             "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -19120,23 +19120,23 @@
     ],
     "loc": {
       "start": {
-        "line": 1200,
+        "line": 1212,
         "column": 4
       },
       "end": {
-        "line": 1209,
+        "line": 1221,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1249,
+          "line": 1261,
           "column": 4
         },
         "end": {
-          "line": 1249,
-          "column": 20
+          "line": 1261,
+          "column": 11
         }
       },
       "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -19479,23 +19479,23 @@
     ],
     "loc": {
       "start": {
-        "line": 1321,
+        "line": 1333,
         "column": 4
       },
       "end": {
-        "line": 1330,
+        "line": 1342,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1361,
+          "line": 1373,
           "column": 4
         },
         "end": {
-          "line": 1361,
-          "column": 40
+          "line": 1373,
+          "column": 42
         }
       },
       "file": "/Users/mostly/Local Projects/statebot/src/statebot.js"
@@ -19848,22 +19848,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1394,
+        "line": 1406,
         "column": 4
       },
       "end": {
-        "line": 1404,
+        "line": 1416,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1482,
+          "line": 1494,
           "column": 4
         },
         "end": {
-          "line": 1482,
+          "line": 1494,
           "column": 76
         }
       },

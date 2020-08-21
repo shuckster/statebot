@@ -661,14 +661,14 @@ var statebot = (function (exports) {
 
   function Pausables() {
     var startPaused = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-    var onPauseCall = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+    var runWhenPaused = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
     var _paused = !!startPaused;
 
     function Pausable(fn) {
       return function () {
         if (_paused) {
-          onPauseCall();
+          runWhenPaused();
           return false;
         }
 
@@ -691,15 +691,13 @@ var statebot = (function (exports) {
   }
 
   function ReferenceCounter(name, kind, description) {
-    var _refs = {};
-
     for (var _len3 = arguments.length, expecting = new Array(_len3 > 3 ? _len3 - 3 : 0), _key3 = 3; _key3 < _len3; _key3++) {
       expecting[_key3 - 3] = arguments[_key3];
     }
 
-    [].concat(expecting).flat().forEach(function (ref) {
-      _refs[ref] = 0;
-    });
+    var _refs = [].concat(expecting).flat().reduce(function (acc, ref) {
+      return _objectSpread2(_objectSpread2({}, acc), {}, _defineProperty({}, ref, 0));
+    }, {});
 
     function increase(ref) {
       _refs[ref] = countOf(ref) + 1;
@@ -754,6 +752,7 @@ var statebot = (function (exports) {
   function ArgTypeError() {
     var errPrefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     return function (fnName, typeMap) {
+      var signature = Object.keys(typeMap).join(', ');
       var argMap = Object.entries(typeMap).map(function (_ref4) {
         var _ref5 = _slicedToArray(_ref4, 2),
             argName = _ref5[0],
@@ -764,7 +763,6 @@ var statebot = (function (exports) {
           argType: argType
         };
       });
-      var signature = Object.keys(typeMap).join(', ');
 
       for (var _len4 = arguments.length, args = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
         args[_key4 - 2] = arguments[_key4];
@@ -799,12 +797,12 @@ var statebot = (function (exports) {
       }).filter(Boolean);
 
       if (!err.length) {
-        return undefined;
-      } else {
-        return "\n".concat(errPrefix).concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
-          return "> ".concat(err);
-        }).join('\n'));
+        return;
       }
+
+      return "\n".concat(errPrefix).concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
+        return "> ".concat(err);
+      }).join('\n'));
     };
   }
 
@@ -1013,6 +1011,153 @@ var statebot = (function (exports) {
     }, []);
   }
 
+  var _INTERNAL_EVENTS;
+  /**
+   * Options for creating a Statebot.
+   *
+   * @typedef {Object} statebotOptions
+   * @property {statebotChart} chart
+   *  The state-chart.
+   * @property {string} [startIn=auto]
+   *  The state in which to start. If unspecified, the first state in the
+   *  chart will be used.
+   * @property {number} [logLevel=3]
+   *  How noisy the logging is, from 1 to 3:
+   *  ```
+   *  1) console.warn
+   *  2) console.warn/log/table
+   *  3) console.warn/log/table/info
+   *  ```
+   *  `3` is the default. Argument type-errors will always `throw`.
+   * @property {number} [historyLimit=2]
+   *  Limit how much history the state-machine keeps. Accessed via
+   *  {@link #statebotfsmhistory|statebotFsm#history()}.
+   * @property {events} [events]
+   *  If you wish to have your Statebots listen to events coming from
+   *  a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/
+   *  `performTransitions()` methods will use it.
+   *
+   *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
+   *
+   * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+   */
+
+  /**
+   * A description of all the states in a machine, plus all of the
+   * permitted transitions between them.
+   *
+   * This is defined using a `string` or an `array` of strings, but
+   *  {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
+   * are much more convenient.
+   *
+   * An arrow `->` configures a **permitted transition** between two states:
+   *
+   * ```
+   * from-state -> to-state
+   * ```
+   *
+   * It's the only operator needed to build any chart:
+   *
+   * ```js
+   * var promiseLikeChart = `
+   *   pending -> resolved
+   *   pending -> rejected
+   *   resolved -> done
+   *   rejected -> done
+   * `
+   * ```
+   *
+   * The "OR" operator `|` can help us remove some redundancy from the above example:
+   *
+   * ```js
+   * var promiseLikeChart = `
+   *   pending -> resolved | rejected
+   *   resolved | rejected -> done
+   * `
+   * ```
+   *
+   * In both charts, `pending` can transition to `resolved` or `rejected`, and
+   * `resolved` or `rejected` can both transition to `done`.
+   *
+   * We can streamline this even further:
+   *
+   * ```js
+   * var promiseLikeChart = `
+   *   pending -> (resolved | rejected) -> done
+   * `
+   * ```
+   *
+   * Again, this is exactly equivalent to the previous two examples.
+   *
+   * Notice in this one that we have parentheses `(` `)` surrounding `resolved`
+   * and `rejected`. They are actually completely ignored by the parser, and
+   * you can use them as you please to help make your charts more readable.
+   *
+   * A chart works exactly the same without them:
+   *
+   * ```js
+   * var promiseLikeChart = `
+   *   pending -> resolved | rejected -> done
+   * `
+   * ```
+   *
+   * Charts can also be split across multiple-lines:
+   *
+   * ```js
+   * var promiseLikeChart = `
+   *   pending ->
+   *   resolved |
+   *   rejected ->
+   *   done
+   * `
+   * ```
+   * Notice that all white-space is ignored on either side of the `->`
+   * and `|`.
+   *
+   * `// Comments of this kind are allowed, too:`
+   *
+   * ```js
+   * var promiseLikeChart = `
+   *   pending -> // Where do we go from here?
+   *     (resolved | rejected) -> // Ah, yes
+   *
+   *   // And now we're all finished
+   *   done
+   * `
+   * ```
+   *
+   * Finally, here's a more full example:
+   *
+   * ```js
+   * var dragDropChart = `
+   *   idle ->
+   *     drag-detect ->
+   *       (dragging | clicked)
+   *
+   *   // Just a click, bail-out!
+   *   clicked -> idle
+   *
+   *   // Drag detected!
+   *   dragging ->
+   *     drag-wait -> dragged -> drag-wait
+   *
+   *   // Drag finished...
+   *   (drag-wait | dragged) ->
+   *     (drag-done | drag-cancel) ->
+   *       idle
+   * `
+   * ```
+   *
+   * @typedef {string|string[]} statebotChart
+   */
+
+  var ON_EXITING = 'onExiting';
+  var ON_ENTERING = 'onEntering';
+  var ON_EXITED = 'onExited';
+  var ON_ENTERED = 'onEntered';
+  var ON_SWITCHING = 'onSwitching';
+  var ON_SWITCHED = 'onSwitched';
+  var INTERNAL_EVENTS = (_INTERNAL_EVENTS = {}, _defineProperty(_INTERNAL_EVENTS, ON_SWITCHING, '(ANY)state:changing'), _defineProperty(_INTERNAL_EVENTS, ON_SWITCHED, '(ANY)state:changed'), _INTERNAL_EVENTS);
   /**
    * Create a {@link #statebotfsm|statebotFsm} `object`.
    *
@@ -1053,11 +1198,13 @@ var statebot = (function (exports) {
         _ref$historyLimit = _ref.historyLimit,
         historyLimit = _ref$historyLimit === void 0 ? 2 : _ref$historyLimit;
 
-    var events = options.events === undefined ? new EventEmitter() : isEventEmitter(options.events) && wrapEmitter(options.events);
+    var eventOption = options.events === undefined ? new EventEmitter() : isEventEmitter(options.events) && options.events;
 
-    if (!events) {
+    if (!eventOption) {
       throw TypeError("\n".concat(logPrefix, ": Invalid event-emitter specified in options"));
     }
+
+    var events = wrapEmitter(eventOption);
 
     var _ref2 = chart ? decomposeChart(chart) : options,
         _ref2$states = _ref2.states,
@@ -1077,11 +1224,7 @@ var statebot = (function (exports) {
     var canWarn = console.canWarn;
     var stateHistory = [startIn];
     var stateHistoryLimit = Math.max(historyLimit, 2);
-    var internalEvents = new EventEmitter();
-    var INTERNAL_EVENTS = {
-      onSwitching: '(ANY)state:changing',
-      onSwitched: '(ANY)state:changed'
-    };
+    var internalEvents = wrapEmitter(new EventEmitter());
     var transitionId = 0;
 
     var _Pausables = Pausables(false, function () {
@@ -1097,19 +1240,35 @@ var statebot = (function (exports) {
         args[_key - 1] = arguments[_key];
       }
 
-      return internalEvents.emit.apply(internalEvents, [eventName].concat(args));
+      return internalEvents.emit(eventName, args);
     });
 
     function onInternalEvent(eventName, cb) {
-      internalEvents.addListener(eventName, cb);
+      var cbWithCurriedArgs = function cbWithCurriedArgs(args) {
+        return cb.apply(void 0, _toConsumableArray(args));
+      };
+
+      internalEvents.on(eventName, cbWithCurriedArgs);
       return function () {
-        return internalEvents.removeListener(eventName, cb);
+        return internalEvents.off(eventName, cbWithCurriedArgs);
       };
     }
 
     var statesHandled = ReferenceCounter(_name, 'states', 'Listening for the following state-changes', _toConsumableArray(states));
     var routesHandled = ReferenceCounter(_name, 'transitions', 'Listening for the following transitions', _toConsumableArray(routes));
     var eventsHandled = ReferenceCounter(_name, 'events', 'Listening for the following events');
+
+    var ifStateThenEnterState = function ifStateThenEnterState(_ref3) {
+      var fromState = _ref3.fromState,
+          toState = _ref3.toState,
+          action = _ref3.action,
+          args = _ref3.args;
+      return inState(fromState, function () {
+        enter.apply(void 0, [toState].concat(_toConsumableArray(args)));
+        isFunction(action) && action.apply(void 0, _toConsumableArray(args));
+        return true;
+      });
+    };
 
     function applyHitcher(hitcher, fnName) {
       var hitcherActions = isFunction(hitcher) ? hitcher({
@@ -1125,10 +1284,10 @@ var statebot = (function (exports) {
 
       var events = {};
       var transitions = [];
-      Object.entries(hitcherActions).forEach(function (_ref3) {
-        var _ref4 = _slicedToArray(_ref3, 2),
-            routeChart = _ref4[0],
-            actionOrConfig = _ref4[1];
+      Object.entries(hitcherActions).map(function (_ref4) {
+        var _ref5 = _slicedToArray(_ref4, 2),
+            routeChart = _ref5[0],
+            actionOrConfig = _ref5[1];
 
         if (isFunction(actionOrConfig)) {
           transitions.push({
@@ -1144,7 +1303,7 @@ var statebot = (function (exports) {
 
         if (isString(_on) || isArray(_on)) {
           var eventNames = [_on].flat();
-          eventNames.forEach(function (eventName) {
+          eventNames.map(function (eventName) {
             events[eventName] = events[eventName] || [];
             events[eventName].push({
               routeChart: routeChart,
@@ -1161,10 +1320,10 @@ var statebot = (function (exports) {
       var allStates = [];
       var allRoutes = [];
       var allCleanupFns = [];
-      var decomposedEvents = Object.entries(events).reduce(function (acc, _ref5) {
-        var _ref6 = _slicedToArray(_ref5, 2),
-            eventName = _ref6[0],
-            _configs = _ref6[1];
+      var decomposedEvents = Object.entries(events).reduce(function (acc, _ref6) {
+        var _ref7 = _slicedToArray(_ref6, 2),
+            eventName = _ref7[0],
+            _configs = _ref7[1];
 
         var _decomposeConfigs = decomposeConfigs(_configs, canWarn),
             states = _decomposeConfigs.states,
@@ -1178,19 +1337,6 @@ var statebot = (function (exports) {
 
         return _objectSpread2(_objectSpread2({}, acc), {}, _defineProperty({}, eventName, configs));
       }, {});
-
-      var ifStateThenEnterState = function ifStateThenEnterState(_ref7) {
-        var fromState = _ref7.fromState,
-            toState = _ref7.toState,
-            action = _ref7.action,
-            args = _ref7.args;
-        return inState(fromState, function () {
-          enter.apply(void 0, [toState].concat(_toConsumableArray(args)));
-          isFunction(action) && action.apply(void 0, _toConsumableArray(args));
-          return true;
-        });
-      };
-
       allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(function (_ref8) {
         var _ref9 = _slicedToArray(_ref8, 2),
             eventName = _ref9[0],
@@ -1249,7 +1395,7 @@ var statebot = (function (exports) {
       }
 
       return function () {
-        return allCleanupFns.forEach(function (fn) {
+        return allCleanupFns.map(function (fn) {
           return fn();
         });
       };
@@ -1395,9 +1541,9 @@ var statebot = (function (exports) {
         args[_key6 - 1] = arguments[_key6];
       }
 
-      emitInternalEvent.apply(void 0, [INTERNAL_EVENTS.onSwitching, toState, inState].concat(args));
+      emitInternalEvent.apply(void 0, [INTERNAL_EVENTS[ON_SWITCHING], toState, inState].concat(args));
       emitInternalEvent.apply(void 0, [nextRoute].concat(args));
-      emitInternalEvent.apply(void 0, [INTERNAL_EVENTS.onSwitched, toState, inState].concat(args));
+      emitInternalEvent.apply(void 0, [INTERNAL_EVENTS[ON_SWITCHED], toState, inState].concat(args));
       return true;
     });
 
@@ -1411,9 +1557,9 @@ var statebot = (function (exports) {
         throw TypeError(err);
       }
 
-      events.addListener(eventName, cb);
+      events.on(eventName, cb);
       return function () {
-        return events.removeListener(eventName, cb);
+        return events.off(eventName, cb);
       };
     }
 
@@ -1435,12 +1581,12 @@ var statebot = (function (exports) {
         };
       }));
     }, {});
-    var enterExitMethods = [['Exiting', 'onSwitching'], ['Entering', 'onSwitching'], ['Exited', 'onSwitched'], ['Entered', 'onSwitched']].reduce(function (obj, names) {
+    var enterExitMethods = [[ON_EXITING, ON_SWITCHING], [ON_ENTERING, ON_SWITCHING], [ON_EXITED, ON_SWITCHED], [ON_ENTERED, ON_SWITCHED]].reduce(function (obj, names) {
       var _names = _slicedToArray(names, 2),
-          name = _names[0],
+          methodName = _names[0],
           switchMethod = _names[1];
 
-      var methodName = "on".concat(name);
+      var name = methodName.slice(2);
       var eventName = name.toLowerCase();
       return _objectSpread2(_objectSpread2({}, obj), {}, _defineProperty({}, methodName, function (state, cb) {
         var err = argTypeError(methodName, {
@@ -1459,13 +1605,9 @@ var statebot = (function (exports) {
           }
 
           if (name.indexOf('Exit') === 0) {
-            if (state === fromState) {
-              cb.apply(void 0, [toState].concat(args));
-            }
+            state === fromState && cb.apply(void 0, [toState].concat(args));
           } else {
-            if (state === toState) {
-              cb.apply(void 0, [fromState].concat(args));
-            }
+            state === toState && cb.apply(void 0, [fromState].concat(args));
           }
         });
         return function () {
@@ -2089,7 +2231,7 @@ var statebot = (function (exports) {
        * machine.enter('done')
        * // Entered from: receiving
        */
-      onEntered: enterExitMethods.onEntered,
+      onEntered: enterExitMethods[ON_ENTERED],
 
       /**
        * Adds a listener that runs a callback immediately **BEFORE** the
@@ -2127,7 +2269,7 @@ var statebot = (function (exports) {
        * // Entering from: sending
        * // We made it!
        */
-      onEntering: enterExitMethods.onEntering,
+      onEntering: enterExitMethods[ON_ENTERING],
 
       /**
        * {@link #statebotfsmonentering .onEntering()} /
@@ -2210,7 +2352,7 @@ var statebot = (function (exports) {
        * machine.enter('sending')
        * // We are heading to: sending
        */
-      onExited: enterExitMethods.onExited,
+      onExited: enterExitMethods[ON_EXITED],
 
       /**
        * Adds a listener that runs a callback immediately **BEFORE** the
@@ -2248,7 +2390,7 @@ var statebot = (function (exports) {
        * // Heading to: receiving
        * // Peace out!
        */
-      onExiting: enterExitMethods.onExiting,
+      onExiting: enterExitMethods[ON_EXITING],
 
       /**
        * {@link #statebotfsmonexiting .onExiting()} /
@@ -2290,7 +2432,7 @@ var statebot = (function (exports) {
        * machine.enter('receiving')
        * // We went from "idle" to "receiving"
        */
-      onSwitched: switchMethods.onSwitched,
+      onSwitched: switchMethods[ON_SWITCHED],
 
       /**
        * Adds a listener that runs a callback immediately before **ANY**
@@ -2321,7 +2463,7 @@ var statebot = (function (exports) {
        * machine.enter('receiving')
        * // Going from "idle" to "receiving"
        */
-      onSwitching: switchMethods.onSwitching,
+      onSwitching: switchMethods[ON_SWITCHING],
 
       /**
        * {@link #statebotfsmonswitching .onSwitching()} /
@@ -2626,10 +2768,10 @@ var statebot = (function (exports) {
         allRoutes.push.apply(allRoutes, _toConsumableArray(routes));
       }
 
-      return [].concat(_toConsumableArray(acc), _toConsumableArray(transitions.map(function (transition) {
-        var _transition = _slicedToArray(transition, 2),
-            fromState = _transition[0],
-            toState = _transition[1];
+      return [].concat(_toConsumableArray(acc), _toConsumableArray(transitions.map(function (_ref10) {
+        var _ref11 = _slicedToArray(_ref10, 2),
+            fromState = _ref11[0],
+            toState = _ref11[1];
 
         return {
           fromState: fromState,
@@ -2670,20 +2812,20 @@ var statebot = (function (exports) {
       return events.emit.apply(events, arguments);
     };
 
-    var addListener = events.addListener ? function () {
+    var on = events.addListener ? function () {
       return events.addListener.apply(events, arguments);
     } : function () {
       return events.on.apply(events, arguments);
     };
-    var removeListener = events.removeListener ? function () {
+    var off = events.removeListener ? function () {
       return events.removeListener.apply(events, arguments);
     } : function () {
       return events.off.apply(events, arguments);
     };
     return {
       emit: emit,
-      addListener: addListener,
-      removeListener: removeListener
+      on: on,
+      off: off
     };
   }
 

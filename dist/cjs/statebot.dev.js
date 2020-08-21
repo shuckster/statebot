@@ -10,9 +10,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+var EventEmitter = require('events');
 
-var EventEmitter = _interopDefault(require('events'));
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var EventEmitter__default = /*#__PURE__*/_interopDefaultLegacy(EventEmitter);
 
 function isArray (obj) {
   return Array.isArray(obj)
@@ -50,7 +52,12 @@ function isTemplateLiteral (obj) {
   return false
 }
 function uniq (input) {
-  return input.reduce((acc, one) => (acc.indexOf(one) === -1 ? [...acc, one] : acc), [])
+  return input.reduce((acc, one) =>
+    acc.indexOf(one) === -1
+      ? [...acc, one]
+      : acc
+    , []
+  )
 }
 function defer (fn, ...args) {
   const timer = setTimeout(fn, 0, ...args);
@@ -85,12 +92,12 @@ function Revokable (fn) {
     }
   }
 }
-function Pausables (startPaused = false, onPauseCall = () => {}) {
+function Pausables (startPaused = false, runWhenPaused = () => {}) {
   let paused = !!startPaused;
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
-        onPauseCall();
+        runWhenPaused();
         return false
       }
       return fn(...args)
@@ -104,10 +111,9 @@ function Pausables (startPaused = false, onPauseCall = () => {}) {
   }
 }
 function ReferenceCounter (name, kind, description, ...expecting) {
-  const _refs = {};
-  [...expecting].flat().forEach(ref => {
-    _refs[ref] = 0;
-  });
+  const _refs = [...expecting]
+    .flat()
+    .reduce((acc, ref) => ({ ...acc, [ref]: 0 }), {});
   function increase (ref) {
     _refs[ref] = countOf(ref) + 1;
     return () => decrease(ref)
@@ -139,20 +145,19 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     }
   }
   return {
-    increase: increase,
-    decrease: decrease,
-    countOf: countOf,
-    toValue: toValue,
-    refs: refs
+    increase,
+    decrease,
+    countOf,
+    toValue,
+    refs
   }
 }
 function ArgTypeError (errPrefix = '') {
   return function (fnName, typeMap, ...args) {
-    const argMap = Object.entries(typeMap)
-      .map(([argName, argType]) => {
-        return { argName, argType }
-      });
     const signature = Object.keys(typeMap).join(', ');
+    const argMap = Object
+      .entries(typeMap)
+      .map(([argName, argType]) => ({ argName, argType }));
     const err = args
       .map((arg, index) => {
         const { argName, argType } = argMap[index];
@@ -179,13 +184,12 @@ function ArgTypeError (errPrefix = '') {
       })
       .filter(Boolean);
     if (!err.length) {
-      return undefined
-    } else {
-      return (
-        `\n${errPrefix}${fnName}(${signature}):\n` +
-        `${err.map(err => `> ${err}`).join('\n')}`
-      )
+      return
     }
+    return (
+      `\n${errPrefix}${fnName}(${signature}):\n` +
+      `${err.map(err => `> ${err}`).join('\n')}`
+    )
   }
 }
 function Logger (level) {
@@ -293,7 +297,9 @@ function decomposeChart (chart) {
   return {
     transitions: filteredRoutes.map(route => route.split(cxArrow)),
     routes: filteredRoutes,
-    states: !emptyStateFound ? filteredStates.filter(Boolean) : filteredStates
+    states: !emptyStateFound
+      ? filteredStates.filter(Boolean)
+      : filteredStates
   }
 }
 function linesFrom (strOrArr) {
@@ -306,27 +312,33 @@ function condensedLines (strOrArr) {
   const input = linesFrom(strOrArr);
   const output = [];
   let previousLineHasContinuation = false;
-  const finalCondensedLine = input.reduce((condensedLine, line) => {
-    const sanitisedLine = line
-      .replace(rxComment, '')
-      .replace(rxDisallowedCharacters, '');
-    if (!sanitisedLine) {
-      return condensedLine
-    }
-    previousLineHasContinuation = rxLineContinuations.test(sanitisedLine);
-    if (previousLineHasContinuation) {
-      return condensedLine + sanitisedLine
-    }
-    output.push(condensedLine + sanitisedLine);
-    return ''
-  }, '');
+  const finalCondensedLine = input
+    .reduce((condensedLine, line) => {
+      const sanitisedLine = line
+        .replace(rxComment, '')
+        .replace(rxDisallowedCharacters, '');
+      if (!sanitisedLine) {
+        return condensedLine
+      }
+      previousLineHasContinuation = rxLineContinuations
+        .test(sanitisedLine);
+      if (previousLineHasContinuation) {
+        return condensedLine + sanitisedLine
+      }
+      output.push(condensedLine + sanitisedLine);
+      return ''
+    }, '');
   if (previousLineHasContinuation || finalCondensedLine) {
     return [...output, finalCondensedLine]
   }
   return [...output]
 }
 function tokenisedLines (lines) {
-  return lines.map(line => line.split(cxArrow).map(str => str.split(cxPipe)))
+  return lines
+    .map(line => line
+      .split(cxArrow)
+      .map(str => str.split(cxPipe))
+    )
 }
 function decomposeRouteFromTokens (line) {
   const output = [];
@@ -342,12 +354,157 @@ function decomposeRouteFromTokens (line) {
 function decomposeTransitionsFromRoute ([fromStates, toStates]) {
   return fromStates.reduce((acc, fromState) => [
     ...acc,
-    ...toStates.map(toState => {
-      return [fromState, toState]
-    })
+    ...toStates.map(toState => [fromState, toState])
   ], [])
 }
 
+/**
+ * Options for creating a Statebot.
+ *
+ * @typedef {Object} statebotOptions
+ * @property {statebotChart} chart
+ *  The state-chart.
+ * @property {string} [startIn=auto]
+ *  The state in which to start. If unspecified, the first state in the
+ *  chart will be used.
+ * @property {number} [logLevel=3]
+ *  How noisy the logging is, from 1 to 3:
+ *  ```
+ *  1) console.warn
+ *  2) console.warn/log/table
+ *  3) console.warn/log/table/info
+ *  ```
+ *  `3` is the default. Argument type-errors will always `throw`.
+ * @property {number} [historyLimit=2]
+ *  Limit how much history the state-machine keeps. Accessed via
+ *  {@link #statebotfsmhistory|statebotFsm#history()}.
+ * @property {events} [events]
+ *  If you wish to have your Statebots listen to events coming from
+ *  a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/
+ *  `performTransitions()` methods will use it.
+ *
+ *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
+ *
+ * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+ */
+/**
+ * A description of all the states in a machine, plus all of the
+ * permitted transitions between them.
+ *
+ * This is defined using a `string` or an `array` of strings, but
+ *  {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
+ * are much more convenient.
+ *
+ * An arrow `->` configures a **permitted transition** between two states:
+ *
+ * ```
+ * from-state -> to-state
+ * ```
+ *
+ * It's the only operator needed to build any chart:
+ *
+ * ```js
+ * var promiseLikeChart = `
+ *   pending -> resolved
+ *   pending -> rejected
+ *   resolved -> done
+ *   rejected -> done
+ * `
+ * ```
+ *
+ * The "OR" operator `|` can help us remove some redundancy from the above example:
+ *
+ * ```js
+ * var promiseLikeChart = `
+ *   pending -> resolved | rejected
+ *   resolved | rejected -> done
+ * `
+ * ```
+ *
+ * In both charts, `pending` can transition to `resolved` or `rejected`, and
+ * `resolved` or `rejected` can both transition to `done`.
+ *
+ * We can streamline this even further:
+ *
+ * ```js
+ * var promiseLikeChart = `
+ *   pending -> (resolved | rejected) -> done
+ * `
+ * ```
+ *
+ * Again, this is exactly equivalent to the previous two examples.
+ *
+ * Notice in this one that we have parentheses `(` `)` surrounding `resolved`
+ * and `rejected`. They are actually completely ignored by the parser, and
+ * you can use them as you please to help make your charts more readable.
+ *
+ * A chart works exactly the same without them:
+ *
+ * ```js
+ * var promiseLikeChart = `
+ *   pending -> resolved | rejected -> done
+ * `
+ * ```
+ *
+ * Charts can also be split across multiple-lines:
+ *
+ * ```js
+ * var promiseLikeChart = `
+ *   pending ->
+ *   resolved |
+ *   rejected ->
+ *   done
+ * `
+ * ```
+ * Notice that all white-space is ignored on either side of the `->`
+ * and `|`.
+ *
+ * `// Comments of this kind are allowed, too:`
+ *
+ * ```js
+ * var promiseLikeChart = `
+ *   pending -> // Where do we go from here?
+ *     (resolved | rejected) -> // Ah, yes
+ *
+ *   // And now we're all finished
+ *   done
+ * `
+ * ```
+ *
+ * Finally, here's a more full example:
+ *
+ * ```js
+ * var dragDropChart = `
+ *   idle ->
+ *     drag-detect ->
+ *       (dragging | clicked)
+ *
+ *   // Just a click, bail-out!
+ *   clicked -> idle
+ *
+ *   // Drag detected!
+ *   dragging ->
+ *     drag-wait -> dragged -> drag-wait
+ *
+ *   // Drag finished...
+ *   (drag-wait | dragged) ->
+ *     (drag-done | drag-cancel) ->
+ *       idle
+ * `
+ * ```
+ *
+ * @typedef {string|string[]} statebotChart
+ */
+const ON_EXITING = 'onExiting';
+const ON_ENTERING = 'onEntering';
+const ON_EXITED = 'onExited';
+const ON_ENTERED = 'onEntered';
+const ON_SWITCHING = 'onSwitching';
+const ON_SWITCHED = 'onSwitched';
+const INTERNAL_EVENTS = {
+  [ON_SWITCHING]: '(ANY)state:changing',
+  [ON_SWITCHED]: '(ANY)state:changed'
+};
 /**
  * Create a {@link #statebotfsm|statebotFsm} `object`.
  *
@@ -381,12 +538,13 @@ function Statebot (name, options) {
     logLevel = 3,
     historyLimit = 2
   } = options || {};
-  const events = options.events === undefined
-    ? new EventEmitter()
-    : isEventEmitter(options.events) && wrapEmitter(options.events);
-  if (!events) {
+  const eventOption = options.events === undefined
+    ? new EventEmitter__default['default']()
+    : isEventEmitter(options.events) && options.events;
+  if (!eventOption) {
     throw TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
   }
+  const events = wrapEmitter(eventOption);
   const { states = [], routes = [] } = chart
     ? decomposeChart(chart)
     : options;
@@ -399,21 +557,18 @@ function Statebot (name, options) {
   const { canWarn } = console;
   const stateHistory = [startIn];
   const stateHistoryLimit = Math.max(historyLimit, 2);
-  const internalEvents = new EventEmitter();
-  const INTERNAL_EVENTS = {
-    onSwitching: '(ANY)state:changing',
-    onSwitched: '(ANY)state:changed'
-  };
+  const internalEvents = wrapEmitter(new EventEmitter__default['default']());
   let transitionId = 0;
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
   const emitInternalEvent = Pausable((eventName, ...args) =>
-    internalEvents.emit(eventName, ...args)
+    internalEvents.emit(eventName, args)
   );
   function onInternalEvent (eventName, cb) {
-    internalEvents.addListener(eventName, cb);
-    return () => internalEvents.removeListener(eventName, cb)
+    const cbWithCurriedArgs = args => cb(...args);
+    internalEvents.on(eventName, cbWithCurriedArgs);
+    return () => internalEvents.off(eventName, cbWithCurriedArgs)
   }
   const statesHandled = ReferenceCounter(
     name,
@@ -432,6 +587,12 @@ function Statebot (name, options) {
     'events',
     'Listening for the following events'
   );
+  const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
+    inState(fromState, () => {
+      enter(toState, ...args);
+      isFunction(action) && action(...args);
+      return true
+    });
   function applyHitcher (hitcher, fnName) {
     const hitcherActions =
       isFunction(hitcher)
@@ -444,8 +605,9 @@ function Statebot (name, options) {
     }
     const events = {};
     const transitions = [];
-    Object.entries(hitcherActions)
-      .forEach(([routeChart, actionOrConfig]) => {
+    Object
+      .entries(hitcherActions)
+      .map(([routeChart, actionOrConfig]) => {
         if (isFunction(actionOrConfig)) {
           transitions.push({ routeChart, action: actionOrConfig });
         } else if (!isPojo(actionOrConfig)) {
@@ -454,7 +616,7 @@ function Statebot (name, options) {
         const { on: _on, then: _then } = actionOrConfig;
         if (isString(_on) || isArray(_on)) {
           const eventNames = [_on].flat();
-          eventNames.forEach(eventName => {
+          eventNames.map(eventName => {
             events[eventName] = events[eventName] || [];
             events[eventName].push({ routeChart, action: _then });
           });
@@ -465,7 +627,8 @@ function Statebot (name, options) {
     const allStates = [];
     const allRoutes = [];
     const allCleanupFns = [];
-    const decomposedEvents = Object.entries(events)
+    const decomposedEvents = Object
+      .entries(events)
       .reduce((acc, [eventName, _configs]) => {
         const { states, routes, configs } = decomposeConfigs(_configs, canWarn);
         if (canWarn()) {
@@ -477,14 +640,9 @@ function Statebot (name, options) {
           [eventName]: configs
         }
       }, {});
-    const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
-      inState(fromState, () => {
-        enter(toState, ...args);
-        isFunction(action) && action(...args);
-        return true
-      });
     allCleanupFns.push(
-      ...Object.entries(decomposedEvents)
+      ...Object
+        .entries(decomposedEvents)
         .map(([eventName, configs]) => [
           eventsHandled.increase(eventName),
           onEvent(eventName, (...args) => {
@@ -531,7 +689,7 @@ function Statebot (name, options) {
         );
       }
     }
-    return () => allCleanupFns.forEach(fn => fn())
+    return () => allCleanupFns.map(fn => fn())
   }
   function previousState () {
     return stateHistory[stateHistory.length - 2]
@@ -560,7 +718,8 @@ function Statebot (name, options) {
       throw TypeError(err)
     }
     return routes.reduce((acc, route) => {
-      const [fromState, toState] = route.split(cxArrow)
+      const [fromState, toState] = route
+        .split(cxArrow)
         .map(state => state.trim());
       return (fromState === _state)
         ? [...acc, toState]
@@ -616,9 +775,9 @@ function Statebot (name, options) {
     if (stateHistory.length > stateHistoryLimit) {
       stateHistory.shift();
     }
-    emitInternalEvent(INTERNAL_EVENTS.onSwitching, toState, inState, ...args);
+    emitInternalEvent(INTERNAL_EVENTS[ON_SWITCHING], toState, inState, ...args);
     emitInternalEvent(nextRoute, ...args);
-    emitInternalEvent(INTERNAL_EVENTS.onSwitched, toState, inState, ...args);
+    emitInternalEvent(INTERNAL_EVENTS[ON_SWITCHED], toState, inState, ...args);
     return true
   });
   function onEvent (eventName, cb) {
@@ -626,8 +785,8 @@ function Statebot (name, options) {
     if (err) {
       throw TypeError(err)
     }
-    events.addListener(eventName, cb);
-    return () => events.removeListener(eventName, cb)
+    events.on(eventName, cb);
+    return () => events.off(eventName, cb)
   }
   const switchMethods = Object
     .keys(INTERNAL_EVENTS)
@@ -651,14 +810,14 @@ function Statebot (name, options) {
       }
     }), {});
   const enterExitMethods = [
-    ['Exiting', 'onSwitching'],
-    ['Entering', 'onSwitching'],
-    ['Exited', 'onSwitched'],
-    ['Entered', 'onSwitched']
+    [ON_EXITING, ON_SWITCHING],
+    [ON_ENTERING, ON_SWITCHING],
+    [ON_EXITED, ON_SWITCHED],
+    [ON_ENTERED, ON_SWITCHED]
   ]
     .reduce((obj, names) => {
-      const [name, switchMethod] = names;
-      const methodName = `on${name}`;
+      const [methodName, switchMethod] = names;
+      const name = methodName.slice(2);
       const eventName = name.toLowerCase();
       return {
         ...obj,
@@ -674,13 +833,9 @@ function Statebot (name, options) {
           const removeEvent = switchMethods[switchMethod](
             (toState, fromState, ...args) => {
               if (name.indexOf('Exit') === 0) {
-                if (state === fromState) {
-                  cb(toState, ...args);
-                }
+                state === fromState && cb(toState, ...args);
               } else {
-                if (state === toState) {
-                  cb(fromState, ...args);
-                }
+                state === toState && cb(fromState, ...args);
               }
             }
           );
@@ -811,7 +966,7 @@ function Statebot (name, options) {
      * machine.canTransitionTo(['play', 'options'])
      * // true
      */
-    canTransitionTo: canTransitionTo,
+    canTransitionTo,
     /**
      * Returns the current state.
      *
@@ -830,7 +985,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "suspended"
      */
-    currentState: currentState,
+    currentState,
     /**
      * Immediately emits an event, firing any listeners added using
      * {@link #statebotfsmperformtransitions|.performTransitions()} or {@link #statebotfsmonevent|.onEvent()}.
@@ -874,7 +1029,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "sending"
      */
-    emit: emit,
+    emit,
     /**
      * Creates a function that emits the specified event.
      *
@@ -923,7 +1078,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "prepare-to-stop"
      */
-    Emit: Emit,
+    Emit,
     /**
      * Immediately changes to the specified state, so long as it is
      * accessible from the {@link #statebotfsmcurrentstate|.currentState()}.
@@ -957,7 +1112,7 @@ function Statebot (name, options) {
      * machine.enter('showing-modal')
      * // true
      */
-    enter: enter,
+    enter,
     /**
      * Creates a function that changes to the specified state, so long
      * as it is accessible from the {@link #statebotfsmcurrentstate|.currentState()}.
@@ -993,7 +1148,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "item-clicked"
      */
-    Enter: Enter,
+    Enter,
     /**
      * Returns all states the machine has been in so far, up to a limit set
      * by `historyLimit` in {@link statebotOptions}.
@@ -1128,7 +1283,7 @@ function Statebot (name, options) {
      * // ^ the function is not called at all in the `false` case,
      * //   so no console.log either.
      */
-    inState: inState,
+    inState,
     /**
      * Returns a function which, when run, tests that
      * {@link #statebotfsmcurrentstate|.currentState()} matches the
@@ -1181,7 +1336,7 @@ function Statebot (name, options) {
      * // ^ the function is not called at all in the `false` case,
      * //   so no console.log either.
      */
-    InState: InState,
+    InState,
     /**
      * Returns the name of the state-machine.
      *
@@ -1236,7 +1391,7 @@ function Statebot (name, options) {
      * machine.enter('done')
      * // Entered from: receiving
      */
-    onEntered: enterExitMethods.onEntered,
+    onEntered: enterExitMethods[ON_ENTERED],
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
      * specified-state becomes the current one.
@@ -1273,7 +1428,7 @@ function Statebot (name, options) {
      * // Entering from: sending
      * // We made it!
      */
-    onEntering: enterExitMethods.onEntering,
+    onEntering: enterExitMethods[ON_ENTERING],
     /**
      * {@link #statebotfsmonentering .onEntering()} /
      * {@link #statebotfsmonentered .onEntered()} callback signature.
@@ -1322,7 +1477,7 @@ function Statebot (name, options) {
      *
      * setInterval(machine.Emit('timer'), 2000)
      */
-    onEvent: onEvent,
+    onEvent,
     /**
      * Adds a listener that runs a callback immediately **AFTER** the
      * specified-state is no longer the current one.
@@ -1353,7 +1508,7 @@ function Statebot (name, options) {
      * machine.enter('sending')
      * // We are heading to: sending
      */
-    onExited: enterExitMethods.onExited,
+    onExited: enterExitMethods[ON_EXITED],
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
      * specified-state is no longer the current one.
@@ -1390,7 +1545,7 @@ function Statebot (name, options) {
      * // Heading to: receiving
      * // Peace out!
      */
-    onExiting: enterExitMethods.onExiting,
+    onExiting: enterExitMethods[ON_EXITING],
     /**
      * {@link #statebotfsmonexiting .onExiting()} /
      * {@link #statebotfsmonexited .onExited()} callback signature.
@@ -1430,7 +1585,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // We went from "idle" to "receiving"
      */
-    onSwitched: switchMethods.onSwitched,
+    onSwitched: switchMethods[ON_SWITCHED],
     /**
      * Adds a listener that runs a callback immediately before **ANY**
      * state-change.
@@ -1460,7 +1615,7 @@ function Statebot (name, options) {
      * machine.enter('receiving')
      * // Going from "idle" to "receiving"
      */
-    onSwitching: switchMethods.onSwitching,
+    onSwitching: switchMethods[ON_SWITCHING],
     /**
      * {@link #statebotfsmonswitching .onSwitching()} /
      * {@link #statebotfsmonswitched .onSwitched()} callback signature.
@@ -1671,7 +1826,7 @@ function Statebot (name, options) {
      * machine.previousState()
      * // "idle"
      */
-    previousState: previousState,
+    previousState,
     /**
      * Returns the state-machine to its starting-state and clears the
      * state-history.
@@ -1698,7 +1853,7 @@ function Statebot (name, options) {
      * machine.currentState()
      * // "page-1"
      */
-    reset: reset,
+    reset,
     /**
      * Resume a {@link #statebotfsmpause|.pause()}'d machine.
      *
@@ -1730,7 +1885,7 @@ function Statebot (name, options) {
      * machine.statesAvailableFromHere('receiving')
      * // ["done"]
      */
-    statesAvailableFromHere: statesAvailableFromHere
+    statesAvailableFromHere
   }
 }
 function decomposeConfigs (configs, canWarn) {
@@ -1745,10 +1900,9 @@ function decomposeConfigs (configs, canWarn) {
     }
     return [
       ...acc,
-      ...transitions.map(transition => {
-        const [fromState, toState] = transition;
-        return { fromState, toState, action }
-      })
+      ...transitions.map(([fromState, toState]) =>
+        ({ fromState, toState, action })
+      )
     ]
   }, []);
   return {
@@ -1780,16 +1934,16 @@ function isStatebot (object) {
 function wrapEmitter (events) {
   const emit = (...args) =>
     events.emit(...args);
-  const addListener = events.addListener
+  const on = events.addListener
     ? (...args) => events.addListener(...args)
     : (...args) => events.on(...args);
-  const removeListener = events.removeListener
+  const off = events.removeListener
     ? (...args) => events.removeListener(...args)
     : (...args) => events.off(...args);
   return {
     emit,
-    addListener,
-    removeListener
+    on,
+    off
   }
 }
 

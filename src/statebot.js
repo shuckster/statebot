@@ -298,34 +298,10 @@ function Statebot (name, options) {
       )
     }
 
-    // For: performTransitions()
-    const events = {}
-
-    // For: onTransitions()
-    const transitions = []
-
-    Object
-      .entries(hitcherActions)
-      .map(([routeChart, actionOrConfig]) => {
-        if (isFunction(actionOrConfig)) {
-          transitions.push({ routeChart, action: actionOrConfig })
-        } else if (!isPojo(actionOrConfig)) {
-          return
-        }
-
-        const { on: _on, then: _then } = actionOrConfig
-        if (isString(_on) || isArray(_on)) {
-          const eventNames = [_on].flat()
-          eventNames.map(eventName => {
-            events[eventName] = events[eventName] || []
-            events[eventName].push({ routeChart, action: _then })
-          })
-        } else if (isFunction(_then)) {
-          // Behave like onTransitions() if a "then" is specified but
-          // there is no "on" event that triggers it
-          transitions.push({ routeChart, action: actionOrConfig })
-        }
-      })
+    const {
+      transitionsForEvents,
+      transitionsOnly
+    } = decomposeHitcherActions(hitcherActions)
 
     const allStates = []
     const allRoutes = []
@@ -333,9 +309,13 @@ function Statebot (name, options) {
 
     // performTransitions()
     const decomposedEvents = Object
-      .entries(events)
-      .reduce((acc, [eventName, _configs]) => {
-        const { states, routes, configs } = decomposeConfigs(_configs, canWarn)
+      .entries(transitionsForEvents)
+      .reduce((acc, [eventName, transitionsAndAction]) => {
+        const {
+          states,
+          routes,
+          configs
+        } = expandTransitions(transitionsAndAction, canWarn)
         if (canWarn()) {
           allStates.push(...states)
           allRoutes.push(...routes)
@@ -365,8 +345,7 @@ function Statebot (name, options) {
     )
 
     // onTransitions()
-    const transitionConfigs = decomposeConfigs(transitions, canWarn)
-
+    const transitionConfigs = expandTransitions(transitionsOnly, canWarn)
     if (canWarn()) {
       allStates.push(...transitionConfigs.states)
       allRoutes.push(...transitionConfigs.routes)
@@ -1684,7 +1663,40 @@ function Statebot (name, options) {
   }
 }
 
-function decomposeConfigs (configs, canWarn) {
+function decomposeHitcherActions (hitcherActions) {
+  // For: performTransitions()
+  const transitionsForEvents = {}
+
+  // For: onTransitions()
+  const transitionsOnly = []
+
+  Object
+    .entries(hitcherActions)
+    .map(([routeChart, actionOrConfig]) => {
+      if (isFunction(actionOrConfig)) {
+        transitionsOnly.push({ routeChart, action: actionOrConfig })
+      } else if (!isPojo(actionOrConfig)) {
+        return
+      }
+
+      const { on: _on, then: _then } = actionOrConfig
+      if (isString(_on) || isArray(_on)) {
+        const eventNames = [_on].flat()
+        eventNames.map(name => {
+          transitionsForEvents[name] = transitionsForEvents[name] || []
+          transitionsForEvents[name].push({ routeChart, action: _then })
+        })
+      } else if (isFunction(_then)) {
+        // Behave like onTransitions() if a "then" is specified but
+        // there is no "on" event that triggers it
+        transitionsOnly.push({ routeChart, action: actionOrConfig })
+      }
+    })
+
+  return { transitionsForEvents, transitionsOnly }
+}
+
+function expandTransitions (configs, canWarn) {
   const allStates = []
   const allRoutes = []
 

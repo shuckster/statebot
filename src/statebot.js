@@ -278,13 +278,6 @@ function Statebot (name, options) {
     'Listening for the following events'
   )
 
-  const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
-    inState(fromState, () => {
-      enter(toState, ...args)
-      isFunction(action) && action(...args)
-      return true
-    })
-
   // Interprets onTransitions() and performTransitions()
   function applyHitcher (hitcher, fnName) {
     const hitcherActions =
@@ -307,7 +300,8 @@ function Statebot (name, options) {
     const allRoutes = []
     const allCleanupFns = []
 
-    // performTransitions()
+    // Handle performTransitions() signature (configs with an event,
+    // and maybe a then-method too)
     const decomposedEvents = Object
       .entries(transitionsForEvents)
       .reduce((acc, [eventName, transitionsAndAction]) => {
@@ -316,6 +310,7 @@ function Statebot (name, options) {
           routes,
           configs
         } = expandTransitions(transitionsAndAction, canWarn)
+
         if (canWarn()) {
           allStates.push(...states)
           allRoutes.push(...routes)
@@ -326,41 +321,56 @@ function Statebot (name, options) {
         }
       }, {})
 
+    function ifStateThenEnterState ({ fromState, toState, action, args }) {
+      return inState(fromState, () => {
+        enter(toState, ...args)
+        isFunction(action) && action(...args)
+        return true
+      })
+    }
+
+    function handleEventForTransition ([eventName, configs]) {
+      return [
+        eventsHandled.increase(eventName),
+        onEvent(eventName, (...args) => {
+          const eventWasHandled = configs
+            .map(config => ({ ...config, args }))
+            .some(ifStateThenEnterState)
+
+          if (!eventWasHandled) {
+            transitionNoOp(`Event not handled: "${eventName}"`)
+          }
+        })
+      ]
+    }
+
     allCleanupFns.push(
       ...Object
         .entries(decomposedEvents)
-        .map(([eventName, configs]) => [
-          eventsHandled.increase(eventName),
-          onEvent(eventName, (...args) => {
-            const eventWasHandled = configs
-              .map(config => ({ ...config, args }))
-              .some(ifStateThenEnterState)
-
-            if (!eventWasHandled) {
-              transitionNoOp(`Event not handled: "${eventName}"`)
-            }
-          })
-        ])
+        .map(handleEventForTransition)
         .flat()
     )
 
-    // onTransitions()
+    // Handle onTransitions() signature (transition-only, and maybe
+    // a then-function too)
     const transitionConfigs = expandTransitions(transitionsOnly, canWarn)
     if (canWarn()) {
       allStates.push(...transitionConfigs.states)
       allRoutes.push(...transitionConfigs.routes)
     }
 
+    function runThenMethodOnTransition (config) {
+      const { fromState, toState, action } = config
+      const route = `${fromState}->${toState}`
+      return [
+        routesHandled.increase(route),
+        onInternalEvent(route, action)
+      ]
+    }
+
     allCleanupFns.push(
       ...transitionConfigs.configs
-        .map(transition => {
-          const { fromState, toState, action } = transition
-          const route = `${fromState}->${toState}`
-          return [
-            routesHandled.increase(route),
-            onInternalEvent(route, action)
-          ]
-        })
+        .map(runThenMethodOnTransition)
         .flat()
     )
 

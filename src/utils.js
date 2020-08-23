@@ -180,34 +180,36 @@ function ArgTypeError (errPrefix = '') {
       .entries(typeMap)
       .map(([argName, argType]) => ({ argName, argType }))
 
+    const typeErrorFromInvalidArgument = (arg, index) => {
+      const { argName, argType } = argMap[index]
+      if (arg === undefined) {
+        return `Argument undefined: "${argName}"`
+      }
+
+      let typeMatches
+      let typeName
+      let errorDesc
+
+      if (isFunction(argType)) {
+        typeMatches = argType(arg) === true
+        typeName = argType.name
+        errorDesc = `${typeName}(${argName}) did not return true`
+      } else {
+        // eslint-disable-next-line valid-typeof
+        typeMatches = typeof arg === argType
+        typeName = argType
+        errorDesc = `Argument "${argName}" should be a ${typeName}`
+      }
+
+      if (!typeMatches) {
+        return (
+          `${errorDesc}: ${argName} === ${typeof arg}(${arg})`
+        )
+      }
+    }
+
     const err = args
-      .map((arg, index) => {
-        const { argName, argType } = argMap[index]
-        if (arg === undefined) {
-          return `Argument undefined: "${argName}"`
-        }
-
-        let errorDesc
-        let typeName
-        let typeMatches
-
-        if (isFunction(argType)) {
-          typeMatches = argType(arg) === true
-          typeName = argType.name
-          errorDesc = `${typeName}(${argName}) did not return true`
-        } else {
-          // eslint-disable-next-line valid-typeof
-          typeMatches = typeof arg === argType
-          typeName = argType
-          errorDesc = `Argument "${argName}" should be a ${typeName}`
-        }
-
-        if (!typeMatches) {
-          return (
-            `${errorDesc}: ${argName} === ${typeof arg}(${arg})`
-          )
-        }
-      })
+      .map(typeErrorFromInvalidArgument)
       .filter(Boolean)
 
     if (!err.length) {

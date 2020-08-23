@@ -329,7 +329,7 @@ function Statebot (name, options) {
       })
     }
 
-    function handleEventForTransition ([eventName, configs]) {
+    function createEventHandlerForTransition ([eventName, configs]) {
       return [
         eventsHandled.increase(eventName),
         onEvent(eventName, (...args) => {
@@ -347,7 +347,7 @@ function Statebot (name, options) {
     allCleanupFns.push(
       ...Object
         .entries(decomposedEvents)
-        .map(handleEventForTransition)
+        .map(createEventHandlerForTransition)
         .flat()
     )
 

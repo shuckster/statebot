@@ -291,7 +291,11 @@ function Table (columns = [], alignments = []) {
   }
 
   function colSizes () {
-    return table.reduce((acc, row) => columns.map((col, index) => Math.max(row[col].length, acc[index])), columns.map(() => 0))
+    return table.reduce(
+      (acc, row) => columns.map(
+        (col, index) => Math.max(row[col].length, acc[index])
+      ), columns.map(() => 0)
+    )
   }
 
   function padLeft (str, len) {

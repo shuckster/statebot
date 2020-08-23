@@ -118,26 +118,28 @@ function condensedLines (strOrArr) {
 
   let previousLineHasContinuation = false
 
+  const condenseLine = (condensedLine, line) => {
+    const sanitisedLine = line
+      .replace(rxComment, '')
+      .replace(rxDisallowedCharacters, '')
+
+    if (!sanitisedLine) {
+      return condensedLine
+    }
+
+    previousLineHasContinuation = rxLineContinuations
+      .test(sanitisedLine)
+
+    if (previousLineHasContinuation) {
+      return condensedLine + sanitisedLine
+    }
+
+    output.push(condensedLine + sanitisedLine)
+    return ''
+  }
+
   const finalCondensedLine = input
-    .reduce((condensedLine, line) => {
-      const sanitisedLine = line
-        .replace(rxComment, '')
-        .replace(rxDisallowedCharacters, '')
-
-      if (!sanitisedLine) {
-        return condensedLine
-      }
-
-      previousLineHasContinuation = rxLineContinuations
-        .test(sanitisedLine)
-
-      if (previousLineHasContinuation) {
-        return condensedLine + sanitisedLine
-      }
-
-      output.push(condensedLine + sanitisedLine)
-      return ''
-    }, '')
+    .reduce(condenseLine, '')
 
   if (previousLineHasContinuation || finalCondensedLine) {
     return [...output, finalCondensedLine]

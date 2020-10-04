@@ -35,8 +35,8 @@
     "email": "statebot@conans.co.uk"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest --bail",
+    "test:watch": "jest --watchAll",
     "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" \"pnpm run build:esm\" ; pnpm run build:typedefs-from-esm-build ; pnpm run build:docs:all",
     "build:typedefs": "pnpm run build:esm ; pnpm run build:typedefs-from-esm-build",
     "build:browser": "rollup --config ./build-config/rollup.config.browser.js",

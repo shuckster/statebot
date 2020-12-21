@@ -1682,24 +1682,30 @@ function decomposeHitcherActions (hitcherActions) {
 
   Object
     .entries(hitcherActions)
-    .map(([routeChart, actionOrConfig]) => {
-      if (isFunction(actionOrConfig)) {
-        transitionsOnly.push({ routeChart, action: actionOrConfig })
-      } else if (!isPojo(actionOrConfig)) {
+    .map(([routeChart, actionFnOrConfigObj]) => {
+      if (isFunction(actionFnOrConfigObj)) {
+        transitionsOnly.push({ routeChart, action: actionFnOrConfigObj })
+        return
+      }
+      if (!isPojo(actionFnOrConfigObj)) {
         return
       }
 
-      const { on: _on, then: _then } = actionOrConfig
-      if (isString(_on) || isArray(_on)) {
+      const { on: _on, then: _then } = actionFnOrConfigObj
+      const hasValidEventNames = isString(_on) || isArray(_on)
+      if (hasValidEventNames) {
         const eventNames = [_on].flat()
         eventNames.map(name => {
           transitionsForEvents[name] = transitionsForEvents[name] || []
           transitionsForEvents[name].push({ routeChart, action: _then })
         })
-      } else if (isFunction(_then)) {
-        // Behave like onTransitions() if a "then" is specified but
-        // there is no "on" event that triggers it
-        transitionsOnly.push({ routeChart, action: actionOrConfig })
+        return
+      }
+
+      // Behave like onTransitions() if a "then" is specified but
+      // there is no "on" event that triggers it
+      if (isFunction(_then)) {
+        transitionsOnly.push({ routeChart, action: actionFnOrConfigObj })
       }
     })
 

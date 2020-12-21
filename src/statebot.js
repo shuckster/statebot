@@ -198,12 +198,12 @@ import { decomposeChart, cxArrow } from './parsing'
 
 function Statebot (name, options) {
   if (!isString(name)) {
-    throw TypeError('\nStatebot: Please specify a name for this machine')
+    throw new TypeError('\nStatebot: Please specify a name for this machine')
   }
 
   const logPrefix = `Statebot[${name}]`
   if (!isPojo(options)) {
-    throw TypeError(`\n${logPrefix}: Please specify options for this machine`)
+    throw new TypeError(`\n${logPrefix}: Please specify options for this machine`)
   }
 
   const {
@@ -217,7 +217,7 @@ function Statebot (name, options) {
     : isEventEmitter(options.events) && options.events
 
   if (!eventOption) {
-    throw TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
+    throw new TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
   }
 
   const events = wrapEmitter(eventOption)
@@ -229,7 +229,7 @@ function Statebot (name, options) {
   const { startIn = states[0] } = options
 
   if (!states.includes(startIn)) {
-    throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
+    throw new Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
 
   const argTypeError = ArgTypeError(`${logPrefix}#`)
@@ -286,7 +286,7 @@ function Statebot (name, options) {
         : isPojo(hitcher) ? hitcher : null
 
     if (!isPojo(hitcherActions)) {
-      throw TypeError(
+      throw new TypeError(
         `Statebot[${name}]#${fnName}(): Expected an object, or a function that returns an object`
       )
     }
@@ -407,7 +407,7 @@ function Statebot (name, options) {
     const testStates = states.flat()
     const err = argTypeError('canTransitionTo', { state: isString }, testStates[0])
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     if (!testStates.length) {
@@ -425,7 +425,7 @@ function Statebot (name, options) {
 
     const err = argTypeError('statesAvailableFromHere', { state: isString }, _state)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     return routes.reduce((acc, route) => {
@@ -442,7 +442,7 @@ function Statebot (name, options) {
   function inState (state, anyOrFn, ...fnArgs) {
     const err = argTypeError('inState', { state: isString }, state)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     const conditionMatches = currentState() === state
@@ -463,7 +463,7 @@ function Statebot (name, options) {
   const emit = Pausable((eventName, ...args) => {
     const err = argTypeError('emit', { eventName: isString }, eventName)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     return events.emit(eventName, ...args)
@@ -472,7 +472,7 @@ function Statebot (name, options) {
   const enter = Pausable((state, ...args) => {
     const err = argTypeError('enter', { state: isString }, state)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     const inState = currentState()
@@ -512,7 +512,7 @@ function Statebot (name, options) {
   function onEvent (eventName, cb) {
     const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     events.on(eventName, cb)
@@ -526,7 +526,7 @@ function Statebot (name, options) {
       [methodName]: cb => {
         const err = argTypeError(methodName, { cb: isFunction }, cb)
         if (err) {
-          throw TypeError(err)
+          throw new TypeError(err)
         }
 
         const decreaseRefCount = statesHandled.increase(
@@ -559,7 +559,7 @@ function Statebot (name, options) {
         [methodName]: (state, cb) => {
           const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb)
           if (err) {
-            throw TypeError(err)
+            throw new TypeError(err)
           }
 
           const decreaseRefCounts = [
@@ -588,7 +588,7 @@ function Statebot (name, options) {
   function Emit (eventName, ...curriedArgs) {
     const err = argTypeError('Emit', { eventName: isString }, eventName)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     return (...args) => emit(eventName, ...[...curriedArgs, ...args])
@@ -597,7 +597,7 @@ function Statebot (name, options) {
   function Enter (state, ...curriedArgs) {
     const err = argTypeError('Enter', { state: isString }, state)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     return (...args) => enter(state, ...[...curriedArgs, ...args])
@@ -606,7 +606,7 @@ function Statebot (name, options) {
   function InState (state, anyOrFn, ...curriedFnArgs) {
     const err = argTypeError('InState', { state: isString }, state)
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
 
     return (...fnArgs) =>

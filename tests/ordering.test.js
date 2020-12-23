@@ -158,9 +158,14 @@ function initStatebotWithEventEmitter(events) {
   })
 
   bot.onTransitions({
-    'idle -> pending': Called('pending :: onTransition :: callback'),
-    'pending -> rejected | resolved': Called('rejected | resolved :: onTransition :: callback'),
-    'rejected | resolved -> finished': Called('finished :: onTransition :: callback'),
+    'idle -> pending':
+      Called('pending :: onTransition :: callback'),
+
+    'pending -> rejected | resolved':
+      Called('rejected | resolved :: onTransition :: callback'),
+
+    'rejected | resolved -> finished':
+      Called('finished :: onTransition :: callback'),
   })
 
   bot.onExited('idle', Called('idle :: onExited'))

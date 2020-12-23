@@ -508,7 +508,10 @@ function Statebot (name, options) {
   })
 
   function onEvent (eventName, cb) {
-    const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb)
+    const err = argTypeError('onEvent',
+      { eventName: isString, cb: isFunction },
+      eventName, cb
+    )
     if (err) {
       throw new TypeError(err)
     }
@@ -555,7 +558,10 @@ function Statebot (name, options) {
       return {
         ...obj,
         [methodName]: (state, cb) => {
-          const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb)
+          const err = argTypeError(methodName,
+            { state: isString, cb: isFunction },
+            state, cb
+          )
           if (err) {
             throw new TypeError(err)
           }
@@ -608,7 +614,7 @@ function Statebot (name, options) {
     }
 
     return (...fnArgs) =>
-      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
+      inState(state, anyOrFn, ...curriedFnArgs.concat(fnArgs))
   }
 
   function reset () {
@@ -1759,16 +1765,15 @@ function isStatebot (object) {
 }
 
 function wrapEmitter (events) {
-  const emit = (...args) =>
-    events.emit(...args)
+  const emit = events.emit
 
   const on = events.addListener
-    ? (...args) => events.addListener(...args)
-    : (...args) => events.on(...args)
+    ? events.addListener
+    : events.on
 
   const off = events.removeListener
-    ? (...args) => events.removeListener(...args)
-    : (...args) => events.off(...args)
+    ? events.removeListener
+    : events.off
 
   return {
     emit,

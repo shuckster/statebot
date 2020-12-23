@@ -20,6 +20,10 @@ export {
   Pausables
 }
 
+//
+// isType
+//
+
 function isArray (obj) {
   return Array.isArray(obj)
 }
@@ -56,11 +60,15 @@ function isTemplateLiteral (obj) {
   if (isString(obj)) {
     return true
   }
-  if (isArray(obj)) {
-    return obj.every(item => isString(item))
+  if (!isArray(obj)) {
+    return false
   }
-  return false
+  return obj.every(isString)
 }
+
+//
+// uniq
+//
 
 function uniq (input) {
   return input.reduce((acc, one) =>
@@ -71,16 +79,22 @@ function uniq (input) {
   )
 }
 
+//
+// defer
+//
+
 function defer (fn, ...args) {
   const timer = setTimeout(fn, 0, ...args)
-  return () => {
-    clearTimeout(timer)
-  }
+  return () => clearTimeout(timer)
 }
 
 function Defer (fn) {
   return (...args) => defer(fn, ...args)
 }
+
+//
+// Revokable
+//
 
 function Once (fn) {
   const { revoke, fn: _fn } = Revokable(fn)
@@ -108,13 +122,17 @@ function Revokable (fn) {
   }
 }
 
-function Pausables (startPaused = false, runWhenPaused = () => {}) {
+//
+// Pausables
+//
+
+function Pausables (startPaused = false, runFnWhenPaused = () => {}) {
   let paused = !!startPaused
 
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
-        runWhenPaused()
+        runFnWhenPaused()
         return false
       }
       return fn(...args)
@@ -128,6 +146,10 @@ function Pausables (startPaused = false, runWhenPaused = () => {}) {
     resume: () => { paused = false },
   }
 }
+
+//
+// ReferenceCounter
+//
 
 function ReferenceCounter (name, kind, description, ...expecting) {
   const _refs = [...expecting]
@@ -224,6 +246,7 @@ const typeErrorFromArgument = (argMap, arg, index) => {
  *   }
  * }
  */
+
 function ArgTypeError (errPrefix = '') {
   return function (fnName, typeMap, ...args) {
     const signature = Object.keys(typeMap).join(', ')
@@ -245,6 +268,10 @@ function ArgTypeError (errPrefix = '') {
     )
   }
 }
+
+//
+// Logger
+//
 
 function Logger (level) {
   let _level = level

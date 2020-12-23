@@ -231,8 +231,8 @@ function Statebot (name, options) {
   }
 
   const argTypeError = ArgTypeError(`${logPrefix}#`)
-  const console = Logger(logLevel)
-  const { canWarn } = console
+  const _console = Logger(logLevel, console)
+  const { canWarn } = _console
 
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
@@ -241,7 +241,7 @@ function Statebot (name, options) {
   let transitionId = 0
 
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
-    console.warn(`${logPrefix}: Ignoring callback, paused`)
+    _console.warn(`${logPrefix}: Ignoring callback, paused`)
   )
 
   const emitInternalEvent = Pausable((eventName, ...args) =>
@@ -377,13 +377,13 @@ function Statebot (name, options) {
       const invalidStates = allStates.filter(state => !states.includes(state))
       const invalidRoutes = allRoutes.filter(route => !routes.includes(route))
       if (invalidStates.length) {
-        console.warn(
+        _console.warn(
           `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
           invalidStates.map(state => `  > "${state}"`).join('\n')
         )
       }
       if (invalidRoutes.length) {
-        console.warn(
+        _console.warn(
           `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
           invalidRoutes.map(route => `  > "${route}"`).join('\n')
         )
@@ -493,7 +493,7 @@ function Statebot (name, options) {
     }
 
     // Fell-through, can enter next state
-    console.info(`${logPrefix}: tId<${++transitionId}>: ${nextRoute}`)
+    _console.info(`${logPrefix}: tId<${++transitionId}>: ${nextRoute}`)
 
     stateHistory.push(toState)
     if (stateHistory.length > stateHistoryLimit) {
@@ -618,7 +618,7 @@ function Statebot (name, options) {
   }
 
   function reset () {
-    console.warn(`${logPrefix}: State-machine reset!`)
+    _console.warn(`${logPrefix}: State-machine reset!`)
 
     stateHistory.length = 0
     stateHistory.push(startIn)
@@ -632,13 +632,13 @@ function Statebot (name, options) {
 
     const availableStates = statesAvailableFromHere()
     if (!availableStates.length) {
-      console.info(
+      _console.info(
         `${logPrefix}: ${message}\n` +
           `  > Previous transition: "${prevRoute}"\n` +
           `  > There are no states available from "${inState}"`
       )
     } else {
-      console.info(
+      _console.info(
         `${logPrefix}: ${message}\n` +
           `  > Previous transition: "${prevRoute}"\n` +
           `  > From "${inState}", valid states are: [${availableStates
@@ -657,7 +657,7 @@ function Statebot (name, options) {
   }
 
   function info () {
-    console.log(`${logPrefix}: Information about this state-machine`)
+    _console.log(`${logPrefix}: Information about this state-machine`)
 
     logRefCounterInfo(statesHandled)
     logRefCounterInfo(routesHandled)
@@ -666,11 +666,11 @@ function Statebot (name, options) {
 
   function logRefCounterInfo (refCounter) {
     const { description, table } = refCounter.toValue()
-    console.log(description)
+    _console.log(description)
     if (table.length) {
-      console.table(table)
+      _console.table(table)
     } else {
-      console.log('  > No information')
+      _console.log('  > No information')
     }
   }
 

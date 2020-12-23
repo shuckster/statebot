@@ -273,7 +273,7 @@ function ArgTypeError (errPrefix = '') {
 // Logger
 //
 
-function Logger (level) {
+function Logger (level, c = console) {
   let _level = level
   if (isString(_level)) {
     _level = ({
@@ -297,10 +297,10 @@ function Logger (level) {
     canLog,
     canInfo,
 
-    info: (...args) => canInfo() && console.info(...args),
-    table: (...args) => canLog() && console.table(...args),
-    log: (...args) => canLog() && console.log(...args),
-    warn: (...args) => canWarn() && console.warn(...args),
-    error: (...args) => console.error(...args)
+    info: (...args) => canInfo() && c.info(...args),
+    table: (...args) => canLog() && c.table(...args),
+    log: (...args) => canLog() && c.log(...args),
+    warn: (...args) => canWarn() && c.warn(...args),
+    error: (...args) => c.error(...args)
   }
 }

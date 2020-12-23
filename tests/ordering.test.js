@@ -1,4 +1,5 @@
 const mitt = require('mitt')
+const EventEmitter = require('events')
 const { Statebot } = require('../src/statebot')
 
 const EXPECTED_CALL_ORDER = [
@@ -42,11 +43,12 @@ const EXPECTED_CALL_ORDER = [
 
 test(`Throws if bad event-emitter passed-in`, () => {
 
-  expect(() => initStatebot({})).toThrow()
+  expect(() => initStatebotWithEventEmitter({})).toThrow()
 })
 
 test(`EventEmitter: expecting callbacks to appear in the correct order`, () => {
-  const { bot, calls } = initStatebot()
+  const nodeEmitter = new EventEmitter()
+  const { bot, calls } = initStatebotWithEventEmitter(nodeEmitter)
 
   //
   // Emit more events than required in order to test transition-guarding
@@ -81,7 +83,7 @@ test(`EventEmitter: expecting callbacks to appear in the correct order`, () => {
 
 test(`mitt: expecting callbacks to appear in the correct order`, () => {
   const mittEmitter = mitt()
-  const { bot, calls } = initStatebot(mittEmitter)
+  const { bot, calls } = initStatebotWithEventEmitter(mittEmitter)
 
   //
   // Emit more events than required in order to test transition-guarding
@@ -114,7 +116,7 @@ test(`mitt: expecting callbacks to appear in the correct order`, () => {
   expect(calls.join('/')).toEqual(EXPECTED_CALL_ORDER.join('/'))
 })
 
-function initStatebot(events) {
+function initStatebotWithEventEmitter(events) {
   const bot = Statebot('test-events-and-ordering', {
     events,
     chart: `

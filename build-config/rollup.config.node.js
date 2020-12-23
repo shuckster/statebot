@@ -24,7 +24,6 @@ export default {
       plugins: [terser(terserConfig)]
     }
   ],
-  external: ['events'],
   plugins: [
     json(),
     builtins(),

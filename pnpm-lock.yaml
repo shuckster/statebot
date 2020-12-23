@@ -1,5 +1,3 @@
-dependencies:
-  events: 3.2.0
 devDependencies:
   '@babel/core': 7.12.10
   '@babel/preset-env': 7.12.11_@babel+core@7.12.10
@@ -4409,12 +4407,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
-  /events/3.2.0:
-    dev: false
-    engines:
-      node: '>=0.8.x'
-    resolution:
-      integrity: sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
   /evp_bytestokey/1.0.3:
     dependencies:
       md5.js: 1.3.5
@@ -9809,7 +9801,6 @@ specifiers:
   eslint-plugin-jest: ^24.1.3
   eslint-plugin-node: ^11.1.0
   eslint-plugin-promise: ^4.2.1
-  events: ^3.2.0
   jest: ^26.6.3
   mitt: ^2.1.0
   rollup: ^2.35.1

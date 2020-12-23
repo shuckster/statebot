@@ -159,7 +159,7 @@ const INTERNAL_EVENTS = {
   [ON_SWITCHED]: '(ANY)state:changed'
 }
 
-import EventEmitter from 'events'
+import mitt from 'mitt'
 
 import {
   isArray,
@@ -212,15 +212,13 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {}
 
-  const eventOption = options.events === undefined
-    ? new EventEmitter()
-    : isEventEmitter(options.events) && options.events
+  const events = options.events === undefined
+    ? mitt()
+    : isEventEmitter(options.events) && wrapEmitter(options.events)
 
-  if (!eventOption) {
+  if (!events) {
     throw new TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
   }
-
-  const events = wrapEmitter(eventOption)
 
   const { states = [], routes = [] } = chart
     ? decomposeChart(chart)
@@ -238,7 +236,7 @@ function Statebot (name, options) {
 
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
-  const internalEvents = wrapEmitter(new EventEmitter())
+  const internalEvents = mitt()
 
   let transitionId = 0
 

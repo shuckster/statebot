@@ -10,11 +10,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var EventEmitter = require('events');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var EventEmitter__default = /*#__PURE__*/_interopDefaultLegacy(EventEmitter);
+function mitt(n){return {all:n=n||new Map,on:function(t,e){var i=n.get(t);i&&i.push(e)||n.set(t,[e]);},off:function(t,e){var i=n.get(t);i&&i.splice(i.indexOf(e)>>>0,1);},emit:function(t,e){(n.get(t)||[]).slice().map(function(n){n(e);}),(n.get("*")||[]).slice().map(function(n){n(t,e);});}}}
 
 function isArray (obj) {
   return Array.isArray(obj)
@@ -46,10 +42,10 @@ function isTemplateLiteral (obj) {
   if (isString(obj)) {
     return true
   }
-  if (isArray(obj)) {
-    return obj.every(item => isString(item))
+  if (!isArray(obj)) {
+    return false
   }
-  return false
+  return obj.every(isString)
 }
 function uniq (input) {
   return input.reduce((acc, one) =>
@@ -61,9 +57,7 @@ function uniq (input) {
 }
 function defer (fn, ...args) {
   const timer = setTimeout(fn, 0, ...args);
-  return () => {
-    clearTimeout(timer);
-  }
+  return () => clearTimeout(timer)
 }
 function Defer (fn) {
   return (...args) => defer(fn, ...args)
@@ -92,12 +86,12 @@ function Revokable (fn) {
     }
   }
 }
-function Pausables (startPaused = false, runWhenPaused = () => {}) {
+function Pausables (startPaused = false, runFnWhenPaused = () => {}) {
   let paused = !!startPaused;
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
-        runWhenPaused();
+        runFnWhenPaused();
         return false
       }
       return fn(...args)
@@ -152,6 +146,48 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     refs
   }
 }
+const typeErrorIfFnReturnsFalse = (argName, argTypeFn, arg) => {
+  return argTypeFn(arg)
+    ? undefined
+    : `${argTypeFn.name}(${argName}) did not return true`
+};
+const typeErrorIfTypeOfFails = (argName, argType, arg) => {
+  return typeof arg === argType
+    ? undefined
+    : `Argument "${argName}" should be a ${argType}`
+};
+const typeErrorFromArgument = (argMap, arg, index) => {
+  const { argName, argType } = argMap[index];
+  if (arg === undefined) {
+    return `Argument undefined: "${argName}"`
+  }
+  const errorDesc = isFunction(argType)
+    ? typeErrorIfFnReturnsFalse(argName, argType, arg)
+    : typeErrorIfTypeOfFails(argName, argType, arg);
+  if (errorDesc) {
+    return (
+      `${errorDesc}: ${argName} === ${typeof arg}(${arg})`
+    )
+  }
+};
+/**
+ * Helper for enforcing correct argument-types.
+ *
+ * @param {string} errPrefix
+ *
+ * @example
+ * const argTypeError = ArgTypeError('namespace#')
+ *
+ * function myFn (myArg1, myArg2) {
+ *   const err = argTypeError('myFn',
+ *     { myArg1: isString, myArg2: Boolean },
+ *     myArg1, myArg2
+ *   )
+ *   if (err) {
+ *     throw new TypeError(err)
+ *   }
+ * }
+ */
 function ArgTypeError (errPrefix = '') {
   return function (fnName, typeMap, ...args) {
     const signature = Object.keys(typeMap).join(', ');
@@ -159,29 +195,7 @@ function ArgTypeError (errPrefix = '') {
       .entries(typeMap)
       .map(([argName, argType]) => ({ argName, argType }));
     const err = args
-      .map((arg, index) => {
-        const { argName, argType } = argMap[index];
-        if (arg === undefined) {
-          return `Argument undefined: "${argName}"`
-        }
-        let errorDesc;
-        let typeName;
-        let typeMatches;
-        if (isFunction(argType)) {
-          typeMatches = argType(arg) === true;
-          typeName = argType.name;
-          errorDesc = `${typeName}(${argName}) did not return true`;
-        } else {
-          typeMatches = typeof arg === argType;
-          typeName = argType;
-          errorDesc = `Argument "${argName}" should be a ${typeName}`;
-        }
-        if (!typeMatches) {
-          return (
-            `${errorDesc}: ${argName} === ${typeof arg}(${arg})`
-          )
-        }
-      })
+      .map((...args) => typeErrorFromArgument(argMap, ...args))
       .filter(Boolean);
     if (!err.length) {
       return
@@ -312,22 +326,23 @@ function condensedLines (strOrArr) {
   const input = linesFrom(strOrArr);
   const output = [];
   let previousLineHasContinuation = false;
+  const condenseLine = (condensedLine, line) => {
+    const sanitisedLine = line
+      .replace(rxComment, '')
+      .replace(rxDisallowedCharacters, '');
+    if (!sanitisedLine) {
+      return condensedLine
+    }
+    previousLineHasContinuation = rxLineContinuations
+      .test(sanitisedLine);
+    if (previousLineHasContinuation) {
+      return condensedLine + sanitisedLine
+    }
+    output.push(condensedLine + sanitisedLine);
+    return ''
+  };
   const finalCondensedLine = input
-    .reduce((condensedLine, line) => {
-      const sanitisedLine = line
-        .replace(rxComment, '')
-        .replace(rxDisallowedCharacters, '');
-      if (!sanitisedLine) {
-        return condensedLine
-      }
-      previousLineHasContinuation = rxLineContinuations
-        .test(sanitisedLine);
-      if (previousLineHasContinuation) {
-        return condensedLine + sanitisedLine
-      }
-      output.push(condensedLine + sanitisedLine);
-      return ''
-    }, '');
+    .reduce(condenseLine, '');
   if (previousLineHasContinuation || finalCondensedLine) {
     return [...output, finalCondensedLine]
   }
@@ -527,37 +542,36 @@ const INTERNAL_EVENTS = {
  */
 function Statebot (name, options) {
   if (!isString(name)) {
-    throw TypeError('\nStatebot: Please specify a name for this machine')
+    throw new TypeError('\nStatebot: Please specify a name for this machine')
   }
   const logPrefix = `Statebot[${name}]`;
   if (!isPojo(options)) {
-    throw TypeError(`\n${logPrefix}: Please specify options for this machine`)
+    throw new TypeError(`\n${logPrefix}: Please specify options for this machine`)
   }
   const {
     chart = undefined,
     logLevel = 3,
     historyLimit = 2
   } = options || {};
-  const eventOption = options.events === undefined
-    ? new EventEmitter__default['default']()
-    : isEventEmitter(options.events) && options.events;
-  if (!eventOption) {
-    throw TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
+  const events = options.events === undefined
+    ? mitt()
+    : isEventEmitter(options.events) && wrapEmitter(options.events);
+  if (!events) {
+    throw new TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
   }
-  const events = wrapEmitter(eventOption);
   const { states = [], routes = [] } = chart
     ? decomposeChart(chart)
     : options;
   const { startIn = states[0] } = options;
   if (!states.includes(startIn)) {
-    throw Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
+    throw new Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
   const argTypeError = ArgTypeError(`${logPrefix}#`);
   const console = Logger(logLevel);
   const { canWarn } = console;
   const stateHistory = [startIn];
   const stateHistoryLimit = Math.max(historyLimit, 2);
-  const internalEvents = wrapEmitter(new EventEmitter__default['default']());
+  const internalEvents = mitt();
   let transitionId = 0;
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     console.warn(`${logPrefix}: Ignoring callback, paused`)
@@ -587,50 +601,31 @@ function Statebot (name, options) {
     'events',
     'Listening for the following events'
   );
-  const ifStateThenEnterState = ({ fromState, toState, action, args }) =>
-    inState(fromState, () => {
-      enter(toState, ...args);
-      isFunction(action) && action(...args);
-      return true
-    });
   function applyHitcher (hitcher, fnName) {
     const hitcherActions =
       isFunction(hitcher)
         ? hitcher({ enter, emit, Enter, Emit })
         : isPojo(hitcher) ? hitcher : null;
     if (!isPojo(hitcherActions)) {
-      throw TypeError(
+      throw new TypeError(
         `Statebot[${name}]#${fnName}(): Expected an object, or a function that returns an object`
       )
     }
-    const events = {};
-    const transitions = [];
-    Object
-      .entries(hitcherActions)
-      .map(([routeChart, actionOrConfig]) => {
-        if (isFunction(actionOrConfig)) {
-          transitions.push({ routeChart, action: actionOrConfig });
-        } else if (!isPojo(actionOrConfig)) {
-          return
-        }
-        const { on: _on, then: _then } = actionOrConfig;
-        if (isString(_on) || isArray(_on)) {
-          const eventNames = [_on].flat();
-          eventNames.map(eventName => {
-            events[eventName] = events[eventName] || [];
-            events[eventName].push({ routeChart, action: _then });
-          });
-        } else if (isFunction(_then)) {
-          transitions.push({ routeChart, action: actionOrConfig });
-        }
-      });
+    const {
+      transitionsForEvents,
+      transitionsOnly
+    } = decomposeHitcherActions(hitcherActions);
     const allStates = [];
     const allRoutes = [];
     const allCleanupFns = [];
     const decomposedEvents = Object
-      .entries(events)
-      .reduce((acc, [eventName, _configs]) => {
-        const { states, routes, configs } = decomposeConfigs(_configs, canWarn);
+      .entries(transitionsForEvents)
+      .reduce((acc, [eventName, transitionsAndAction]) => {
+        const {
+          states,
+          routes,
+          configs
+        } = expandTransitions(transitionsAndAction, canWarn);
         if (canWarn()) {
           allStates.push(...states);
           allRoutes.push(...routes);
@@ -640,37 +635,48 @@ function Statebot (name, options) {
           [eventName]: configs
         }
       }, {});
+    function ifStateThenEnterState ({ fromState, toState, action, args }) {
+      return inState(fromState, () => {
+        enter(toState, ...args);
+        isFunction(action) && action(...args);
+        return true
+      })
+    }
+    function createEventHandlerForTransition ([eventName, configs]) {
+      return [
+        eventsHandled.increase(eventName),
+        onEvent(eventName, (...args) => {
+          const eventWasHandled = configs
+            .map(config => ({ ...config, args }))
+            .some(ifStateThenEnterState);
+          if (!eventWasHandled) {
+            transitionNoOp(`Event not handled: "${eventName}"`);
+          }
+        })
+      ]
+    }
     allCleanupFns.push(
       ...Object
         .entries(decomposedEvents)
-        .map(([eventName, configs]) => [
-          eventsHandled.increase(eventName),
-          onEvent(eventName, (...args) => {
-            const eventWasHandled = configs
-              .map(config => ({ ...config, args }))
-              .some(ifStateThenEnterState);
-            if (!eventWasHandled) {
-              transitionNoOp(`Event not handled: "${eventName}"`);
-            }
-          })
-        ])
+        .map(createEventHandlerForTransition)
         .flat()
     );
-    const transitionConfigs = decomposeConfigs(transitions, canWarn);
+    const transitionConfigs = expandTransitions(transitionsOnly, canWarn);
     if (canWarn()) {
       allStates.push(...transitionConfigs.states);
       allRoutes.push(...transitionConfigs.routes);
     }
+    function runThenMethodOnTransition (config) {
+      const { fromState, toState, action } = config;
+      const route = `${fromState}->${toState}`;
+      return [
+        routesHandled.increase(route),
+        onInternalEvent(route, action)
+      ]
+    }
     allCleanupFns.push(
       ...transitionConfigs.configs
-        .map(transition => {
-          const { fromState, toState, action } = transition;
-          const route = `${fromState}->${toState}`;
-          return [
-            routesHandled.increase(route),
-            onInternalEvent(route, action)
-          ]
-        })
+        .map(runThenMethodOnTransition)
         .flat()
     );
     if (canWarn()) {
@@ -701,7 +707,7 @@ function Statebot (name, options) {
     const testStates = states.flat();
     const err = argTypeError('canTransitionTo', { state: isString }, testStates[0]);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     if (!testStates.length) {
       return false
@@ -715,7 +721,7 @@ function Statebot (name, options) {
       : currentState();
     const err = argTypeError('statesAvailableFromHere', { state: isString }, _state);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     return routes.reduce((acc, route) => {
       const [fromState, toState] = route
@@ -729,7 +735,7 @@ function Statebot (name, options) {
   function inState (state, anyOrFn, ...fnArgs) {
     const err = argTypeError('inState', { state: isString }, state);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     const conditionMatches = currentState() === state;
     if (anyOrFn === undefined) {
@@ -746,14 +752,14 @@ function Statebot (name, options) {
   const emit = Pausable((eventName, ...args) => {
     const err = argTypeError('emit', { eventName: isString }, eventName);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     return events.emit(eventName, ...args)
   });
   const enter = Pausable((state, ...args) => {
     const err = argTypeError('enter', { state: isString }, state);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     const inState = currentState();
     const toState = state;
@@ -781,9 +787,12 @@ function Statebot (name, options) {
     return true
   });
   function onEvent (eventName, cb) {
-    const err = argTypeError('onEvent', { eventName: isString, cb: isFunction }, eventName, cb);
+    const err = argTypeError('onEvent',
+      { eventName: isString, cb: isFunction },
+      eventName, cb
+    );
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     events.on(eventName, cb);
     return () => events.off(eventName, cb)
@@ -795,7 +804,7 @@ function Statebot (name, options) {
       [methodName]: cb => {
         const err = argTypeError(methodName, { cb: isFunction }, cb);
         if (err) {
-          throw TypeError(err)
+          throw new TypeError(err)
         }
         const decreaseRefCount = statesHandled.increase(
           INTERNAL_EVENTS[methodName]
@@ -822,9 +831,12 @@ function Statebot (name, options) {
       return {
         ...obj,
         [methodName]: (state, cb) => {
-          const err = argTypeError(methodName, { state: isString, cb: isFunction }, state, cb);
+          const err = argTypeError(methodName,
+            { state: isString, cb: isFunction },
+            state, cb
+          );
           if (err) {
-            throw TypeError(err)
+            throw new TypeError(err)
           }
           const decreaseRefCounts = [
             statesHandled.increase(state),
@@ -849,24 +861,24 @@ function Statebot (name, options) {
   function Emit (eventName, ...curriedArgs) {
     const err = argTypeError('Emit', { eventName: isString }, eventName);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     return (...args) => emit(eventName, ...[...curriedArgs, ...args])
   }
   function Enter (state, ...curriedArgs) {
     const err = argTypeError('Enter', { state: isString }, state);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     return (...args) => enter(state, ...[...curriedArgs, ...args])
   }
   function InState (state, anyOrFn, ...curriedFnArgs) {
     const err = argTypeError('InState', { state: isString }, state);
     if (err) {
-      throw TypeError(err)
+      throw new TypeError(err)
     }
     return (...fnArgs) =>
-      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
+      inState(state, anyOrFn, ...curriedFnArgs.concat(fnArgs))
   }
   function reset () {
     console.warn(`${logPrefix}: State-machine reset!`);
@@ -1888,7 +1900,36 @@ function Statebot (name, options) {
     statesAvailableFromHere
   }
 }
-function decomposeConfigs (configs, canWarn) {
+function decomposeHitcherActions (hitcherActions) {
+  const transitionsForEvents = {};
+  const transitionsOnly = [];
+  Object
+    .entries(hitcherActions)
+    .map(([routeChart, actionFnOrConfigObj]) => {
+      if (isFunction(actionFnOrConfigObj)) {
+        transitionsOnly.push({ routeChart, action: actionFnOrConfigObj });
+        return
+      }
+      if (!isPojo(actionFnOrConfigObj)) {
+        return
+      }
+      const { on: _on, then: _then } = actionFnOrConfigObj;
+      const hasValidEventNames = isString(_on) || isArray(_on);
+      if (hasValidEventNames) {
+        const eventNames = [_on].flat();
+        eventNames.map(name => {
+          transitionsForEvents[name] = transitionsForEvents[name] || [];
+          transitionsForEvents[name].push({ routeChart, action: _then });
+        });
+        return
+      }
+      if (isFunction(_then)) {
+        transitionsOnly.push({ routeChart, action: actionFnOrConfigObj });
+      }
+    });
+  return { transitionsForEvents, transitionsOnly }
+}
+function expandTransitions (configs, canWarn) {
   const allStates = [];
   const allRoutes = [];
   const _configs = configs.reduce((acc, config) => {
@@ -1932,14 +1973,13 @@ function isStatebot (object) {
   )
 }
 function wrapEmitter (events) {
-  const emit = (...args) =>
-    events.emit(...args);
+  const emit = events.emit;
   const on = events.addListener
-    ? (...args) => events.addListener(...args)
-    : (...args) => events.on(...args);
+    ? events.addListener
+    : events.on;
   const off = events.removeListener
-    ? (...args) => events.removeListener(...args)
-    : (...args) => events.off(...args);
+    ? events.removeListener
+    : events.off;
   return {
     emit,
     on,
@@ -2190,7 +2230,11 @@ function Table (columns = [], alignments = []) {
     table.push(obj);
   }
   function colSizes () {
-    return table.reduce((acc, row) => columns.map((col, index) => Math.max(row[col].length, acc[index])), columns.map(() => 0))
+    return table.reduce(
+      (acc, row) => columns.map(
+        (col, index) => Math.max(row[col].length, acc[index])
+      ), columns.map(() => 0)
+    )
   }
   function padLeft (str, len) {
     return str + ' '.repeat(len - str.length)

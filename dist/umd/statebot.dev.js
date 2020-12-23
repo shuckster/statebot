@@ -150,417 +150,25 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  var domain;
-
-  function EventHandlers() {}
-
-  EventHandlers.prototype = Object.create(null);
-
-  function EventEmitter() {
-    EventEmitter.init.call(this);
-  }
-  EventEmitter.EventEmitter = EventEmitter;
-  EventEmitter.usingDomains = false;
-  EventEmitter.prototype.domain = undefined;
-  EventEmitter.prototype._events = undefined;
-  EventEmitter.prototype._maxListeners = undefined;
-  EventEmitter.defaultMaxListeners = 10;
-
-  EventEmitter.init = function () {
-    this.domain = null;
-
-    if (EventEmitter.usingDomains) {
-      if (domain.active ) ;
-    }
-
-    if (!this._events || this._events === Object.getPrototypeOf(this)._events) {
-      this._events = new EventHandlers();
-      this._eventsCount = 0;
-    }
-
-    this._maxListeners = this._maxListeners || undefined;
-  };
-
-  EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
-    if (typeof n !== 'number' || n < 0 || isNaN(n)) throw new TypeError('"n" argument must be a positive number');
-    this._maxListeners = n;
-    return this;
-  };
-
-  function $getMaxListeners(that) {
-    if (that._maxListeners === undefined) return EventEmitter.defaultMaxListeners;
-    return that._maxListeners;
-  }
-
-  EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-    return $getMaxListeners(this);
-  };
-
-  function emitNone(handler, isFn, self) {
-    if (isFn) handler.call(self);else {
-      var len = handler.length;
-      var listeners = arrayClone(handler, len);
-
-      for (var i = 0; i < len; ++i) {
-        listeners[i].call(self);
+  function mitt (n) {
+    return {
+      all: n = n || new Map(),
+      on: function on(t, e) {
+        var i = n.get(t);
+        i && i.push(e) || n.set(t, [e]);
+      },
+      off: function off(t, e) {
+        var i = n.get(t);
+        i && i.splice(i.indexOf(e) >>> 0, 1);
+      },
+      emit: function emit(t, e) {
+        (n.get(t) || []).slice().map(function (n) {
+          n(e);
+        }), (n.get("*") || []).slice().map(function (n) {
+          n(t, e);
+        });
       }
-    }
-  }
-
-  function emitOne(handler, isFn, self, arg1) {
-    if (isFn) handler.call(self, arg1);else {
-      var len = handler.length;
-      var listeners = arrayClone(handler, len);
-
-      for (var i = 0; i < len; ++i) {
-        listeners[i].call(self, arg1);
-      }
-    }
-  }
-
-  function emitTwo(handler, isFn, self, arg1, arg2) {
-    if (isFn) handler.call(self, arg1, arg2);else {
-      var len = handler.length;
-      var listeners = arrayClone(handler, len);
-
-      for (var i = 0; i < len; ++i) {
-        listeners[i].call(self, arg1, arg2);
-      }
-    }
-  }
-
-  function emitThree(handler, isFn, self, arg1, arg2, arg3) {
-    if (isFn) handler.call(self, arg1, arg2, arg3);else {
-      var len = handler.length;
-      var listeners = arrayClone(handler, len);
-
-      for (var i = 0; i < len; ++i) {
-        listeners[i].call(self, arg1, arg2, arg3);
-      }
-    }
-  }
-
-  function emitMany(handler, isFn, self, args) {
-    if (isFn) handler.apply(self, args);else {
-      var len = handler.length;
-      var listeners = arrayClone(handler, len);
-
-      for (var i = 0; i < len; ++i) {
-        listeners[i].apply(self, args);
-      }
-    }
-  }
-
-  EventEmitter.prototype.emit = function emit(type) {
-    var er, handler, len, args, i, events, domain;
-    var doError = type === 'error';
-    events = this._events;
-    if (events) doError = doError && events.error == null;else if (!doError) return false;
-    domain = this.domain;
-
-    if (doError) {
-      er = arguments[1];
-
-      if (domain) {
-        if (!er) er = new Error('Uncaught, unspecified "error" event');
-        er.domainEmitter = this;
-        er.domain = domain;
-        er.domainThrown = false;
-        domain.emit('error', er);
-      } else if (er instanceof Error) {
-        throw er;
-      } else {
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-        err.context = er;
-        throw err;
-      }
-
-      return false;
-    }
-
-    handler = events[type];
-    if (!handler) return false;
-    var isFn = typeof handler === 'function';
-    len = arguments.length;
-
-    switch (len) {
-      case 1:
-        emitNone(handler, isFn, this);
-        break;
-
-      case 2:
-        emitOne(handler, isFn, this, arguments[1]);
-        break;
-
-      case 3:
-        emitTwo(handler, isFn, this, arguments[1], arguments[2]);
-        break;
-
-      case 4:
-        emitThree(handler, isFn, this, arguments[1], arguments[2], arguments[3]);
-        break;
-
-      default:
-        args = new Array(len - 1);
-
-        for (i = 1; i < len; i++) {
-          args[i - 1] = arguments[i];
-        }
-
-        emitMany(handler, isFn, this, args);
-    }
-    return true;
-  };
-
-  function _addListener(target, type, listener, prepend) {
-    var m;
-    var events;
-    var existing;
-    if (typeof listener !== 'function') throw new TypeError('"listener" argument must be a function');
-    events = target._events;
-
-    if (!events) {
-      events = target._events = new EventHandlers();
-      target._eventsCount = 0;
-    } else {
-      if (events.newListener) {
-        target.emit('newListener', type, listener.listener ? listener.listener : listener);
-        events = target._events;
-      }
-
-      existing = events[type];
-    }
-
-    if (!existing) {
-      existing = events[type] = listener;
-      ++target._eventsCount;
-    } else {
-      if (typeof existing === 'function') {
-        existing = events[type] = prepend ? [listener, existing] : [existing, listener];
-      } else {
-        if (prepend) {
-          existing.unshift(listener);
-        } else {
-          existing.push(listener);
-        }
-      }
-
-      if (!existing.warned) {
-        m = $getMaxListeners(target);
-
-        if (m && m > 0 && existing.length > m) {
-          existing.warned = true;
-          var w = new Error('Possible EventEmitter memory leak detected. ' + existing.length + ' ' + type + ' listeners added. ' + 'Use emitter.setMaxListeners() to increase limit');
-          w.name = 'MaxListenersExceededWarning';
-          w.emitter = target;
-          w.type = type;
-          w.count = existing.length;
-          emitWarning(w);
-        }
-      }
-    }
-
-    return target;
-  }
-
-  function emitWarning(e) {
-    typeof console.warn === 'function' ? console.warn(e) : console.log(e);
-  }
-
-  EventEmitter.prototype.addListener = function addListener(type, listener) {
-    return _addListener(this, type, listener, false);
-  };
-
-  EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-  EventEmitter.prototype.prependListener = function prependListener(type, listener) {
-    return _addListener(this, type, listener, true);
-  };
-
-  function _onceWrap(target, type, listener) {
-    var fired = false;
-
-    function g() {
-      target.removeListener(type, g);
-
-      if (!fired) {
-        fired = true;
-        listener.apply(target, arguments);
-      }
-    }
-
-    g.listener = listener;
-    return g;
-  }
-
-  EventEmitter.prototype.once = function once(type, listener) {
-    if (typeof listener !== 'function') throw new TypeError('"listener" argument must be a function');
-    this.on(type, _onceWrap(this, type, listener));
-    return this;
-  };
-
-  EventEmitter.prototype.prependOnceListener = function prependOnceListener(type, listener) {
-    if (typeof listener !== 'function') throw new TypeError('"listener" argument must be a function');
-    this.prependListener(type, _onceWrap(this, type, listener));
-    return this;
-  };
-
-  EventEmitter.prototype.removeListener = function removeListener(type, listener) {
-    var list, events, position, i, originalListener;
-    if (typeof listener !== 'function') throw new TypeError('"listener" argument must be a function');
-    events = this._events;
-    if (!events) return this;
-    list = events[type];
-    if (!list) return this;
-
-    if (list === listener || list.listener && list.listener === listener) {
-      if (--this._eventsCount === 0) this._events = new EventHandlers();else {
-        delete events[type];
-        if (events.removeListener) this.emit('removeListener', type, list.listener || listener);
-      }
-    } else if (typeof list !== 'function') {
-      position = -1;
-
-      for (i = list.length; i-- > 0;) {
-        if (list[i] === listener || list[i].listener && list[i].listener === listener) {
-          originalListener = list[i].listener;
-          position = i;
-          break;
-        }
-      }
-
-      if (position < 0) return this;
-
-      if (list.length === 1) {
-        list[0] = undefined;
-
-        if (--this._eventsCount === 0) {
-          this._events = new EventHandlers();
-          return this;
-        } else {
-          delete events[type];
-        }
-      } else {
-        spliceOne(list, position);
-      }
-
-      if (events.removeListener) this.emit('removeListener', type, originalListener || listener);
-    }
-
-    return this;
-  };
-
-  EventEmitter.prototype.removeAllListeners = function removeAllListeners(type) {
-    var listeners, events;
-    events = this._events;
-    if (!events) return this;
-
-    if (!events.removeListener) {
-      if (arguments.length === 0) {
-        this._events = new EventHandlers();
-        this._eventsCount = 0;
-      } else if (events[type]) {
-        if (--this._eventsCount === 0) this._events = new EventHandlers();else delete events[type];
-      }
-
-      return this;
-    }
-
-    if (arguments.length === 0) {
-      var keys = Object.keys(events);
-
-      for (var i = 0, key; i < keys.length; ++i) {
-        key = keys[i];
-        if (key === 'removeListener') continue;
-        this.removeAllListeners(key);
-      }
-
-      this.removeAllListeners('removeListener');
-      this._events = new EventHandlers();
-      this._eventsCount = 0;
-      return this;
-    }
-
-    listeners = events[type];
-
-    if (typeof listeners === 'function') {
-      this.removeListener(type, listeners);
-    } else if (listeners) {
-      do {
-        this.removeListener(type, listeners[listeners.length - 1]);
-      } while (listeners[0]);
-    }
-
-    return this;
-  };
-
-  EventEmitter.prototype.listeners = function listeners(type) {
-    var evlistener;
-    var ret;
-    var events = this._events;
-    if (!events) ret = [];else {
-      evlistener = events[type];
-      if (!evlistener) ret = [];else if (typeof evlistener === 'function') ret = [evlistener.listener || evlistener];else ret = unwrapListeners(evlistener);
-    }
-    return ret;
-  };
-
-  EventEmitter.listenerCount = function (emitter, type) {
-    if (typeof emitter.listenerCount === 'function') {
-      return emitter.listenerCount(type);
-    } else {
-      return listenerCount.call(emitter, type);
-    }
-  };
-
-  EventEmitter.prototype.listenerCount = listenerCount;
-
-  function listenerCount(type) {
-    var events = this._events;
-
-    if (events) {
-      var evlistener = events[type];
-
-      if (typeof evlistener === 'function') {
-        return 1;
-      } else if (evlistener) {
-        return evlistener.length;
-      }
-    }
-
-    return 0;
-  }
-
-  EventEmitter.prototype.eventNames = function eventNames() {
-    return this._eventsCount > 0 ? Reflect.ownKeys(this._events) : [];
-  };
-
-  function spliceOne(list, index) {
-    for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
-      list[i] = list[k];
-    }
-
-    list.pop();
-  }
-
-  function arrayClone(arr, i) {
-    var copy = new Array(i);
-
-    while (i--) {
-      copy[i] = arr[i];
-    }
-
-    return copy;
-  }
-
-  function unwrapListeners(arr) {
-    var ret = new Array(arr.length);
-
-    for (var i = 0; i < ret.length; ++i) {
-      ret[i] = arr[i].listener || arr[i];
-    }
-
-    return ret;
+    };
   }
 
   function isArray(obj) {
@@ -596,13 +204,11 @@
       return true;
     }
 
-    if (isArray(obj)) {
-      return obj.every(function (item) {
-        return isString(item);
-      });
+    if (!isArray(obj)) {
+      return false;
     }
 
-    return false;
+    return obj.every(isString);
   }
 
   function uniq(input) {
@@ -618,7 +224,7 @@
 
     var timer = setTimeout.apply(void 0, [fn, 0].concat(args));
     return function () {
-      clearTimeout(timer);
+      return clearTimeout(timer);
     };
   }
 
@@ -664,14 +270,14 @@
 
   function Pausables() {
     var startPaused = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-    var runWhenPaused = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+    var runFnWhenPaused = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
     var _paused = !!startPaused;
 
     function Pausable(fn) {
       return function () {
         if (_paused) {
-          runWhenPaused();
+          runFnWhenPaused();
           return false;
         }
 
@@ -752,6 +358,49 @@
     };
   }
 
+  var typeErrorIfFnReturnsFalse = function typeErrorIfFnReturnsFalse(argName, argTypeFn, arg) {
+    return argTypeFn(arg) ? undefined : "".concat(argTypeFn.name, "(").concat(argName, ") did not return true");
+  };
+
+  var typeErrorIfTypeOfFails = function typeErrorIfTypeOfFails(argName, argType, arg) {
+    return _typeof(arg) === argType ? undefined : "Argument \"".concat(argName, "\" should be a ").concat(argType);
+  };
+
+  var typeErrorFromArgument = function typeErrorFromArgument(argMap, arg, index) {
+    var _argMap$index = argMap[index],
+        argName = _argMap$index.argName,
+        argType = _argMap$index.argType;
+
+    if (arg === undefined) {
+      return "Argument undefined: \"".concat(argName, "\"");
+    }
+
+    var errorDesc = isFunction(argType) ? typeErrorIfFnReturnsFalse(argName, argType, arg) : typeErrorIfTypeOfFails(argName, argType, arg);
+
+    if (errorDesc) {
+      return "".concat(errorDesc, ": ").concat(argName, " === ").concat(_typeof(arg), "(").concat(arg, ")");
+    }
+  };
+  /**
+   * Helper for enforcing correct argument-types.
+   *
+   * @param {string} errPrefix
+   *
+   * @example
+   * const argTypeError = ArgTypeError('namespace#')
+   *
+   * function myFn (myArg1, myArg2) {
+   *   const err = argTypeError('myFn',
+   *     { myArg1: isString, myArg2: Boolean },
+   *     myArg1, myArg2
+   *   )
+   *   if (err) {
+   *     throw new TypeError(err)
+   *   }
+   * }
+   */
+
+
   function ArgTypeError() {
     var errPrefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     return function (fnName, typeMap) {
@@ -771,32 +420,12 @@
         args[_key4 - 2] = arguments[_key4];
       }
 
-      var err = args.map(function (arg, index) {
-        var _argMap$index = argMap[index],
-            argName = _argMap$index.argName,
-            argType = _argMap$index.argType;
-
-        if (arg === undefined) {
-          return "Argument undefined: \"".concat(argName, "\"");
+      var err = args.map(function () {
+        for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+          args[_key5] = arguments[_key5];
         }
 
-        var errorDesc;
-        var typeName;
-        var typeMatches;
-
-        if (isFunction(argType)) {
-          typeMatches = argType(arg) === true;
-          typeName = argType.name;
-          errorDesc = "".concat(typeName, "(").concat(argName, ") did not return true");
-        } else {
-          typeMatches = _typeof(arg) === argType;
-          typeName = argType;
-          errorDesc = "Argument \"".concat(argName, "\" should be a ").concat(typeName);
-        }
-
-        if (!typeMatches) {
-          return "".concat(errorDesc, ": ").concat(argName, " === ").concat(_typeof(arg), "(").concat(arg, ")");
-        }
+        return typeErrorFromArgument.apply(void 0, [argMap].concat(args));
       }).filter(Boolean);
 
       if (!err.length) {
@@ -957,7 +586,8 @@
     var input = linesFrom(strOrArr);
     var output = [];
     var previousLineHasContinuation = false;
-    var finalCondensedLine = input.reduce(function (condensedLine, line) {
+
+    var condenseLine = function condenseLine(condensedLine, line) {
       var sanitisedLine = line.replace(rxComment, '').replace(rxDisallowedCharacters, '');
 
       if (!sanitisedLine) {
@@ -972,7 +602,9 @@
 
       output.push(condensedLine + sanitisedLine);
       return '';
-    }, '');
+    };
+
+    var finalCondensedLine = input.reduce(condenseLine, '');
 
     if (previousLineHasContinuation || finalCondensedLine) {
       return [].concat(output, [finalCondensedLine]);
@@ -1184,13 +816,13 @@
 
   function Statebot(_name, options) {
     if (!isString(_name)) {
-      throw TypeError('\nStatebot: Please specify a name for this machine');
+      throw new TypeError('\nStatebot: Please specify a name for this machine');
     }
 
     var logPrefix = "Statebot[".concat(_name, "]");
 
     if (!isPojo(options)) {
-      throw TypeError("\n".concat(logPrefix, ": Please specify options for this machine"));
+      throw new TypeError("\n".concat(logPrefix, ": Please specify options for this machine"));
     }
 
     var _ref = options || {},
@@ -1201,13 +833,11 @@
         _ref$historyLimit = _ref.historyLimit,
         historyLimit = _ref$historyLimit === void 0 ? 2 : _ref$historyLimit;
 
-    var eventOption = options.events === undefined ? new EventEmitter() : isEventEmitter(options.events) && options.events;
+    var events = options.events === undefined ? mitt() : isEventEmitter(options.events) && wrapEmitter(options.events);
 
-    if (!eventOption) {
-      throw TypeError("\n".concat(logPrefix, ": Invalid event-emitter specified in options"));
+    if (!events) {
+      throw new TypeError("\n".concat(logPrefix, ": Invalid event-emitter specified in options"));
     }
-
-    var events = wrapEmitter(eventOption);
 
     var _ref2 = chart ? decomposeChart(chart) : options,
         _ref2$states = _ref2.states,
@@ -1219,7 +849,7 @@
         startIn = _options$startIn === void 0 ? states[0] : _options$startIn;
 
     if (!states.includes(startIn)) {
-      throw Error("".concat(logPrefix, ": Starting-state not in chart: \"").concat(startIn, "\""));
+      throw new Error("".concat(logPrefix, ": Starting-state not in chart: \"").concat(startIn, "\""));
     }
 
     var argTypeError = ArgTypeError("".concat(logPrefix, "#"));
@@ -1227,7 +857,7 @@
     var canWarn = console.canWarn;
     var stateHistory = [startIn];
     var stateHistoryLimit = Math.max(historyLimit, 2);
-    var internalEvents = wrapEmitter(new EventEmitter());
+    var internalEvents = mitt();
     var transitionId = 0;
 
     var _Pausables = Pausables(false, function () {
@@ -1261,18 +891,6 @@
     var routesHandled = ReferenceCounter(_name, 'transitions', 'Listening for the following transitions', _toConsumableArray(routes));
     var eventsHandled = ReferenceCounter(_name, 'events', 'Listening for the following events');
 
-    var ifStateThenEnterState = function ifStateThenEnterState(_ref3) {
-      var fromState = _ref3.fromState,
-          toState = _ref3.toState,
-          action = _ref3.action,
-          args = _ref3.args;
-      return inState(fromState, function () {
-        enter.apply(void 0, [toState].concat(_toConsumableArray(args)));
-        isFunction(action) && action.apply(void 0, _toConsumableArray(args));
-        return true;
-      });
-    };
-
     function applyHitcher(hitcher, fnName) {
       var hitcherActions = isFunction(hitcher) ? hitcher({
         enter: enter,
@@ -1282,56 +900,25 @@
       }) : isPojo(hitcher) ? hitcher : null;
 
       if (!isPojo(hitcherActions)) {
-        throw TypeError("Statebot[".concat(_name, "]#").concat(fnName, "(): Expected an object, or a function that returns an object"));
+        throw new TypeError("Statebot[".concat(_name, "]#").concat(fnName, "(): Expected an object, or a function that returns an object"));
       }
 
-      var events = {};
-      var transitions = [];
-      Object.entries(hitcherActions).map(function (_ref4) {
-        var _ref5 = _slicedToArray(_ref4, 2),
-            routeChart = _ref5[0],
-            actionOrConfig = _ref5[1];
+      var _decomposeHitcherActi = decomposeHitcherActions(hitcherActions),
+          transitionsForEvents = _decomposeHitcherActi.transitionsForEvents,
+          transitionsOnly = _decomposeHitcherActi.transitionsOnly;
 
-        if (isFunction(actionOrConfig)) {
-          transitions.push({
-            routeChart: routeChart,
-            action: actionOrConfig
-          });
-        } else if (!isPojo(actionOrConfig)) {
-          return;
-        }
-
-        var _on = actionOrConfig.on,
-            _then = actionOrConfig.then;
-
-        if (isString(_on) || isArray(_on)) {
-          var eventNames = [_on].flat();
-          eventNames.map(function (eventName) {
-            events[eventName] = events[eventName] || [];
-            events[eventName].push({
-              routeChart: routeChart,
-              action: _then
-            });
-          });
-        } else if (isFunction(_then)) {
-          transitions.push({
-            routeChart: routeChart,
-            action: actionOrConfig
-          });
-        }
-      });
       var allStates = [];
       var allRoutes = [];
       var allCleanupFns = [];
-      var decomposedEvents = Object.entries(events).reduce(function (acc, _ref6) {
-        var _ref7 = _slicedToArray(_ref6, 2),
-            eventName = _ref7[0],
-            _configs = _ref7[1];
+      var decomposedEvents = Object.entries(transitionsForEvents).reduce(function (acc, _ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            eventName = _ref4[0],
+            transitionsAndAction = _ref4[1];
 
-        var _decomposeConfigs = decomposeConfigs(_configs, canWarn),
-            states = _decomposeConfigs.states,
-            routes = _decomposeConfigs.routes,
-            configs = _decomposeConfigs.configs;
+        var _expandTransitions = expandTransitions(transitionsAndAction, canWarn),
+            states = _expandTransitions.states,
+            routes = _expandTransitions.routes,
+            configs = _expandTransitions.configs;
 
         if (canWarn()) {
           allStates.push.apply(allStates, _toConsumableArray(states));
@@ -1340,10 +927,23 @@
 
         return _objectSpread2(_objectSpread2({}, acc), {}, _defineProperty({}, eventName, configs));
       }, {});
-      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(function (_ref8) {
-        var _ref9 = _slicedToArray(_ref8, 2),
-            eventName = _ref9[0],
-            configs = _ref9[1];
+
+      function ifStateThenEnterState(_ref5) {
+        var fromState = _ref5.fromState,
+            toState = _ref5.toState,
+            action = _ref5.action,
+            args = _ref5.args;
+        return inState(fromState, function () {
+          enter.apply(void 0, [toState].concat(_toConsumableArray(args)));
+          isFunction(action) && action.apply(void 0, _toConsumableArray(args));
+          return true;
+        });
+      }
+
+      function createEventHandlerForTransition(_ref6) {
+        var _ref7 = _slicedToArray(_ref6, 2),
+            eventName = _ref7[0],
+            configs = _ref7[1];
 
         return [eventsHandled.increase(eventName), onEvent(eventName, function () {
           for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
@@ -1360,21 +960,25 @@
             transitionNoOp("Event not handled: \"".concat(eventName, "\""));
           }
         })];
-      }).flat()));
-      var transitionConfigs = decomposeConfigs(transitions, canWarn);
+      }
+
+      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(createEventHandlerForTransition).flat()));
+      var transitionConfigs = expandTransitions(transitionsOnly, canWarn);
 
       if (canWarn()) {
         allStates.push.apply(allStates, _toConsumableArray(transitionConfigs.states));
         allRoutes.push.apply(allRoutes, _toConsumableArray(transitionConfigs.routes));
       }
 
-      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(transitionConfigs.configs.map(function (transition) {
-        var fromState = transition.fromState,
-            toState = transition.toState,
-            action = transition.action;
+      function runThenMethodOnTransition(config) {
+        var fromState = config.fromState,
+            toState = config.toState,
+            action = config.action;
         var route = "".concat(fromState, "->").concat(toState);
         return [routesHandled.increase(route), onInternalEvent(route, action)];
-      }).flat()));
+      }
+
+      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(transitionConfigs.configs.map(runThenMethodOnTransition).flat()));
 
       if (canWarn()) {
         var invalidStates = allStates.filter(function (state) {
@@ -1423,7 +1027,7 @@
       }, testStates[0]);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       if (!testStates.length) {
@@ -1444,7 +1048,7 @@
       }, _state);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       return routes.reduce(function (acc, route) {
@@ -1465,7 +1069,7 @@
       }, state);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       var conditionMatches = currentState() === state;
@@ -1495,7 +1099,7 @@
       }, eventName);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
@@ -1510,7 +1114,7 @@
       }, state);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       var inState = currentState();
@@ -1557,7 +1161,7 @@
       }, eventName, cb);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       events.on(eventName, cb);
@@ -1573,7 +1177,7 @@
         }, cb);
 
         if (err) {
-          throw TypeError(err);
+          throw new TypeError(err);
         }
 
         var decreaseRefCount = statesHandled.increase(INTERNAL_EVENTS[methodName]);
@@ -1598,7 +1202,7 @@
         }, state, cb);
 
         if (err) {
-          throw TypeError(err);
+          throw new TypeError(err);
         }
 
         var decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase("".concat(state, ":").concat(eventName))];
@@ -1632,7 +1236,7 @@
       }, eventName);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       return function () {
@@ -1654,7 +1258,7 @@
       }, state);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       return function () {
@@ -1676,7 +1280,7 @@
       }, state);
 
       if (err) {
-        throw TypeError(err);
+        throw new TypeError(err);
       }
 
       return function () {
@@ -1684,7 +1288,7 @@
           fnArgs[_key13] = arguments[_key13];
         }
 
-        return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));
+        return inState.apply(void 0, [state, anyOrFn].concat(_toConsumableArray(curriedFnArgs.concat(fnArgs))));
       };
     }
 
@@ -2753,7 +2357,56 @@
     };
   }
 
-  function decomposeConfigs(configs, canWarn) {
+  function decomposeHitcherActions(hitcherActions) {
+    var transitionsForEvents = {};
+    var transitionsOnly = [];
+    Object.entries(hitcherActions).map(function (_ref8) {
+      var _ref9 = _slicedToArray(_ref8, 2),
+          routeChart = _ref9[0],
+          actionFnOrConfigObj = _ref9[1];
+
+      if (isFunction(actionFnOrConfigObj)) {
+        transitionsOnly.push({
+          routeChart: routeChart,
+          action: actionFnOrConfigObj
+        });
+        return;
+      }
+
+      if (!isPojo(actionFnOrConfigObj)) {
+        return;
+      }
+
+      var _on = actionFnOrConfigObj.on,
+          _then = actionFnOrConfigObj.then;
+      var hasValidEventNames = isString(_on) || isArray(_on);
+
+      if (hasValidEventNames) {
+        var eventNames = [_on].flat();
+        eventNames.map(function (name) {
+          transitionsForEvents[name] = transitionsForEvents[name] || [];
+          transitionsForEvents[name].push({
+            routeChart: routeChart,
+            action: _then
+          });
+        });
+        return;
+      }
+
+      if (isFunction(_then)) {
+        transitionsOnly.push({
+          routeChart: routeChart,
+          action: actionFnOrConfigObj
+        });
+      }
+    });
+    return {
+      transitionsForEvents: transitionsForEvents,
+      transitionsOnly: transitionsOnly
+    };
+  }
+
+  function expandTransitions(configs, canWarn) {
     var allStates = [];
     var allRoutes = [];
 
@@ -2811,20 +2464,9 @@
   }
 
   function wrapEmitter(events) {
-    var emit = function emit() {
-      return events.emit.apply(events, arguments);
-    };
-
-    var on = events.addListener ? function () {
-      return events.addListener.apply(events, arguments);
-    } : function () {
-      return events.on.apply(events, arguments);
-    };
-    var off = events.removeListener ? function () {
-      return events.removeListener.apply(events, arguments);
-    } : function () {
-      return events.off.apply(events, arguments);
-    };
+    var emit = events.emit;
+    var on = events.addListener ? events.addListener : events.on;
+    var off = events.removeListener ? events.removeListener : events.off;
     return {
       emit: emit,
       on: on,

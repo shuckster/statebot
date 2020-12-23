@@ -76,7 +76,7 @@ declare module "statebot" {
      * permitted transitions between them.
      *
      * This is defined using a `string` or an `array` of strings, but
-     *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
+     *  {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
      * are much more convenient.
      *
      * An arrow `->` configures a **permitted transition** between two states:
@@ -89,10 +89,10 @@ declare module "statebot" {
      *
      * ```js
      * var promiseLikeChart = `
-     *    pending -> resolved
-     *    pending -> rejected
-     *    resolved -> done
-     *    rejected -> done
+     *   pending -> resolved
+     *   pending -> rejected
+     *   resolved -> done
+     *   rejected -> done
      * `
      * ```
      *
@@ -100,8 +100,8 @@ declare module "statebot" {
      *
      * ```js
      * var promiseLikeChart = `
-     *    pending -> resolved | rejected
-     *    resolved | rejected -> done
+     *   pending -> resolved | rejected
+     *   resolved | rejected -> done
      * `
      * ```
      *
@@ -112,7 +112,7 @@ declare module "statebot" {
      *
      * ```js
      * var promiseLikeChart = `
-     *    pending -> (resolved | rejected) -> done
+     *   pending -> (resolved | rejected) -> done
      * `
      * ```
      *
@@ -126,7 +126,7 @@ declare module "statebot" {
      *
      * ```js
      * var promiseLikeChart = `
-     *    pending -> resolved | rejected -> done
+     *   pending -> resolved | rejected -> done
      * `
      * ```
      *
@@ -134,10 +134,10 @@ declare module "statebot" {
      *
      * ```js
      * var promiseLikeChart = `
-     *    pending ->
-     *    resolved |
-     *    rejected ->
-     *    done
+     *   pending ->
+     *   resolved |
+     *   rejected ->
+     *   done
      * `
      * ```
      * Notice that all white-space is ignored on either side of the `->`
@@ -147,11 +147,11 @@ declare module "statebot" {
      *
      * ```js
      * var promiseLikeChart = `
-     *    pending -> // Where do we go from here?
-     *      (resolved | rejected) -> // Ah, yes
+     *   pending -> // Where do we go from here?
+     *     (resolved | rejected) -> // Ah, yes
      *
-     *    // And now we're all finished
-     *    done
+     *   // And now we're all finished
+     *   done
      * `
      * ```
      *
@@ -159,21 +159,21 @@ declare module "statebot" {
      *
      * ```js
      * var dragDropChart = `
-     *    idle ->
-     *      drag-detect ->
-     *        (dragging | clicked)
+     *   idle ->
+     *     drag-detect ->
+     *       (dragging | clicked)
      *
-     *    // Just a click, bail-out!
-     *    clicked -> idle
+     *   // Just a click, bail-out!
+     *   clicked -> idle
      *
-     *    // Drag detected!
-     *    dragging ->
-     *      drag-wait -> dragged -> drag-wait
+     *   // Drag detected!
+     *   dragging ->
+     *     drag-wait -> dragged -> drag-wait
      *
-     *    // Drag finished...
-     *    (drag-wait | dragged) ->
-     *      (drag-done | drag-cancel) ->
-     *        idle
+     *   // Drag finished...
+     *   (drag-wait | dragged) ->
+     *     (drag-done | drag-cancel) ->
+     *       idle
      * `
      * ```
      */

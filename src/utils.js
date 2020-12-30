@@ -231,6 +231,7 @@ const typeErrorFromArgument = (argMap, arg, index) => {
 /**
  * Helper for enforcing correct argument-types.
  *
+ * @private
  * @param {string} errPrefix
  *
  * @example

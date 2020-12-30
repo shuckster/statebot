@@ -67,7 +67,8 @@ declare module "statebot" {
          *
          * It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
          *
-         * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+         * - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+         * - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
          */
         events?: any;
     };
@@ -281,6 +282,9 @@ declare module "statebot" {
          * Statebot imports `EventEmitter` from the
          *  {@link https://www.npmjs.com/package/events|events}
          * package for dealing with events in the browser.
+         *
+         * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+         * used for both the browser and non-browser builds.
          *
          * @example
          * var machine = Statebot('basic-form', {
@@ -753,7 +757,7 @@ declare module "statebot" {
          *
          * setInterval(machine.Emit('timer'), 2000)
          */
-        onEvent: (eventName: any, cb: any) => () => any;
+        onEvent: (eventName: any, cb: any) => () => void;
         /**
          * Adds a listener that runs a callback immediately **AFTER** the
          * specified-state is no longer the current one.

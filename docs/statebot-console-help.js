@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* globals statebot */
 var Statebot = statebot.Statebot;
 var isStatebot = statebot.isStatebot;
 var routeIsPossible = statebot.routeIsPossible;

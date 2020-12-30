@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.5.1
+ * v2.6.0
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -173,6 +173,7 @@ const typeErrorFromArgument = (argMap, arg, index) => {
 /**
  * Helper for enforcing correct argument-types.
  *
+ * @private
  * @param {string} errPrefix
  *
  * @example
@@ -206,7 +207,7 @@ function ArgTypeError (errPrefix = '') {
     )
   }
 }
-function Logger (level) {
+function Logger (level, c = console) {
   let _level = level;
   if (isString(_level)) {
     _level = ({
@@ -229,11 +230,11 @@ function Logger (level) {
     canWarn,
     canLog,
     canInfo,
-    info: (...args) => canInfo() && console.info(...args),
-    table: (...args) => canLog() && console.table(...args),
-    log: (...args) => canLog() && console.log(...args),
-    warn: (...args) => canWarn() && console.warn(...args),
-    error: (...args) => console.error(...args)
+    info: (...args) => canInfo() && c.info(...args),
+    table: (...args) => canLog() && c.table(...args),
+    log: (...args) => canLog() && c.log(...args),
+    warn: (...args) => canWarn() && c.warn(...args),
+    error: (...args) => c.error(...args)
   }
 }
 
@@ -400,7 +401,8 @@ function decomposeTransitionsFromRoute ([fromStates, toStates]) {
  *
  *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
  *
- * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+ *  - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+ *  - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
  */
 /**
  * A description of all the states in a machine, plus all of the
@@ -554,7 +556,7 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {};
   const events = options.events === undefined
-    ? mitt()
+    ? wrapEmitter(mitt())
     : isEventEmitter(options.events) && wrapEmitter(options.events);
   if (!events) {
     throw new TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
@@ -567,22 +569,21 @@ function Statebot (name, options) {
     throw new Error(`${logPrefix}: Starting-state not in chart: "${startIn}"`)
   }
   const argTypeError = ArgTypeError(`${logPrefix}#`);
-  const console = Logger(logLevel);
-  const { canWarn } = console;
+  const _console = Logger(logLevel, console);
+  const { canWarn } = _console;
   const stateHistory = [startIn];
   const stateHistoryLimit = Math.max(historyLimit, 2);
-  const internalEvents = mitt();
+  const internalEvents = wrapEmitter(mitt());
   let transitionId = 0;
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
-    console.warn(`${logPrefix}: Ignoring callback, paused`)
+    _console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
   const emitInternalEvent = Pausable((eventName, ...args) =>
-    internalEvents.emit(eventName, args)
+    internalEvents.emit(eventName, ...args)
   );
   function onInternalEvent (eventName, cb) {
-    const cbWithCurriedArgs = args => cb(...args);
-    internalEvents.on(eventName, cbWithCurriedArgs);
-    return () => internalEvents.off(eventName, cbWithCurriedArgs)
+    internalEvents.on(eventName, cb);
+    return () => internalEvents.off(eventName, cb)
   }
   const statesHandled = ReferenceCounter(
     name,
@@ -683,13 +684,13 @@ function Statebot (name, options) {
       const invalidStates = allStates.filter(state => !states.includes(state));
       const invalidRoutes = allRoutes.filter(route => !routes.includes(route));
       if (invalidStates.length) {
-        console.warn(
+        _console.warn(
           `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
           invalidStates.map(state => `  > "${state}"`).join('\n')
         );
       }
       if (invalidRoutes.length) {
-        console.warn(
+        _console.warn(
           `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
           invalidRoutes.map(route => `  > "${route}"`).join('\n')
         );
@@ -776,7 +777,7 @@ function Statebot (name, options) {
       transitionNoOp(`Invalid transition "${nextRoute}", not switching`);
       return false
     }
-    console.info(`${logPrefix}: tId<${++transitionId}>: ${nextRoute}`);
+    _console.info(`${logPrefix}: tId<${++transitionId}>: ${nextRoute}`);
     stateHistory.push(toState);
     if (stateHistory.length > stateHistoryLimit) {
       stateHistory.shift();
@@ -881,7 +882,7 @@ function Statebot (name, options) {
       inState(state, anyOrFn, ...curriedFnArgs.concat(fnArgs))
   }
   function reset () {
-    console.warn(`${logPrefix}: State-machine reset!`);
+    _console.warn(`${logPrefix}: State-machine reset!`);
     stateHistory.length = 0;
     stateHistory.push(startIn);
   }
@@ -892,13 +893,13 @@ function Statebot (name, options) {
       `${lastState === undefined ? '[undefined]' : lastState}->${inState}`;
     const availableStates = statesAvailableFromHere();
     if (!availableStates.length) {
-      console.info(
+      _console.info(
         `${logPrefix}: ${message}\n` +
           `  > Previous transition: "${prevRoute}"\n` +
           `  > There are no states available from "${inState}"`
       );
     } else {
-      console.info(
+      _console.info(
         `${logPrefix}: ${message}\n` +
           `  > Previous transition: "${prevRoute}"\n` +
           `  > From "${inState}", valid states are: [${availableStates
@@ -915,18 +916,18 @@ function Statebot (name, options) {
     }
   }
   function info () {
-    console.log(`${logPrefix}: Information about this state-machine`);
+    _console.log(`${logPrefix}: Information about this state-machine`);
     logRefCounterInfo(statesHandled);
     logRefCounterInfo(routesHandled);
     logRefCounterInfo(eventsHandled);
   }
   function logRefCounterInfo (refCounter) {
     const { description, table } = refCounter.toValue();
-    console.log(description);
+    _console.log(description);
     if (table.length) {
-      console.table(table);
+      _console.table(table);
     } else {
-      console.log('  > No information');
+      _console.log('  > No information');
     }
   }
   /**
@@ -1017,6 +1018,9 @@ function Statebot (name, options) {
      * Statebot imports `EventEmitter` from the
      *  {@link https://www.npmjs.com/package/events|events}
      * package for dealing with events in the browser.
+     *
+     * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+     * used for both the browser and non-browser builds.
      *
      * @example
      * var machine = Statebot('basic-form', {
@@ -1973,13 +1977,38 @@ function isStatebot (object) {
   )
 }
 function wrapEmitter (events) {
-  const emit = events.emit;
-  const on = events.addListener
-    ? events.addListener
-    : events.on;
-  const off = events.removeListener
-    ? events.removeListener
-    : events.off;
+  const emit = (eventName, ...args) =>
+    events.emit(eventName, args);
+  const addListener = events.addListener
+    ? (...args) => events.addListener(...args)
+    : (...args) => events.on(...args);
+  const removeListener = events.removeListener
+    ? (...args) => events.removeListener(...args)
+    : (...args) => events.off(...args);
+  const wrapMap = new Map();
+  function on (eventName, fn) {
+    let fnMeta = wrapMap.get(fn);
+    if (!fnMeta) {
+      fnMeta = {
+        handleEvent: (args = []) => fn(...args),
+        refCount: 0
+      };
+      wrapMap.set(fn, fnMeta);
+    }
+    fnMeta.refCount += 1;
+    addListener(eventName, fnMeta.handleEvent);
+  }
+  function off (eventName, fn) {
+    let fnMeta = wrapMap.get(fn);
+    if (!fnMeta) {
+      return
+    }
+    removeListener(eventName, fnMeta.handleEvent);
+    fnMeta.refCount -= 1;
+    if (fnMeta.refCount === 0) {
+      wrapMap.delete(fn);
+    }
+  }
   return {
     emit,
     on,

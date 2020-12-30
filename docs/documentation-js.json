@@ -1115,7 +1115,7 @@
         {
           "type": "code",
           "lang": "js",
-          "value": "<script src=\"https://unpkg.com/statebot@2.5.1/dist/browser/statebot.min.js\"></script>",
+          "value": "<script src=\"https://unpkg.com/statebot@2.6.0/dist/browser/statebot.min.js\"></script>",
           "position": {
             "start": {
               "line": 33,
@@ -3078,22 +3078,22 @@
           ],
           "loc": {
             "start": {
-              "line": 178,
+              "line": 179,
               "column": 0
             },
             "end": {
-              "line": 197,
+              "line": 198,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 199,
+                "line": 200,
                 "column": 0
               },
               "end": {
-                "line": 1678,
+                "line": 1677,
                 "column": 1
               }
             },
@@ -3382,22 +3382,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1745,
+              "line": 1744,
               "column": 0
             },
             "end": {
-              "line": 1758,
+              "line": 1757,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1760,
+                "line": 1759,
                 "column": 0
               },
               "end": {
-                "line": 1765,
+                "line": 1764,
                 "column": 1
               }
             },
@@ -5143,7 +5143,7 @@
       },
       {
         "title": "property",
-        "description": "If you wish to have your Statebots listen to events coming from\n a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/\n `performTransitions()` methods will use it.\n\n It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.\n\nSince Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.",
+        "description": "If you wish to have your Statebots listen to events coming from\n a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/\n `performTransitions()` methods will use it.\n\n It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.\n\n - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.\n - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.",
         "lineNumber": 20,
         "type": {
           "type": "OptionalType",
@@ -5161,18 +5161,18 @@
         "column": 0
       },
       "end": {
-        "line": 39,
+        "line": 40,
         "column": 3
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 150,
+          "line": 151,
           "column": 0
         },
         "end": {
-          "line": 150,
+          "line": 151,
           "column": 30
         }
       },
@@ -5841,11 +5841,94 @@
               }
             },
             {
-              "type": "paragraph",
+              "type": "list",
+              "ordered": false,
+              "start": null,
+              "loose": false,
               "children": [
                 {
-                  "type": "text",
-                  "value": "Since Statebot 2.5.0 ",
+                  "type": "listItem",
+                  "loose": false,
+                  "checked": null,
+                  "children": [
+                    {
+                      "type": "paragraph",
+                      "children": [
+                        {
+                          "type": "text",
+                          "value": "Since Statebot 2.5.0 ",
+                          "position": {
+                            "start": {
+                              "line": 7,
+                              "column": 4,
+                              "offset": 310
+                            },
+                            "end": {
+                              "line": 7,
+                              "column": 25,
+                              "offset": 331
+                            },
+                            "indent": []
+                          }
+                        },
+                        {
+                          "type": "link",
+                          "url": "https://npmjs.com/mitt",
+                          "title": null,
+                          "jsdoc": true,
+                          "children": [
+                            {
+                              "type": "text",
+                              "value": "mitt"
+                            }
+                          ],
+                          "position": {
+                            "start": {
+                              "line": 7,
+                              "column": 25,
+                              "offset": 331
+                            },
+                            "end": {
+                              "line": 7,
+                              "column": 60,
+                              "offset": 366
+                            },
+                            "indent": []
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "value": " is also compatible.",
+                          "position": {
+                            "start": {
+                              "line": 7,
+                              "column": 60,
+                              "offset": 366
+                            },
+                            "end": {
+                              "line": 7,
+                              "column": 80,
+                              "offset": 386
+                            },
+                            "indent": []
+                          }
+                        }
+                      ],
+                      "position": {
+                        "start": {
+                          "line": 7,
+                          "column": 4,
+                          "offset": 310
+                        },
+                        "end": {
+                          "line": 7,
+                          "column": 80,
+                          "offset": 386
+                        },
+                        "indent": []
+                      }
+                    }
+                  ],
                   "position": {
                     "start": {
                       "line": 7,
@@ -5854,50 +5937,105 @@
                     },
                     "end": {
                       "line": 7,
-                      "column": 22,
-                      "offset": 328
+                      "column": 80,
+                      "offset": 386
                     },
                     "indent": []
                   }
                 },
                 {
-                  "type": "link",
-                  "url": "https://npmjs.com/mitt",
-                  "title": null,
-                  "jsdoc": true,
+                  "type": "listItem",
+                  "loose": false,
+                  "checked": null,
                   "children": [
                     {
-                      "type": "text",
-                      "value": "mitt"
+                      "type": "paragraph",
+                      "children": [
+                        {
+                          "type": "text",
+                          "value": "Since Statebot 2.6.0 ",
+                          "position": {
+                            "start": {
+                              "line": 8,
+                              "column": 4,
+                              "offset": 390
+                            },
+                            "end": {
+                              "line": 8,
+                              "column": 25,
+                              "offset": 411
+                            },
+                            "indent": []
+                          }
+                        },
+                        {
+                          "type": "link",
+                          "url": "https://npmjs.com/mitt",
+                          "title": null,
+                          "jsdoc": true,
+                          "children": [
+                            {
+                              "type": "text",
+                              "value": "mitt"
+                            }
+                          ],
+                          "position": {
+                            "start": {
+                              "line": 8,
+                              "column": 25,
+                              "offset": 411
+                            },
+                            "end": {
+                              "line": 8,
+                              "column": 60,
+                              "offset": 446
+                            },
+                            "indent": []
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "value": " is used internally.",
+                          "position": {
+                            "start": {
+                              "line": 8,
+                              "column": 60,
+                              "offset": 446
+                            },
+                            "end": {
+                              "line": 8,
+                              "column": 80,
+                              "offset": 466
+                            },
+                            "indent": []
+                          }
+                        }
+                      ],
+                      "position": {
+                        "start": {
+                          "line": 8,
+                          "column": 4,
+                          "offset": 390
+                        },
+                        "end": {
+                          "line": 8,
+                          "column": 80,
+                          "offset": 466
+                        },
+                        "indent": []
+                      }
                     }
                   ],
                   "position": {
                     "start": {
-                      "line": 7,
-                      "column": 22,
-                      "offset": 328
+                      "line": 8,
+                      "column": 1,
+                      "offset": 387
                     },
                     "end": {
-                      "line": 7,
-                      "column": 57,
-                      "offset": 363
-                    },
-                    "indent": []
-                  }
-                },
-                {
-                  "type": "text",
-                  "value": " is also compatible.",
-                  "position": {
-                    "start": {
-                      "line": 7,
-                      "column": 57,
-                      "offset": 363
-                    },
-                    "end": {
-                      "line": 7,
-                      "column": 77,
-                      "offset": 383
+                      "line": 8,
+                      "column": 80,
+                      "offset": 466
                     },
                     "indent": []
                   }
@@ -5910,11 +6048,13 @@
                   "offset": 307
                 },
                 "end": {
-                  "line": 7,
-                  "column": 77,
-                  "offset": 383
+                  "line": 8,
+                  "column": 80,
+                  "offset": 466
                 },
-                "indent": []
+                "indent": [
+                  1
+                ]
               }
             }
           ],
@@ -5925,9 +6065,9 @@
               "offset": 0
             },
             "end": {
-              "line": 7,
-              "column": 77,
-              "offset": 383
+              "line": 8,
+              "column": 80,
+              "offset": 466
             }
           }
         },
@@ -7377,22 +7517,22 @@
     ],
     "loc": {
       "start": {
-        "line": 41,
+        "line": 42,
         "column": 0
       },
       "end": {
-        "line": 148,
+        "line": 149,
         "column": 3
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 150,
+          "line": 151,
           "column": 0
         },
         "end": {
-          "line": 150,
+          "line": 151,
           "column": 30
         }
       },
@@ -7560,22 +7700,22 @@
     ],
     "loc": {
       "start": {
-        "line": 677,
+        "line": 673,
         "column": 2
       },
       "end": {
-        "line": 681,
+        "line": 677,
         "column": 5
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 683,
+          "line": 679,
           "column": 2
         },
         "end": {
-          "line": 1677,
+          "line": 1676,
           "column": 3
         }
       },
@@ -7887,22 +8027,22 @@
           ],
           "loc": {
             "start": {
-              "line": 691,
+              "line": 687,
               "column": 4
             },
             "end": {
-              "line": 727,
+              "line": 723,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 728,
+                "line": 724,
                 "column": 4
               },
               "end": {
-                "line": 728,
+                "line": 724,
                 "column": 19
               }
             },
@@ -8085,22 +8225,22 @@
           ],
           "loc": {
             "start": {
-              "line": 730,
+              "line": 726,
               "column": 4
             },
             "end": {
-              "line": 747,
+              "line": 743,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 748,
+                "line": 744,
                 "column": 4
               },
               "end": {
-                "line": 748,
+                "line": 744,
                 "column": 16
               }
             },
@@ -8353,7 +8493,7 @@
             },
             {
               "title": "returns",
-              "description": "Whether or not the event had listeners.\n\n See: {@link https://nodejs.org/api/events.html#events_emitter_emit_eventname_args|Node Events}\n for more information.\n\nStatebot imports `EventEmitter` from the\n {@link https://www.npmjs.com/package/events|events}\npackage for dealing with events in the browser.",
+              "description": "Whether or not the event had listeners.\n\n See: {@link https://nodejs.org/api/events.html#events_emitter_emit_eventname_args|Node Events}\n for more information.\n\nStatebot imports `EventEmitter` from the\n {@link https://www.npmjs.com/package/events|events}\npackage for dealing with events in the browser.\n\nSince Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is\nused for both the browser and non-browser builds.",
               "lineNumber": 10,
               "type": {
                 "type": "NameExpression",
@@ -8363,27 +8503,27 @@
             {
               "title": "example",
               "description": "var machine = Statebot('basic-form', {\n  chart: `\n    idle -> sending -> redirect\n  `\n})\n\nmachine.performTransitions({\n  'idle -> sending': {\n    on: 'post-data',\n    then: (...args) => {\n      console.log('Event args: ', args)\n      // setTimeout(machine.Enter('redirect'), 5000)\n    }\n  }\n})\n\nmachine.emit('post-data', 'Hello, world!')\n// Event args: [\"Hello, world!\"]\n\nmachine.currentState()\n// \"sending\"",
-              "lineNumber": 20
+              "lineNumber": 23
             }
           ],
           "loc": {
             "start": {
-              "line": 750,
+              "line": 746,
               "column": 4
             },
             "end": {
-              "line": 792,
+              "line": 791,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 793,
+                "line": 792,
                 "column": 4
               },
               "end": {
-                "line": 793,
+                "line": 792,
                 "column": 8
               }
             },
@@ -8712,6 +8852,87 @@
                         1
                       ]
                     }
+                  },
+                  {
+                    "type": "paragraph",
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "Since Statebot 2.6.0 ",
+                        "position": {
+                          "start": {
+                            "line": 10,
+                            "column": 1,
+                            "offset": 304
+                          },
+                          "end": {
+                            "line": 10,
+                            "column": 22,
+                            "offset": 325
+                          },
+                          "indent": []
+                        }
+                      },
+                      {
+                        "type": "link",
+                        "url": "https://npmjs.com/mitt",
+                        "title": null,
+                        "jsdoc": true,
+                        "children": [
+                          {
+                            "type": "text",
+                            "value": "mitt"
+                          }
+                        ],
+                        "position": {
+                          "start": {
+                            "line": 10,
+                            "column": 22,
+                            "offset": 325
+                          },
+                          "end": {
+                            "line": 10,
+                            "column": 57,
+                            "offset": 360
+                          },
+                          "indent": []
+                        }
+                      },
+                      {
+                        "type": "text",
+                        "value": " is\nused for both the browser and non-browser builds.",
+                        "position": {
+                          "start": {
+                            "line": 10,
+                            "column": 57,
+                            "offset": 360
+                          },
+                          "end": {
+                            "line": 11,
+                            "column": 50,
+                            "offset": 413
+                          },
+                          "indent": [
+                            1
+                          ]
+                        }
+                      }
+                    ],
+                    "position": {
+                      "start": {
+                        "line": 10,
+                        "column": 1,
+                        "offset": 304
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 50,
+                        "offset": 413
+                      },
+                      "indent": [
+                        1
+                      ]
+                    }
                   }
                 ],
                 "position": {
@@ -8721,9 +8942,9 @@
                     "offset": 0
                   },
                   "end": {
-                    "line": 8,
-                    "column": 48,
-                    "offset": 302
+                    "line": 11,
+                    "column": 50,
+                    "offset": 413
                   }
                 }
               },
@@ -8951,22 +9172,22 @@
           ],
           "loc": {
             "start": {
-              "line": 795,
+              "line": 794,
               "column": 4
             },
             "end": {
-              "line": 842,
+              "line": 841,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 843,
+                "line": 842,
                 "column": 4
               },
               "end": {
-                "line": 843,
+                "line": 842,
                 "column": 8
               }
             },
@@ -9436,22 +9657,22 @@
           ],
           "loc": {
             "start": {
-              "line": 845,
+              "line": 844,
               "column": 4
             },
             "end": {
-              "line": 877,
+              "line": 876,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 878,
+                "line": 877,
                 "column": 4
               },
               "end": {
-                "line": 878,
+                "line": 877,
                 "column": 9
               }
             },
@@ -9918,22 +10139,22 @@
           ],
           "loc": {
             "start": {
-              "line": 880,
+              "line": 879,
               "column": 4
             },
             "end": {
-              "line": 914,
+              "line": 913,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 915,
+                "line": 914,
                 "column": 4
               },
               "end": {
-                "line": 915,
+                "line": 914,
                 "column": 9
               }
             },
@@ -10379,22 +10600,22 @@
           ],
           "loc": {
             "start": {
-              "line": 917,
+              "line": 916,
               "column": 4
             },
             "end": {
-              "line": 942,
+              "line": 941,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 943,
+                "line": 942,
                 "column": 4
               },
               "end": {
-                "line": 943,
+                "line": 942,
                 "column": 36
               }
             },
@@ -10579,22 +10800,22 @@
           ],
           "loc": {
             "start": {
-              "line": 945,
+              "line": 944,
               "column": 4
             },
             "end": {
-              "line": 979,
+              "line": 978,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 980,
+                "line": 979,
                 "column": 4
               },
               "end": {
-                "line": 980,
+                "line": 979,
                 "column": 22
               }
             },
@@ -10796,22 +11017,22 @@
           ],
           "loc": {
             "start": {
-              "line": 982,
+              "line": 981,
               "column": 4
             },
             "end": {
-              "line": 1003,
+              "line": 1002,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1004,
+                "line": 1003,
                 "column": 4
               },
               "end": {
-                "line": 1004,
+                "line": 1003,
                 "column": 28
               }
             },
@@ -11426,22 +11647,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1006,
+              "line": 1005,
               "column": 4
             },
             "end": {
-              "line": 1053,
+              "line": 1052,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1054,
+                "line": 1053,
                 "column": 4
               },
               "end": {
-                "line": 1054,
+                "line": 1053,
                 "column": 11
               }
             },
@@ -12303,22 +12524,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1056,
+              "line": 1055,
               "column": 4
             },
             "end": {
-              "line": 1107,
+              "line": 1106,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1108,
+                "line": 1107,
                 "column": 4
               },
               "end": {
-                "line": 1108,
+                "line": 1107,
                 "column": 11
               }
             },
@@ -12909,22 +13130,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1110,
+              "line": 1109,
               "column": 4
             },
             "end": {
-              "line": 1131,
+              "line": 1130,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1132,
+                "line": 1131,
                 "column": 4
               },
               "end": {
-                "line": 1132,
+                "line": 1131,
                 "column": 20
               }
             },
@@ -13226,22 +13447,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1134,
+              "line": 1133,
               "column": 4
             },
             "end": {
-              "line": 1164,
+              "line": 1163,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1165,
+                "line": 1164,
                 "column": 4
               },
               "end": {
-                "line": 1165,
+                "line": 1164,
                 "column": 43
               }
             },
@@ -13718,22 +13939,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1167,
+              "line": 1166,
               "column": 4
             },
             "end": {
-              "line": 1202,
+              "line": 1201,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1203,
+                "line": 1202,
                 "column": 4
               },
               "end": {
-                "line": 1203,
+                "line": 1202,
                 "column": 45
               }
             },
@@ -14158,22 +14379,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1216,
+              "line": 1215,
               "column": 4
             },
             "end": {
-              "line": 1253,
+              "line": 1252,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1254,
+                "line": 1253,
                 "column": 4
               },
               "end": {
-                "line": 1254,
+                "line": 1253,
                 "column": 11
               }
             },
@@ -14598,22 +14819,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1256,
+              "line": 1255,
               "column": 4
             },
             "end": {
-              "line": 1285,
+              "line": 1284,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1286,
+                "line": 1285,
                 "column": 4
               },
               "end": {
-                "line": 1286,
+                "line": 1285,
                 "column": 41
               }
             },
@@ -15090,22 +15311,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1288,
+              "line": 1287,
               "column": 4
             },
             "end": {
-              "line": 1323,
+              "line": 1322,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1324,
+                "line": 1323,
                 "column": 4
               },
               "end": {
-                "line": 1324,
+                "line": 1323,
                 "column": 43
               }
             },
@@ -15572,22 +15793,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1337,
+              "line": 1336,
               "column": 4
             },
             "end": {
-              "line": 1365,
+              "line": 1364,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1366,
+                "line": 1365,
                 "column": 4
               },
               "end": {
-                "line": 1366,
+                "line": 1365,
                 "column": 42
               }
             },
@@ -15993,22 +16214,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1368,
+              "line": 1367,
               "column": 4
             },
             "end": {
-              "line": 1396,
+              "line": 1395,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1397,
+                "line": 1396,
                 "column": 4
               },
               "end": {
-                "line": 1397,
+                "line": 1396,
                 "column": 44
               }
             },
@@ -16337,22 +16558,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1411,
+              "line": 1410,
               "column": 4
             },
             "end": {
-              "line": 1486,
+              "line": 1485,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1487,
+                "line": 1486,
                 "column": 4
               },
               "end": {
-                "line": 1487,
+                "line": 1486,
                 "column": 76
               }
             },
@@ -16989,22 +17210,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1489,
+              "line": 1488,
               "column": 4
             },
             "end": {
-              "line": 1496,
+              "line": 1495,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1497,
+                "line": 1496,
                 "column": 4
               },
               "end": {
-                "line": 1497,
+                "line": 1496,
                 "column": 9
               }
             },
@@ -17202,22 +17423,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1499,
+              "line": 1498,
               "column": 4
             },
             "end": {
-              "line": 1506,
+              "line": 1505,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1507,
+                "line": 1506,
                 "column": 4
               },
               "end": {
-                "line": 1507,
+                "line": 1506,
                 "column": 10
               }
             },
@@ -17456,22 +17677,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1509,
+              "line": 1508,
               "column": 4
             },
             "end": {
-              "line": 1589,
+              "line": 1588,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1590,
+                "line": 1589,
                 "column": 4
               },
               "end": {
-                "line": 1590,
+                "line": 1589,
                 "column": 86
               }
             },
@@ -17997,22 +18218,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1592,
+              "line": 1591,
               "column": 4
             },
             "end": {
-              "line": 1613,
+              "line": 1612,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1614,
+                "line": 1613,
                 "column": 4
               },
               "end": {
-                "line": 1614,
+                "line": 1613,
                 "column": 17
               }
             },
@@ -18328,22 +18549,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1616,
+              "line": 1615,
               "column": 4
             },
             "end": {
-              "line": 1641,
+              "line": 1640,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1642,
+                "line": 1641,
                 "column": 4
               },
               "end": {
-                "line": 1642,
+                "line": 1641,
                 "column": 9
               }
             },
@@ -18502,22 +18723,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1644,
+              "line": 1643,
               "column": 4
             },
             "end": {
-              "line": 1650,
+              "line": 1649,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1651,
+                "line": 1650,
                 "column": 4
               },
               "end": {
-                "line": 1651,
+                "line": 1650,
                 "column": 10
               }
             },
@@ -18746,22 +18967,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1653,
+              "line": 1652,
               "column": 4
             },
             "end": {
-              "line": 1675,
+              "line": 1674,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1676,
+                "line": 1675,
                 "column": 4
               },
               "end": {
-                "line": 1676,
+                "line": 1675,
                 "column": 27
               }
             },
@@ -19120,22 +19341,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1205,
+        "line": 1204,
         "column": 4
       },
       "end": {
-        "line": 1214,
+        "line": 1213,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1254,
+          "line": 1253,
           "column": 4
         },
         "end": {
-          "line": 1254,
+          "line": 1253,
           "column": 11
         }
       },
@@ -19479,22 +19700,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1326,
+        "line": 1325,
         "column": 4
       },
       "end": {
-        "line": 1335,
+        "line": 1334,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1366,
+          "line": 1365,
           "column": 4
         },
         "end": {
-          "line": 1366,
+          "line": 1365,
           "column": 42
         }
       },
@@ -19848,22 +20069,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1399,
+        "line": 1398,
         "column": 4
       },
       "end": {
-        "line": 1409,
+        "line": 1408,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1487,
+          "line": 1486,
           "column": 4
         },
         "end": {
-          "line": 1487,
+          "line": 1486,
           "column": 76
         }
       },
@@ -20721,140 +20942,5 @@
       }
     ],
     "namespace": "assertRouteOptions"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "Helper for enforcing correct argument-types.",
-              "position": {
-                "start": {
-                  "line": 1,
-                  "column": 1,
-                  "offset": 0
-                },
-                "end": {
-                  "line": 1,
-                  "column": 45,
-                  "offset": 44
-                },
-                "indent": []
-              }
-            }
-          ],
-          "position": {
-            "start": {
-              "line": 1,
-              "column": 1,
-              "offset": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 45,
-              "offset": 44
-            },
-            "indent": []
-          }
-        }
-      ],
-      "position": {
-        "start": {
-          "line": 1,
-          "column": 1,
-          "offset": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 45,
-          "offset": 44
-        }
-      }
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": null,
-        "lineNumber": 3,
-        "type": {
-          "type": "NameExpression",
-          "name": "string"
-        },
-        "name": "errPrefix"
-      },
-      {
-        "title": "example",
-        "description": "const argTypeError = ArgTypeError('namespace#')\n\nfunction myFn (myArg1, myArg2) {\n  const err = argTypeError('myFn',\n    { myArg1: isString, myArg2: Boolean },\n    myArg1, myArg2\n  )\n  if (err) {\n    throw new TypeError(err)\n  }\n}",
-        "lineNumber": 5
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 231,
-        "column": 0
-      },
-      "end": {
-        "line": 248,
-        "column": 3
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 250,
-          "column": 0
-        },
-        "end": {
-          "line": 270,
-          "column": 1
-        }
-      },
-      "file": "/Users/mostly/Documents/Projects/statebot/statebot/src/utils.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "const argTypeError = ArgTypeError('namespace#')\n\nfunction myFn (myArg1, myArg2) {\n  const err = argTypeError('myFn',\n    { myArg1: isString, myArg2: Boolean },\n    myArg1, myArg2\n  )\n  if (err) {\n    throw new TypeError(err)\n  }\n}"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "errPrefix",
-        "lineNumber": 3,
-        "type": {
-          "type": "NameExpression",
-          "name": "string"
-        },
-        "default": "''"
-      }
-    ],
-    "properties": [],
-    "returns": [],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "ArgTypeError",
-    "kind": "class",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "ArgTypeError",
-        "kind": "class"
-      }
-    ],
-    "namespace": "ArgTypeError"
   }
 ]

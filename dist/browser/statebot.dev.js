@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.5.1
+ * v2.6.0
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -381,6 +381,7 @@ var statebot = (function (exports) {
   /**
    * Helper for enforcing correct argument-types.
    *
+   * @private
    * @param {string} errPrefix
    *
    * @example
@@ -436,6 +437,7 @@ var statebot = (function (exports) {
   }
 
   function Logger(level) {
+    var c = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : console;
     var _level = level;
 
     if (isString(_level)) {
@@ -464,29 +466,19 @@ var statebot = (function (exports) {
       canLog: canLog,
       canInfo: canInfo,
       info: function info() {
-        var _console;
-
-        return canInfo() && (_console = console).info.apply(_console, arguments);
+        return canInfo() && c.info.apply(c, arguments);
       },
       table: function table() {
-        var _console2;
-
-        return canLog() && (_console2 = console).table.apply(_console2, arguments);
+        return canLog() && c.table.apply(c, arguments);
       },
       log: function log() {
-        var _console3;
-
-        return canLog() && (_console3 = console).log.apply(_console3, arguments);
+        return canLog() && c.log.apply(c, arguments);
       },
       warn: function warn() {
-        var _console4;
-
-        return canWarn() && (_console4 = console).warn.apply(_console4, arguments);
+        return canWarn() && c.warn.apply(c, arguments);
       },
       error: function error() {
-        var _console5;
-
-        return (_console5 = console).error.apply(_console5, arguments);
+        return c.error.apply(c, arguments);
       }
     };
   }
@@ -671,7 +663,8 @@ var statebot = (function (exports) {
    *
    *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
    *
-   * Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+   *  - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+   *  - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
    */
 
   /**
@@ -830,7 +823,7 @@ var statebot = (function (exports) {
         _ref$historyLimit = _ref.historyLimit,
         historyLimit = _ref$historyLimit === void 0 ? 2 : _ref$historyLimit;
 
-    var events = options.events === undefined ? mitt() : isEventEmitter(options.events) && wrapEmitter(options.events);
+    var events = options.events === undefined ? wrapEmitter(mitt()) : isEventEmitter(options.events) && wrapEmitter(options.events);
 
     if (!events) {
       throw new TypeError("\n".concat(logPrefix, ": Invalid event-emitter specified in options"));
@@ -850,15 +843,17 @@ var statebot = (function (exports) {
     }
 
     var argTypeError = ArgTypeError("".concat(logPrefix, "#"));
-    var console = Logger(logLevel);
-    var canWarn = console.canWarn;
+
+    var _console = Logger(logLevel, console);
+
+    var canWarn = _console.canWarn;
     var stateHistory = [startIn];
     var stateHistoryLimit = Math.max(historyLimit, 2);
-    var internalEvents = mitt();
+    var internalEvents = wrapEmitter(mitt());
     var transitionId = 0;
 
     var _Pausables = Pausables(false, function () {
-      return console.warn("".concat(logPrefix, ": Ignoring callback, paused"));
+      return _console.warn("".concat(logPrefix, ": Ignoring callback, paused"));
     }),
         pause = _Pausables.pause,
         resume = _Pausables.resume,
@@ -870,17 +865,13 @@ var statebot = (function (exports) {
         args[_key - 1] = arguments[_key];
       }
 
-      return internalEvents.emit(eventName, args);
+      return internalEvents.emit.apply(internalEvents, [eventName].concat(args));
     });
 
     function onInternalEvent(eventName, cb) {
-      var cbWithCurriedArgs = function cbWithCurriedArgs(args) {
-        return cb.apply(void 0, _toConsumableArray(args));
-      };
-
-      internalEvents.on(eventName, cbWithCurriedArgs);
+      internalEvents.on(eventName, cb);
       return function () {
-        return internalEvents.off(eventName, cbWithCurriedArgs);
+        return internalEvents.off(eventName, cb);
       };
     }
 
@@ -986,13 +977,13 @@ var statebot = (function (exports) {
         });
 
         if (invalidStates.length) {
-          console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid states specified:\n") + invalidStates.map(function (state) {
+          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid states specified:\n") + invalidStates.map(function (state) {
             return "  > \"".concat(state, "\"");
           }).join('\n'));
         }
 
         if (invalidRoutes.length) {
-          console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid transitions specified:\n") + invalidRoutes.map(function (route) {
+          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid transitions specified:\n") + invalidRoutes.map(function (route) {
             return "  > \"".concat(route, "\"");
           }).join('\n'));
         }
@@ -1134,7 +1125,8 @@ var statebot = (function (exports) {
         return false;
       }
 
-      console.info("".concat(logPrefix, ": tId<").concat(++transitionId, ">: ").concat(nextRoute));
+      _console.info("".concat(logPrefix, ": tId<").concat(++transitionId, ">: ").concat(nextRoute));
+
       stateHistory.push(toState);
 
       if (stateHistory.length > stateHistoryLimit) {
@@ -1290,7 +1282,8 @@ var statebot = (function (exports) {
     }
 
     function reset() {
-      console.warn("".concat(logPrefix, ": State-machine reset!"));
+      _console.warn("".concat(logPrefix, ": State-machine reset!"));
+
       stateHistory.length = 0;
       stateHistory.push(startIn);
     }
@@ -1302,9 +1295,9 @@ var statebot = (function (exports) {
       var availableStates = statesAvailableFromHere();
 
       if (!availableStates.length) {
-        console.info("".concat(logPrefix, ": ").concat(message, "\n") + "  > Previous transition: \"".concat(prevRoute, "\"\n") + "  > There are no states available from \"".concat(inState, "\""));
+        _console.info("".concat(logPrefix, ": ").concat(message, "\n") + "  > Previous transition: \"".concat(prevRoute, "\"\n") + "  > There are no states available from \"".concat(inState, "\""));
       } else {
-        console.info("".concat(logPrefix, ": ").concat(message, "\n") + "  > Previous transition: \"".concat(prevRoute, "\"\n") + "  > From \"".concat(inState, "\", valid states are: [").concat(availableStates.map(function (state) {
+        _console.info("".concat(logPrefix, ": ").concat(message, "\n") + "  > Previous transition: \"".concat(prevRoute, "\"\n") + "  > From \"".concat(inState, "\", valid states are: [").concat(availableStates.map(function (state) {
           return "\"".concat(state, "\"");
         }).join(', '), "]"));
       }
@@ -1319,7 +1312,8 @@ var statebot = (function (exports) {
     }
 
     function _info() {
-      console.log("".concat(logPrefix, ": Information about this state-machine"));
+      _console.log("".concat(logPrefix, ": Information about this state-machine"));
+
       logRefCounterInfo(statesHandled);
       logRefCounterInfo(routesHandled);
       logRefCounterInfo(eventsHandled);
@@ -1330,12 +1324,12 @@ var statebot = (function (exports) {
           description = _refCounter$toValue.description,
           table = _refCounter$toValue.table;
 
-      console.log(description);
+      _console.log(description);
 
       if (table.length) {
-        console.table(table);
+        _console.table(table);
       } else {
-        console.log('  > No information');
+        _console.log('  > No information');
       }
     }
     /**
@@ -1431,6 +1425,9 @@ var statebot = (function (exports) {
        * Statebot imports `EventEmitter` from the
        *  {@link https://www.npmjs.com/package/events|events}
        * package for dealing with events in the browser.
+       *
+       * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+       * used for both the browser and non-browser builds.
        *
        * @example
        * var machine = Statebot('basic-form', {
@@ -2461,9 +2458,59 @@ var statebot = (function (exports) {
   }
 
   function wrapEmitter(events) {
-    var emit = events.emit;
-    var on = events.addListener ? events.addListener : events.on;
-    var off = events.removeListener ? events.removeListener : events.off;
+    var emit = function emit(eventName) {
+      for (var _len14 = arguments.length, args = new Array(_len14 > 1 ? _len14 - 1 : 0), _key14 = 1; _key14 < _len14; _key14++) {
+        args[_key14 - 1] = arguments[_key14];
+      }
+
+      return events.emit(eventName, args);
+    };
+
+    var addListener = events.addListener ? function () {
+      return events.addListener.apply(events, arguments);
+    } : function () {
+      return events.on.apply(events, arguments);
+    };
+    var removeListener = events.removeListener ? function () {
+      return events.removeListener.apply(events, arguments);
+    } : function () {
+      return events.off.apply(events, arguments);
+    };
+    var wrapMap = new Map();
+
+    function on(eventName, fn) {
+      var fnMeta = wrapMap.get(fn);
+
+      if (!fnMeta) {
+        fnMeta = {
+          handleEvent: function handleEvent() {
+            var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+            return fn.apply(void 0, _toConsumableArray(args));
+          },
+          refCount: 0
+        };
+        wrapMap.set(fn, fnMeta);
+      }
+
+      fnMeta.refCount += 1;
+      addListener(eventName, fnMeta.handleEvent);
+    }
+
+    function off(eventName, fn) {
+      var fnMeta = wrapMap.get(fn);
+
+      if (!fnMeta) {
+        return;
+      }
+
+      removeListener(eventName, fnMeta.handleEvent);
+      fnMeta.refCount -= 1;
+
+      if (fnMeta.refCount === 0) {
+        wrapMap["delete"](fn);
+      }
+    }
+
     return {
       emit: emit,
       on: on,

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset='utf-8' />
-	<title>statebot 2.5.1 | Documentation</title>
+	<title>statebot 2.6.0 | Documentation</title>
 	<meta name='description' content='Write more robust and understandable programs.'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
 	<link href='assets/styles.min.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
 			<div class='font-smaller fixed col-3 top-0 bottom-0 left-0 overflow-auto fill-light dark-link'>
 				<div class='px2'>
 					<h3 class='mb0 no-anchor'><code>statebot</code></h3>
-					<div class='mb1'><code>2.5.1</code></div>
+					<div class='mb1'><code>2.6.0</code></div>
 					<input placeholder='Filter' id='filter-input' class='col12 block input' type='text' />
 					<div id="toc">
 						
@@ -309,17 +309,6 @@
 						
 						
 						<a
-								href='#argtypeerror'
-								class="regular block">
-							<code>ArgTypeError</code>
-							
-						</a>
-						
-						
-						
-						
-						
-						<a
 								href='#assertrouteoptions'
 								class="regular block">
 							<code>assertRouteOptions</code>
@@ -374,7 +363,7 @@ is <a href="../LICENSE">MIT licensed</a>.</p>
 <pre class='hljs'>npm i statebot</pre>
 <pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">'statebot'</span></pre>
 <p>Or non-<code>npm</code> project:</p>
-<pre class='hljs'>&lt;script src=<span class="hljs-string">"https://unpkg.com/statebot@2.5.1/dist/browser/statebot.min.js"</span>&gt;&lt;<span class="hljs-regexp">/script&gt;</span></pre>
+<pre class='hljs'>&lt;script src=<span class="hljs-string">"https://unpkg.com/statebot@2.6.0/dist/browser/statebot.min.js"</span>&gt;&lt;<span class="hljs-regexp">/script&gt;</span></pre>
 <pre class='hljs'><span class="hljs-keyword">const</span> { Statebot } = statebot
 <span class="hljs-comment">// Make machines with Statebot()</span>
 
@@ -1107,7 +1096,10 @@ a shared EventEmitter, you can pass it in here. The
 <code>performTransitions()</code>
  methods will use it.
 <p> It should have the same signature as <a href="https://nodejs.org/api/events.html#events_class_eventemitter">EventEmitter</a>.</p>
-<p>Since Statebot 2.5.0 <a href="https://npmjs.com/mitt">mitt</a> is also compatible.</p>
+<ul>
+<li>Since Statebot 2.5.0 <a href="https://npmjs.com/mitt">mitt</a> is also compatible.</li>
+<li>Since Statebot 2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is used internally.</li>
+</ul>
 </td>
 		</tr>
 
@@ -1553,6 +1545,8 @@ for more information.</p>
 <p>Statebot imports <code>EventEmitter</code> from the
 <a href="https://www.npmjs.com/package/events">events</a>
 package for dealing with events in the browser.</p>
+<p>Since Statebot 2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is
+used for both the browser and non-browser builds.</p>
 </span>
 	
 	
@@ -4247,91 +4241,6 @@ machine.statesAvailableFromHere(<span class="hljs-string">'receiving'</span>)
 
 	
 
-	
-
-	
-
-	
-
-	
-
-	
-</section>
-
-				
-				
-				
-				<section id='argtypeerror'class='mt2 mb2 px3 py1 keyline-top'>
-
-	<div class='right py2'>
-		
-		
-	</div>
-
-	<h3 class='regular'>
-		<a class='black' href='#argtypeerror'>
-			<code>
-				ArgTypeError
-				<span class='gray'>(errPrefix)</span>
-			</code>
-		</a>
-	</h3>
-
-	<p>Helper for enforcing correct argument-types.</p>
-
-	
-
-	
-	
-	
-	
-	
-	
-
-	
-	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
-		<thead class='fill-light'>
-		<th class='col-3 small caps quiet'>parameter</th>
-		<th class='col-3 small caps quiet'>type</th>
-		<th class='col-6 small caps quiet'>description</th>
-		</thead>
-		
-		<tr>
-			<td class='col-3 strong'><code>errPrefix</code></td>
-			<td class='col-3 quiet'>
-				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
-				
-				= <code>&#39;&#39;</code>
-			</td>
-			<td class='col-6'></td>
-		</tr>
-		
-		
-	</table>
-	
-
-	
-
-	
-
-	
-
-	
-	<h4 class='caps quiet mb1 mt3'>Examples</h4>
-	
-	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">const</span> argTypeError = ArgTypeError(<span class="hljs-string">'namespace#'</span>)
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myFn</span> (<span class="hljs-params">myArg1, myArg2</span>) </span>{
-  <span class="hljs-keyword">const</span> err = argTypeError(<span class="hljs-string">'myFn'</span>,
-    { <span class="hljs-attr">myArg1</span>: isString, <span class="hljs-attr">myArg2</span>: <span class="hljs-built_in">Boolean</span> },
-    myArg1, myArg2
-  )
-  <span class="hljs-keyword">if</span> (err) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(err)
-  }
-}</code></pre>
-	
 	
 
 	

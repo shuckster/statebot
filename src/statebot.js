@@ -213,7 +213,7 @@ function Statebot (name, options) {
   } = options || {}
 
   const events = options.events === undefined
-    ? mitt()
+    ? wrapEmitter(mitt())
     : isEventEmitter(options.events) && wrapEmitter(options.events)
 
   if (!events) {
@@ -236,7 +236,7 @@ function Statebot (name, options) {
 
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
-  const internalEvents = mitt()
+  const internalEvents = wrapEmitter(mitt())
 
   let transitionId = 0
 
@@ -245,17 +245,12 @@ function Statebot (name, options) {
   )
 
   const emitInternalEvent = Pausable((eventName, ...args) =>
-    internalEvents.emit(eventName, args)
+    internalEvents.emit(eventName, ...args)
   )
 
   function onInternalEvent (eventName, cb) {
-    // curried to support mitt, which only
-    // allows two arguments to be passed to emit(),
-    // rather than an arbitrary number.
-    // Not actually using mitt internally, yet! :)
-    const cbWithCurriedArgs = args => cb(...args)
-    internalEvents.on(eventName, cbWithCurriedArgs)
-    return () => internalEvents.off(eventName, cbWithCurriedArgs)
+    internalEvents.on(eventName, cb)
+    return () => internalEvents.off(eventName, cb)
   }
 
   const statesHandled = ReferenceCounter(
@@ -1765,15 +1760,45 @@ function isStatebot (object) {
 }
 
 function wrapEmitter (events) {
-  const emit = events.emit
+  const emit = (eventName, ...args) =>
+    events.emit(eventName, args)
 
-  const on = events.addListener
-    ? events.addListener
-    : events.on
+  const addListener = events.addListener
+    ? (...args) => events.addListener(...args)
+    : (...args) => events.on(...args)
 
-  const off = events.removeListener
-    ? events.removeListener
-    : events.off
+  const removeListener = events.removeListener
+    ? (...args) => events.removeListener(...args)
+    : (...args) => events.off(...args)
+
+  const wrapMap = new Map()
+
+  function on (eventName, fn) {
+    let fnMeta = wrapMap.get(fn)
+    if (!fnMeta) {
+      fnMeta = {
+        handleEvent: (args = []) => fn(...args),
+        refCount: 0
+      }
+      wrapMap.set(fn, fnMeta)
+    }
+
+    fnMeta.refCount += 1
+    addListener(eventName, fnMeta.handleEvent)
+  }
+
+  function off (eventName, fn) {
+    let fnMeta = wrapMap.get(fn)
+    if (!fnMeta) {
+      return
+    }
+
+    removeListener(eventName, fnMeta.handleEvent)
+    fnMeta.refCount -= 1
+    if (fnMeta.refCount === 0) {
+      wrapMap.delete(fn)
+    }
+  }
 
   return {
     emit,

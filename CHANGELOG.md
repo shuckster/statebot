@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Now using Mitt for events
 - Changed license from ISC to MIT
 
 ## [2.5.1] - 2020-08-11

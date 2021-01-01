@@ -56,7 +56,7 @@ machine.onEntered('stop', () => {
 setInterval(machine.Emit('timer'), 2000)
 ```
 
-It's less than 8K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
+It's less than 6K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 
@@ -696,6 +696,9 @@ Here are the things I'd personally like to work on:
 Statebot was inspired by a trawl through Wikipedia and Google, which in turn was inspired by [XState](https://github.com/davidkpiano/xstate) by David Khourshid. You should check it out.
 
 Statebot integrates [events](https://www.npmjs.com/package/events) for the browser-build.
+
+- Since Statebot 2.5.0 [mitt](https://npmjs.com/mitt) is also compatible.
+- Since Statebot 2.6.0 mitt is used internally.
 
 The Statebot logo uses the "You're Gone" font from [Typodermic Fonts](https://typodermicfonts.com/youre-gone/). The logo was made with [Acorn](https://flyingmeat.com/acorn/). The documentation is written in [JSDoc](https://jsdoc.app/) and is built with [documentation.js](http://documentation.js.org/).
 

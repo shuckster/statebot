@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.6.0
+ * v2.6.1
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -188,6 +188,66 @@ var statebot = (function (exports) {
     return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
   }
 
+  function wrapEmitter(events) {
+    var emit = function emit(eventName) {
+      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+
+      return events.emit(eventName, args);
+    };
+
+    var addListener = events.addListener ? function () {
+      return events.addListener.apply(events, arguments);
+    } : function () {
+      return events.on.apply(events, arguments);
+    };
+    var removeListener = events.removeListener ? function () {
+      return events.removeListener.apply(events, arguments);
+    } : function () {
+      return events.off.apply(events, arguments);
+    };
+    var wrapMap = new Map();
+
+    function on(eventName, fn) {
+      var fnMeta = wrapMap.get(fn);
+
+      if (!fnMeta) {
+        fnMeta = {
+          handleEvent: function handleEvent(args) {
+            return fn.apply(void 0, _toConsumableArray(args || []));
+          },
+          refCount: 0
+        };
+        wrapMap.set(fn, fnMeta);
+      }
+
+      fnMeta.refCount += 1;
+      addListener(eventName, fnMeta.handleEvent);
+    }
+
+    function off(eventName, fn) {
+      var fnMeta = wrapMap.get(fn);
+
+      if (!fnMeta) {
+        return;
+      }
+
+      removeListener(eventName, fnMeta.handleEvent);
+      fnMeta.refCount -= 1;
+
+      if (fnMeta.refCount === 0) {
+        wrapMap["delete"](fn);
+      }
+    }
+
+    return {
+      emit: emit,
+      on: on,
+      off: off
+    };
+  }
+
   function isPojo(obj) {
     if (obj === null || !isObject(obj)) {
       return false;
@@ -215,8 +275,8 @@ var statebot = (function (exports) {
   }
 
   function defer(fn) {
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
     }
 
     var timer = setTimeout.apply(void 0, [fn, 0].concat(args));
@@ -227,8 +287,8 @@ var statebot = (function (exports) {
 
   function Defer(fn) {
     return function () {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
       }
 
       return defer.apply(void 0, [fn].concat(args));
@@ -265,9 +325,8 @@ var statebot = (function (exports) {
     };
   }
 
-  function Pausables() {
-    var startPaused = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-    var runFnWhenPaused = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+  function Pausables(startPaused, runFnWhenPaused) {
+    runFnWhenPaused = runFnWhenPaused || function () {};
 
     var _paused = !!startPaused;
 
@@ -297,8 +356,8 @@ var statebot = (function (exports) {
   }
 
   function ReferenceCounter(name, kind, description) {
-    for (var _len3 = arguments.length, expecting = new Array(_len3 > 3 ? _len3 - 3 : 0), _key3 = 3; _key3 < _len3; _key3++) {
-      expecting[_key3 - 3] = arguments[_key3];
+    for (var _len4 = arguments.length, expecting = new Array(_len4 > 3 ? _len4 - 3 : 0), _key4 = 3; _key4 < _len4; _key4++) {
+      expecting[_key4 - 3] = arguments[_key4];
     }
 
     var _refs = [].concat(expecting).flat().reduce(function (acc, ref) {
@@ -399,8 +458,8 @@ var statebot = (function (exports) {
    */
 
 
-  function ArgTypeError() {
-    var errPrefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  function ArgTypeError(errPrefix) {
+    errPrefix = errPrefix || '';
     return function (fnName, typeMap) {
       var signature = Object.keys(typeMap).join(', ');
       var argMap = Object.entries(typeMap).map(function (_ref4) {
@@ -414,13 +473,13 @@ var statebot = (function (exports) {
         };
       });
 
-      for (var _len4 = arguments.length, args = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
-        args[_key4 - 2] = arguments[_key4];
+      for (var _len5 = arguments.length, args = new Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
+        args[_key5 - 2] = arguments[_key5];
       }
 
       var err = args.map(function () {
-        for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-          args[_key5] = arguments[_key5];
+        for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+          args[_key6] = arguments[_key6];
         }
 
         return typeErrorFromArgument.apply(void 0, [argMap].concat(args));
@@ -436,29 +495,28 @@ var statebot = (function (exports) {
     };
   }
 
-  function Logger(level) {
-    var c = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : console;
-    var _level = level;
+  function Logger(level, _console) {
+    _console = _console || console;
 
-    if (isString(_level)) {
-      _level = {
+    if (isString(level)) {
+      level = {
         info: 3,
         log: 2,
         warn: 1,
         none: 0
-      }[_level] || 3;
+      }[level] || 3;
     }
 
     function canWarn() {
-      return _level >= 1;
+      return level >= 1;
     }
 
     function canLog() {
-      return _level >= 2;
+      return level >= 2;
     }
 
     function canInfo() {
-      return _level >= 3;
+      return level >= 3;
     }
 
     return {
@@ -466,19 +524,29 @@ var statebot = (function (exports) {
       canLog: canLog,
       canInfo: canInfo,
       info: function info() {
-        return canInfo() && c.info.apply(c, arguments);
+        var _console2;
+
+        return canInfo() && (_console2 = _console).info.apply(_console2, arguments);
       },
       table: function table() {
-        return canLog() && c.table.apply(c, arguments);
+        var _console3;
+
+        return canLog() && (_console3 = _console).table.apply(_console3, arguments);
       },
       log: function log() {
-        return canLog() && c.log.apply(c, arguments);
+        var _console4;
+
+        return canLog() && (_console4 = _console).log.apply(_console4, arguments);
       },
       warn: function warn() {
-        return canWarn() && c.warn.apply(c, arguments);
+        var _console5;
+
+        return canWarn() && (_console5 = _console).warn.apply(_console5, arguments);
       },
       error: function error() {
-        return c.error.apply(c, arguments);
+        var _console6;
+
+        return (_console6 = _console).error.apply(_console6, arguments);
       }
     };
   }
@@ -849,7 +917,6 @@ var statebot = (function (exports) {
     var canWarn = _console.canWarn;
     var stateHistory = [startIn];
     var stateHistoryLimit = Math.max(historyLimit, 2);
-    var internalEvents = wrapEmitter(mitt());
     var transitionId = 0;
 
     var _Pausables = Pausables(false, function () {
@@ -860,6 +927,7 @@ var statebot = (function (exports) {
         paused = _Pausables.paused,
         Pausable = _Pausables.Pausable;
 
+    var internalEvents = wrapEmitter(mitt());
     var emitInternalEvent = Pausable(function (eventName) {
       for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         args[_key - 1] = arguments[_key];
@@ -891,14 +959,55 @@ var statebot = (function (exports) {
         throw new TypeError("Statebot[".concat(_name, "]#").concat(fnName, "(): Expected an object, or a function that returns an object"));
       }
 
+      var allStates = [];
+      var allRoutes = [];
+
       var _decomposeHitcherActi = decomposeHitcherActions(hitcherActions),
           transitionsForEvents = _decomposeHitcherActi.transitionsForEvents,
           transitionsOnly = _decomposeHitcherActi.transitionsOnly;
 
-      var allStates = [];
-      var allRoutes = [];
-      var allCleanupFns = [];
-      var decomposedEvents = Object.entries(transitionsForEvents).reduce(function (acc, _ref3) {
+      var eventsMappedToTransitionConfigs = Object.entries(transitionsForEvents).reduce(decomposeTransitionsForEvent, {});
+      var transitionConfigs = expandTransitions(transitionsOnly, canWarn);
+      var allCleanupFns = Object.entries(eventsMappedToTransitionConfigs).map(createEventHandlerForTransition).concat(transitionConfigs.configs.map(runThenMethodOnTransition)).flat();
+
+      if (canWarn()) {
+        allStates.push.apply(allStates, _toConsumableArray(transitionConfigs.states));
+        allRoutes.push.apply(allRoutes, _toConsumableArray(transitionConfigs.routes));
+        var invalidStates = allStates.filter(function (state) {
+          return !states.includes(state);
+        });
+        var invalidRoutes = allRoutes.filter(function (route) {
+          return !routes.includes(route);
+        });
+
+        if (invalidStates.length) {
+          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid states specified:\n") + invalidStates.map(function (state) {
+            return "  > \"".concat(state, "\"");
+          }).join('\n'));
+        }
+
+        if (invalidRoutes.length) {
+          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid transitions specified:\n") + invalidRoutes.map(function (route) {
+            return "  > \"".concat(route, "\"");
+          }).join('\n'));
+        }
+      }
+
+      return function () {
+        return allCleanupFns.map(function (fn) {
+          return fn();
+        });
+      };
+
+      function runThenMethodOnTransition(config) {
+        var fromState = config.fromState,
+            toState = config.toState,
+            action = config.action;
+        var route = "".concat(fromState, "->").concat(toState);
+        return [routesHandled.increase(route), onInternalEvent(route, action)];
+      }
+
+      function decomposeTransitionsForEvent(acc, _ref3) {
         var _ref4 = _slicedToArray(_ref3, 2),
             eventName = _ref4[0],
             transitionsAndAction = _ref4[1];
@@ -914,7 +1023,7 @@ var statebot = (function (exports) {
         }
 
         return _objectSpread2(_objectSpread2({}, acc), {}, _defineProperty({}, eventName, configs));
-      }, {});
+      }
 
       function ifStateThenEnterState(_ref5) {
         var fromState = _ref5.fromState,
@@ -949,51 +1058,6 @@ var statebot = (function (exports) {
           }
         })];
       }
-
-      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(Object.entries(decomposedEvents).map(createEventHandlerForTransition).flat()));
-      var transitionConfigs = expandTransitions(transitionsOnly, canWarn);
-
-      if (canWarn()) {
-        allStates.push.apply(allStates, _toConsumableArray(transitionConfigs.states));
-        allRoutes.push.apply(allRoutes, _toConsumableArray(transitionConfigs.routes));
-      }
-
-      function runThenMethodOnTransition(config) {
-        var fromState = config.fromState,
-            toState = config.toState,
-            action = config.action;
-        var route = "".concat(fromState, "->").concat(toState);
-        return [routesHandled.increase(route), onInternalEvent(route, action)];
-      }
-
-      allCleanupFns.push.apply(allCleanupFns, _toConsumableArray(transitionConfigs.configs.map(runThenMethodOnTransition).flat()));
-
-      if (canWarn()) {
-        var invalidStates = allStates.filter(function (state) {
-          return !states.includes(state);
-        });
-        var invalidRoutes = allRoutes.filter(function (route) {
-          return !routes.includes(route);
-        });
-
-        if (invalidStates.length) {
-          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid states specified:\n") + invalidStates.map(function (state) {
-            return "  > \"".concat(state, "\"");
-          }).join('\n'));
-        }
-
-        if (invalidRoutes.length) {
-          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid transitions specified:\n") + invalidRoutes.map(function (route) {
-            return "  > \"".concat(route, "\"");
-          }).join('\n'));
-        }
-      }
-
-      return function () {
-        return allCleanupFns.map(function (fn) {
-          return fn();
-        });
-      };
     }
 
     function previousState() {
@@ -1255,7 +1319,7 @@ var statebot = (function (exports) {
           args[_key11] = arguments[_key11];
         }
 
-        return enter.apply(void 0, [state].concat([].concat(curriedArgs, args)));
+        return enter.apply(void 0, _toConsumableArray([state, curriedArgs].concat(args)));
       };
     }
 
@@ -1277,7 +1341,7 @@ var statebot = (function (exports) {
           fnArgs[_key13] = arguments[_key13];
         }
 
-        return inState.apply(void 0, [state, anyOrFn].concat(_toConsumableArray(curriedFnArgs.concat(fnArgs))));
+        return inState.apply(void 0, _toConsumableArray([state, anyOrFn].concat(curriedFnArgs, fnArgs)));
       };
     }
 
@@ -2457,67 +2521,6 @@ var statebot = (function (exports) {
     return isPojo(object) && typeof object.__STATEBOT__ === 'number';
   }
 
-  function wrapEmitter(events) {
-    var emit = function emit(eventName) {
-      for (var _len14 = arguments.length, args = new Array(_len14 > 1 ? _len14 - 1 : 0), _key14 = 1; _key14 < _len14; _key14++) {
-        args[_key14 - 1] = arguments[_key14];
-      }
-
-      return events.emit(eventName, args);
-    };
-
-    var addListener = events.addListener ? function () {
-      return events.addListener.apply(events, arguments);
-    } : function () {
-      return events.on.apply(events, arguments);
-    };
-    var removeListener = events.removeListener ? function () {
-      return events.removeListener.apply(events, arguments);
-    } : function () {
-      return events.off.apply(events, arguments);
-    };
-    var wrapMap = new Map();
-
-    function on(eventName, fn) {
-      var fnMeta = wrapMap.get(fn);
-
-      if (!fnMeta) {
-        fnMeta = {
-          handleEvent: function handleEvent() {
-            var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-            return fn.apply(void 0, _toConsumableArray(args));
-          },
-          refCount: 0
-        };
-        wrapMap.set(fn, fnMeta);
-      }
-
-      fnMeta.refCount += 1;
-      addListener(eventName, fnMeta.handleEvent);
-    }
-
-    function off(eventName, fn) {
-      var fnMeta = wrapMap.get(fn);
-
-      if (!fnMeta) {
-        return;
-      }
-
-      removeListener(eventName, fnMeta.handleEvent);
-      fnMeta.refCount -= 1;
-
-      if (fnMeta.refCount === 0) {
-        wrapMap["delete"](fn);
-      }
-    }
-
-    return {
-      emit: emit,
-      on: on,
-      off: off
-    };
-  }
-
   var argTypeError$1 = ArgTypeError('statebot.');
   /**
    * Assert that a certain route can be followed by a
@@ -2774,9 +2777,9 @@ var statebot = (function (exports) {
     });
   }
 
-  function Table() {
-    var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    var alignments = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  function Table(columns, alignments) {
+    columns = columns || [];
+    alignments = alignments || [];
     var table = [];
     var alignment = columns.map(function (_, index) {
       return alignments[index] || 'center';

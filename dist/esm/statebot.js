@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.6.0
+ * v2.6.1
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -27,6 +27,45 @@ function isEventEmitter (obj) {
     (isFunction(obj.addListener) || isFunction(obj.on)) &&
     (isFunction(obj.removeListener) || isFunction(obj.off))
   )
+}
+function wrapEmitter (events) {
+  const emit = (eventName, ...args) =>
+    events.emit(eventName, args);
+  const addListener = events.addListener
+    ? (...args) => events.addListener(...args)
+    : (...args) => events.on(...args);
+  const removeListener = events.removeListener
+    ? (...args) => events.removeListener(...args)
+    : (...args) => events.off(...args);
+  const wrapMap = new Map();
+  function on (eventName, fn) {
+    let fnMeta = wrapMap.get(fn);
+    if (!fnMeta) {
+      fnMeta = {
+        handleEvent: args => fn(...args || []),
+        refCount: 0
+      };
+      wrapMap.set(fn, fnMeta);
+    }
+    fnMeta.refCount += 1;
+    addListener(eventName, fnMeta.handleEvent);
+  }
+  function off (eventName, fn) {
+    let fnMeta = wrapMap.get(fn);
+    if (!fnMeta) {
+      return
+    }
+    removeListener(eventName, fnMeta.handleEvent);
+    fnMeta.refCount -= 1;
+    if (fnMeta.refCount === 0) {
+      wrapMap.delete(fn);
+    }
+  }
+  return {
+    emit,
+    on,
+    off
+  }
 }
 function isPojo (obj) {
   if (obj === null || (!isObject(obj))) {
@@ -82,7 +121,8 @@ function Revokable (fn) {
     }
   }
 }
-function Pausables (startPaused = false, runFnWhenPaused = () => {}) {
+function Pausables (startPaused, runFnWhenPaused) {
+  runFnWhenPaused = runFnWhenPaused || function () {};
   let paused = !!startPaused;
   function Pausable (fn) {
     return (...args) => {
@@ -185,7 +225,8 @@ const typeErrorFromArgument = (argMap, arg, index) => {
  *   }
  * }
  */
-function ArgTypeError (errPrefix = '') {
+function ArgTypeError (errPrefix) {
+  errPrefix = errPrefix || '';
   return function (fnName, typeMap, ...args) {
     const signature = Object.keys(typeMap).join(', ');
     const argMap = Object
@@ -203,34 +244,34 @@ function ArgTypeError (errPrefix = '') {
     )
   }
 }
-function Logger (level, c = console) {
-  let _level = level;
-  if (isString(_level)) {
-    _level = ({
+function Logger (level, _console) {
+  _console = _console || console;
+  if (isString(level)) {
+    level = ({
       info: 3,
       log: 2,
       warn: 1,
       none: 0
-    })[_level] || 3;
+    })[level] || 3;
   }
   function canWarn () {
-    return _level >= 1
+    return level >= 1
   }
   function canLog () {
-    return _level >= 2
+    return level >= 2
   }
   function canInfo () {
-    return _level >= 3
+    return level >= 3
   }
   return {
     canWarn,
     canLog,
     canInfo,
-    info: (...args) => canInfo() && c.info(...args),
-    table: (...args) => canLog() && c.table(...args),
-    log: (...args) => canLog() && c.log(...args),
-    warn: (...args) => canWarn() && c.warn(...args),
-    error: (...args) => c.error(...args)
+    info: (...args) => canInfo() && _console.info(...args),
+    table: (...args) => canLog() && _console.table(...args),
+    log: (...args) => canLog() && _console.log(...args),
+    warn: (...args) => canWarn() && _console.warn(...args),
+    error: (...args) => _console.error(...args)
   }
 }
 
@@ -569,11 +610,11 @@ function Statebot (name, options) {
   const { canWarn } = _console;
   const stateHistory = [startIn];
   const stateHistoryLimit = Math.max(historyLimit, 2);
-  const internalEvents = wrapEmitter(mitt());
   let transitionId = 0;
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
+  const internalEvents = wrapEmitter(mitt());
   const emitInternalEvent = Pausable((eventName, ...args) =>
     internalEvents.emit(eventName, ...args)
   );
@@ -608,30 +649,64 @@ function Statebot (name, options) {
         `Statebot[${name}]#${fnName}(): Expected an object, or a function that returns an object`
       )
     }
+    const allStates = [];
+    const allRoutes = [];
     const {
       transitionsForEvents,
       transitionsOnly
     } = decomposeHitcherActions(hitcherActions);
-    const allStates = [];
-    const allRoutes = [];
-    const allCleanupFns = [];
-    const decomposedEvents = Object
+    const eventsMappedToTransitionConfigs = Object
       .entries(transitionsForEvents)
-      .reduce((acc, [eventName, transitionsAndAction]) => {
-        const {
-          states,
-          routes,
-          configs
-        } = expandTransitions(transitionsAndAction, canWarn);
-        if (canWarn()) {
-          allStates.push(...states);
-          allRoutes.push(...routes);
-        }
-        return {
-          ...acc,
-          [eventName]: configs
-        }
-      }, {});
+      .reduce(decomposeTransitionsForEvent, {});
+    const transitionConfigs = expandTransitions(transitionsOnly, canWarn);
+    const allCleanupFns =
+      Object
+        .entries(eventsMappedToTransitionConfigs)
+        .map(createEventHandlerForTransition)
+        .concat(transitionConfigs.configs.map(runThenMethodOnTransition))
+        .flat();
+    if (canWarn()) {
+      allStates.push(...transitionConfigs.states);
+      allRoutes.push(...transitionConfigs.routes);
+      const invalidStates = allStates.filter(state => !states.includes(state));
+      const invalidRoutes = allRoutes.filter(route => !routes.includes(route));
+      if (invalidStates.length) {
+        _console.warn(
+          `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
+          invalidStates.map(state => `  > "${state}"`).join('\n')
+        );
+      }
+      if (invalidRoutes.length) {
+        _console.warn(
+          `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
+          invalidRoutes.map(route => `  > "${route}"`).join('\n')
+        );
+      }
+    }
+    return () => allCleanupFns.map(fn => fn())
+    function runThenMethodOnTransition (config) {
+      const { fromState, toState, action } = config;
+      const route = `${fromState}->${toState}`;
+      return [
+        routesHandled.increase(route),
+        onInternalEvent(route, action)
+      ]
+    }
+    function decomposeTransitionsForEvent (acc, [eventName, transitionsAndAction]) {
+      const {
+        states,
+        routes,
+        configs
+      } = expandTransitions(transitionsAndAction, canWarn);
+      if (canWarn()) {
+        allStates.push(...states);
+        allRoutes.push(...routes);
+      }
+      return {
+        ...acc,
+        [eventName]: configs
+      }
+    }
     function ifStateThenEnterState ({ fromState, toState, action, args }) {
       return inState(fromState, () => {
         enter(toState, ...args);
@@ -652,47 +727,6 @@ function Statebot (name, options) {
         })
       ]
     }
-    allCleanupFns.push(
-      ...Object
-        .entries(decomposedEvents)
-        .map(createEventHandlerForTransition)
-        .flat()
-    );
-    const transitionConfigs = expandTransitions(transitionsOnly, canWarn);
-    if (canWarn()) {
-      allStates.push(...transitionConfigs.states);
-      allRoutes.push(...transitionConfigs.routes);
-    }
-    function runThenMethodOnTransition (config) {
-      const { fromState, toState, action } = config;
-      const route = `${fromState}->${toState}`;
-      return [
-        routesHandled.increase(route),
-        onInternalEvent(route, action)
-      ]
-    }
-    allCleanupFns.push(
-      ...transitionConfigs.configs
-        .map(runThenMethodOnTransition)
-        .flat()
-    );
-    if (canWarn()) {
-      const invalidStates = allStates.filter(state => !states.includes(state));
-      const invalidRoutes = allRoutes.filter(route => !routes.includes(route));
-      if (invalidStates.length) {
-        _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
-          invalidStates.map(state => `  > "${state}"`).join('\n')
-        );
-      }
-      if (invalidRoutes.length) {
-        _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
-          invalidRoutes.map(route => `  > "${route}"`).join('\n')
-        );
-      }
-    }
-    return () => allCleanupFns.map(fn => fn())
   }
   function previousState () {
     return stateHistory[stateHistory.length - 2]
@@ -867,7 +901,7 @@ function Statebot (name, options) {
     if (err) {
       throw new TypeError(err)
     }
-    return (...args) => enter(state, ...[...curriedArgs, ...args])
+    return (...args) => enter(...[state, curriedArgs].concat(args))
   }
   function InState (state, anyOrFn, ...curriedFnArgs) {
     const err = argTypeError('InState', { state: isString }, state);
@@ -875,7 +909,7 @@ function Statebot (name, options) {
       throw new TypeError(err)
     }
     return (...fnArgs) =>
-      inState(state, anyOrFn, ...curriedFnArgs.concat(fnArgs))
+      inState(...[state, anyOrFn].concat(curriedFnArgs, fnArgs))
   }
   function reset () {
     _console.warn(`${logPrefix}: State-machine reset!`);
@@ -1972,45 +2006,6 @@ function isStatebot (object) {
     typeof object.__STATEBOT__ === 'number'
   )
 }
-function wrapEmitter (events) {
-  const emit = (eventName, ...args) =>
-    events.emit(eventName, args);
-  const addListener = events.addListener
-    ? (...args) => events.addListener(...args)
-    : (...args) => events.on(...args);
-  const removeListener = events.removeListener
-    ? (...args) => events.removeListener(...args)
-    : (...args) => events.off(...args);
-  const wrapMap = new Map();
-  function on (eventName, fn) {
-    let fnMeta = wrapMap.get(fn);
-    if (!fnMeta) {
-      fnMeta = {
-        handleEvent: (args = []) => fn(...args),
-        refCount: 0
-      };
-      wrapMap.set(fn, fnMeta);
-    }
-    fnMeta.refCount += 1;
-    addListener(eventName, fnMeta.handleEvent);
-  }
-  function off (eventName, fn) {
-    let fnMeta = wrapMap.get(fn);
-    if (!fnMeta) {
-      return
-    }
-    removeListener(eventName, fnMeta.handleEvent);
-    fnMeta.refCount -= 1;
-    if (fnMeta.refCount === 0) {
-      wrapMap.delete(fn);
-    }
-  }
-  return {
-    emit,
-    on,
-    off
-  }
-}
 
 const argTypeError$1 = ArgTypeError('statebot.');
 /**
@@ -2234,7 +2229,9 @@ function assertRoute (machine, expectedRoute, options) {
     const removeOnSwitchingListener = machine.onSwitching(fn);
   })
 }
-function Table (columns = [], alignments = []) {
+function Table (columns, alignments) {
+  columns = columns || [];
+  alignments = alignments || [];
   const table = [];
   const alignment = columns.map((_, index) => alignments[index] || 'center');
   let locked = false;

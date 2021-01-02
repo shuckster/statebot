@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.1] - 2021-01-02
+### Updated
+- Add code-comments to make CodeFactor happy with documentation page
+- Remove argument-defaults to reduce compiled/minified code-size slightly
+
 ## [2.6.0] - 2020-12-30
 ### Changed
 - Now using Mitt for events

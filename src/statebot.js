@@ -168,6 +168,7 @@ import {
   isFunction,
   isPojo,
   isString,
+  wrapEmitter,
   ArgTypeError,
   Logger,
   ReferenceCounter,
@@ -1761,52 +1762,4 @@ function isStatebot (object) {
     isPojo(object) &&
     typeof object.__STATEBOT__ === 'number'
   )
-}
-
-function wrapEmitter (events) {
-  const emit = (eventName, ...args) =>
-    events.emit(eventName, args)
-
-  const addListener = events.addListener
-    ? (...args) => events.addListener(...args)
-    : (...args) => events.on(...args)
-
-  const removeListener = events.removeListener
-    ? (...args) => events.removeListener(...args)
-    : (...args) => events.off(...args)
-
-  const wrapMap = new Map()
-
-  function on (eventName, fn) {
-    let fnMeta = wrapMap.get(fn)
-    if (!fnMeta) {
-      fnMeta = {
-        handleEvent: (args = []) => fn(...args),
-        refCount: 0
-      }
-      wrapMap.set(fn, fnMeta)
-    }
-
-    fnMeta.refCount += 1
-    addListener(eventName, fnMeta.handleEvent)
-  }
-
-  function off (eventName, fn) {
-    let fnMeta = wrapMap.get(fn)
-    if (!fnMeta) {
-      return
-    }
-
-    removeListener(eventName, fnMeta.handleEvent)
-    fnMeta.refCount -= 1
-    if (fnMeta.refCount === 0) {
-      wrapMap.delete(fn)
-    }
-  }
-
-  return {
-    emit,
-    on,
-    off
-  }
 }

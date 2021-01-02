@@ -238,7 +238,6 @@ function Statebot (name, options) {
 
   const stateHistory = [startIn]
   const stateHistoryLimit = Math.max(historyLimit, 2)
-  const internalEvents = wrapEmitter(mitt())
 
   let transitionId = 0
 
@@ -246,6 +245,7 @@ function Statebot (name, options) {
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   )
 
+  const internalEvents = wrapEmitter(mitt())
   const emitInternalEvent = Pausable((eventName, ...args) =>
     internalEvents.emit(eventName, ...args)
   )
@@ -286,35 +286,83 @@ function Statebot (name, options) {
       )
     }
 
+    const allStates = []
+    const allRoutes = []
     const {
       transitionsForEvents,
       transitionsOnly
     } = decomposeHitcherActions(hitcherActions)
 
-    const allStates = []
-    const allRoutes = []
-    const allCleanupFns = []
-
-    // Handle performTransitions() signature (configs with an event,
-    // and maybe a then-method too)
-    const decomposedEvents = Object
+    // Handle performTransitions() signature
+    // (configs with an event, and maybe a then-method too)
+    const eventsMappedToTransitionConfigs = Object
       .entries(transitionsForEvents)
-      .reduce((acc, [eventName, transitionsAndAction]) => {
-        const {
-          states,
-          routes,
-          configs
-        } = expandTransitions(transitionsAndAction, canWarn)
+      .reduce(decomposeTransitionsForEvent, {})
 
-        if (canWarn()) {
-          allStates.push(...states)
-          allRoutes.push(...routes)
-        }
-        return {
-          ...acc,
-          [eventName]: configs
-        }
-      }, {})
+    // Handle onTransitions() signature
+    // (transition-only, and maybe a then-function too)
+    const transitionConfigs = expandTransitions(transitionsOnly, canWarn)
+
+    const allCleanupFns =
+      Object
+        .entries(eventsMappedToTransitionConfigs)
+        .map(createEventHandlerForTransition)
+        .concat(transitionConfigs.configs.map(runThenMethodOnTransition))
+        .flat()
+
+    // Debugging
+    // (if we're at the right level)
+    if (canWarn()) {
+      allStates.push(...transitionConfigs.states)
+      allRoutes.push(...transitionConfigs.routes)
+
+      const invalidStates = allStates.filter(state => !states.includes(state))
+      const invalidRoutes = allRoutes.filter(route => !routes.includes(route))
+
+      if (invalidStates.length) {
+        _console.warn(
+          `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
+          invalidStates.map(state => `  > "${state}"`).join('\n')
+        )
+      }
+      if (invalidRoutes.length) {
+        _console.warn(
+          `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
+          invalidRoutes.map(route => `  > "${route}"`).join('\n')
+        )
+      }
+    }
+
+    return () => allCleanupFns.map(fn => fn())
+
+    // Helper for onTransitions()
+    function runThenMethodOnTransition (config) {
+      const { fromState, toState, action } = config
+      const route = `${fromState}->${toState}`
+      return [
+        routesHandled.increase(route),
+        onInternalEvent(route, action)
+      ]
+    }
+
+    // Helpers for performTransitions()
+    function decomposeTransitionsForEvent (acc, [eventName, transitionsAndAction]) {
+      const {
+        states,
+        routes,
+        configs
+      } = expandTransitions(transitionsAndAction, canWarn)
+
+      if (canWarn()) {
+        allStates.push(...states)
+        allRoutes.push(...routes)
+      }
+
+      return {
+        ...acc,
+        [eventName]: configs
+      }
+    }
 
     function ifStateThenEnterState ({ fromState, toState, action, args }) {
       return inState(fromState, () => {
@@ -338,56 +386,6 @@ function Statebot (name, options) {
         })
       ]
     }
-
-    allCleanupFns.push(
-      ...Object
-        .entries(decomposedEvents)
-        .map(createEventHandlerForTransition)
-        .flat()
-    )
-
-    // Handle onTransitions() signature (transition-only, and maybe
-    // a then-function too)
-    const transitionConfigs = expandTransitions(transitionsOnly, canWarn)
-    if (canWarn()) {
-      allStates.push(...transitionConfigs.states)
-      allRoutes.push(...transitionConfigs.routes)
-    }
-
-    function runThenMethodOnTransition (config) {
-      const { fromState, toState, action } = config
-      const route = `${fromState}->${toState}`
-      return [
-        routesHandled.increase(route),
-        onInternalEvent(route, action)
-      ]
-    }
-
-    allCleanupFns.push(
-      ...transitionConfigs.configs
-        .map(runThenMethodOnTransition)
-        .flat()
-    )
-
-    // Debugging, if we're at the right level
-    if (canWarn()) {
-      const invalidStates = allStates.filter(state => !states.includes(state))
-      const invalidRoutes = allRoutes.filter(route => !routes.includes(route))
-      if (invalidStates.length) {
-        _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
-          invalidStates.map(state => `  > "${state}"`).join('\n')
-        )
-      }
-      if (invalidRoutes.length) {
-        _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
-          invalidRoutes.map(route => `  > "${route}"`).join('\n')
-        )
-      }
-    }
-
-    return () => allCleanupFns.map(fn => fn())
   }
 
   function previousState () {

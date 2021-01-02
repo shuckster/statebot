@@ -267,7 +267,10 @@ function assertRoute (machine, expectedRoute, options) {
   })
 }
 
-function Table (columns = [], alignments = []) {
+function Table (columns, alignments) {
+  columns = columns || []
+  alignments = alignments || []
+
   const table = []
   const alignment = columns.map((_, index) => alignments[index] || 'center')
 

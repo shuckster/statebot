@@ -599,7 +599,7 @@ function Statebot (name, options) {
       throw new TypeError(err)
     }
 
-    return (...args) => enter(state, ...[...curriedArgs, ...args])
+    return (...args) => enter(...[state, curriedArgs].concat(args))
   }
 
   function InState (state, anyOrFn, ...curriedFnArgs) {
@@ -609,7 +609,7 @@ function Statebot (name, options) {
     }
 
     return (...fnArgs) =>
-      inState(state, anyOrFn, ...curriedFnArgs.concat(fnArgs))
+      inState(...[state, anyOrFn].concat(curriedFnArgs, fnArgs))
   }
 
   function reset () {

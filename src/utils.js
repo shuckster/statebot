@@ -68,7 +68,7 @@ function wrapEmitter (events) {
     let fnMeta = wrapMap.get(fn)
     if (!fnMeta) {
       fnMeta = {
-        handleEvent: (args = []) => fn(...args),
+        handleEvent: args => fn(...args || []),
         refCount: 0
       }
       wrapMap.set(fn, fnMeta)
@@ -175,7 +175,8 @@ function Revokable (fn) {
 // Pausables
 //
 
-function Pausables (startPaused = false, runFnWhenPaused = () => {}) {
+function Pausables (startPaused, runFnWhenPaused) {
+  runFnWhenPaused = runFnWhenPaused || function () {}
   let paused = !!startPaused
 
   function Pausable (fn) {
@@ -297,7 +298,8 @@ const typeErrorFromArgument = (argMap, arg, index) => {
  * }
  */
 
-function ArgTypeError (errPrefix = '') {
+function ArgTypeError (errPrefix) {
+  errPrefix = errPrefix || ''
   return function (fnName, typeMap, ...args) {
     const signature = Object.keys(typeMap).join(', ')
     const argMap = Object
@@ -323,34 +325,34 @@ function ArgTypeError (errPrefix = '') {
 // Logger
 //
 
-function Logger (level, c = console) {
-  let _level = level
-  if (isString(_level)) {
-    _level = ({
+function Logger (level, _console) {
+  _console = _console || console
+  if (isString(level)) {
+    level = ({
       info: 3,
       log: 2,
       warn: 1,
       none: 0
-    })[_level] || 3
+    })[level] || 3
   }
   function canWarn () {
-    return _level >= 1
+    return level >= 1
   }
   function canLog () {
-    return _level >= 2
+    return level >= 2
   }
   function canInfo () {
-    return _level >= 3
+    return level >= 3
   }
   return {
     canWarn,
     canLog,
     canInfo,
 
-    info: (...args) => canInfo() && c.info(...args),
-    table: (...args) => canLog() && c.table(...args),
-    log: (...args) => canLog() && c.log(...args),
-    warn: (...args) => canWarn() && c.warn(...args),
-    error: (...args) => c.error(...args)
+    info: (...args) => canInfo() && _console.info(...args),
+    table: (...args) => canLog() && _console.table(...args),
+    log: (...args) => canLog() && _console.log(...args),
+    warn: (...args) => canWarn() && _console.warn(...args),
+    error: (...args) => _console.error(...args)
   }
 }

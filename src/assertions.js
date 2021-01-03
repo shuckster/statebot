@@ -301,24 +301,16 @@ function Table (columns, alignments) {
     )
   }
 
-  function padLeft (str, len) {
-    return str + ' '.repeat(len - str.length)
-  }
-
-  function padRight (str, len) {
-    return ' '.repeat(len - str.length) + str
-  }
-
   function content () {
     const sizes = colSizes()
     function formatField (value, index) {
       const size = sizes[index]
       const align = alignment[index]
       if (align === 'left') {
-        return padLeft(value, size)
+        return value.padEnd(size)
       }
       if (align === 'right') {
-        return padRight(value, size)
+        return value.padStart(size)
       }
       return value
     }

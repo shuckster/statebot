@@ -13,7 +13,7 @@ const bot = Statebot('test-events-only', {
   logLevel: 0
 })
 
-const EXPECTED_EVENT_ARITY_COUNT = 114
+const EXPECTED_EVENT_ARITY_COUNT = 114 * 2
 
 let callCount = 0
 function bumpEventArityCount(...args) {
@@ -94,6 +94,38 @@ test(`ran event callbacks with expected arity`, () => {
   bot.emit('done', 1, 2, 3, 4, 5)
   bot.emit('done', 1, 2, 3, 4, 5)
   bot.emit('done', 1, 2, 3, 4, 5)
+
+  bot.reset()
+
+  const emitStart1 = bot.Emit('start', 1, 2)
+  const emitPass1 = bot.Emit('pass', 1, 2, 3, 4)
+  const emitDone1 = bot.Emit('done', 1, 2, 3)
+
+  emitStart1()
+  emitStart1()
+  emitStart1()
+  emitPass1()
+  emitPass1()
+  emitPass1()
+  emitDone1()
+  emitDone1()
+  emitDone1()
+
+  bot.reset()
+
+  const emitStart2 = bot.Emit('start', 1)
+  const emitFail2 = bot.Emit('fail')
+  const emitDone2 = bot.Emit('done', 1, 2, 3, 4, 5)
+
+  emitStart2()
+  emitStart2()
+  emitStart2()
+  emitFail2()
+  emitFail2()
+  emitFail2()
+  emitDone2()
+  emitDone2()
+  emitDone2()
 
   expect(callCount).toEqual(EXPECTED_EVENT_ARITY_COUNT)
 })

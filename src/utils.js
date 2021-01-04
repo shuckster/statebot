@@ -326,7 +326,6 @@ function ArgTypeError (errPrefix) {
 //
 
 function Logger (level, _console) {
-  _console = _console || console
   if (isString(level)) {
     level = ({
       info: 3,
@@ -344,15 +343,16 @@ function Logger (level, _console) {
   function canInfo () {
     return level >= 3
   }
+  const { info, table, log, warn, error } = _console || console
   return {
     canWarn,
     canLog,
     canInfo,
 
-    info: (...args) => canInfo() && _console.info(...args),
-    table: (...args) => canLog() && _console.table(...args),
-    log: (...args) => canLog() && _console.log(...args),
-    warn: (...args) => canWarn() && _console.warn(...args),
-    error: (...args) => _console.error(...args)
+    info: (...args) => { canInfo() && info(...args) },
+    table: (...args) => { canLog() && table(...args) },
+    log: (...args) => { canLog() && log(...args) },
+    warn: (...args) => { canWarn() && warn(...args) },
+    error: (...args) => { error(...args) }
   }
 }

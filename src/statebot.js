@@ -609,7 +609,7 @@ function Statebot (name, options) {
     }
 
     return (...fnArgs) =>
-      inState(...[state, anyOrFn].concat(curriedFnArgs, fnArgs))
+      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
   }
 
   function reset () {

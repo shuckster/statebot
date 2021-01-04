@@ -134,7 +134,7 @@ function uniq (input) {
 
 function defer (fn, ...args) {
   const timer = setTimeout(fn, 0, ...args)
-  return () => clearTimeout(timer)
+  return () => { clearTimeout(timer) }
 }
 
 function Defer (fn) {
@@ -208,7 +208,7 @@ function ReferenceCounter (name, kind, description, ...expecting) {
 
   function increase (ref) {
     _refs[ref] = countOf(ref) + 1
-    return () => decrease(ref)
+    return () => { decrease(ref) }
   }
   function decrease (ref) {
     const count = countOf(ref) - 1
@@ -299,7 +299,6 @@ const typeErrorFromArgument = (argMap, arg, index) => {
  */
 
 function ArgTypeError (errPrefix) {
-  errPrefix = errPrefix || ''
   return function (fnName, typeMap, ...args) {
     const signature = Object.keys(typeMap).join(', ')
     const argMap = Object
@@ -315,7 +314,7 @@ function ArgTypeError (errPrefix) {
     }
 
     return (
-      `\n${errPrefix}${fnName}(${signature}):\n` +
+      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
       `${err.map(err => `> ${err}`).join('\n')}`
     )
   }

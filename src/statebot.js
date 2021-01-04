@@ -599,7 +599,7 @@ function Statebot (name, options) {
       throw new TypeError(err)
     }
 
-    return (...args) => enter(...[state, curriedArgs].concat(args))
+    return (...args) => enter(state, ...[...curriedArgs, ...args])
   }
 
   function InState (state, anyOrFn, ...curriedFnArgs) {

@@ -96,7 +96,7 @@ function uniq (input) {
 }
 function defer (fn, ...args) {
   const timer = setTimeout(fn, 0, ...args);
-  return () => clearTimeout(timer)
+  return () => { clearTimeout(timer); }
 }
 function Defer (fn) {
   return (...args) => defer(fn, ...args)
@@ -150,7 +150,7 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     .reduce((acc, ref) => ({ ...acc, [ref]: 0 }), {});
   function increase (ref) {
     _refs[ref] = countOf(ref) + 1;
-    return () => decrease(ref)
+    return () => { decrease(ref); }
   }
   function decrease (ref) {
     const count = countOf(ref) - 1;
@@ -230,7 +230,6 @@ const typeErrorFromArgument = (argMap, arg, index) => {
  * }
  */
 function ArgTypeError (errPrefix) {
-  errPrefix = errPrefix || '';
   return function (fnName, typeMap, ...args) {
     const signature = Object.keys(typeMap).join(', ');
     const argMap = Object
@@ -243,13 +242,12 @@ function ArgTypeError (errPrefix) {
       return
     }
     return (
-      `\n${errPrefix}${fnName}(${signature}):\n` +
+      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
       `${err.map(err => `> ${err}`).join('\n')}`
     )
   }
 }
 function Logger (level, _console) {
-  _console = _console || console;
   if (isString(level)) {
     level = ({
       info: 3,
@@ -267,15 +265,16 @@ function Logger (level, _console) {
   function canInfo () {
     return level >= 3
   }
+  const { info, table, log, warn, error } = _console || console;
   return {
     canWarn,
     canLog,
     canInfo,
-    info: (...args) => canInfo() && _console.info(...args),
-    table: (...args) => canLog() && _console.table(...args),
-    log: (...args) => canLog() && _console.log(...args),
-    warn: (...args) => canWarn() && _console.warn(...args),
-    error: (...args) => _console.error(...args)
+    info: (...args) => { canInfo() && info(...args); },
+    table: (...args) => { canLog() && table(...args); },
+    log: (...args) => { canLog() && log(...args); },
+    warn: (...args) => { canWarn() && warn(...args); },
+    error: (...args) => { error(...args); }
   }
 }
 
@@ -619,9 +618,7 @@ function Statebot (name, options) {
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
   const internalEvents = wrapEmitter(mitt());
-  const emitInternalEvent = Pausable((eventName, ...args) =>
-    internalEvents.emit(eventName, ...args)
-  );
+  const emitInternalEvent = Pausable(internalEvents.emit);
   function onInternalEvent (eventName, cb) {
     internalEvents.on(eventName, cb);
     return () => internalEvents.off(eventName, cb)
@@ -905,7 +902,7 @@ function Statebot (name, options) {
     if (err) {
       throw new TypeError(err)
     }
-    return (...args) => enter(...[state, curriedArgs].concat(args))
+    return (...args) => enter(state, ...[...curriedArgs, ...args])
   }
   function InState (state, anyOrFn, ...curriedFnArgs) {
     const err = argTypeError('InState', { state: isString }, state);
@@ -913,7 +910,7 @@ function Statebot (name, options) {
       throw new TypeError(err)
     }
     return (...fnArgs) =>
-      inState(...[state, anyOrFn].concat(curriedFnArgs, fnArgs))
+      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
   }
   function reset () {
     _console.warn(`${logPrefix}: State-machine reset!`);
@@ -2262,22 +2259,16 @@ function Table (columns, alignments) {
       ), columns.map(() => 0)
     )
   }
-  function padLeft (str, len) {
-    return str + ' '.repeat(len - str.length)
-  }
-  function padRight (str, len) {
-    return ' '.repeat(len - str.length) + str
-  }
   function content () {
     const sizes = colSizes();
     function formatField (value, index) {
       const size = sizes[index];
       const align = alignment[index];
       if (align === 'left') {
-        return padLeft(value, size)
+        return value.padEnd(size)
       }
       if (align === 'right') {
-        return padRight(value, size)
+        return value.padStart(size)
       }
       return value
     }

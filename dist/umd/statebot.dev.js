@@ -284,7 +284,7 @@
 
     var timer = setTimeout.apply(void 0, [fn, 0].concat(args));
     return function () {
-      return clearTimeout(timer);
+      clearTimeout(timer);
     };
   }
 
@@ -370,7 +370,7 @@
     function increase(ref) {
       _refs[ref] = countOf(ref) + 1;
       return function () {
-        return decrease(ref);
+        decrease(ref);
       };
     }
 
@@ -462,7 +462,6 @@
 
 
   function ArgTypeError(errPrefix) {
-    errPrefix = errPrefix || '';
     return function (fnName, typeMap) {
       var signature = Object.keys(typeMap).join(', ');
       var argMap = Object.entries(typeMap).map(function (_ref4) {
@@ -492,15 +491,13 @@
         return;
       }
 
-      return "\n".concat(errPrefix).concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
+      return "\n".concat(errPrefix || '').concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
         return "> ".concat(err);
       }).join('\n'));
     };
   }
 
   function Logger(level, _console) {
-    _console = _console || console;
-
     if (isString(level)) {
       level = {
         info: 3,
@@ -522,34 +519,31 @@
       return level >= 3;
     }
 
+    var _ref6 = _console || console,
+        _info = _ref6.info,
+        _table = _ref6.table,
+        _log = _ref6.log,
+        _warn = _ref6.warn,
+        _error = _ref6.error;
+
     return {
       canWarn: canWarn,
       canLog: canLog,
       canInfo: canInfo,
       info: function info() {
-        var _console2;
-
-        return canInfo() && (_console2 = _console).info.apply(_console2, arguments);
+        canInfo() && _info.apply(void 0, arguments);
       },
       table: function table() {
-        var _console3;
-
-        return canLog() && (_console3 = _console).table.apply(_console3, arguments);
+        canLog() && _table.apply(void 0, arguments);
       },
       log: function log() {
-        var _console4;
-
-        return canLog() && (_console4 = _console).log.apply(_console4, arguments);
+        canLog() && _log.apply(void 0, arguments);
       },
       warn: function warn() {
-        var _console5;
-
-        return canWarn() && (_console5 = _console).warn.apply(_console5, arguments);
+        canWarn() && _warn.apply(void 0, arguments);
       },
       error: function error() {
-        var _console6;
-
-        return (_console6 = _console).error.apply(_console6, arguments);
+        _error.apply(void 0, arguments);
       }
     };
   }
@@ -931,13 +925,7 @@
         Pausable = _Pausables.Pausable;
 
     var internalEvents = wrapEmitter(mitt());
-    var emitInternalEvent = Pausable(function (eventName) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-
-      return internalEvents.emit.apply(internalEvents, [eventName].concat(args));
-    });
+    var emitInternalEvent = Pausable(internalEvents.emit);
 
     function onInternalEvent(eventName, cb) {
       internalEvents.on(eventName, cb);
@@ -1046,8 +1034,8 @@
             configs = _ref7[1];
 
         return [eventsHandled.increase(eventName), onEvent(eventName, function () {
-          for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            args[_key2] = arguments[_key2];
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
           }
 
           var eventWasHandled = configs.map(function (config) {
@@ -1072,8 +1060,8 @@
     }
 
     function canTransitionTo() {
-      for (var _len3 = arguments.length, states = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        states[_key3] = arguments[_key3];
+      for (var _len2 = arguments.length, states = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        states[_key2] = arguments[_key2];
       }
 
       var testStates = states.flat();
@@ -1138,8 +1126,8 @@
       }
 
       if (isFunction(anyOrFn)) {
-        for (var _len4 = arguments.length, fnArgs = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
-          fnArgs[_key4 - 2] = arguments[_key4];
+        for (var _len3 = arguments.length, fnArgs = new Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
+          fnArgs[_key3 - 2] = arguments[_key3];
         }
 
         return anyOrFn.apply(void 0, fnArgs);
@@ -1157,8 +1145,8 @@
         throw new TypeError(err);
       }
 
-      for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
+      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        args[_key4 - 1] = arguments[_key4];
       }
 
       return events.emit.apply(events, [eventName].concat(args));
@@ -1200,8 +1188,8 @@
         stateHistory.shift();
       }
 
-      for (var _len6 = arguments.length, args = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-        args[_key6 - 1] = arguments[_key6];
+      for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+        args[_key5 - 1] = arguments[_key5];
       }
 
       emitInternalEvent.apply(void 0, [INTERNAL_EVENTS[ON_SWITCHING], toState, inState].concat(args));
@@ -1263,8 +1251,8 @@
 
         var decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase("".concat(state, ":").concat(eventName))];
         var removeEvent = switchMethods[switchMethod](function (toState, fromState) {
-          for (var _len7 = arguments.length, args = new Array(_len7 > 2 ? _len7 - 2 : 0), _key7 = 2; _key7 < _len7; _key7++) {
-            args[_key7 - 2] = arguments[_key7];
+          for (var _len6 = arguments.length, args = new Array(_len6 > 2 ? _len6 - 2 : 0), _key6 = 2; _key6 < _len6; _key6++) {
+            args[_key6 - 2] = arguments[_key6];
           }
 
           if (name.indexOf('Exit') === 0) {
@@ -1283,8 +1271,8 @@
     }, {});
 
     function Emit(eventName) {
-      for (var _len8 = arguments.length, curriedArgs = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
-        curriedArgs[_key8 - 1] = arguments[_key8];
+      for (var _len7 = arguments.length, curriedArgs = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+        curriedArgs[_key7 - 1] = arguments[_key7];
       }
 
       var err = argTypeError('Emit', {
@@ -1296,8 +1284,8 @@
       }
 
       return function () {
-        for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-          args[_key9] = arguments[_key9];
+        for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+          args[_key8] = arguments[_key8];
         }
 
         return emit.apply(void 0, [eventName].concat([].concat(curriedArgs, args)));
@@ -1305,8 +1293,8 @@
     }
 
     function Enter(state) {
-      for (var _len10 = arguments.length, curriedArgs = new Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
-        curriedArgs[_key10 - 1] = arguments[_key10];
+      for (var _len9 = arguments.length, curriedArgs = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
+        curriedArgs[_key9 - 1] = arguments[_key9];
       }
 
       var err = argTypeError('Enter', {
@@ -1318,17 +1306,17 @@
       }
 
       return function () {
-        for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-          args[_key11] = arguments[_key11];
+        for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+          args[_key10] = arguments[_key10];
         }
 
-        return enter.apply(void 0, _toConsumableArray([state, curriedArgs].concat(args)));
+        return enter.apply(void 0, [state].concat([].concat(curriedArgs, args)));
       };
     }
 
     function InState(state, anyOrFn) {
-      for (var _len12 = arguments.length, curriedFnArgs = new Array(_len12 > 2 ? _len12 - 2 : 0), _key12 = 2; _key12 < _len12; _key12++) {
-        curriedFnArgs[_key12 - 2] = arguments[_key12];
+      for (var _len11 = arguments.length, curriedFnArgs = new Array(_len11 > 2 ? _len11 - 2 : 0), _key11 = 2; _key11 < _len11; _key11++) {
+        curriedFnArgs[_key11 - 2] = arguments[_key11];
       }
 
       var err = argTypeError('InState', {
@@ -1340,11 +1328,11 @@
       }
 
       return function () {
-        for (var _len13 = arguments.length, fnArgs = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-          fnArgs[_key13] = arguments[_key13];
+        for (var _len12 = arguments.length, fnArgs = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+          fnArgs[_key12] = arguments[_key12];
         }
 
-        return inState.apply(void 0, _toConsumableArray([state, anyOrFn].concat(curriedFnArgs, fnArgs)));
+        return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));
       };
     }
 
@@ -2819,14 +2807,6 @@
       }));
     }
 
-    function padLeft(str, len) {
-      return str + ' '.repeat(len - str.length);
-    }
-
-    function padRight(str, len) {
-      return ' '.repeat(len - str.length) + str;
-    }
-
     function content() {
       var sizes = colSizes();
 
@@ -2835,11 +2815,11 @@
         var align = alignment[index];
 
         if (align === 'left') {
-          return padLeft(value, size);
+          return value.padEnd(size);
         }
 
         if (align === 'right') {
-          return padRight(value, size);
+          return value.padStart(size);
         }
 
         return value;

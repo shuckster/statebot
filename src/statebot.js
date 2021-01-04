@@ -246,9 +246,7 @@ function Statebot (name, options) {
   )
 
   const internalEvents = wrapEmitter(mitt())
-  const emitInternalEvent = Pausable((eventName, ...args) =>
-    internalEvents.emit(eventName, ...args)
-  )
+  const emitInternalEvent = Pausable(internalEvents.emit)
 
   function onInternalEvent (eventName, cb) {
     internalEvents.on(eventName, cb)

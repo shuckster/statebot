@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.2] - 2021-01-04
+### Fixed
+- Revert previous argument-defaults tweak, as it bugged Enter(). Fixed, regression test added
+
+### Added
+- Further tests for arity of emit/Emit
+
+### Changed
+- Replace padLeft/padRight with padEnd/padStart respectively
+
 ## [2.6.1] - 2021-01-02
 ### Updated
 - Add code-comments to make CodeFactor happy with documentation page

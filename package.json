@@ -58,7 +58,7 @@
     "concurrently": "^5.3.0",
     "documentation": "^13.1.0",
     "documentation-theme-light": "^1.1.1",
-    "eslint": "^7.16.0",
+    "eslint": "^7.17.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.1.3",

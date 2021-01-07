@@ -4,50 +4,21 @@
 //
 
 export {
+  ArgTypeError,
+  Defer,
   isArray,
   isEventEmitter,
   isFunction,
   isPojo,
   isString,
   isTemplateLiteral,
+  Logger,
+  Once,
+  Pausables,
+  ReferenceCounter,
+  Revokable,
   uniq,
   wrapEmitter,
-  Defer,
-  Once,
-  Revokable,
-  ReferenceCounter,
-  ArgTypeError,
-  Logger,
-  Pausables
-}
-
-//
-// isType
-//
-
-function isArray (obj) {
-  return Array.isArray(obj)
-}
-
-function isFunction (obj) {
-  return typeof obj === 'function'
-}
-
-function isString (obj) {
-  return typeof obj === 'string'
-}
-
-function isObject (obj) {
-  return typeof obj === 'object'
-}
-
-function isEventEmitter (obj) {
-  return (
-    isObject(obj) &&
-    isFunction(obj.emit) &&
-    (isFunction(obj.addListener) || isFunction(obj.on)) &&
-    (isFunction(obj.removeListener) || isFunction(obj.off))
-  )
 }
 
 function wrapEmitter (events) {
@@ -96,6 +67,35 @@ function wrapEmitter (events) {
     on,
     off
   }
+}
+
+//
+// isType
+//
+
+function isEventEmitter (obj) {
+  return (
+    isObject(obj) &&
+    isFunction(obj.emit) &&
+    (isFunction(obj.addListener) || isFunction(obj.on)) &&
+    (isFunction(obj.removeListener) || isFunction(obj.off))
+  )
+}
+
+function isArray (obj) {
+  return Array.isArray(obj)
+}
+
+function isFunction (obj) {
+  return typeof obj === 'function'
+}
+
+function isString (obj) {
+  return typeof obj === 'string'
+}
+
+function isObject (obj) {
+  return typeof obj === 'object'
 }
 
 function isPojo (obj) {

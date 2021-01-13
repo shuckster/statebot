@@ -652,44 +652,29 @@ The [documentation](https://shuckster.github.io/statebot/) has a few more exampl
 
 I wrote Statebot to learn about FSMs, but really I ended up learning more about writing programs in general, and what I do and do not like about the process.
 
-- 👎 I don't like sprawling configuration
+Above all, state-machines are extremely useful when it comes to *reading old code*. Their innate robustness and predictability are an added bonus.
 
-- 👎 I don't like all-or-nothing APIs
+Understanding the flow of a program I haven't come back to in a while is exactly what I enjoy the most about using state-machines.
 
-- 👍 I do like things that permit clear separation of concerns
+With Statebot itself, code can be marshalled into a shape that "fans-out":
 
-- 👍 I do like limitations that aim to encourage this
+1. The compact `chart` at the top describes the flow.
 
-Not that I'm any good at following these myself, but it's good to have aspirations!
+2. The hitchers reveal how `transitions` happen.
 
-But above all, state-machines are extremely useful when it comes to *reading old code*. Their innate robustness and predictability are an added bonus.
+3. Finally, the `callbacks` pull-in all the business-logic. (This might still be a huge jumbled mess of course, but at least at this point I'll have a few leads into what's supposed to be going on!)
 
-With Statebot, code can be marshalled into a shape that "fans-out":
+Frankly, this does add a bit of redundancy when using Statebot.
 
-1. I can get the gist of a program from the `chart` at the top. I love the fact that it almost looks like a code-comment, but it's actually configuration.
+Transitions are repeated between charts and hitchers, and there can be a bit of to-ing and fro-ing to get them right. But for me, the pay-off of being able to jump-in to an old piece of code and grok it quickly is worth it.
 
-2. Looking at how the hitchers wire-up the `transitions` gives a little more insight into the moving-parts.
-
-3. Finally, the `callbacks` pull-in all the business-logic. This might still be a huge jumbled mess of course, but at least at this point I'll have a few leads into what's supposed to be going on.
-
-Statebot charts look the way they do because I wanted to try to express, in code, the visualisation tools often used to represent FSMs.
-
-Frankly, this does add a bit of redundancy when using Statebot. Transitions are repeated between charts and hitchers, and there can be a bit of to-ing and fro-ing to get them right. But for me, the pay-off of being able to jump-in to an old piece of code and grok it quickly is worth it.
-
-I guess the bottom-line with any tool is to use it sparingly and appropriately, and the same applies with Statebot.
+The bottom-line with any tool is to use it sparingly and appropriately, and the same applies with Statebot.
 
 # Contributing
 
 I consider the API stable and would not like it to change much. I don't want it to become a store or data-manager. Many APIs exist that are dedicated to such tasks. I'd really like to keep Statebot lean.
 
 Of course, bug-fixes, forks, and integrations are very welcome.
-
-Here are the things I'd personally like to work on:
-
-- Tests using [FastCheck](https://github.com/dubzzz/fast-check)
-- Examples using other libraries, such as React
-- Determine compatible browser/Node versions beyond just specifying a browserslistrc
-- The documentation-theme is hacked about using awk. Maybe let's not do that :P
 
 ## Credits
 

@@ -171,26 +171,6 @@
     };
   }
 
-  function isArray(obj) {
-    return Array.isArray(obj);
-  }
-
-  function isFunction(obj) {
-    return typeof obj === 'function';
-  }
-
-  function isString(obj) {
-    return typeof obj === 'string';
-  }
-
-  function isObject(obj) {
-    return _typeof(obj) === 'object';
-  }
-
-  function isEventEmitter(obj) {
-    return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
-  }
-
   function wrapEmitter(events) {
     var emit = function emit(eventName) {
       for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -249,6 +229,26 @@
       on: on,
       off: off
     };
+  }
+
+  function isEventEmitter(obj) {
+    return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
+  }
+
+  function isArray(obj) {
+    return Array.isArray(obj);
+  }
+
+  function isFunction(obj) {
+    return typeof obj === 'function';
+  }
+
+  function isString(obj) {
+    return typeof obj === 'string';
+  }
+
+  function isObject(obj) {
+    return _typeof(obj) === 'object';
   }
 
   function isPojo(obj) {

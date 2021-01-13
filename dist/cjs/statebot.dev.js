@@ -12,26 +12,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function mitt(n){return {all:n=n||new Map,on:function(t,e){var i=n.get(t);i&&i.push(e)||n.set(t,[e]);},off:function(t,e){var i=n.get(t);i&&i.splice(i.indexOf(e)>>>0,1);},emit:function(t,e){(n.get(t)||[]).slice().map(function(n){n(e);}),(n.get("*")||[]).slice().map(function(n){n(t,e);});}}}
 
-function isArray (obj) {
-  return Array.isArray(obj)
-}
-function isFunction (obj) {
-  return typeof obj === 'function'
-}
-function isString (obj) {
-  return typeof obj === 'string'
-}
-function isObject (obj) {
-  return typeof obj === 'object'
-}
-function isEventEmitter (obj) {
-  return (
-    isObject(obj) &&
-    isFunction(obj.emit) &&
-    (isFunction(obj.addListener) || isFunction(obj.on)) &&
-    (isFunction(obj.removeListener) || isFunction(obj.off))
-  )
-}
 function wrapEmitter (events) {
   const emit = (eventName, ...args) =>
     events.emit(eventName, args);
@@ -70,6 +50,26 @@ function wrapEmitter (events) {
     on,
     off
   }
+}
+function isEventEmitter (obj) {
+  return (
+    isObject(obj) &&
+    isFunction(obj.emit) &&
+    (isFunction(obj.addListener) || isFunction(obj.on)) &&
+    (isFunction(obj.removeListener) || isFunction(obj.off))
+  )
+}
+function isArray (obj) {
+  return Array.isArray(obj)
+}
+function isFunction (obj) {
+  return typeof obj === 'function'
+}
+function isString (obj) {
+  return typeof obj === 'string'
+}
+function isObject (obj) {
+  return typeof obj === 'object'
 }
 function isPojo (obj) {
   if (obj === null || (!isObject(obj))) {

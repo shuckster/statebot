@@ -4,9 +4,15 @@
   "version": "2.6.2",
   "author": "Conan Theobald <statebot@conans.co.uk>",
   "license": "MIT",
+  "types": "index.d.ts",
   "main": "index.js",
   "module": "dist/esm/statebot.js",
-  "types": "index.d.ts",
+  "exports": {
+    "default": "./dist/esm/statebot.js",
+    "require": "./index.js",
+    "import": "./dist/esm/statebot.js",
+    "browser": "./dist/browser/statebot.dev.js"
+  },
   "files": [
     "dist/**/*.js",
     "dist/**/*.map",

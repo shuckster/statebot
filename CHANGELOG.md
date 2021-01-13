@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.3] - 2021-01-13
+### Added
+- package.json exports
+
 ## [2.6.2] - 2021-01-04
 ### Fixed
 - Revert previous argument-defaults tweak, as it bugged Enter(). Fixed, regression test added

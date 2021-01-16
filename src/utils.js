@@ -300,7 +300,6 @@ const typeErrorFromArgument = (argMap, arg, index) => {
 
 function ArgTypeError (errPrefix) {
   return function (fnName, typeMap, ...args) {
-    const signature = Object.keys(typeMap).join(', ')
     const argMap = Object
       .entries(typeMap)
       .map(([argName, argType]) => ({ argName, argType }))
@@ -313,6 +312,7 @@ function ArgTypeError (errPrefix) {
       return
     }
 
+    const signature = Object.keys(typeMap).join(', ')
     return (
       `\n${errPrefix || ''}${fnName}(${signature}):\n` +
       `${err.map(err => `> ${err}`).join('\n')}`

@@ -49,9 +49,21 @@ machine.onEvent('timer', () => {
   redrawTrafficLights()
 })
 
-machine.onEntered('stop', () => {
-  console.log('One moment, please...')
-})
+function redrawTrafficLights() {
+  machine.inState({
+    'stop': () =>
+      console.log('Draw red light')
+
+    'prepare-to-go': () =>
+      console.log('Draw red + yellow lights')
+
+    'go': () =>
+      console.log('Draw green light')
+
+    'prepare-to-stop': () =>
+      console.log('Draw yellow light')
+  })
+}
 
 setInterval(machine.Emit('timer'), 2000)
 ```

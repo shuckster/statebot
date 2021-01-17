@@ -1050,7 +1050,8 @@ function Statebot (name, options) {
      * @instance
      * @function
      * @param {string|object} state
-     *  The state to test against. This can be a string or an object.
+     *  The state to test against. This can be a string if you have a
+     *  single condition, or an object for multiple. (See example.)
      * @param {any|function} [outputWhenTrue]
      *  When a string is specified as the first argment, this becomes
      *  an optional `true`-value that is returned if the state matches.

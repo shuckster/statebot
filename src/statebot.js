@@ -163,17 +163,20 @@ const INTERNAL_EVENTS = {
 import mitt from 'mitt'
 
 import {
+  wrapEmitter,
+  Logger,
+  ReferenceCounter,
+  Pausables,
+} from './utils'
+
+import {
   isArray,
   isEventEmitter,
   isFunction,
   isPojo,
   isString,
-  wrapEmitter,
   ArgTypeError,
-  Logger,
-  ReferenceCounter,
-  Pausables
-} from './utils'
+} from './types'
 
 import { decomposeChart, cxArrow } from './parsing'
 

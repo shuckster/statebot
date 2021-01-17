@@ -10,13 +10,12 @@ export {
 
 import { isStatebot } from './statebot'
 import { decomposeRoute } from './parsing'
+import { isTemplateLiteral, ArgTypeError } from './types'
 import {
   Defer,
   Once,
   Revokable,
   Logger,
-  ArgTypeError,
-  isTemplateLiteral
 } from './utils'
 
 const argTypeError = ArgTypeError('statebot.')

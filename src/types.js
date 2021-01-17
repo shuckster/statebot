@@ -63,19 +63,19 @@ function isTemplateLiteral (obj) {
 // ArgTypeError
 //
 
-const typeErrorIfFnReturnsFalse = (argName, argTypeFn, arg) => {
+const typeErrorStringIfFnReturnsFalse = (argName, argTypeFn, arg) => {
   return argTypeFn(arg)
     ? undefined
     : `${argTypeFn.name}(${argName}) did not return true`
 }
 
-const typeErrorIfTypeOfFails = (argName, argType, arg) => {
+const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
   return typeof arg === argType
     ? undefined
     : `Argument "${argName}" should be a ${argType}`
 }
 
-const typeErrorFromArgument = (argMap, arg, index) => {
+const typeErrorStringFromArgument = (argMap, arg, index) => {
   const { argName, argType } = argMap[index]
   if (arg === undefined) {
     return `Argument undefined: "${argName}"`
@@ -87,8 +87,8 @@ const typeErrorFromArgument = (argMap, arg, index) => {
 
   const errorDescs = permittedArgTypes
     .map(argType => isFunction(argType)
-      ? typeErrorIfFnReturnsFalse(argName, argType, arg)
-      : typeErrorIfTypeOfFails(argName, argType, arg)
+      ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
+      : typeErrorStringIfTypeOfFails(argName, argType, arg)
     )
     .filter(isString)
 
@@ -131,8 +131,8 @@ function ArgTypeError (errPrefix) {
       .map(([argName, argType]) => ({ argName, argType }))
 
     const err = args
-      .map((...args) => typeErrorFromArgument(argMap, ...args))
-      .filter(Boolean)
+      .map((...args) => typeErrorStringFromArgument(argMap, ...args))
+      .filter(isString)
 
     if (!err.length) {
       return

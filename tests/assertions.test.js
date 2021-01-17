@@ -26,6 +26,10 @@ const ROUTES_WITH_BACKTRACKING = [
   'hidden -> prompt -> submitting -> submitting-slowly -> failed -> submitting -> confirmed -> hidden'
 ]
 
+test(`routeIsPossible() expects at least two arguments`, () => {
+  expect(() => routeIsPossible()).toThrow()
+})
+
 ROUTES_WITH_BACKTRACKING.forEach(route => {
   test(`bot should be able to trace this route:\n${route}`, () => {
     expect(true).toEqual(routeIsPossible(bot, route))

@@ -4,7 +4,6 @@
 //
 
 export {
-  ArgTypeError,
   Defer,
   Logger,
   Once,
@@ -192,81 +191,6 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     countOf,
     toValue,
     refs
-  }
-}
-
-//
-// ArgTypeError
-//
-
-const typeErrorIfFnReturnsFalse = (argName, argTypeFn, arg) => {
-  return argTypeFn(arg)
-    ? undefined
-    : `${argTypeFn.name}(${argName}) did not return true`
-}
-
-const typeErrorIfTypeOfFails = (argName, argType, arg) => {
-  return typeof arg === argType
-    ? undefined
-    : `Argument "${argName}" should be a ${argType}`
-}
-
-const typeErrorFromArgument = (argMap, arg, index) => {
-  const { argName, argType } = argMap[index]
-  if (arg === undefined) {
-    return `Argument undefined: "${argName}"`
-  }
-
-  const errorDesc = isFunction(argType)
-    ? typeErrorIfFnReturnsFalse(argName, argType, arg)
-    : typeErrorIfTypeOfFails(argName, argType, arg)
-
-  if (errorDesc) {
-    return (
-      `${errorDesc}: ${argName} === ${typeof arg}(${arg})`
-    )
-  }
-}
-
-/**
- * Helper for enforcing correct argument-types.
- *
- * @private
- * @param {string} errPrefix
- *
- * @example
- * const argTypeError = ArgTypeError('namespace#')
- *
- * function myFn (myArg1, myArg2) {
- *   const err = argTypeError('myFn',
- *     { myArg1: isString, myArg2: Boolean },
- *     myArg1, myArg2
- *   )
- *   if (err) {
- *     throw new TypeError(err)
- *   }
- * }
- */
-
-function ArgTypeError (errPrefix) {
-  return function (fnName, typeMap, ...args) {
-    const argMap = Object
-      .entries(typeMap)
-      .map(([argName, argType]) => ({ argName, argType }))
-
-    const err = args
-      .map((...args) => typeErrorFromArgument(argMap, ...args))
-      .filter(Boolean)
-
-    if (!err.length) {
-      return
-    }
-
-    const signature = Object.keys(typeMap).join(', ')
-    return (
-      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
-      `${err.map(err => `> ${err}`).join('\n')}`
-    )
   }
 }
 

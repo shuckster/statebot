@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.0] - 2021-01-17
+### Added
+- inState/InState now supports an object for config as well as a string:
+```js
+  inState('idle')
+  // true | false
+
+  inState('idle', 'waiting')
+  // "waiting" | null
+
+  inState({
+    idle: 'hold up',
+    success: () => 'fn-result',
+    done: <JSX />,
+  })
+  // "hold up" | "fn-result" | <JSX /> | null
+```
+
 ## [2.6.3] - 2021-01-13
 ### Added
 - package.json exports

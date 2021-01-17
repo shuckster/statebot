@@ -527,13 +527,22 @@ declare module "statebot" {
          * If a function is specified, then its return-value will be used
          * as the `true`-value.
          *
+         * Since v2.7.0:
+         * - An object can be used instead of a string, with the keys
+         *   being the states, and the values corresponding to their
+         *   `outputWhenTrue` value. See the updated example below.
+         *
          * @memberof statebotFsm
          * @instance
          * @function
-         * @param {string} state The state to test against.
+         * @param {string|object} state
+         *  The state to test against. This can be a string if you have a
+         *  single condition, or an object for multiple. (See example.)
          * @param {any|function} [outputWhenTrue]
-         *  Optional `true`-value. If a function is specified, it will be
-         *  called and its return value will be used.
+         *  When a string is specified as the first argment, this becomes
+         *  an optional `true`-value that is returned if the state matches.
+         *  If a function is specified, it will be called and its return
+         *  value will be used.
          * @param {...*} [fnArgs]
          *  Arguments that will pass into `outputWhenTrue()` if it has
          *  been defined as a function.
@@ -555,6 +564,16 @@ declare module "statebot" {
          * // "Purrrr..."
          *
          * machine.enter('gear-1')
+         *
+         * // Since v2.7.0:
+         * machine.inState({
+         *   'idle': 'Purrrr...',
+         *   'gear-1': () => 'Chugga-chugga-chugga...',
+         *   'gear-2': () => 'Brumma-brumma-brum-brum...',
+         *   'reverse': false,
+         * })
+         * // "Chugga-chugga-chugga..."
+         *
          * machine.inState('idle', () => {
          *   console.log('Idling!')
          *   return 'Purrrr...'
@@ -563,7 +582,7 @@ declare module "statebot" {
          * // ^ the function is not called at all in the `false` case,
          * //   so no console.log either.
          */
-        inState: (state: any, anyOrFn: any, ...fnArgs: any[]) => any;
+        inState: (...args: any[]) => any;
         /**
          * Returns a function which, when run, tests that
          * {@link #statebotfsmcurrentstate|.currentState()} matches the
@@ -616,7 +635,7 @@ declare module "statebot" {
          * // ^ the function is not called at all in the `false` case,
          * //   so no console.log either.
          */
-        InState: (state: any, anyOrFn: any, ...curriedFnArgs: any[]) => (...fnArgs: any[]) => any;
+        InState: (...args: any[]) => (...fnArgs: any[]) => any;
         /**
          * Returns the name of the state-machine.
          *

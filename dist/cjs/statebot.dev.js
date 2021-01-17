@@ -12,6 +12,113 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function mitt(n){return {all:n=n||new Map,on:function(t,e){var i=n.get(t);i&&i.push(e)||n.set(t,[e]);},off:function(t,e){var i=n.get(t);i&&i.splice(i.indexOf(e)>>>0,1);},emit:function(t,e){(n.get(t)||[]).slice().map(function(n){n(e);}),(n.get("*")||[]).slice().map(function(n){n(t,e);});}}}
 
+function isEventEmitter (obj) {
+  return (
+    isObject(obj) &&
+    isFunction(obj.emit) &&
+    (isFunction(obj.addListener) || isFunction(obj.on)) &&
+    (isFunction(obj.removeListener) || isFunction(obj.off))
+  )
+}
+function isArray (obj) {
+  return Array.isArray(obj)
+}
+function isFunction (obj) {
+  return typeof obj === 'function'
+}
+function isString (obj) {
+  return typeof obj === 'string'
+}
+function isObject (obj) {
+  return typeof obj === 'object'
+}
+function isPojo (obj) {
+  if (obj === null || (!isObject(obj))) {
+    return false
+  }
+  return Object.getPrototypeOf(obj) === Object.prototype
+}
+function isTemplateLiteral (obj) {
+  if (isString(obj)) {
+    return true
+  }
+  if (!isArray(obj)) {
+    return false
+  }
+  return obj.every(isString)
+}
+const typeErrorStringIfFnReturnsFalse = (argName, argTypeFn, arg) => {
+  return argTypeFn(arg)
+    ? undefined
+    : `${argTypeFn.name}(${argName}) did not return true`
+};
+const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
+  return typeof arg === argType
+    ? undefined
+    : `Argument "${argName}" should be a ${argType}`
+};
+const typeErrorStringFromArgument = (argMap, arg, index) => {
+  const { argName, argType } = argMap[index];
+  if (arg === undefined) {
+    return `Argument undefined: "${argName}"`
+  }
+  const permittedArgTypes = Array.isArray(argType)
+    ? argType
+    : [argType];
+  const errorDescs = permittedArgTypes
+    .map(argType => isFunction(argType)
+      ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
+      : typeErrorStringIfTypeOfFails(argName, argType, arg)
+    )
+    .filter(isString);
+  const multipleTypesSpecified = permittedArgTypes.length > 1;
+  const shouldError = multipleTypesSpecified
+    ? errorDescs.length > 1
+    : errorDescs.length;
+  if (shouldError) {
+    return (
+      `${errorDescs.join('\n| ')}\n> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`
+    )
+  }
+};
+/**
+ * Helper for enforcing correct argument-types.
+ *
+ * @private
+ * @param {string} errPrefix
+ *
+ * @example
+ * const argTypeError = ArgTypeError('namespace#')
+ *
+ * function myFn (myArg1, myArg2) {
+ *   const err = argTypeError('myFn',
+ *     { myArg1: isString, myArg2: Boolean },
+ *     myArg1, myArg2
+ *   )
+ *   if (err) {
+ *     throw new TypeError(err)
+ *   }
+ * }
+ */
+function ArgTypeError (errPrefix) {
+  return function (fnName, typeMap, ...args) {
+    const argMap = Object
+      .entries(typeMap)
+      .map(([argName, argType]) => ({ argName, argType }));
+    const err = args
+      .map((...args) => typeErrorStringFromArgument(argMap, ...args))
+      .filter(isString);
+    if (!err.length) {
+      return
+    }
+    const signature = Object.keys(typeMap).join(', ');
+    return (
+      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
+      `${err.map(err => `| ${err}`).join('\n')}`
+    )
+  }
+}
+
 function wrapEmitter (events) {
   const emit = (eventName, ...args) =>
     events.emit(eventName, args);
@@ -50,41 +157,6 @@ function wrapEmitter (events) {
     on,
     off
   }
-}
-function isEventEmitter (obj) {
-  return (
-    isObject(obj) &&
-    isFunction(obj.emit) &&
-    (isFunction(obj.addListener) || isFunction(obj.on)) &&
-    (isFunction(obj.removeListener) || isFunction(obj.off))
-  )
-}
-function isArray (obj) {
-  return Array.isArray(obj)
-}
-function isFunction (obj) {
-  return typeof obj === 'function'
-}
-function isString (obj) {
-  return typeof obj === 'string'
-}
-function isObject (obj) {
-  return typeof obj === 'object'
-}
-function isPojo (obj) {
-  if (obj === null || (!isObject(obj))) {
-    return false
-  }
-  return Object.getPrototypeOf(obj) === Object.prototype
-}
-function isTemplateLiteral (obj) {
-  if (isString(obj)) {
-    return true
-  }
-  if (!isArray(obj)) {
-    return false
-  }
-  return obj.every(isString)
 }
 function uniq (input) {
   return input.reduce((acc, one) =>
@@ -184,67 +256,6 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     countOf,
     toValue,
     refs
-  }
-}
-const typeErrorIfFnReturnsFalse = (argName, argTypeFn, arg) => {
-  return argTypeFn(arg)
-    ? undefined
-    : `${argTypeFn.name}(${argName}) did not return true`
-};
-const typeErrorIfTypeOfFails = (argName, argType, arg) => {
-  return typeof arg === argType
-    ? undefined
-    : `Argument "${argName}" should be a ${argType}`
-};
-const typeErrorFromArgument = (argMap, arg, index) => {
-  const { argName, argType } = argMap[index];
-  if (arg === undefined) {
-    return `Argument undefined: "${argName}"`
-  }
-  const errorDesc = isFunction(argType)
-    ? typeErrorIfFnReturnsFalse(argName, argType, arg)
-    : typeErrorIfTypeOfFails(argName, argType, arg);
-  if (errorDesc) {
-    return (
-      `${errorDesc}: ${argName} === ${typeof arg}(${arg})`
-    )
-  }
-};
-/**
- * Helper for enforcing correct argument-types.
- *
- * @private
- * @param {string} errPrefix
- *
- * @example
- * const argTypeError = ArgTypeError('namespace#')
- *
- * function myFn (myArg1, myArg2) {
- *   const err = argTypeError('myFn',
- *     { myArg1: isString, myArg2: Boolean },
- *     myArg1, myArg2
- *   )
- *   if (err) {
- *     throw new TypeError(err)
- *   }
- * }
- */
-function ArgTypeError (errPrefix) {
-  return function (fnName, typeMap, ...args) {
-    const signature = Object.keys(typeMap).join(', ');
-    const argMap = Object
-      .entries(typeMap)
-      .map(([argName, argType]) => ({ argName, argType }));
-    const err = args
-      .map((...args) => typeErrorFromArgument(argMap, ...args))
-      .filter(Boolean);
-    if (!err.length) {
-      return
-    }
-    return (
-      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
-      `${err.map(err => `> ${err}`).join('\n')}`
-    )
   }
 }
 function Logger (level, _console) {
@@ -764,11 +775,7 @@ function Statebot (name, options) {
         : acc
     }, [])
   }
-  function inState (state, anyOrFn, ...fnArgs) {
-    const err = argTypeError('inState', { state: isString }, state);
-    if (err) {
-      throw new TypeError(err)
-    }
+  function _inState (state, anyOrFn, ...fnArgs) {
     const conditionMatches = currentState() === state;
     if (anyOrFn === undefined) {
       return conditionMatches
@@ -780,6 +787,23 @@ function Statebot (name, options) {
       return anyOrFn(...fnArgs)
     }
     return anyOrFn
+  }
+  function _inStateObject(stateObject, ...fnArgs) {
+    const match = Object
+      .entries(stateObject)
+      .find(([state]) => _inState(state));
+    return match
+      ? _inState(...match.concat(fnArgs))
+      : null
+  }
+  function inState (...args) {
+    const err = argTypeError('inState', { state: [isString, isPojo] }, args[0]);
+    if (err) {
+      throw new TypeError(err)
+    }
+    return isPojo(args[0])
+      ? _inStateObject(...args)
+      : _inState(...args)
   }
   const emit = Pausable((eventName, ...args) => {
     const err = argTypeError('emit', { eventName: isString }, eventName);
@@ -904,13 +928,22 @@ function Statebot (name, options) {
     }
     return (...args) => enter(state, ...[...curriedArgs, ...args])
   }
-  function InState (state, anyOrFn, ...curriedFnArgs) {
-    const err = argTypeError('InState', { state: isString }, state);
+  function _InState (state, anyOrFn, ...curriedFnArgs) {
+    return (...fnArgs) =>
+      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
+  }
+  function _InStateObject(stateObject, ...curriedFnArgs) {
+    return (...fnArgs) =>
+      inState(stateObject, ...[...curriedFnArgs, ...fnArgs])
+  }
+  function InState (...args) {
+    const err = argTypeError('InState', { state: [isString, isPojo] }, args[0]);
     if (err) {
       throw new TypeError(err)
     }
-    return (...fnArgs) =>
-      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
+    return isPojo(args[0])
+      ? _InStateObject(...args)
+      : _InState(...args)
   }
   function reset () {
     _console.warn(`${logPrefix}: State-machine reset!`);
@@ -1294,13 +1327,22 @@ function Statebot (name, options) {
      * If a function is specified, then its return-value will be used
      * as the `true`-value.
      *
+     * Since v2.7.0:
+     * - An object can be used instead of a string, with the keys
+     *   being the states, and the values corresponding to their
+     *   `outputWhenTrue` value. See the updated example below.
+     *
      * @memberof statebotFsm
      * @instance
      * @function
-     * @param {string} state The state to test against.
+     * @param {string|object} state
+     *  The state to test against. This can be a string if you have a
+     *  single condition, or an object for multiple. (See example.)
      * @param {any|function} [outputWhenTrue]
-     *  Optional `true`-value. If a function is specified, it will be
-     *  called and its return value will be used.
+     *  When a string is specified as the first argment, this becomes
+     *  an optional `true`-value that is returned if the state matches.
+     *  If a function is specified, it will be called and its return
+     *  value will be used.
      * @param {...*} [fnArgs]
      *  Arguments that will pass into `outputWhenTrue()` if it has
      *  been defined as a function.
@@ -1322,6 +1364,16 @@ function Statebot (name, options) {
      * // "Purrrr..."
      *
      * machine.enter('gear-1')
+     *
+     * // Since v2.7.0:
+     * machine.inState({
+     *   'idle': 'Purrrr...',
+     *   'gear-1': () => 'Chugga-chugga-chugga...',
+     *   'gear-2': () => 'Brumma-brumma-brum-brum...',
+     *   'reverse': false,
+     * })
+     * // "Chugga-chugga-chugga..."
+     *
      * machine.inState('idle', () => {
      *   console.log('Idling!')
      *   return 'Purrrr...'

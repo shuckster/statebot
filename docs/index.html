@@ -2202,6 +2202,12 @@ instead of <code>true</code>, and <code>null</code> will be returned instead of
 <code>false</code>.</p>
 <p>If a function is specified, then its return-value will be used
 as the <code>true</code>-value.</p>
+<p>Since v2.7.0:</p>
+<ul>
+<li>An object can be used instead of a string, with the keys
+being the states, and the values corresponding to their
+<code>outputWhenTrue</code> value. See the updated example below.</li>
+</ul>
 
 	
 
@@ -2223,10 +2229,11 @@ as the <code>true</code>-value.</p>
 		<tr>
 			<td class='col-3 strong'><code>state</code></td>
 			<td class='col-3 quiet'>
-				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)
 				
 			</td>
-			<td class='col-6'>The state to test against.
+			<td class='col-6'>The state to test against. This can be a string if you have a
+single condition, or an object for multiple. (See example.)
 </td>
 		</tr>
 		
@@ -2237,10 +2244,12 @@ as the <code>true</code>-value.</p>
 				(any | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)?
 				
 			</td>
-			<td class='col-6'>Optional 
+			<td class='col-6'>When a string is specified as the first argment, this becomes
+an optional 
 <code>true</code>
--value. If a function is specified, it will be
-called and its return value will be used.
+-value that is returned if the state matches.
+If a function is specified, it will be called and its return
+value will be used.
 </td>
 		</tr>
 		
@@ -2296,6 +2305,16 @@ machine.inState(<span class="hljs-string">'idle'</span>, <span class="hljs-strin
 <span class="hljs-comment">// "Purrrr..."</span>
 
 machine.enter(<span class="hljs-string">'gear-1'</span>)
+
+<span class="hljs-comment">// Since v2.7.0:</span>
+machine.inState({
+  <span class="hljs-string">'idle'</span>: <span class="hljs-string">'Purrrr...'</span>,
+  <span class="hljs-string">'gear-1'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'Chugga-chugga-chugga...'</span>,
+  <span class="hljs-string">'gear-2'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'Brumma-brumma-brum-brum...'</span>,
+  <span class="hljs-string">'reverse'</span>: <span class="hljs-literal">false</span>,
+})
+<span class="hljs-comment">// "Chugga-chugga-chugga..."</span>
+
 machine.inState(<span class="hljs-string">'idle'</span>, () =&gt; {
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Idling!'</span>)
   <span class="hljs-keyword">return</span> <span class="hljs-string">'Purrrr...'</span>

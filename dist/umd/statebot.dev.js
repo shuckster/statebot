@@ -171,6 +171,131 @@
     };
   }
 
+  function isEventEmitter(obj) {
+    return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
+  }
+
+  function isArray(obj) {
+    return Array.isArray(obj);
+  }
+
+  function isFunction(obj) {
+    return typeof obj === 'function';
+  }
+
+  function isString(obj) {
+    return typeof obj === 'string';
+  }
+
+  function isObject(obj) {
+    return _typeof(obj) === 'object';
+  }
+
+  function isPojo(obj) {
+    if (obj === null || !isObject(obj)) {
+      return false;
+    }
+
+    return Object.getPrototypeOf(obj) === Object.prototype;
+  }
+
+  function isTemplateLiteral(obj) {
+    if (isString(obj)) {
+      return true;
+    }
+
+    if (!isArray(obj)) {
+      return false;
+    }
+
+    return obj.every(isString);
+  }
+
+  var typeErrorStringIfFnReturnsFalse = function typeErrorStringIfFnReturnsFalse(argName, argTypeFn, arg) {
+    return argTypeFn(arg) ? undefined : "".concat(argTypeFn.name, "(").concat(argName, ") did not return true");
+  };
+
+  var typeErrorStringIfTypeOfFails = function typeErrorStringIfTypeOfFails(argName, argType, arg) {
+    return _typeof(arg) === argType ? undefined : "Argument \"".concat(argName, "\" should be a ").concat(argType);
+  };
+
+  var typeErrorStringFromArgument = function typeErrorStringFromArgument(argMap, arg, index) {
+    var _argMap$index = argMap[index],
+        argName = _argMap$index.argName,
+        argType = _argMap$index.argType;
+
+    if (arg === undefined) {
+      return "Argument undefined: \"".concat(argName, "\"");
+    }
+
+    var permittedArgTypes = Array.isArray(argType) ? argType : [argType];
+    var errorDescs = permittedArgTypes.map(function (argType) {
+      return isFunction(argType) ? typeErrorStringIfFnReturnsFalse(argName, argType, arg) : typeErrorStringIfTypeOfFails(argName, argType, arg);
+    }).filter(isString);
+    var multipleTypesSpecified = permittedArgTypes.length > 1;
+    var shouldError = multipleTypesSpecified ? errorDescs.length > 1 : errorDescs.length;
+
+    if (shouldError) {
+      return "".concat(errorDescs.join('\n| '), "\n> typeof ").concat(argName, " === ").concat(_typeof(arg), "(").concat(JSON.stringify(arg), ")");
+    }
+  };
+  /**
+   * Helper for enforcing correct argument-types.
+   *
+   * @private
+   * @param {string} errPrefix
+   *
+   * @example
+   * const argTypeError = ArgTypeError('namespace#')
+   *
+   * function myFn (myArg1, myArg2) {
+   *   const err = argTypeError('myFn',
+   *     { myArg1: isString, myArg2: Boolean },
+   *     myArg1, myArg2
+   *   )
+   *   if (err) {
+   *     throw new TypeError(err)
+   *   }
+   * }
+   */
+
+
+  function ArgTypeError(errPrefix) {
+    return function (fnName, typeMap) {
+      var argMap = Object.entries(typeMap).map(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            argName = _ref2[0],
+            argType = _ref2[1];
+
+        return {
+          argName: argName,
+          argType: argType
+        };
+      });
+
+      for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        args[_key - 2] = arguments[_key];
+      }
+
+      var err = args.map(function () {
+        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
+
+        return typeErrorStringFromArgument.apply(void 0, [argMap].concat(args));
+      }).filter(isString);
+
+      if (!err.length) {
+        return;
+      }
+
+      var signature = Object.keys(typeMap).join(', ');
+      return "\n".concat(errPrefix || '').concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
+        return "| ".concat(err);
+      }).join('\n'));
+    };
+  }
+
   function wrapEmitter(events) {
     var emit = function emit(eventName) {
       for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -229,46 +354,6 @@
       on: on,
       off: off
     };
-  }
-
-  function isEventEmitter(obj) {
-    return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
-  }
-
-  function isArray(obj) {
-    return Array.isArray(obj);
-  }
-
-  function isFunction(obj) {
-    return typeof obj === 'function';
-  }
-
-  function isString(obj) {
-    return typeof obj === 'string';
-  }
-
-  function isObject(obj) {
-    return _typeof(obj) === 'object';
-  }
-
-  function isPojo(obj) {
-    if (obj === null || !isObject(obj)) {
-      return false;
-    }
-
-    return Object.getPrototypeOf(obj) === Object.prototype;
-  }
-
-  function isTemplateLiteral(obj) {
-    if (isString(obj)) {
-      return true;
-    }
-
-    if (!isArray(obj)) {
-      return false;
-    }
-
-    return obj.every(isString);
   }
 
   function uniq(input) {
@@ -417,86 +502,6 @@
     };
   }
 
-  var typeErrorIfFnReturnsFalse = function typeErrorIfFnReturnsFalse(argName, argTypeFn, arg) {
-    return argTypeFn(arg) ? undefined : "".concat(argTypeFn.name, "(").concat(argName, ") did not return true");
-  };
-
-  var typeErrorIfTypeOfFails = function typeErrorIfTypeOfFails(argName, argType, arg) {
-    return _typeof(arg) === argType ? undefined : "Argument \"".concat(argName, "\" should be a ").concat(argType);
-  };
-
-  var typeErrorFromArgument = function typeErrorFromArgument(argMap, arg, index) {
-    var _argMap$index = argMap[index],
-        argName = _argMap$index.argName,
-        argType = _argMap$index.argType;
-
-    if (arg === undefined) {
-      return "Argument undefined: \"".concat(argName, "\"");
-    }
-
-    var errorDesc = isFunction(argType) ? typeErrorIfFnReturnsFalse(argName, argType, arg) : typeErrorIfTypeOfFails(argName, argType, arg);
-
-    if (errorDesc) {
-      return "".concat(errorDesc, ": ").concat(argName, " === ").concat(_typeof(arg), "(").concat(arg, ")");
-    }
-  };
-  /**
-   * Helper for enforcing correct argument-types.
-   *
-   * @private
-   * @param {string} errPrefix
-   *
-   * @example
-   * const argTypeError = ArgTypeError('namespace#')
-   *
-   * function myFn (myArg1, myArg2) {
-   *   const err = argTypeError('myFn',
-   *     { myArg1: isString, myArg2: Boolean },
-   *     myArg1, myArg2
-   *   )
-   *   if (err) {
-   *     throw new TypeError(err)
-   *   }
-   * }
-   */
-
-
-  function ArgTypeError(errPrefix) {
-    return function (fnName, typeMap) {
-      var signature = Object.keys(typeMap).join(', ');
-      var argMap = Object.entries(typeMap).map(function (_ref4) {
-        var _ref5 = _slicedToArray(_ref4, 2),
-            argName = _ref5[0],
-            argType = _ref5[1];
-
-        return {
-          argName: argName,
-          argType: argType
-        };
-      });
-
-      for (var _len5 = arguments.length, args = new Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
-        args[_key5 - 2] = arguments[_key5];
-      }
-
-      var err = args.map(function () {
-        for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-          args[_key6] = arguments[_key6];
-        }
-
-        return typeErrorFromArgument.apply(void 0, [argMap].concat(args));
-      }).filter(Boolean);
-
-      if (!err.length) {
-        return;
-      }
-
-      return "\n".concat(errPrefix || '').concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
-        return "> ".concat(err);
-      }).join('\n'));
-    };
-  }
-
   function Logger(level, _console) {
     if (isString(level)) {
       level = {
@@ -519,12 +524,12 @@
       return level >= 3;
     }
 
-    var _ref6 = _console || console,
-        _info = _ref6.info,
-        _table = _ref6.table,
-        _log = _ref6.log,
-        _warn = _ref6.warn,
-        _error = _ref6.error;
+    var _ref4 = _console || console,
+        _info = _ref4.info,
+        _table = _ref4.table,
+        _log = _ref4.log,
+        _warn = _ref4.warn,
+        _error = _ref4.error;
 
     return {
       canWarn: canWarn,
@@ -1106,15 +1111,7 @@
       }, []);
     }
 
-    function inState(state, anyOrFn) {
-      var err = argTypeError('inState', {
-        state: isString
-      }, state);
-
-      if (err) {
-        throw new TypeError(err);
-      }
-
+    function _inState(state, anyOrFn) {
       var conditionMatches = currentState() === state;
 
       if (anyOrFn === undefined) {
@@ -1136,6 +1133,33 @@
       return anyOrFn;
     }
 
+    function _inStateObject(stateObject) {
+      var match = Object.entries(stateObject).find(function (_ref8) {
+        var _ref9 = _slicedToArray(_ref8, 1),
+            state = _ref9[0];
+
+        return _inState(state);
+      });
+
+      for (var _len4 = arguments.length, fnArgs = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        fnArgs[_key4 - 1] = arguments[_key4];
+      }
+
+      return match ? _inState.apply(void 0, _toConsumableArray(match.concat(fnArgs))) : null;
+    }
+
+    function inState() {
+      var err = argTypeError('inState', {
+        state: [isString, isPojo]
+      }, arguments.length <= 0 ? undefined : arguments[0]);
+
+      if (err) {
+        throw new TypeError(err);
+      }
+
+      return isPojo(arguments.length <= 0 ? undefined : arguments[0]) ? _inStateObject.apply(void 0, arguments) : _inState.apply(void 0, arguments);
+    }
+
     var emit = Pausable(function (eventName) {
       var err = argTypeError('emit', {
         eventName: isString
@@ -1145,8 +1169,8 @@
         throw new TypeError(err);
       }
 
-      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
+      for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+        args[_key5 - 1] = arguments[_key5];
       }
 
       return events.emit.apply(events, [eventName].concat(args));
@@ -1188,8 +1212,8 @@
         stateHistory.shift();
       }
 
-      for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
+      for (var _len6 = arguments.length, args = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+        args[_key6 - 1] = arguments[_key6];
       }
 
       emitInternalEvent.apply(void 0, [INTERNAL_EVENTS[ON_SWITCHING], toState, inState].concat(args));
@@ -1251,8 +1275,8 @@
 
         var decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase("".concat(state, ":").concat(eventName))];
         var removeEvent = switchMethods[switchMethod](function (toState, fromState) {
-          for (var _len6 = arguments.length, args = new Array(_len6 > 2 ? _len6 - 2 : 0), _key6 = 2; _key6 < _len6; _key6++) {
-            args[_key6 - 2] = arguments[_key6];
+          for (var _len7 = arguments.length, args = new Array(_len7 > 2 ? _len7 - 2 : 0), _key7 = 2; _key7 < _len7; _key7++) {
+            args[_key7 - 2] = arguments[_key7];
           }
 
           if (name.indexOf('Exit') === 0) {
@@ -1271,8 +1295,8 @@
     }, {});
 
     function Emit(eventName) {
-      for (var _len7 = arguments.length, curriedArgs = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
-        curriedArgs[_key7 - 1] = arguments[_key7];
+      for (var _len8 = arguments.length, curriedArgs = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+        curriedArgs[_key8 - 1] = arguments[_key8];
       }
 
       var err = argTypeError('Emit', {
@@ -1284,8 +1308,8 @@
       }
 
       return function () {
-        for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-          args[_key8] = arguments[_key8];
+        for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+          args[_key9] = arguments[_key9];
         }
 
         return emit.apply(void 0, [eventName].concat([].concat(curriedArgs, args)));
@@ -1293,8 +1317,8 @@
     }
 
     function Enter(state) {
-      for (var _len9 = arguments.length, curriedArgs = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
-        curriedArgs[_key9 - 1] = arguments[_key9];
+      for (var _len10 = arguments.length, curriedArgs = new Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
+        curriedArgs[_key10 - 1] = arguments[_key10];
       }
 
       var err = argTypeError('Enter', {
@@ -1306,34 +1330,52 @@
       }
 
       return function () {
-        for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-          args[_key10] = arguments[_key10];
+        for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+          args[_key11] = arguments[_key11];
         }
 
         return enter.apply(void 0, [state].concat([].concat(curriedArgs, args)));
       };
     }
 
-    function InState(state, anyOrFn) {
-      for (var _len11 = arguments.length, curriedFnArgs = new Array(_len11 > 2 ? _len11 - 2 : 0), _key11 = 2; _key11 < _len11; _key11++) {
-        curriedFnArgs[_key11 - 2] = arguments[_key11];
+    function _InState(state, anyOrFn) {
+      for (var _len12 = arguments.length, curriedFnArgs = new Array(_len12 > 2 ? _len12 - 2 : 0), _key12 = 2; _key12 < _len12; _key12++) {
+        curriedFnArgs[_key12 - 2] = arguments[_key12];
       }
 
+      return function () {
+        for (var _len13 = arguments.length, fnArgs = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+          fnArgs[_key13] = arguments[_key13];
+        }
+
+        return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));
+      };
+    }
+
+    function _InStateObject(stateObject) {
+      for (var _len14 = arguments.length, curriedFnArgs = new Array(_len14 > 1 ? _len14 - 1 : 0), _key14 = 1; _key14 < _len14; _key14++) {
+        curriedFnArgs[_key14 - 1] = arguments[_key14];
+      }
+
+      return function () {
+        for (var _len15 = arguments.length, fnArgs = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+          fnArgs[_key15] = arguments[_key15];
+        }
+
+        return inState.apply(void 0, [stateObject].concat([].concat(curriedFnArgs, fnArgs)));
+      };
+    }
+
+    function InState() {
       var err = argTypeError('InState', {
-        state: isString
-      }, state);
+        state: [isString, isPojo]
+      }, arguments.length <= 0 ? undefined : arguments[0]);
 
       if (err) {
         throw new TypeError(err);
       }
 
-      return function () {
-        for (var _len12 = arguments.length, fnArgs = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-          fnArgs[_key12] = arguments[_key12];
-        }
-
-        return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));
-      };
+      return isPojo(arguments.length <= 0 ? undefined : arguments[0]) ? _InStateObject.apply(void 0, arguments) : _InState.apply(void 0, arguments);
     }
 
     function reset() {
@@ -1738,13 +1780,22 @@
        * If a function is specified, then its return-value will be used
        * as the `true`-value.
        *
+       * Since v2.7.0:
+       * - An object can be used instead of a string, with the keys
+       *   being the states, and the values corresponding to their
+       *   `outputWhenTrue` value. See the updated example below.
+       *
        * @memberof statebotFsm
        * @instance
        * @function
-       * @param {string} state The state to test against.
+       * @param {string|object} state
+       *  The state to test against. This can be a string if you have a
+       *  single condition, or an object for multiple. (See example.)
        * @param {any|function} [outputWhenTrue]
-       *  Optional `true`-value. If a function is specified, it will be
-       *  called and its return value will be used.
+       *  When a string is specified as the first argment, this becomes
+       *  an optional `true`-value that is returned if the state matches.
+       *  If a function is specified, it will be called and its return
+       *  value will be used.
        * @param {...*} [fnArgs]
        *  Arguments that will pass into `outputWhenTrue()` if it has
        *  been defined as a function.
@@ -1766,6 +1817,16 @@
        * // "Purrrr..."
        *
        * machine.enter('gear-1')
+       *
+       * // Since v2.7.0:
+       * machine.inState({
+       *   'idle': 'Purrrr...',
+       *   'gear-1': () => 'Chugga-chugga-chugga...',
+       *   'gear-2': () => 'Brumma-brumma-brum-brum...',
+       *   'reverse': false,
+       * })
+       * // "Chugga-chugga-chugga..."
+       *
        * machine.inState('idle', () => {
        *   console.log('Idling!')
        *   return 'Purrrr...'
@@ -2409,10 +2470,10 @@
   function decomposeHitcherActions(hitcherActions) {
     var transitionsForEvents = {};
     var transitionsOnly = [];
-    Object.entries(hitcherActions).map(function (_ref8) {
-      var _ref9 = _slicedToArray(_ref8, 2),
-          routeChart = _ref9[0],
-          actionFnOrConfigObj = _ref9[1];
+    Object.entries(hitcherActions).map(function (_ref10) {
+      var _ref11 = _slicedToArray(_ref10, 2),
+          routeChart = _ref11[0],
+          actionFnOrConfigObj = _ref11[1];
 
       if (isFunction(actionFnOrConfigObj)) {
         transitionsOnly.push({
@@ -2473,10 +2534,10 @@
         allRoutes.push.apply(allRoutes, _toConsumableArray(routes));
       }
 
-      return [].concat(_toConsumableArray(acc), _toConsumableArray(transitions.map(function (_ref10) {
-        var _ref11 = _slicedToArray(_ref10, 2),
-            fromState = _ref11[0],
-            toState = _ref11[1];
+      return [].concat(_toConsumableArray(acc), _toConsumableArray(transitions.map(function (_ref12) {
+        var _ref13 = _slicedToArray(_ref12, 2),
+            fromState = _ref13[0],
+            toState = _ref13[1];
 
         return {
           fromState: fromState,

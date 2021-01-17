@@ -433,12 +433,7 @@ function Statebot (name, options) {
     }, [])
   }
 
-  function inState (state, anyOrFn, ...fnArgs) {
-    const err = argTypeError('inState', { state: isString }, state)
-    if (err) {
-      throw new TypeError(err)
-    }
-
+  function _inState (state, anyOrFn, ...fnArgs) {
     const conditionMatches = currentState() === state
 
     if (anyOrFn === undefined) {
@@ -452,6 +447,27 @@ function Statebot (name, options) {
     }
 
     return anyOrFn
+  }
+
+  function _inStateObject(stateObject, ...fnArgs) {
+    const match = Object
+      .entries(stateObject)
+      .find(([state]) => _inState(state))
+
+    return match
+      ? _inState(...match.concat(fnArgs))
+      : null
+  }
+
+  function inState (...args) {
+    const err = argTypeError('inState', { state: [isString, isPojo] }, args[0])
+    if (err) {
+      throw new TypeError(err)
+    }
+
+    return isPojo(args[0])
+      ? _inStateObject(...args)
+      : _inState(...args)
   }
 
   const emit = Pausable((eventName, ...args) => {
@@ -603,14 +619,25 @@ function Statebot (name, options) {
     return (...args) => enter(state, ...[...curriedArgs, ...args])
   }
 
-  function InState (state, anyOrFn, ...curriedFnArgs) {
-    const err = argTypeError('InState', { state: isString }, state)
+  function _InState (state, anyOrFn, ...curriedFnArgs) {
+    return (...fnArgs) =>
+      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
+  }
+
+  function _InStateObject(stateObject, ...curriedFnArgs) {
+    return (...fnArgs) =>
+      inState(stateObject, ...[...curriedFnArgs, ...fnArgs])
+  }
+
+  function InState (...args) {
+    const err = argTypeError('InState', { state: [isString, isPojo] }, args[0])
     if (err) {
       throw new TypeError(err)
     }
 
-    return (...fnArgs) =>
-      inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs])
+    return isPojo(args[0])
+      ? _InStateObject(...args)
+      : _InState(...args)
   }
 
   function reset () {
@@ -1014,13 +1041,21 @@ function Statebot (name, options) {
      * If a function is specified, then its return-value will be used
      * as the `true`-value.
      *
+     * Since v2.7.0:
+     * - An object can be used instead of a string, with the keys
+     *   being the states, and the values corresponding to their
+     *   `outputWhenTrue` value. See the updated example below.
+     *
      * @memberof statebotFsm
      * @instance
      * @function
-     * @param {string} state The state to test against.
+     * @param {string|object} state
+     *  The state to test against. This can be a string or an object.
      * @param {any|function} [outputWhenTrue]
-     *  Optional `true`-value. If a function is specified, it will be
-     *  called and its return value will be used.
+     *  When a string is specified as the first argment, this becomes
+     *  an optional `true`-value that is returned if the state matches.
+     *  If a function is specified, it will be called and its return
+     *  value will be used.
      * @param {...*} [fnArgs]
      *  Arguments that will pass into `outputWhenTrue()` if it has
      *  been defined as a function.
@@ -1042,6 +1077,16 @@ function Statebot (name, options) {
      * // "Purrrr..."
      *
      * machine.enter('gear-1')
+     *
+     * // Since v2.7.0:
+     * machine.inState({
+     *   'idle': 'Purrrr...',
+     *   'gear-1': () => 'Chugga-chugga-chugga...',
+     *   'gear-2': () => 'Brumma-brumma-brum-brum...',
+     *   'reverse': false,
+     * })
+     * // "Chugga-chugga-chugga..."
+     *
      * machine.inState('idle', () => {
      *   console.log('Idling!')
      *   return 'Purrrr...'

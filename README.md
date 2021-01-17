@@ -52,16 +52,16 @@ machine.onEvent('timer', () => {
 function redrawTrafficLights() {
   machine.inState({
     'stop': () =>
-      console.log('Draw red light')
+      console.log('Draw red light'),
 
     'prepare-to-go': () =>
-      console.log('Draw red + yellow lights')
+      console.log('Draw red + yellow lights'),
 
     'go': () =>
-      console.log('Draw green light')
+      console.log('Draw green light'),
 
     'prepare-to-stop': () =>
-      console.log('Draw yellow light')
+      console.log('Draw yellow light'),
   })
 }
 

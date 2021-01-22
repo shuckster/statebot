@@ -637,8 +637,8 @@
 
   function linesFrom(strOrArr) {
     return [strOrArr].flat().reduce(function (acc, line) {
-      return [].concat(_toConsumableArray(acc), [line.split(rxCRLF)]);
-    }, []).flat();
+      return [].concat(_toConsumableArray(acc), _toConsumableArray(line.split(rxCRLF)));
+    }, []);
   }
 
   function condensedLines(strOrArr) {

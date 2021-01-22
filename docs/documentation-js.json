@@ -1115,7 +1115,7 @@
         {
           "type": "code",
           "lang": "js",
-          "value": "<script src=\"https://unpkg.com/statebot@2.7.1/dist/browser/statebot.min.js\"></script>",
+          "value": "<script src=\"https://unpkg.com/statebot@2.7.2/dist/browser/statebot.min.js\"></script>",
           "position": {
             "start": {
               "line": 33,

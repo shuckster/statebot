@@ -8,7 +8,7 @@
   "main": "index.js",
   "module": "dist/esm/statebot.js",
   "exports": {
-    "default": "./dist/esm/statebot.js",
+    "default": "./index.js",
     "import": "./dist/esm/statebot.js",
     "browser": "./dist/browser/statebot.dev.js",
     "require": "./index.js"

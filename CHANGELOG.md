@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.2] - 2021-01-22
+### Fixed
+- Wrong package.json setting for Node
+
 ## [2.7.1] - 2021-01-17
 ### Fixed
 - Updated README example required commas

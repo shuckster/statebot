@@ -109,8 +109,7 @@ function decomposeChart (chart) {
 function linesFrom (strOrArr) {
   return [strOrArr]
     .flat()
-    .reduce((acc, line) => [...acc, line.split(rxCRLF)], [])
-    .flat()
+    .reduce((acc, line) => [...acc, ...line.split(rxCRLF)], [])
 }
 
 function condensedLines (strOrArr) {

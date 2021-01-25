@@ -361,9 +361,9 @@ is <a href="../LICENSE">MIT licensed</a>.</p>
 <p>Play around with an example that uses React in <a href="https://codesandbox.io/s/statebot-react-ot3xe?file=/src/Loader.js">this CodeSandbox</a>.</p>
 <p>You can install Statebot into your <code>npm</code> project:</p>
 <pre class='hljs'>npm i statebot</pre>
-<pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">'statebot'</span></pre>
+<pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;statebot&#x27;</span></pre>
 <p>Or non-<code>npm</code> project:</p>
-<pre class='hljs'>&lt;script src=<span class="hljs-string">"https://unpkg.com/statebot@2.7.2/dist/browser/statebot.min.js"</span>&gt;&lt;<span class="hljs-regexp">/script&gt;</span></pre>
+<pre class='hljs'>&lt;script src=<span class="hljs-string">&quot;https://unpkg.com/statebot@2.7.2/dist/browser/statebot.min.js&quot;</span>&gt;&lt;/script&gt;</pre>
 <pre class='hljs'><span class="hljs-keyword">const</span> { Statebot } = statebot
 <span class="hljs-comment">// Make machines with Statebot()</span>
 
@@ -372,42 +372,42 @@ is <a href="../LICENSE">MIT licensed</a>.</p>
 <h3>Open the developer-console :)</h3>
 <p>I've included Statebot in this page. Open the developer-console to
 follow along with the examples below:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'promise-like'</span>, {
+<pre class='hljs'><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;promise-like&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     // This one will behave a bit like a Promise
     idle -&gt; pending -&gt;
       resolved | rejected
 
-    // ...and we're done
+    // ...and we&#x27;re done
     resolved -&gt; done
     rejected -&gt; done
   `</span>,
-  <span class="hljs-attr">startIn</span>: <span class="hljs-string">'idle'</span>
+  <span class="hljs-attr">startIn</span>: <span class="hljs-string">&#x27;idle&#x27;</span>
 })
 
-machine.canTransitionTo(<span class="hljs-string">'pending'</span>)
+machine.canTransitionTo(<span class="hljs-string">&#x27;pending&#x27;</span>)
 <span class="hljs-comment">// true</span>
 
-machine.enter(<span class="hljs-string">'pending'</span>)
+machine.enter(<span class="hljs-string">&#x27;pending&#x27;</span>)
 machine.statesAvailableFromHere()
-<span class="hljs-comment">// ["resolved", "rejected"]</span></pre>
+<span class="hljs-comment">// [&quot;resolved&quot;, &quot;rejected&quot;]</span></pre>
 <p>We can hook-up events with <a href="#statebotfsmperformtransitions">.performTransitions()</a>:</p>
 <pre class='hljs'>machine.performTransitions({
- <span class="hljs-string">'pending -&gt; resolved'</span>: {
-   <span class="hljs-attr">on</span>: <span class="hljs-string">'data-loaded'</span>
+ <span class="hljs-string">&#x27;pending -&gt; resolved&#x27;</span>: {
+   <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;data-loaded&#x27;</span>
  },
- <span class="hljs-string">'pending -&gt; rejected'</span>: {
-   <span class="hljs-attr">on</span>: [<span class="hljs-string">'timeout'</span>, <span class="hljs-string">'data-error'</span>],
+ <span class="hljs-string">&#x27;pending -&gt; rejected&#x27;</span>: {
+   <span class="hljs-attr">on</span>: [<span class="hljs-string">&#x27;timeout&#x27;</span>, <span class="hljs-string">&#x27;data-error&#x27;</span>],
    <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
-     <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">'Uh oh...'</span>, msg)
+     <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">&#x27;Uh oh...&#x27;</span>, msg)
    }
  },
- <span class="hljs-string">'resolved | rejected -&gt; done'</span>: {
-   <span class="hljs-attr">on</span>: <span class="hljs-string">'thats-all-folks'</span>
+ <span class="hljs-string">&#x27;resolved | rejected -&gt; done&#x27;</span>: {
+   <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;thats-all-folks&#x27;</span>
  }
 })
 
-machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-string">'Did you hear that?'</span>)</pre>
+machine.emit(<span class="hljs-string">&#x27;data-error&#x27;</span>, <span class="hljs-string">&#x27;Did you hear that?&#x27;</span>)</pre>
 <p>Here's the API:</p>
 <table>
 <thead>
@@ -541,7 +541,7 @@ machine.emit(<span class="hljs-string">'data-error'</span>, <span class="hljs-st
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'lemming'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;lemming&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     walking -&gt; (digging | building | falling) -&gt;
       walking
@@ -736,7 +736,7 @@ while the machine is working, as with
 	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(...)
 
 routeIsPossible(machine,
-  <span class="hljs-string">'walking -&gt; falling -&gt; splatting -&gt; walking'</span>
+  <span class="hljs-string">&#x27;walking -&gt; falling -&gt; splatting -&gt; walking&#x27;</span>
 )
 <span class="hljs-comment">// false</span></code></pre>
 	
@@ -849,19 +849,19 @@ timeout period.</p>
 	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(...)
 
 assertRoute(
-  machine, <span class="hljs-string">'prepare -&gt; debounce -&gt; sending -&gt; done -&gt; idle'</span>,
+  machine, <span class="hljs-string">&#x27;prepare -&gt; debounce -&gt; sending -&gt; done -&gt; idle&#x27;</span>,
   {
-    <span class="hljs-attr">description</span>: <span class="hljs-string">'Email sent with no issues'</span>,
-    <span class="hljs-attr">fromState</span>: <span class="hljs-string">'idle'</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;Email sent with no issues&#x27;</span>,
+    <span class="hljs-attr">fromState</span>: <span class="hljs-string">&#x27;idle&#x27;</span>,
     <span class="hljs-attr">timeoutInMs</span>: <span class="hljs-number">1000</span> * <span class="hljs-number">20</span>,
     <span class="hljs-attr">permittedDeviations</span>: <span class="hljs-number">0</span>,
     <span class="hljs-attr">logLevel</span>: <span class="hljs-number">3</span>
   }
 )
-.then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Assertion passed!'</span>))
+.then(<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Assertion passed!&#x27;</span>))
 .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`Whoops: <span class="hljs-subst">${err}</span>`</span>))
 
-machine.enter(<span class="hljs-string">'idle'</span>)</code></pre>
+machine.enter(<span class="hljs-string">&#x27;idle&#x27;</span>)</code></pre>
 	
 	
 
@@ -948,11 +948,11 @@ and <code>transitions</code>.</p>
   pending -&gt;
     success | failure
 `</span>
-<span class="hljs-comment">// states = ['pending', 'success', 'failure']</span>
-<span class="hljs-comment">// routes = [ 'pending-&gt;success', 'pending-&gt;failure']</span>
+<span class="hljs-comment">// states = [&#x27;pending&#x27;, &#x27;success&#x27;, &#x27;failure&#x27;]</span>
+<span class="hljs-comment">// routes = [ &#x27;pending-&gt;success&#x27;, &#x27;pending-&gt;failure&#x27;]</span>
 <span class="hljs-comment">// transitions = [</span>
-<span class="hljs-comment">//   ['pending', 'success'],</span>
-<span class="hljs-comment">//   ['pending', 'failure']</span>
+<span class="hljs-comment">//   [&#x27;pending&#x27;, &#x27;success&#x27;],</span>
+<span class="hljs-comment">//   [&#x27;pending&#x27;, &#x27;failure&#x27;]</span>
 <span class="hljs-comment">// ]</span></code></pre>
 	
 	
@@ -1190,7 +1190,7 @@ and <code>|</code>.</p>
   pending -&gt; // Where do we go from here?
     (resolved | rejected) -&gt; // Ah, yes
 
-  // And now we're all finished
+  // And now we&#x27;re all finished
   done
 `</span></pre>
 <p>Finally, here's a more full example:</p>
@@ -1367,7 +1367,7 @@ the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'game-menus'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;game-menus&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     loading -&gt;
       menu -&gt;
@@ -1384,11 +1384,11 @@ the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
   `</span>
 })
 
-machine.canTransitionTo(<span class="hljs-string">'play'</span>)
+machine.canTransitionTo(<span class="hljs-string">&#x27;play&#x27;</span>)
 <span class="hljs-comment">// false</span>
 
-machine.enter(<span class="hljs-string">'menu'</span>)
-machine.canTransitionTo([<span class="hljs-string">'play'</span>, <span class="hljs-string">'options'</span>])
+machine.enter(<span class="hljs-string">&#x27;menu&#x27;</span>)
+machine.canTransitionTo([<span class="hljs-string">&#x27;play&#x27;</span>, <span class="hljs-string">&#x27;options&#x27;</span>])
 <span class="hljs-comment">// true</span></code></pre>
 	
 	
@@ -1451,14 +1451,14 @@ machine.canTransitionTo([<span class="hljs-string">'play'</span>, <span class="h
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'coroutine'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;coroutine&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     suspended -&gt; running -&gt; (suspended | dead)
   `</span>
 })
 
 machine.currentState()
-<span class="hljs-comment">// "suspended"</span></code></pre>
+<span class="hljs-comment">// &quot;suspended&quot;</span></code></pre>
 	
 	
 
@@ -1558,27 +1558,27 @@ used for both the browser and non-browser builds.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'basic-form'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;basic-form&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending -&gt; redirect
   `</span>
 })
 
 machine.performTransitions({
-  <span class="hljs-string">'idle -&gt; sending'</span>: {
-    <span class="hljs-attr">on</span>: <span class="hljs-string">'post-data'</span>,
+  <span class="hljs-string">&#x27;idle -&gt; sending&#x27;</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;post-data&#x27;</span>,
     <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> {
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Event args: '</span>, args)
-      <span class="hljs-comment">// setTimeout(machine.Enter('redirect'), 5000)</span>
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Event args: &#x27;</span>, args)
+      <span class="hljs-comment">// setTimeout(machine.Enter(&#x27;redirect&#x27;), 5000)</span>
     }
   }
 })
 
-machine.emit(<span class="hljs-string">'post-data'</span>, <span class="hljs-string">'Hello, world!'</span>)
-<span class="hljs-comment">// Event args: ["Hello, world!"]</span>
+machine.emit(<span class="hljs-string">&#x27;post-data&#x27;</span>, <span class="hljs-string">&#x27;Hello, world!&#x27;</span>)
+<span class="hljs-comment">// Event args: [&quot;Hello, world!&quot;]</span>
 
 machine.currentState()
-<span class="hljs-comment">// "sending"</span></code></pre>
+<span class="hljs-comment">// &quot;sending&quot;</span></code></pre>
 	
 	
 
@@ -1677,7 +1677,7 @@ whenever it is called.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'traffic-lights'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;traffic-lights&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     go -&gt;
       prepare-to-stop -&gt;
@@ -1688,26 +1688,26 @@ whenever it is called.
       prepare-to-go -&gt;
       go
   `</span>,
-  <span class="hljs-attr">startIn</span>: <span class="hljs-string">'stop'</span>
+  <span class="hljs-attr">startIn</span>: <span class="hljs-string">&#x27;stop&#x27;</span>
 })
 
 machine.performTransitions({
-  <span class="hljs-string">'stop -&gt; prepare-to-go'</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
-  <span class="hljs-string">'prepare-to-go -&gt; go'</span>:     { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
-  <span class="hljs-string">'go -&gt; prepare-to-stop'</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
-  <span class="hljs-string">'prepare-to-stop -&gt; stop'</span>: { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> }
+  <span class="hljs-string">&#x27;stop -&gt; prepare-to-go&#x27;</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;timer&#x27;</span> },
+  <span class="hljs-string">&#x27;prepare-to-go -&gt; go&#x27;</span>:     { <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;timer&#x27;</span> },
+  <span class="hljs-string">&#x27;go -&gt; prepare-to-stop&#x27;</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;timer&#x27;</span> },
+  <span class="hljs-string">&#x27;prepare-to-stop -&gt; stop&#x27;</span>: { <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;timer&#x27;</span> }
 })
 
-<span class="hljs-keyword">var</span> nextTrafficLight = machine.Emit(<span class="hljs-string">'timer'</span>)
+<span class="hljs-keyword">var</span> nextTrafficLight = machine.Emit(<span class="hljs-string">&#x27;timer&#x27;</span>)
 machine.currentState()
-<span class="hljs-comment">// "stop"</span>
+<span class="hljs-comment">// &quot;stop&quot;</span>
 
 nextTrafficLight()
 nextTrafficLight()
 nextTrafficLight()
 
 machine.currentState()
-<span class="hljs-comment">// "prepare-to-stop"</span></code></pre>
+<span class="hljs-comment">// &quot;prepare-to-stop&quot;</span></code></pre>
 	
 	
 
@@ -1801,7 +1801,7 @@ accessible from the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'dialog'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;dialog&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; showing-modal -&gt; (saving | idle)
       saving -&gt; idle
@@ -1809,16 +1809,16 @@ accessible from the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 })
 
 machine.currentState()
-<span class="hljs-comment">// "idle"</span>
+<span class="hljs-comment">// &quot;idle&quot;</span>
 
-machine.enter(<span class="hljs-string">'saving'</span>)
+machine.enter(<span class="hljs-string">&#x27;saving&#x27;</span>)
 <span class="hljs-comment">// false</span>
 
-<span class="hljs-comment">// [dialog]: Invalid transition "idle-&gt;saving", not switching</span>
-<span class="hljs-comment">// &gt; Previous transition: "[undefined]-&gt;idle"</span>
-<span class="hljs-comment">// &gt; From "idle", valid states are: ["showing-modal"]</span>
+<span class="hljs-comment">// [dialog]: Invalid transition &quot;idle-&gt;saving&quot;, not switching</span>
+<span class="hljs-comment">// &gt; Previous transition: &quot;[undefined]-&gt;idle&quot;</span>
+<span class="hljs-comment">// &gt; From &quot;idle&quot;, valid states are: [&quot;showing-modal&quot;]</span>
 
-machine.enter(<span class="hljs-string">'showing-modal'</span>)
+machine.enter(<span class="hljs-string">&#x27;showing-modal&#x27;</span>)
 <span class="hljs-comment">// true</span></code></pre>
 	
 	
@@ -1917,23 +1917,23 @@ whenever it is called.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'popup-menu'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;popup-menu&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; menu-opened -&gt;
       (item-clicked | idle)
 
     item-clicked -&gt; idle
   `</span>,
-  <span class="hljs-attr">startIn</span>: <span class="hljs-string">'menu-opened'</span>
+  <span class="hljs-attr">startIn</span>: <span class="hljs-string">&#x27;menu-opened&#x27;</span>
 })
 
-button.onclick = machine.Enter(<span class="hljs-string">'item-clicked'</span>)
+button.onclick = machine.Enter(<span class="hljs-string">&#x27;item-clicked&#x27;</span>)
 machine.currentState()
-<span class="hljs-comment">// "menu-opened"</span>
+<span class="hljs-comment">// &quot;menu-opened&quot;</span>
 
 button.onclick()
 machine.currentState()
-<span class="hljs-comment">// "item-clicked"</span></code></pre>
+<span class="hljs-comment">// &quot;item-clicked&quot;</span></code></pre>
 	
 	
 
@@ -1996,7 +1996,7 @@ by <code>historyLimit</code> in <a href="#statebotoptions">statebotOptions</a>.<
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'downloader'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;downloader&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     loading -&gt; (failure | success)
       failure -&gt; loading
@@ -2005,12 +2005,12 @@ by <code>historyLimit</code> in <a href="#statebotoptions">statebotOptions</a>.<
   <span class="hljs-attr">historyLimit</span>: <span class="hljs-number">4</span>
 })
 
-machine.enter(<span class="hljs-string">'failure'</span>)
-machine.enter(<span class="hljs-string">'loading'</span>)
-machine.enter(<span class="hljs-string">'success'</span>)
-machine.enter(<span class="hljs-string">'done'</span>)
+machine.enter(<span class="hljs-string">&#x27;failure&#x27;</span>)
+machine.enter(<span class="hljs-string">&#x27;loading&#x27;</span>)
+machine.enter(<span class="hljs-string">&#x27;success&#x27;</span>)
+machine.enter(<span class="hljs-string">&#x27;done&#x27;</span>)
 machine.history()
-<span class="hljs-comment">// ["failure", "loading", "success", "done"]</span></code></pre>
+<span class="hljs-comment">// [&quot;failure&quot;, &quot;loading&quot;, &quot;success&quot;, &quot;done&quot;]</span></code></pre>
 	
 	
 
@@ -2063,7 +2063,7 @@ machine.history()
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
@@ -2075,19 +2075,19 @@ machine.info()
 <span class="hljs-comment">// ┌─────────┬─────────────┬────────┐</span>
 <span class="hljs-comment">// │ (index) │   states    │   #    │</span>
 <span class="hljs-comment">// ├─────────┼─────────────┼────────┤</span>
-<span class="hljs-comment">// │    0    │   'done'    │ 'None' │</span>
-<span class="hljs-comment">// │    1    │   'idle'    │ 'None' │</span>
-<span class="hljs-comment">// │    2    │ 'receiving' │ 'None' │</span>
-<span class="hljs-comment">// │    3    │  'sending'  │ 'None' │</span>
+<span class="hljs-comment">// │    0    │   &#x27;done&#x27;    │ &#x27;None&#x27; │</span>
+<span class="hljs-comment">// │    1    │   &#x27;idle&#x27;    │ &#x27;None&#x27; │</span>
+<span class="hljs-comment">// │    2    │ &#x27;receiving&#x27; │ &#x27;None&#x27; │</span>
+<span class="hljs-comment">// │    3    │  &#x27;sending&#x27;  │ &#x27;None&#x27; │</span>
 <span class="hljs-comment">// └─────────┴─────────────┴────────┘</span>
 <span class="hljs-comment">// [half-duplex] Listening for the following transitions:</span>
 <span class="hljs-comment">// ┌─────────┬───────────────────┬────────┐</span>
 <span class="hljs-comment">// │ (index) │    transitions    │   #    │</span>
 <span class="hljs-comment">// ├─────────┼───────────────────┼────────┤</span>
-<span class="hljs-comment">// │    0    │ 'idle-&gt;receiving' │ 'None' │</span>
-<span class="hljs-comment">// │    1    │  'idle-&gt;sending'  │ 'None' │</span>
-<span class="hljs-comment">// │    2    │ 'receiving-&gt;done' │ 'None' │</span>
-<span class="hljs-comment">// │    3    │  'sending-&gt;done'  │ 'None' │</span>
+<span class="hljs-comment">// │    0    │ &#x27;idle-&gt;receiving&#x27; │ &#x27;None&#x27; │</span>
+<span class="hljs-comment">// │    1    │  &#x27;idle-&gt;sending&#x27;  │ &#x27;None&#x27; │</span>
+<span class="hljs-comment">// │    2    │ &#x27;receiving-&gt;done&#x27; │ &#x27;None&#x27; │</span>
+<span class="hljs-comment">// │    3    │  &#x27;sending-&gt;done&#x27;  │ &#x27;None&#x27; │</span>
 <span class="hljs-comment">// └─────────┴───────────────────┴────────┘</span>
 <span class="hljs-comment">// [half-duplex]: Listening for the following events:</span>
 <span class="hljs-comment">// (No information)</span></code></pre>
@@ -2153,7 +2153,7 @@ machine.info()
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
@@ -2290,7 +2290,7 @@ been defined as a function.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'little-revver'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;little-revver&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt;
       (gear-1 | gear-2 | reverse) -&gt;
@@ -2298,26 +2298,26 @@ been defined as a function.
   `</span>
 })
 
-machine.inState(<span class="hljs-string">'idle'</span>)
+machine.inState(<span class="hljs-string">&#x27;idle&#x27;</span>)
 <span class="hljs-comment">// true</span>
 
-machine.inState(<span class="hljs-string">'idle'</span>, <span class="hljs-string">'Purrrr...'</span>)
-<span class="hljs-comment">// "Purrrr..."</span>
+machine.inState(<span class="hljs-string">&#x27;idle&#x27;</span>, <span class="hljs-string">&#x27;Purrrr...&#x27;</span>)
+<span class="hljs-comment">// &quot;Purrrr...&quot;</span>
 
-machine.enter(<span class="hljs-string">'gear-1'</span>)
+machine.enter(<span class="hljs-string">&#x27;gear-1&#x27;</span>)
 
 <span class="hljs-comment">// Since v2.7.0:</span>
 machine.inState({
-  <span class="hljs-string">'idle'</span>: <span class="hljs-string">'Purrrr...'</span>,
-  <span class="hljs-string">'gear-1'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'Chugga-chugga-chugga...'</span>,
-  <span class="hljs-string">'gear-2'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'Brumma-brumma-brum-brum...'</span>,
-  <span class="hljs-string">'reverse'</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-string">&#x27;idle&#x27;</span>: <span class="hljs-string">&#x27;Purrrr...&#x27;</span>,
+  <span class="hljs-string">&#x27;gear-1&#x27;</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;Chugga-chugga-chugga...&#x27;</span>,
+  <span class="hljs-string">&#x27;gear-2&#x27;</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;Brumma-brumma-brum-brum...&#x27;</span>,
+  <span class="hljs-string">&#x27;reverse&#x27;</span>: <span class="hljs-literal">false</span>,
 })
-<span class="hljs-comment">// "Chugga-chugga-chugga..."</span>
+<span class="hljs-comment">// &quot;Chugga-chugga-chugga...&quot;</span>
 
-machine.inState(<span class="hljs-string">'idle'</span>, () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Idling!'</span>)
-  <span class="hljs-keyword">return</span> <span class="hljs-string">'Purrrr...'</span>
+machine.inState(<span class="hljs-string">&#x27;idle&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Idling!&#x27;</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Purrrr...&#x27;</span>
 })
 <span class="hljs-comment">// null</span>
 <span class="hljs-comment">// ^ the function is not called at all in the `false` case,</span>
@@ -2439,7 +2439,7 @@ been defined as a function.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'little-revver'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;little-revver&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt;
       (gear-1 | gear-2 | reverse) -&gt;
@@ -2447,10 +2447,10 @@ been defined as a function.
   `</span>
 })
 
-<span class="hljs-keyword">var</span> idling = machine.InState(<span class="hljs-string">'idle'</span>)
-<span class="hljs-keyword">var</span> purring = machine.InState(<span class="hljs-string">'idle'</span>, () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Idling!'</span>)
-  <span class="hljs-keyword">return</span> <span class="hljs-string">'Purrrr...'</span>
+<span class="hljs-keyword">var</span> idling = machine.InState(<span class="hljs-string">&#x27;idle&#x27;</span>)
+<span class="hljs-keyword">var</span> purring = machine.InState(<span class="hljs-string">&#x27;idle&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Idling!&#x27;</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Purrrr...&#x27;</span>
 })
 
 idling()
@@ -2458,9 +2458,9 @@ idling()
 
 purring()
 <span class="hljs-comment">// Idling!</span>
-<span class="hljs-comment">// "Purrrr..."</span>
+<span class="hljs-comment">// &quot;Purrrr...&quot;</span>
 
-machine.enter(<span class="hljs-string">'gear-1'</span>)
+machine.enter(<span class="hljs-string">&#x27;gear-1&#x27;</span>)
 purring()
 <span class="hljs-comment">// null</span>
 <span class="hljs-comment">// ^ the function is not called at all in the `false` case,</span>
@@ -2528,7 +2528,7 @@ for the same.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'Ay, there’s the rub.'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;Ay, there’s the rub.&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     the-question -&gt; (to-be | not-to-be)
       not-to-be -&gt; perchance-to-dream
@@ -2536,7 +2536,7 @@ for the same.</p>
 })
 
 machine.name()
-<span class="hljs-comment">// "Ay, there’s the rub."</span></code></pre>
+<span class="hljs-comment">// &quot;Ay, there’s the rub.&quot;</span></code></pre>
 	
 	
 
@@ -2632,18 +2632,18 @@ specified-state becomes the current one.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
-machine.onEntered(<span class="hljs-string">'done'</span>, fromState =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Entered from:'</span>, fromState)
+machine.onEntered(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-function"><span class="hljs-params">fromState</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Entered from:&#x27;</span>, fromState)
 })
 
-machine.enter(<span class="hljs-string">'receiving'</span>)
-machine.enter(<span class="hljs-string">'done'</span>)
+machine.enter(<span class="hljs-string">&#x27;receiving&#x27;</span>)
+machine.enter(<span class="hljs-string">&#x27;done&#x27;</span>)
 <span class="hljs-comment">// Entered from: receiving</span></code></pre>
 	
 	
@@ -2740,22 +2740,22 @@ specified-state becomes the current one.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
-machine.onEntered(<span class="hljs-string">'done'</span>, () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'We made it!'</span>)
+machine.onEntered(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;We made it!&#x27;</span>)
 })
 
-machine.onEntering(<span class="hljs-string">'done'</span>, fromState =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Entering from:'</span>, fromState)
+machine.onEntering(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-function"><span class="hljs-params">fromState</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Entering from:&#x27;</span>, fromState)
 })
 
-machine.enter(<span class="hljs-string">'sending'</span>)
-machine.enter(<span class="hljs-string">'done'</span>)
+machine.enter(<span class="hljs-string">&#x27;sending&#x27;</span>)
+machine.enter(<span class="hljs-string">&#x27;done&#x27;</span>)
 <span class="hljs-comment">// Entering from: sending</span>
 <span class="hljs-comment">// We made it!</span></code></pre>
 	
@@ -2852,7 +2852,7 @@ event is called.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'traffic-lights'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;traffic-lights&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     go -&gt;
       prepare-to-stop -&gt;
@@ -2866,15 +2866,15 @@ event is called.</p>
 })
 
 machine.performTransitions({
-  <span class="hljs-string">'stop -&gt; prepare-to-go -&gt; go'</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
-  <span class="hljs-string">'go -&gt; prepare-to-stop -&gt; stop'</span>: { <span class="hljs-attr">on</span>: <span class="hljs-string">'timer'</span> },
+  <span class="hljs-string">&#x27;stop -&gt; prepare-to-go -&gt; go&#x27;</span>:   { <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;timer&#x27;</span> },
+  <span class="hljs-string">&#x27;go -&gt; prepare-to-stop -&gt; stop&#x27;</span>: { <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;timer&#x27;</span> },
 })
 
-machine.onEvent(<span class="hljs-string">'timer'</span>, () =&gt; {
+machine.onEvent(<span class="hljs-string">&#x27;timer&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   redrawTrafficLights()
 })
 
-setInterval(machine.Emit(<span class="hljs-string">'timer'</span>), <span class="hljs-number">2000</span>)</code></pre>
+<span class="hljs-built_in">setInterval</span>(machine.Emit(<span class="hljs-string">&#x27;timer&#x27;</span>), <span class="hljs-number">2000</span>)</code></pre>
 	
 	
 
@@ -2970,17 +2970,17 @@ specified-state is no longer the current one.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
-machine.onExited(<span class="hljs-string">'idle'</span>, toState =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'We are heading to:'</span>, toState)
+machine.onExited(<span class="hljs-string">&#x27;idle&#x27;</span>, <span class="hljs-function"><span class="hljs-params">toState</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;We are heading to:&#x27;</span>, toState)
 })
 
-machine.enter(<span class="hljs-string">'sending'</span>)
+machine.enter(<span class="hljs-string">&#x27;sending&#x27;</span>)
 <span class="hljs-comment">// We are heading to: sending</span></code></pre>
 	
 	
@@ -3077,22 +3077,22 @@ specified-state is no longer the current one.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
-machine.onExited(<span class="hljs-string">'idle'</span>, () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Peace out!'</span>)
+machine.onExited(<span class="hljs-string">&#x27;idle&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Peace out!&#x27;</span>)
 })
 
-machine.onExiting(<span class="hljs-string">'idle'</span>, toState =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Heading to:'</span>, toState)
+machine.onExiting(<span class="hljs-string">&#x27;idle&#x27;</span>, <span class="hljs-function"><span class="hljs-params">toState</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Heading to:&#x27;</span>, toState)
 })
 
-machine.enter(<span class="hljs-string">'receiving'</span>)
-machine.enter(<span class="hljs-string">'done'</span>)
+machine.enter(<span class="hljs-string">&#x27;receiving&#x27;</span>)
+machine.enter(<span class="hljs-string">&#x27;done&#x27;</span>)
 <span class="hljs-comment">// Heading to: receiving</span>
 <span class="hljs-comment">// Peace out!</span></code></pre>
 	
@@ -3179,18 +3179,18 @@ state-change.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
 machine.onSwitched(<span class="hljs-function">(<span class="hljs-params">toState, fromState</span>) =&gt;</span> {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`We went from "<span class="hljs-subst">${fromState}</span>" to "<span class="hljs-subst">${toState}</span>"`</span>)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`We went from &quot;<span class="hljs-subst">${fromState}</span>&quot; to &quot;<span class="hljs-subst">${toState}</span>&quot;`</span>)
 })
 
-machine.enter(<span class="hljs-string">'receiving'</span>)
-<span class="hljs-comment">// We went from "idle" to "receiving"</span></code></pre>
+machine.enter(<span class="hljs-string">&#x27;receiving&#x27;</span>)
+<span class="hljs-comment">// We went from &quot;idle&quot; to &quot;receiving&quot;</span></code></pre>
 	
 	
 
@@ -3275,18 +3275,18 @@ state-change.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
 machine.onSwitching(<span class="hljs-function">(<span class="hljs-params">toState, fromState</span>) =&gt;</span> {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Going from "<span class="hljs-subst">${fromState}</span>" to "<span class="hljs-subst">${toState}</span>"`</span>)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Going from &quot;<span class="hljs-subst">${fromState}</span>&quot; to &quot;<span class="hljs-subst">${toState}</span>&quot;`</span>)
 })
 
-machine.enter(<span class="hljs-string">'receiving'</span>)
-<span class="hljs-comment">// Going from "idle" to "receiving"</span></code></pre>
+machine.enter(<span class="hljs-string">&#x27;receiving&#x27;</span>)
+<span class="hljs-comment">// Going from &quot;idle&quot; to &quot;receiving&quot;</span></code></pre>
 	
 	
 
@@ -3375,59 +3375,59 @@ by this method.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
 machine.onTransitions({
-  <span class="hljs-string">'idle -&gt; sending'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-string">&#x27;idle -&gt; sending&#x27;</span>: <span class="hljs-function">() =&gt;</span> {
     sendData()
-      .then(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
-      .catch(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(machine.Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;sent&#x27;</span>))
+      .catch(machine.Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;failed&#x27;</span>))
   },
-  <span class="hljs-string">'idle -&gt; receiving'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-string">&#x27;idle -&gt; receiving&#x27;</span>: <span class="hljs-function">() =&gt;</span> {
     receiveData()
-      .then(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
-      .catch(machine.Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(machine.Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;received&#x27;</span>))
+      .catch(machine.Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;failed&#x27;</span>))
   },
-  <span class="hljs-string">'sending | receiving -&gt; done'</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'All finished: '</span>, whatHappened)
+  <span class="hljs-string">&#x27;sending | receiving -&gt; done&#x27;</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;All finished: &#x27;</span>, whatHappened)
   }
 })
 
-machine.enter(<span class="hljs-string">'sending'</span>)
+machine.enter(<span class="hljs-string">&#x27;sending&#x27;</span>)
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendData</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-    setTimeout(resolve, <span class="hljs-number">1000</span>)
-    setTimeout(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
+    <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>)
+    <span class="hljs-built_in">setTimeout</span>(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
   })
 }
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">receiveData</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-    setTimeout(resolve, <span class="hljs-number">1000</span>)
-    setTimeout(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
+    <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>)
+    <span class="hljs-built_in">setTimeout</span>(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
   })
 }</code></pre>
 	
 	
 	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-comment">// The above example using a function for config</span>
 machine.onTransitions(<span class="hljs-function">(<span class="hljs-params">{ Enter }</span>) =&gt;</span> ({
-  <span class="hljs-string">'idle -&gt; sending'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-string">&#x27;idle -&gt; sending&#x27;</span>: <span class="hljs-function">() =&gt;</span> {
     sendData()
-      .then(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'sent'</span>))
-      .catch(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;sent&#x27;</span>))
+      .catch(Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;failed&#x27;</span>))
   },
-  <span class="hljs-string">'idle -&gt; receiving'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-string">&#x27;idle -&gt; receiving&#x27;</span>: <span class="hljs-function">() =&gt;</span> {
     receiveData()
-      .then(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'received'</span>))
-      .catch(Enter(<span class="hljs-string">'done'</span>, <span class="hljs-string">'failed'</span>))
+      .then(Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;received&#x27;</span>))
+      .catch(Enter(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-string">&#x27;failed&#x27;</span>))
   },
-  <span class="hljs-string">'sending | receiving -&gt; done'</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'All finished: '</span>, whatHappened)
+  <span class="hljs-string">&#x27;sending | receiving -&gt; done&#x27;</span>: <span class="hljs-function"><span class="hljs-params">whatHappened</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;All finished: &#x27;</span>, whatHappened)
   }
 }))
 
@@ -3625,7 +3625,7 @@ by this method.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'complex-form'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;complex-form&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt;
       update
@@ -3645,44 +3645,44 @@ by this method.
 })
 
 machine.performTransitions(<span class="hljs-function">(<span class="hljs-params">{ Enter, emit }</span>) =&gt;</span> ({
-  <span class="hljs-string">'idle -&gt; update'</span>: {
-    <span class="hljs-attr">on</span>: <span class="hljs-string">'user-saved'</span>,
+  <span class="hljs-string">&#x27;idle -&gt; update&#x27;</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;user-saved&#x27;</span>,
     <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Sending data: '</span>, data)
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Sending data: &#x27;</span>, data)
 
       sendData(data)
-        .then(Enter(<span class="hljs-string">'success'</span>))
-        .catch(Enter(<span class="hljs-string">'failed'</span>))
+        .then(Enter(<span class="hljs-string">&#x27;success&#x27;</span>))
+        .catch(Enter(<span class="hljs-string">&#x27;failed&#x27;</span>))
 
-      emit(<span class="hljs-string">'data-sent'</span>)
+      emit(<span class="hljs-string">&#x27;data-sent&#x27;</span>)
     }
   },
-  <span class="hljs-string">'update -&gt; waiting'</span>: {
-    <span class="hljs-attr">on</span>: <span class="hljs-string">'data-sent'</span>,
-    <span class="hljs-attr">then</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-      setTimeout(Enter(<span class="hljs-string">'waiting-a-while'</span>), <span class="hljs-number">750</span>)
-      setTimeout(Enter(<span class="hljs-string">'timeout'</span>), <span class="hljs-number">5000</span>)
+  <span class="hljs-string">&#x27;update -&gt; waiting&#x27;</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;data-sent&#x27;</span>,
+    <span class="hljs-attr">then</span>: <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-built_in">setTimeout</span>(Enter(<span class="hljs-string">&#x27;waiting-a-while&#x27;</span>), <span class="hljs-number">750</span>)
+      <span class="hljs-built_in">setTimeout</span>(Enter(<span class="hljs-string">&#x27;timeout&#x27;</span>), <span class="hljs-number">5000</span>)
     }
   }
 }))
 
-<span class="hljs-comment">// Just to illustrate that you can mix n' match with onTransitions:</span>
+<span class="hljs-comment">// Just to illustrate that you can mix n&#x27; match with onTransitions:</span>
 machine.onTransitions({
-  <span class="hljs-string">'waiting | waiting-a-while -&gt; success'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Lovely!'</span>)
+  <span class="hljs-string">&#x27;waiting | waiting-a-while -&gt; success&#x27;</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Lovely!&#x27;</span>)
   },
-  <span class="hljs-string">'waiting | waiting-a-while -&gt; timeout'</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Well, at least you have your shoes'</span>)
+  <span class="hljs-string">&#x27;waiting | waiting-a-while -&gt; timeout&#x27;</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Well, at least you have your shoes&#x27;</span>)
   }
 })
 
-machine.emit(<span class="hljs-string">'user-saved'</span>, [<span class="hljs-string">'some'</span>, <span class="hljs-string">'data'</span>])
-<span class="hljs-comment">// Sending data: ["some", "data"]</span>
+machine.emit(<span class="hljs-string">&#x27;user-saved&#x27;</span>, [<span class="hljs-string">&#x27;some&#x27;</span>, <span class="hljs-string">&#x27;data&#x27;</span>])
+<span class="hljs-comment">// Sending data: [&quot;some&quot;, &quot;data&quot;]</span>
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendData</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-    setTimeout(resolve, <span class="hljs-number">1000</span>)
-    setTimeout(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
+    <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>)
+    <span class="hljs-built_in">setTimeout</span>(reject, <span class="hljs-number">750</span> + <span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">750</span>))
   })
 }</code></pre>
 	
@@ -3752,15 +3752,15 @@ machine has just started.)
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'simple-sender'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;simple-sender&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending -&gt; done
   `</span>
 })
 
-machine.enter(<span class="hljs-string">'sending'</span>)
+machine.enter(<span class="hljs-string">&#x27;sending&#x27;</span>)
 machine.previousState()
-<span class="hljs-comment">// "idle"</span></code></pre>
+<span class="hljs-comment">// &quot;idle&quot;</span></code></pre>
 	
 	
 
@@ -3816,7 +3816,7 @@ transitions will be fired. The pause-state will be maintained.</p>
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'carousel'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;carousel&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     page-1 -&gt;
     page-2 -&gt;
@@ -3825,10 +3825,10 @@ transitions will be fired. The pause-state will be maintained.</p>
   `</span>
 })
 
-machine.enter(<span class="hljs-string">'page-2'</span>)
+machine.enter(<span class="hljs-string">&#x27;page-2&#x27;</span>)
 machine.reset()
 machine.currentState()
-<span class="hljs-comment">// "page-1"</span></code></pre>
+<span class="hljs-comment">// &quot;page-1&quot;</span></code></pre>
 	
 	
 
@@ -3961,17 +3961,17 @@ if unspecified.
 	<h4 class='caps quiet mb1 mt3'>Examples</h4>
 	
 	
-	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">'half-duplex'</span>, {
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;half-duplex&#x27;</span>, {
   <span class="hljs-attr">chart</span>: <span class="hljs-string">`
     idle -&gt; sending | receiving -&gt; done
   `</span>
 })
 
 machine.statesAvailableFromHere()
-<span class="hljs-comment">// ["sending", "receiving"]</span>
+<span class="hljs-comment">// [&quot;sending&quot;, &quot;receiving&quot;]</span>
 
-machine.statesAvailableFromHere(<span class="hljs-string">'receiving'</span>)
-<span class="hljs-comment">// ["done"]</span></code></pre>
+machine.statesAvailableFromHere(<span class="hljs-string">&#x27;receiving&#x27;</span>)
+<span class="hljs-comment">// [&quot;done&quot;]</span></code></pre>
 	
 	
 

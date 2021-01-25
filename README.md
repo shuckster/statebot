@@ -42,7 +42,7 @@ const machine = Statebot('traffic-lights', {
 
 machine.performTransitions({
   'stop -> prepare-to-go -> go':   { on: 'timer' },
-  'go -> prepare-to-stop -> stop': { on: 'timer' }
+  'go -> prepare-to-stop -> stop': { on: 'timer' },
 })
 
 machine.onEvent('timer', () => {
@@ -174,12 +174,13 @@ const { Statebot } = require('statebot')
 // Describe states + transitions
 const machine = Statebot('promise-like', {
   chart: `
-    idle ->
 
+    idle ->
       // This one behaves a bit like a Promise
       pending ->
         (resolved | rejected) ->
       done
+
   `,
   startIn: 'pending'
 })

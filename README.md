@@ -155,9 +155,12 @@ function LoadingButton() {
       onClick={Emit('start-loading')}
       disabled={inState('loading')}
     >
-      {inState('idle', 'Load')}
-      {inState('loading', 'Please wait...')}
-      {inState('loaded', 'Done!')} ({state})
+      {inState({
+        'idle': 'Load',
+        'loading': 'Please wait...',
+        'loaded': 'Done!',
+      })}
+      ({state})
     </button>
   )
 }

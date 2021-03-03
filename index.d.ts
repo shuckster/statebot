@@ -1,5 +1,20 @@
 declare module "statebot" {
     /**
+     * {@link #statebotfsmonentering .onEntering()} /
+     * {@link #statebotfsmonentered .onEntered()} callback signature.
+     */
+    export type enterCallback = (fromState: string, ...args?: any[]) => any;
+    /**
+     * {@link #statebotfsmonexiting .onExiting()} /
+     * {@link #statebotfsmonexited .onExited()} callback signature.
+     */
+    export type exitCallback = (toState: string, ...args?: any[]) => any;
+    /**
+     * {@link #statebotfsmonswitching .onSwitching()} /
+     * {@link #statebotfsmonswitched .onSwitched()} callback signature.
+     */
+    export type switchCallback = (toState: string, fromState: string, ...args?: any[]) => any;
+    /**
      * {@link #statebotassertroute|assertRoute()} options.
      */
     export type assertRouteOptions = {
@@ -37,7 +52,7 @@ declare module "statebot" {
      */
     export type statebotOptions = {
         /**
-         * The state-chart.
+         *  The state-chart.
          */
         chart: statebotChart;
         /**
@@ -223,10 +238,10 @@ declare module "statebot" {
          *   chart: `
          *     loading ->
          *       menu ->
-         *         play |
+         *            play |
          *         options |
-         *         sound |
-         *         quit
+         *           sound |
+         *            quit
          *
          *     // Go back to menu
          *     play | options | sound -> menu

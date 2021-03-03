@@ -298,9 +298,9 @@ const rxOperators = [cxPipe, cxArrow]
 const rxLineContinuations = new RegExp(`(${rxOperators})$`);
 const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi;
 const rxComment = /(\/\/[^\n\r]*)/;
-const argTypeError = ArgTypeError('statebot.');
+const argTypeError$1 = ArgTypeError('statebot.');
 function decomposeRoute (templateLiteral) {
-  const err = argTypeError('decomposeRoute',
+  const err = argTypeError$1('decomposeRoute',
     { templateLiteral: isTemplateLiteral },
     templateLiteral
   );
@@ -336,7 +336,7 @@ function decomposeRoute (templateLiteral) {
  * // ]
  */
 function decomposeChart (chart) {
-  const err = argTypeError('decomposeChart',
+  const err = argTypeError$1('decomposeChart',
     { chart: isTemplateLiteral },
     chart
   );
@@ -1022,10 +1022,10 @@ function Statebot (name, options) {
      *   chart: `
      *     loading ->
      *       menu ->
-     *         play |
+     *            play |
      *         options |
-     *         sound |
-     *         quit
+     *           sound |
+     *            quit
      *
      *     // Go back to menu
      *     play | options | sound -> menu
@@ -2059,7 +2059,7 @@ function isStatebot (object) {
   )
 }
 
-const argTypeError$1 = ArgTypeError('statebot.');
+const argTypeError = ArgTypeError('statebot.');
 /**
  * Assert that a certain route can be followed by a
  * {@link #statebotfsm|statebotFsm}.
@@ -2090,7 +2090,7 @@ const argTypeError$1 = ArgTypeError('statebot.');
  * // false
  */
 function routeIsPossible (machine, route) {
-  const err = argTypeError$1('routeIsPossible',
+  const err = argTypeError('routeIsPossible',
     { machine: isStatebot, route: isTemplateLiteral },
     machine, route
   );
@@ -2171,7 +2171,7 @@ let assertionId = 0;
  * machine.enter('idle')
  */
 function assertRoute (machine, expectedRoute, options) {
-  const err = argTypeError$1('assertRoute',
+  const err = argTypeError('assertRoute',
     { machine: isStatebot, expectedRoute: isTemplateLiteral },
     machine, expectedRoute
   );

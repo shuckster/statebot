@@ -345,7 +345,7 @@
       fnMeta.refCount -= 1;
 
       if (fnMeta.refCount === 0) {
-        wrapMap["delete"](fn);
+        wrapMap.delete(fn);
       }
     }
 
@@ -562,10 +562,10 @@
   var rxLineContinuations = new RegExp("(".concat(rxOperators, ")$"));
   var rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi;
   var rxComment = /(\/\/[^\n\r]*)/;
-  var argTypeError = ArgTypeError('statebot.');
+  var argTypeError$1 = ArgTypeError('statebot.');
 
   function decomposeRoute(templateLiteral) {
-    var err = argTypeError('decomposeRoute', {
+    var err = argTypeError$1('decomposeRoute', {
       templateLiteral: isTemplateLiteral
     }, templateLiteral);
 
@@ -604,7 +604,7 @@
 
 
   function decomposeChart(chart) {
-    var err = argTypeError('decomposeChart', {
+    var err = argTypeError$1('decomposeChart', {
       chart: isTemplateLiteral
     }, chart);
 
@@ -1461,10 +1461,10 @@
        *   chart: `
        *     loading ->
        *       menu ->
-       *         play |
+       *            play |
        *         options |
-       *         sound |
-       *         quit
+       *           sound |
+       *            quit
        *
        *     // Go back to menu
        *     play | options | sound -> menu
@@ -2573,7 +2573,7 @@
     return isPojo(object) && typeof object.__STATEBOT__ === 'number';
   }
 
-  var argTypeError$1 = ArgTypeError('statebot.');
+  var argTypeError = ArgTypeError('statebot.');
   /**
    * Assert that a certain route can be followed by a
    * {@link #statebotfsm|statebotFsm}.
@@ -2605,7 +2605,7 @@
    */
 
   function routeIsPossible(machine, route) {
-    var err = argTypeError$1('routeIsPossible', {
+    var err = argTypeError('routeIsPossible', {
       machine: isStatebot,
       route: isTemplateLiteral
     }, machine, route);
@@ -2692,7 +2692,7 @@
    */
 
   function assertRoute(machine, expectedRoute, options) {
-    var err = argTypeError$1('assertRoute', {
+    var err = argTypeError('assertRoute', {
       machine: isStatebot,
       expectedRoute: isTemplateLiteral
     }, machine, expectedRoute);

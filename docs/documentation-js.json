@@ -8021,7 +8021,7 @@
             },
             {
               "title": "example",
-              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n        play |\n        options |\n        sound |\n        quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true",
+              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n           play |\n        options |\n          sound |\n           quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true",
               "lineNumber": 12
             }
           ],
@@ -8051,7 +8051,7 @@
           "augments": [],
           "examples": [
             {
-              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n        play |\n        options |\n        sound |\n        quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true"
+              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n           play |\n        options |\n          sound |\n           quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true"
             }
           ],
           "implements": [],

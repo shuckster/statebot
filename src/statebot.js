@@ -728,10 +728,10 @@ function Statebot (name, options) {
      *   chart: `
      *     loading ->
      *       menu ->
-     *         play |
+     *            play |
      *         options |
-     *         sound |
-     *         quit
+     *           sound |
+     *            quit
      *
      *     // Go back to menu
      *     play | options | sound -> menu

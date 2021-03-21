@@ -690,7 +690,7 @@ The bottom-line with any tool is to use it sparingly and appropriately, and the 
 
 I consider the API stable and would not like it to change much. I don't want it to become a store or data-manager. Many APIs exist that are dedicated to such tasks. I'd really like to keep Statebot lean.
 
-Of course, bug-fixes, forks, and integrations are very welcome.
+Of course, bug-fixes, forks, and integrations are very welcome! If you feel it has saved you a little pain while trying to grok your own old projects, please consider [buying me a coffee](https://www.buymeacoffee.com/shuckster). :)
 
 ## Credits
 

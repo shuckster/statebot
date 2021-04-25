@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.4] - 2021-04-25
+### Fixed
+- Guard against wrapped-on() args not being an array
+
 ## [2.7.3] - 2021-04-25
 ### Updated
 - Dependencies, package.json tweaks

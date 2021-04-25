@@ -129,7 +129,7 @@ function wrapEmitter (events) {
     let fnMeta = wrapMap.get(fn);
     if (!fnMeta) {
       fnMeta = {
-        handleEvent: args => fn(...args || []),
+        handleEvent: (args = []) => fn(...[args].flat()),
         refCount: 0
       };
       wrapMap.set(fn, fnMeta);

@@ -325,8 +325,9 @@
 
       if (!fnMeta) {
         fnMeta = {
-          handleEvent: function handleEvent(args) {
-            return fn.apply(void 0, _toConsumableArray(args || []));
+          handleEvent: function handleEvent() {
+            var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+            return fn.apply(void 0, _toConsumableArray([args].flat()));
           },
           refCount: 0
         };

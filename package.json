@@ -2,8 +2,16 @@
   "name": "statebot",
   "description": "Write more robust and understandable programs.",
   "version": "2.7.2",
-  "author": "Conan Theobald <statebot@conans.co.uk>",
+  "author": "Conan Theobald",
   "license": "MIT",
+  "keywords": [
+    "finite automata",
+    "state machine",
+    "state chart",
+    "adjacency graph",
+    "events",
+    "fsm"
+  ],
   "types": "index.d.ts",
   "main": "index.js",
   "module": "dist/esm/statebot.js",
@@ -25,12 +33,6 @@
   "engines": {
     "node": ">=10"
   },
-  "keywords": [
-    "finite",
-    "state",
-    "machine",
-    "fsm"
-  ],
   "homepage": "https://shuckster.github.io/statebot/",
   "repository": {
     "type": "git",
@@ -38,7 +40,7 @@
   },
   "bugs": {
     "url": "https://github.com/shuckster/statebot/issues",
-    "email": "statebot@conans.co.uk"
+    "email": "bugs+statebot@conans.co.uk"
   },
   "scripts": {
     "test": "jest --bail",

@@ -311,7 +311,7 @@
           "type": "code",
           "lang": "js",
           "meta": null,
-          "value": "<script src=\"https://unpkg.com/statebot@2.7.3/dist/browser/statebot.min.js\"></script>"
+          "value": "<script src=\"https://unpkg.com/statebot@2.7.4/dist/browser/statebot.min.js\"></script>"
         },
         {
           "type": "code",

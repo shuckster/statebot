@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset='utf-8' />
-	<title>statebot 2.7.2 | Documentation</title>
+	<title>statebot 2.7.3 | Documentation</title>
 	<meta name='description' content='Write more robust and understandable programs.'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
 	<link href='assets/styles.min.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
 			<div class='font-smaller fixed col-3 top-0 bottom-0 left-0 overflow-auto fill-light dark-link'>
 				<div class='px2'>
 					<h3 class='mb0 no-anchor'><code>statebot</code></h3>
-					<div class='mb1'><code>2.7.2</code></div>
+					<div class='mb1'><code>2.7.3</code></div>
 					<input placeholder='Filter' id='filter-input' class='col12 block input' type='text' />
 					<div id="toc">
 						
@@ -363,7 +363,7 @@ is <a href="../LICENSE">MIT licensed</a>.</p>
 <pre class='hljs'>npm i statebot</pre>
 <pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;statebot&#x27;</span></pre>
 <p>Or non-<code>npm</code> project:</p>
-<pre class='hljs'>&lt;script src=<span class="hljs-string">&quot;https://unpkg.com/statebot@2.7.2/dist/browser/statebot.min.js&quot;</span>&gt;&lt;/script&gt;</pre>
+<pre class='hljs'>&lt;script src=<span class="hljs-string">&quot;https://unpkg.com/statebot@2.7.3/dist/browser/statebot.min.js&quot;</span>&gt;&lt;/script&gt;</pre>
 <pre class='hljs'><span class="hljs-keyword">const</span> { Statebot } = statebot
 <span class="hljs-comment">// Make machines with Statebot()</span>
 
@@ -619,8 +619,7 @@ machine.emit(<span class="hljs-string">&#x27;data-error&#x27;</span>, <span clas
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -706,7 +705,7 @@ while the machine is working, as with
 				
 			</td>
 			<td class='col-6'>The route to test as an arrow-delimited string:
-<p> <code>"idle -> pending -> success -> done"</code></p>
+<p><code> "idle -> pending -> success -> done" </code></p>
 </td>
 		</tr>
 		
@@ -721,8 +720,7 @@ while the machine is working, as with
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -809,7 +807,7 @@ timeout period.</p>
 				
 			</td>
 			<td class='col-6'>The expected route as an arrow-delimited string:
-<p> <code>"idle -> pending -> success -> done"</code></p>
+<p><code> "idle -> pending -> success -> done" </code></p>
 </td>
 		</tr>
 		
@@ -834,8 +832,7 @@ timeout period.</p>
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -932,8 +929,7 @@ and <code>transitions</code>.</p>
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -1059,7 +1055,7 @@ chart will be used.
 2) console.warn/log/table
 3) console.warn/log/table/info
 </code></pre>
-<p> <code>3</code> is the default. Argument type-errors will always <code>throw</code>.</p>
+<p><code>3</code> is the default. Argument type-errors will always <code>throw</code>.</p>
 </td>
 		</tr>
 
@@ -1095,7 +1091,7 @@ a shared EventEmitter, you can pass it in here. The
 
 <code>performTransitions()</code>
  methods will use it.
-<p> It should have the same signature as <a href="https://nodejs.org/api/events.html#events_class_eventemitter">EventEmitter</a>.</p>
+<p>It should have the same signature as <a href="https://nodejs.org/api/events.html#events_class_eventemitter">EventEmitter</a>.</p>
 <ul>
 <li>Since Statebot 2.5.0 <a href="https://npmjs.com/mitt">mitt</a> is also compatible.</li>
 <li>Since Statebot 2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is used internally.</li>
@@ -1355,8 +1351,7 @@ the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -1439,8 +1434,7 @@ machine.canTransitionTo([<span class="hljs-string">&#x27;play&#x27;</span>, <spa
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -1540,7 +1534,7 @@ machine.currentState()
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
 	:
 	<span class='force-inline'>Whether or not the event had listeners.
-<p> See: <a href="https://nodejs.org/api/events.html#events_emitter_emit_eventname_args">Node Events</a>
+<p>See: <a href="https://nodejs.org/api/events.html#events_emitter_emit_eventname_args">Node Events</a>
 for more information.</p>
 <p>Statebot imports <code>EventEmitter</code> from the
 <a href="https://www.npmjs.com/package/events">events</a>
@@ -2141,8 +2135,7 @@ machine.info()
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -2278,8 +2271,7 @@ been defined as a function.
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | null | any)</code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -2605,7 +2597,7 @@ specified-state becomes the current one.</p>
 				
 			</td>
 			<td class='col-6'>A callback function with the signature:
-<p> <code>(fromState, ...args?)</code></p>
+<p><code>(fromState, ...args?)</code></p>
 </td>
 		</tr>
 		
@@ -2713,7 +2705,7 @@ specified-state becomes the current one.</p>
 				
 			</td>
 			<td class='col-6'>A callback function with the signature:
-<p> <code>(fromState, ...args?)</code></p>
+<p><code>(fromState, ...args?)</code></p>
 </td>
 		</tr>
 		
@@ -2943,7 +2935,7 @@ specified-state is no longer the current one.</p>
 				
 			</td>
 			<td class='col-6'>A callback function with the signature:
-<p> <code>(toState, ...args?)</code></p>
+<p><code>(toState, ...args?)</code></p>
 </td>
 		</tr>
 		
@@ -3050,7 +3042,7 @@ specified-state is no longer the current one.</p>
 				
 			</td>
 			<td class='col-6'>A callback function with the signature:
-<p> <code>(toState, ...args?)</code></p>
+<p><code>(toState, ...args?)</code></p>
 </td>
 		</tr>
 		
@@ -3152,7 +3144,7 @@ state-change.</p>
 				
 			</td>
 			<td class='col-6'>A callback function with the signature:
-<p> <code>(toState, fromState, ...args?)</code></p>
+<p><code>(toState, fromState, ...args?)</code></p>
 </td>
 		</tr>
 		
@@ -3248,7 +3240,7 @@ state-change.</p>
 				
 			</td>
 			<td class='col-6'>A callback function with the signature:
-<p> <code>(toState, fromState, ...args?)</code></p>
+<p><code>(toState, fromState, ...args?)</code></p>
 </td>
 		</tr>
 		
@@ -3529,8 +3521,7 @@ the machine is <a href="#statebotfsmresume">.resume()</a>'d.</p>
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	
@@ -3949,8 +3940,7 @@ if unspecified.
 	<h4 class='caps quiet mb1 mt3'>Returns</h4>
 	<code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>></code>
 	:
-	<span class='force-inline'>
-</span>
+	<span class='force-inline'></span>
 	
 	
 	

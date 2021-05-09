@@ -79,12 +79,10 @@ function decomposeChart (chart) {
   const lines = condensedLines(chart)
   const linesOfTokens = tokenisedLines(lines)
   const linesOfRoutes = linesOfTokens
-    .map(decomposeRouteFromTokens)
-    .flat(1)
+    .flatMap(decomposeRouteFromTokens)
 
   const linesOfTransitions = linesOfRoutes
-    .map(decomposeTransitionsFromRoute)
-    .flat(1)
+    .flatMap(decomposeTransitionsFromRoute)
 
   let emptyStateFound = false
   const routeKeys = linesOfTransitions.map(route => {

@@ -342,11 +342,9 @@ function decomposeChart (chart) {
   const lines = condensedLines(chart);
   const linesOfTokens = tokenisedLines(lines);
   const linesOfRoutes = linesOfTokens
-    .map(decomposeRouteFromTokens)
-    .flat(1);
+    .flatMap(decomposeRouteFromTokens);
   const linesOfTransitions = linesOfRoutes
-    .map(decomposeTransitionsFromRoute)
-    .flat(1);
+    .flatMap(decomposeTransitionsFromRoute);
   let emptyStateFound = false;
   const routeKeys = linesOfTransitions.map(route => {
     if (route.includes('')) {
@@ -696,7 +694,7 @@ function Statebot (name, options) {
       const route = `${fromState}->${toState}`;
       return [
         routesHandled.increase(route),
-        onInternalEvent(route, action)
+        onInternalEvent(route, bindActionTo(toState, action))
       ]
     }
     function decomposeTransitionsForEvent (acc, [eventName, transitionsAndAction]) {
@@ -717,7 +715,7 @@ function Statebot (name, options) {
     function ifStateThenEnterState ({ fromState, toState, action, args }) {
       return inState(fromState, () => {
         enter(toState, ...args);
-        isFunction(action) && action(...args);
+        isFunction(action) && runActionFor(toState, action, ...args);
         return true
       })
     }
@@ -733,6 +731,19 @@ function Statebot (name, options) {
           }
         })
       ]
+    }
+    function runActionFor(state, actionFn, ...args) {
+      const onExitingState = actionFn(...args);
+      if (isFunction(onExitingState)) {
+        const uninstall = Once(enterExitMethods[ON_EXITING](state, (toState) => {
+          uninstall();
+          onExitingState(toState);
+        }));
+        allCleanupFns.push(uninstall);
+      }
+    }
+    function bindActionTo(state, actionFn) {
+      return (...args) => runActionFor(state, actionFn, ...args)
     }
   }
   function previousState () {
@@ -1724,6 +1735,11 @@ function Statebot (name, options) {
     /**
      * Run callbacks when transitions happen.
      *
+     * Since v2.8.0:
+     * - If a callback returns a function, it will be invoked when
+     *   the state is exited in the same manner as if an {@link #statebotfsmonexiting .onExiting()}
+     *   handler was created using it.
+     *
      * @memberof statebotFsm
      * @instance
      * @function
@@ -1820,6 +1836,11 @@ function Statebot (name, options) {
      * Perform transitions when events happen.
      *
      * Use `then` to optionally add callbacks to those transitions.
+     *
+     * Since v2.8.0:
+     * - If a `then` method returns a function, it will be invoked when
+     *   the state is exited in the same manner as if an {@link #statebotfsmonexiting .onExiting()}
+     *   handler was created using it.
      *
      * @memberof statebotFsm
      * @instance

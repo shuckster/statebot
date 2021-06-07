@@ -619,8 +619,8 @@ var statebot = (function (exports) {
 
     var lines = condensedLines(chart);
     var linesOfTokens = tokenisedLines(lines);
-    var linesOfRoutes = linesOfTokens.map(decomposeRouteFromTokens).flat(1);
-    var linesOfTransitions = linesOfRoutes.map(decomposeTransitionsFromRoute).flat(1);
+    var linesOfRoutes = linesOfTokens.flatMap(decomposeRouteFromTokens);
+    var linesOfTransitions = linesOfRoutes.flatMap(decomposeTransitionsFromRoute);
     var emptyStateFound = false;
     var routeKeys = linesOfTransitions.map(function (route) {
       if (route.includes('')) {
@@ -1005,7 +1005,7 @@ var statebot = (function (exports) {
             toState = config.toState,
             action = config.action;
         var route = "".concat(fromState, "->").concat(toState);
-        return [routesHandled.increase(route), onInternalEvent(route, action)];
+        return [routesHandled.increase(route), onInternalEvent(route, bindActionTo(toState, action))];
       }
 
       function decomposeTransitionsForEvent(acc, _ref3) {
@@ -1033,7 +1033,7 @@ var statebot = (function (exports) {
             args = _ref5.args;
         return inState(fromState, function () {
           enter.apply(void 0, [toState].concat(_toConsumableArray(args)));
-          isFunction(action) && action.apply(void 0, _toConsumableArray(args));
+          isFunction(action) && runActionFor.apply(void 0, [toState, action].concat(_toConsumableArray(args)));
           return true;
         });
       }
@@ -1059,6 +1059,32 @@ var statebot = (function (exports) {
           }
         })];
       }
+
+      function runActionFor(state, actionFn) {
+        for (var _len2 = arguments.length, args = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+          args[_key2 - 2] = arguments[_key2];
+        }
+
+        var onExitingState = actionFn.apply(void 0, args);
+
+        if (isFunction(onExitingState)) {
+          var uninstall = Once(enterExitMethods[ON_EXITING](state, function (toState) {
+            uninstall();
+            onExitingState(toState);
+          }));
+          allCleanupFns.push(uninstall);
+        }
+      }
+
+      function bindActionTo(state, actionFn) {
+        return function () {
+          for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+            args[_key3] = arguments[_key3];
+          }
+
+          return runActionFor.apply(void 0, [state, actionFn].concat(args));
+        };
+      }
     }
 
     function previousState() {
@@ -1070,8 +1096,8 @@ var statebot = (function (exports) {
     }
 
     function canTransitionTo() {
-      for (var _len2 = arguments.length, states = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        states[_key2] = arguments[_key2];
+      for (var _len4 = arguments.length, states = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        states[_key4] = arguments[_key4];
       }
 
       var testStates = states.flat();
@@ -1128,8 +1154,8 @@ var statebot = (function (exports) {
       }
 
       if (isFunction(anyOrFn)) {
-        for (var _len3 = arguments.length, fnArgs = new Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
-          fnArgs[_key3 - 2] = arguments[_key3];
+        for (var _len5 = arguments.length, fnArgs = new Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
+          fnArgs[_key5 - 2] = arguments[_key5];
         }
 
         return anyOrFn.apply(void 0, fnArgs);
@@ -1146,8 +1172,8 @@ var statebot = (function (exports) {
         return _inState(state);
       });
 
-      for (var _len4 = arguments.length, fnArgs = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        fnArgs[_key4 - 1] = arguments[_key4];
+      for (var _len6 = arguments.length, fnArgs = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+        fnArgs[_key6 - 1] = arguments[_key6];
       }
 
       return match ? _inState.apply(void 0, _toConsumableArray(match.concat(fnArgs))) : null;
@@ -1174,8 +1200,8 @@ var statebot = (function (exports) {
         throw new TypeError(err);
       }
 
-      for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
+      for (var _len7 = arguments.length, args = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+        args[_key7 - 1] = arguments[_key7];
       }
 
       return events.emit.apply(events, [eventName].concat(args));
@@ -1217,8 +1243,8 @@ var statebot = (function (exports) {
         stateHistory.shift();
       }
 
-      for (var _len6 = arguments.length, args = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-        args[_key6 - 1] = arguments[_key6];
+      for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+        args[_key8 - 1] = arguments[_key8];
       }
 
       emitInternalEvent.apply(void 0, [INTERNAL_EVENTS[ON_SWITCHING], toState, inState].concat(args));
@@ -1280,8 +1306,8 @@ var statebot = (function (exports) {
 
         var decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase("".concat(state, ":").concat(eventName))];
         var removeEvent = switchMethods[switchMethod](function (toState, fromState) {
-          for (var _len7 = arguments.length, args = new Array(_len7 > 2 ? _len7 - 2 : 0), _key7 = 2; _key7 < _len7; _key7++) {
-            args[_key7 - 2] = arguments[_key7];
+          for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key9 = 2; _key9 < _len9; _key9++) {
+            args[_key9 - 2] = arguments[_key9];
           }
 
           if (name.indexOf('Exit') === 0) {
@@ -1300,8 +1326,8 @@ var statebot = (function (exports) {
     }, {});
 
     function Emit(eventName) {
-      for (var _len8 = arguments.length, curriedArgs = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
-        curriedArgs[_key8 - 1] = arguments[_key8];
+      for (var _len10 = arguments.length, curriedArgs = new Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
+        curriedArgs[_key10 - 1] = arguments[_key10];
       }
 
       var err = argTypeError('Emit', {
@@ -1313,8 +1339,8 @@ var statebot = (function (exports) {
       }
 
       return function () {
-        for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-          args[_key9] = arguments[_key9];
+        for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+          args[_key11] = arguments[_key11];
         }
 
         return emit.apply(void 0, [eventName].concat([].concat(curriedArgs, args)));
@@ -1322,8 +1348,8 @@ var statebot = (function (exports) {
     }
 
     function Enter(state) {
-      for (var _len10 = arguments.length, curriedArgs = new Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
-        curriedArgs[_key10 - 1] = arguments[_key10];
+      for (var _len12 = arguments.length, curriedArgs = new Array(_len12 > 1 ? _len12 - 1 : 0), _key12 = 1; _key12 < _len12; _key12++) {
+        curriedArgs[_key12 - 1] = arguments[_key12];
       }
 
       var err = argTypeError('Enter', {
@@ -1335,8 +1361,8 @@ var statebot = (function (exports) {
       }
 
       return function () {
-        for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-          args[_key11] = arguments[_key11];
+        for (var _len13 = arguments.length, args = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+          args[_key13] = arguments[_key13];
         }
 
         return enter.apply(void 0, [state].concat([].concat(curriedArgs, args)));
@@ -1344,13 +1370,13 @@ var statebot = (function (exports) {
     }
 
     function _InState(state, anyOrFn) {
-      for (var _len12 = arguments.length, curriedFnArgs = new Array(_len12 > 2 ? _len12 - 2 : 0), _key12 = 2; _key12 < _len12; _key12++) {
-        curriedFnArgs[_key12 - 2] = arguments[_key12];
+      for (var _len14 = arguments.length, curriedFnArgs = new Array(_len14 > 2 ? _len14 - 2 : 0), _key14 = 2; _key14 < _len14; _key14++) {
+        curriedFnArgs[_key14 - 2] = arguments[_key14];
       }
 
       return function () {
-        for (var _len13 = arguments.length, fnArgs = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-          fnArgs[_key13] = arguments[_key13];
+        for (var _len15 = arguments.length, fnArgs = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+          fnArgs[_key15] = arguments[_key15];
         }
 
         return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));
@@ -1358,13 +1384,13 @@ var statebot = (function (exports) {
     }
 
     function _InStateObject(stateObject) {
-      for (var _len14 = arguments.length, curriedFnArgs = new Array(_len14 > 1 ? _len14 - 1 : 0), _key14 = 1; _key14 < _len14; _key14++) {
-        curriedFnArgs[_key14 - 1] = arguments[_key14];
+      for (var _len16 = arguments.length, curriedFnArgs = new Array(_len16 > 1 ? _len16 - 1 : 0), _key16 = 1; _key16 < _len16; _key16++) {
+        curriedFnArgs[_key16 - 1] = arguments[_key16];
       }
 
       return function () {
-        for (var _len15 = arguments.length, fnArgs = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
-          fnArgs[_key15] = arguments[_key15];
+        for (var _len17 = arguments.length, fnArgs = new Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+          fnArgs[_key17] = arguments[_key17];
         }
 
         return inState.apply(void 0, [stateObject].concat([].concat(curriedFnArgs, fnArgs)));
@@ -2202,6 +2228,11 @@ var statebot = (function (exports) {
       /**
        * Run callbacks when transitions happen.
        *
+       * Since v2.8.0:
+       * - If a callback returns a function, it will be invoked when
+       *   the state is exited in the same manner as if an {@link #statebotfsmonexiting .onExiting()}
+       *   handler was created using it.
+       *
        * @memberof statebotFsm
        * @instance
        * @function
@@ -2303,6 +2334,11 @@ var statebot = (function (exports) {
        * Perform transitions when events happen.
        *
        * Use `then` to optionally add callbacks to those transitions.
+       *
+       * Since v2.8.0:
+       * - If a `then` method returns a function, it will be invoked when
+       *   the state is exited in the same manner as if an {@link #statebotfsmonexiting .onExiting()}
+       *   handler was created using it.
        *
        * @memberof statebotFsm
        * @instance

@@ -3309,6 +3309,12 @@ machine.enter(<span class="hljs-string">&#x27;receiving&#x27;</span>)
 	</h3>
 
 	<p>Run callbacks when transitions happen.</p>
+<p>Since v2.8.0:</p>
+<ul>
+<li>If a callback returns a function, it will be invoked when
+the state is exited in the same manner as if an <a href="#statebotfsmonexiting">.onExiting()</a>
+handler was created using it.</li>
+</ul>
 
 	
 
@@ -3558,6 +3564,12 @@ the machine is <a href="#statebotfsmresume">.resume()</a>'d.</p>
 
 	<p>Perform transitions when events happen.</p>
 <p>Use <code>then</code> to optionally add callbacks to those transitions.</p>
+<p>Since v2.8.0:</p>
+<ul>
+<li>If a <code>then</code> method returns a function, it will be invoked when
+the state is exited in the same manner as if an <a href="#statebotfsmonexiting">.onExiting()</a>
+handler was created using it.</li>
+</ul>
 
 	
 

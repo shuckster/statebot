@@ -1036,22 +1036,22 @@
           ],
           "loc": {
             "start": {
-              "line": 183,
+              "line": 184,
               "column": 0
             },
             "end": {
-              "line": 202,
+              "line": 203,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 204,
+                "line": 205,
                 "column": 0
               },
               "end": {
-                "line": 1723,
+                "line": 1751,
                 "column": 1
               }
             },
@@ -1212,22 +1212,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1790,
+              "line": 1818,
               "column": 0
             },
             "end": {
-              "line": 1803,
+              "line": 1831,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1805,
+                "line": 1833,
                 "column": 0
               },
               "end": {
-                "line": 1810,
+                "line": 1838,
                 "column": 1
               }
             },
@@ -1994,7 +1994,7 @@
                 "column": 0
               },
               "end": {
-                "line": 107,
+                "line": 105,
                 "column": 1
               }
             },
@@ -2990,22 +2990,22 @@
     ],
     "loc": {
       "start": {
-        "line": 700,
+        "line": 718,
         "column": 2
       },
       "end": {
-        "line": 704,
+        "line": 722,
         "column": 5
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 706,
+          "line": 724,
           "column": 2
         },
         "end": {
-          "line": 1722,
+          "line": 1750,
           "column": 3
         }
       },
@@ -3154,22 +3154,22 @@
           ],
           "loc": {
             "start": {
-              "line": 714,
+              "line": 732,
               "column": 4
             },
             "end": {
-              "line": 750,
+              "line": 768,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 751,
+                "line": 769,
                 "column": 4
               },
               "end": {
-                "line": 751,
+                "line": 769,
                 "column": 19
               }
             },
@@ -3302,22 +3302,22 @@
           ],
           "loc": {
             "start": {
-              "line": 753,
+              "line": 771,
               "column": 4
             },
             "end": {
-              "line": 770,
+              "line": 788,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 771,
+                "line": 789,
                 "column": 4
               },
               "end": {
-                "line": 771,
+                "line": 789,
                 "column": 16
               }
             },
@@ -3479,22 +3479,22 @@
           ],
           "loc": {
             "start": {
-              "line": 773,
+              "line": 791,
               "column": 4
             },
             "end": {
-              "line": 818,
+              "line": 836,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 819,
+                "line": 837,
                 "column": 4
               },
               "end": {
-                "line": 819,
+                "line": 837,
                 "column": 8
               }
             },
@@ -3780,22 +3780,22 @@
           ],
           "loc": {
             "start": {
-              "line": 821,
+              "line": 839,
               "column": 4
             },
             "end": {
-              "line": 868,
+              "line": 886,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 869,
+                "line": 887,
                 "column": 4
               },
               "end": {
-                "line": 869,
+                "line": 887,
                 "column": 8
               }
             },
@@ -4027,22 +4027,22 @@
           ],
           "loc": {
             "start": {
-              "line": 871,
+              "line": 889,
               "column": 4
             },
             "end": {
-              "line": 903,
+              "line": 921,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 904,
+                "line": 922,
                 "column": 4
               },
               "end": {
-                "line": 904,
+                "line": 922,
                 "column": 9
               }
             },
@@ -4275,22 +4275,22 @@
           ],
           "loc": {
             "start": {
-              "line": 906,
+              "line": 924,
               "column": 4
             },
             "end": {
-              "line": 940,
+              "line": 958,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 941,
+                "line": 959,
                 "column": 4
               },
               "end": {
-                "line": 941,
+                "line": 959,
                 "column": 9
               }
             },
@@ -4498,22 +4498,22 @@
           ],
           "loc": {
             "start": {
-              "line": 943,
+              "line": 961,
               "column": 4
             },
             "end": {
-              "line": 968,
+              "line": 986,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 969,
+                "line": 987,
                 "column": 4
               },
               "end": {
-                "line": 969,
+                "line": 987,
                 "column": 36
               }
             },
@@ -4622,22 +4622,22 @@
           ],
           "loc": {
             "start": {
-              "line": 971,
+              "line": 989,
               "column": 4
             },
             "end": {
-              "line": 1005,
+              "line": 1023,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1006,
+                "line": 1024,
                 "column": 4
               },
               "end": {
-                "line": 1006,
+                "line": 1024,
                 "column": 22
               }
             },
@@ -4749,22 +4749,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1008,
+              "line": 1026,
               "column": 4
             },
             "end": {
-              "line": 1029,
+              "line": 1047,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1030,
+                "line": 1048,
                 "column": 4
               },
               "end": {
-                "line": 1030,
+                "line": 1048,
                 "column": 28
               }
             },
@@ -5075,22 +5075,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1032,
+              "line": 1050,
               "column": 4
             },
             "end": {
-              "line": 1098,
+              "line": 1116,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1099,
+                "line": 1117,
                 "column": 4
               },
               "end": {
-                "line": 1099,
+                "line": 1117,
                 "column": 11
               }
             },
@@ -5463,22 +5463,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1101,
+              "line": 1119,
               "column": 4
             },
             "end": {
-              "line": 1152,
+              "line": 1170,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1153,
+                "line": 1171,
                 "column": 4
               },
               "end": {
-                "line": 1153,
+                "line": 1171,
                 "column": 11
               }
             },
@@ -5737,22 +5737,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1155,
+              "line": 1173,
               "column": 4
             },
             "end": {
-              "line": 1176,
+              "line": 1194,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1177,
+                "line": 1195,
                 "column": 4
               },
               "end": {
-                "line": 1177,
+                "line": 1195,
                 "column": 20
               }
             },
@@ -5909,22 +5909,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1179,
+              "line": 1197,
               "column": 4
             },
             "end": {
-              "line": 1209,
+              "line": 1227,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1210,
+                "line": 1228,
                 "column": 4
               },
               "end": {
-                "line": 1210,
+                "line": 1228,
                 "column": 43
               }
             },
@@ -6137,22 +6137,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1212,
+              "line": 1230,
               "column": 4
             },
             "end": {
-              "line": 1247,
+              "line": 1265,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1248,
+                "line": 1266,
                 "column": 4
               },
               "end": {
-                "line": 1248,
+                "line": 1266,
                 "column": 45
               }
             },
@@ -6352,22 +6352,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1261,
+              "line": 1279,
               "column": 4
             },
             "end": {
-              "line": 1298,
+              "line": 1316,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1299,
+                "line": 1317,
                 "column": 4
               },
               "end": {
-                "line": 1299,
+                "line": 1317,
                 "column": 11
               }
             },
@@ -6571,22 +6571,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1301,
+              "line": 1319,
               "column": 4
             },
             "end": {
-              "line": 1330,
+              "line": 1348,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1331,
+                "line": 1349,
                 "column": 4
               },
               "end": {
-                "line": 1331,
+                "line": 1349,
                 "column": 41
               }
             },
@@ -6799,22 +6799,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1333,
+              "line": 1351,
               "column": 4
             },
             "end": {
-              "line": 1368,
+              "line": 1386,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1369,
+                "line": 1387,
                 "column": 4
               },
               "end": {
-                "line": 1369,
+                "line": 1387,
                 "column": 43
               }
             },
@@ -7017,22 +7017,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1382,
+              "line": 1400,
               "column": 4
             },
             "end": {
-              "line": 1410,
+              "line": 1428,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1411,
+                "line": 1429,
                 "column": 4
               },
               "end": {
-                "line": 1411,
+                "line": 1429,
                 "column": 42
               }
             },
@@ -7212,22 +7212,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1413,
+              "line": 1431,
               "column": 4
             },
             "end": {
-              "line": 1441,
+              "line": 1459,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1442,
+                "line": 1460,
                 "column": 4
               },
               "end": {
-                "line": 1442,
+                "line": 1460,
                 "column": 44
               }
             },
@@ -7338,6 +7338,55 @@
                     "value": "Run callbacks when transitions happen."
                   }
                 ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "Since v2.8.0:"
+                  }
+                ]
+              },
+              {
+                "type": "list",
+                "ordered": false,
+                "start": null,
+                "spread": false,
+                "children": [
+                  {
+                    "type": "listItem",
+                    "spread": false,
+                    "checked": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "children": [
+                          {
+                            "type": "text",
+                            "value": "If a callback returns a function, it will be invoked when\nthe state is exited in the same manner as if an "
+                          },
+                          {
+                            "type": "link",
+                            "url": "#statebotfsmonexiting",
+                            "title": null,
+                            "jsdoc": true,
+                            "children": [
+                              {
+                                "type": "text",
+                                "value": ".onExiting()"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "value": "\nhandler was created using it."
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
@@ -7345,23 +7394,23 @@
             {
               "title": "memberof",
               "description": "statebotFsm",
-              "lineNumber": 3
+              "lineNumber": 8
             },
             {
               "title": "instance",
               "description": null,
-              "lineNumber": 4
+              "lineNumber": 9
             },
             {
               "title": "function",
               "description": null,
-              "lineNumber": 5,
+              "lineNumber": 10,
               "name": null
             },
             {
               "title": "param",
               "description": "Configuration in the form of an object, or a function that\n returns an object. If a function is used, there will be a single\n argument passed-in: an object with the following methods\n attached as a convenience:\n\n - {{@link #statebotfsmenter|.enter()}, {@link #statebotfsmemit|.emit()}, {@link #enter-state-1 .Enter()}, {@link #emit-name .Emit()}}",
-              "lineNumber": 6,
+              "lineNumber": 11,
               "type": {
                 "type": "UnionType",
                 "elements": [
@@ -7380,7 +7429,7 @@
             {
               "title": "returns",
               "description": "A function that removes all listeners added\n by this method.",
-              "lineNumber": 14,
+              "lineNumber": 19,
               "type": {
                 "type": "NameExpression",
                 "name": "function"
@@ -7389,32 +7438,32 @@
             {
               "title": "example",
               "description": "var machine = Statebot('half-duplex', {\n  chart: `\n    idle -> sending | receiving -> done\n  `\n})\n\nmachine.onTransitions({\n  'idle -> sending': () => {\n    sendData()\n      .then(machine.Enter('done', 'sent'))\n      .catch(machine.Enter('done', 'failed'))\n  },\n  'idle -> receiving': () => {\n    receiveData()\n      .then(machine.Enter('done', 'received'))\n      .catch(machine.Enter('done', 'failed'))\n  },\n  'sending | receiving -> done': whatHappened => {\n    console.log('All finished: ', whatHappened)\n  }\n})\n\nmachine.enter('sending')\n\nfunction sendData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(resolve, 1000)\n    setTimeout(reject, 750 + Math.round(Math.random() * 750))\n  })\n}\n\nfunction receiveData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(resolve, 1000)\n    setTimeout(reject, 750 + Math.round(Math.random() * 750))\n  })\n}",
-              "lineNumber": 17
+              "lineNumber": 22
             },
             {
               "title": "example",
               "description": "// The above example using a function for config\nmachine.onTransitions(({ Enter }) => ({\n  'idle -> sending': () => {\n    sendData()\n      .then(Enter('done', 'sent'))\n      .catch(Enter('done', 'failed'))\n  },\n  'idle -> receiving': () => {\n    receiveData()\n      .then(Enter('done', 'received'))\n      .catch(Enter('done', 'failed'))\n  },\n  'sending | receiving -> done': whatHappened => {\n    console.log('All finished: ', whatHappened)\n  }\n}))\n\n// etc...",
-              "lineNumber": 56
+              "lineNumber": 61
             }
           ],
           "loc": {
             "start": {
-              "line": 1456,
+              "line": 1474,
               "column": 4
             },
             "end": {
-              "line": 1531,
+              "line": 1554,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1532,
+                "line": 1555,
                 "column": 4
               },
               "end": {
-                "line": 1532,
+                "line": 1555,
                 "column": 76
               }
             },
@@ -7434,7 +7483,7 @@
             {
               "title": "param",
               "name": "transitions",
-              "lineNumber": 6,
+              "lineNumber": 11,
               "description": {
                 "type": "root",
                 "children": [
@@ -7687,22 +7736,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1534,
+              "line": 1557,
               "column": 4
             },
             "end": {
-              "line": 1541,
+              "line": 1564,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1542,
+                "line": 1565,
                 "column": 4
               },
               "end": {
-                "line": 1542,
+                "line": 1565,
                 "column": 9
               }
             },
@@ -7810,22 +7859,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1544,
+              "line": 1567,
               "column": 4
             },
             "end": {
-              "line": 1551,
+              "line": 1574,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1552,
+                "line": 1575,
                 "column": 4
               },
               "end": {
-                "line": 1552,
+                "line": 1575,
                 "column": 10
               }
             },
@@ -7906,6 +7955,63 @@
                     "value": " to optionally add callbacks to those transitions."
                   }
                 ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "Since v2.8.0:"
+                  }
+                ]
+              },
+              {
+                "type": "list",
+                "ordered": false,
+                "start": null,
+                "spread": false,
+                "children": [
+                  {
+                    "type": "listItem",
+                    "spread": false,
+                    "checked": null,
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "children": [
+                          {
+                            "type": "text",
+                            "value": "If a "
+                          },
+                          {
+                            "type": "inlineCode",
+                            "value": "then"
+                          },
+                          {
+                            "type": "text",
+                            "value": " method returns a function, it will be invoked when\nthe state is exited in the same manner as if an "
+                          },
+                          {
+                            "type": "link",
+                            "url": "#statebotfsmonexiting",
+                            "title": null,
+                            "jsdoc": true,
+                            "children": [
+                              {
+                                "type": "text",
+                                "value": ".onExiting()"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "value": "\nhandler was created using it."
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
@@ -7913,23 +8019,23 @@
             {
               "title": "memberof",
               "description": "statebotFsm",
-              "lineNumber": 5
+              "lineNumber": 10
             },
             {
               "title": "instance",
               "description": null,
-              "lineNumber": 6
+              "lineNumber": 11
             },
             {
               "title": "function",
               "description": null,
-              "lineNumber": 7,
+              "lineNumber": 12,
               "name": null
             },
             {
               "title": "param",
               "description": "Configuration in the form of an object, or a function that\n returns an object. If a function is used, there will be a single\n argument passed-in: an object with the following methods\n attached as a convenience:\n\n - {{@link #statebotfsmenter|.enter()}, {@link #statebotfsmemit|.emit()}, {@link #enter-state-1 .Enter()}, {@link #emit-name .Emit()}}",
-              "lineNumber": 8,
+              "lineNumber": 13,
               "type": {
                 "type": "UnionType",
                 "elements": [
@@ -7948,7 +8054,7 @@
             {
               "title": "returns",
               "description": "A function that removes all listeners added\n by this method.",
-              "lineNumber": 16,
+              "lineNumber": 21,
               "type": {
                 "type": "NameExpression",
                 "name": "function"
@@ -7957,27 +8063,27 @@
             {
               "title": "example",
               "description": "var machine = Statebot('complex-form', {\n  chart: `\n    idle ->\n      update\n\n    // Maybe things take a long time...\n    update ->\n      waiting -> waiting-a-while\n\n    // Which path will we take?\n    waiting | waiting-a-while ->\n      success | failed | timeout\n\n    // All done!\n    success | failed | timeout ->\n      done\n  `\n})\n\nmachine.performTransitions(({ Enter, emit }) => ({\n  'idle -> update': {\n    on: 'user-saved',\n    then: (data) => {\n      console.log('Sending data: ', data)\n\n      sendData(data)\n        .then(Enter('success'))\n        .catch(Enter('failed'))\n\n      emit('data-sent')\n    }\n  },\n  'update -> waiting': {\n    on: 'data-sent',\n    then: () => {\n      setTimeout(Enter('waiting-a-while'), 750)\n      setTimeout(Enter('timeout'), 5000)\n    }\n  }\n}))\n\n// Just to illustrate that you can mix n' match with onTransitions:\nmachine.onTransitions({\n  'waiting | waiting-a-while -> success': () => {\n    console.log('Lovely!')\n  },\n  'waiting | waiting-a-while -> timeout': () => {\n    console.log('Well, at least you have your shoes')\n  }\n})\n\nmachine.emit('user-saved', ['some', 'data'])\n// Sending data: [\"some\", \"data\"]\n\nfunction sendData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(resolve, 1000)\n    setTimeout(reject, 750 + Math.round(Math.random() * 750))\n  })\n}",
-              "lineNumber": 19
+              "lineNumber": 24
             }
           ],
           "loc": {
             "start": {
-              "line": 1554,
+              "line": 1577,
               "column": 4
             },
             "end": {
-              "line": 1634,
+              "line": 1662,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1635,
+                "line": 1663,
                 "column": 4
               },
               "end": {
-                "line": 1635,
+                "line": 1663,
                 "column": 86
               }
             },
@@ -7994,7 +8100,7 @@
             {
               "title": "param",
               "name": "transitions",
-              "lineNumber": 8,
+              "lineNumber": 13,
               "description": {
                 "type": "root",
                 "children": [
@@ -8221,22 +8327,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1637,
+              "line": 1665,
               "column": 4
             },
             "end": {
-              "line": 1658,
+              "line": 1686,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1659,
+                "line": 1687,
                 "column": 4
               },
               "end": {
-                "line": 1659,
+                "line": 1687,
                 "column": 17
               }
             },
@@ -8383,22 +8489,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1661,
+              "line": 1689,
               "column": 4
             },
             "end": {
-              "line": 1686,
+              "line": 1714,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1687,
+                "line": 1715,
                 "column": 4
               },
               "end": {
-                "line": 1687,
+                "line": 1715,
                 "column": 9
               }
             },
@@ -8493,22 +8599,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1689,
+              "line": 1717,
               "column": 4
             },
             "end": {
-              "line": 1695,
+              "line": 1723,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1696,
+                "line": 1724,
                 "column": 4
               },
               "end": {
-                "line": 1696,
+                "line": 1724,
                 "column": 10
               }
             },
@@ -8643,22 +8749,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1698,
+              "line": 1726,
               "column": 4
             },
             "end": {
-              "line": 1720,
+              "line": 1748,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1721,
+                "line": 1749,
                 "column": 4
               },
               "end": {
-                "line": 1721,
+                "line": 1749,
                 "column": 27
               }
             },
@@ -8856,22 +8962,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1250,
+        "line": 1268,
         "column": 4
       },
       "end": {
-        "line": 1259,
+        "line": 1277,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1299,
+          "line": 1317,
           "column": 4
         },
         "end": {
-          "line": 1299,
+          "line": 1317,
           "column": 11
         }
       },
@@ -9053,22 +9159,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1371,
+        "line": 1389,
         "column": 4
       },
       "end": {
-        "line": 1380,
+        "line": 1398,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1411,
+          "line": 1429,
           "column": 4
         },
         "end": {
-          "line": 1411,
+          "line": 1429,
           "column": 42
         }
       },
@@ -9260,22 +9366,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1444,
+        "line": 1462,
         "column": 4
       },
       "end": {
-        "line": 1454,
+        "line": 1472,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1532,
+          "line": 1555,
           "column": 4
         },
         "end": {
-          "line": 1532,
+          "line": 1555,
           "column": 76
         }
       },

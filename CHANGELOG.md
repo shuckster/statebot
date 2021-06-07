@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.0] - 2021-06-07
+### Added
+- If a `performTransition` `then` method or `onTransitions` callback
+  return a function, it will be invoked when the state is exited in the
+  same manner as if an `.onExiting()` handler was created using it.
+
 ## [2.7.4] - 2021-04-25
 ### Fixed
 - Guard against wrapped-on() args not being an array

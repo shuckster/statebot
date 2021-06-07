@@ -944,6 +944,11 @@ declare module "statebot" {
         /**
          * Run callbacks when transitions happen.
          *
+         * Since v2.8.0:
+         * - If a callback returns a function, it will be invoked when
+         *   the state is exited in the same manner as if an {@link #statebotfsmonexiting .onExiting()}
+         *   handler was created using it.
+         *
          * @memberof statebotFsm
          * @instance
          * @function
@@ -1040,6 +1045,11 @@ declare module "statebot" {
          * Perform transitions when events happen.
          *
          * Use `then` to optionally add callbacks to those transitions.
+         *
+         * Since v2.8.0:
+         * - If a `then` method returns a function, it will be invoked when
+         *   the state is exited in the same manner as if an {@link #statebotfsmonexiting .onExiting()}
+         *   handler was created using it.
          *
          * @memberof statebotFsm
          * @instance

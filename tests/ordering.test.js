@@ -11,12 +11,14 @@ const EXPECTED_CALL_ORDER = [
   'pending :: performTransition :: then',
   'pending :: onExiting',
   'resolved :: onEntering',
+  'pending :: onTransition :: callback-leaving',
   'rejected | resolved :: onTransition :: callback',
   'pending :: onExited',
   'resolved :: onEntered',
   'resolved :: performTransition :: then',
   'resolved :: onExiting',
   'finished :: onEntering',
+  'resolved :: performTransition :: then-leaving',
   'finished :: onTransition :: callback',
   'resolved :: onExited',
   'finished :: onEntered',
@@ -29,6 +31,7 @@ const EXPECTED_CALL_ORDER = [
   'pending :: performTransition :: then',
   'pending :: onExiting',
   'rejected :: onEntering',
+  'pending :: onTransition :: callback-leaving',
   'rejected | resolved :: onTransition :: callback',
   'pending :: onExited',
   'rejected :: onEntered',
@@ -145,7 +148,10 @@ function initStatebotWithEventEmitter(events) {
     },
     'pending -> resolved': {
       on: 'pass',
-      then: Called('resolved :: performTransition :: then')
+      then: () => {
+        Called('resolved :: performTransition :: then')()
+        return Called('resolved :: performTransition :: then-leaving')
+      }
     },
     'pending -> rejected': {
       on: 'fail',
@@ -158,8 +164,10 @@ function initStatebotWithEventEmitter(events) {
   })
 
   bot.onTransitions({
-    'idle -> pending':
-      Called('pending :: onTransition :: callback'),
+    'idle -> pending': () => {
+      Called('pending :: onTransition :: callback')()
+      return Called('pending :: onTransition :: callback-leaving')
+    },
 
     'pending -> rejected | resolved':
       Called('rejected | resolved :: onTransition :: callback'),

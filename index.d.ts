@@ -1,20 +1,5 @@
 declare module "statebot" {
     /**
-     * {@link #statebotfsmonentering .onEntering()} /
-     * {@link #statebotfsmonentered .onEntered()} callback signature.
-     */
-    export type enterCallback = (fromState: string, ...args?: any[]) => any;
-    /**
-     * {@link #statebotfsmonexiting .onExiting()} /
-     * {@link #statebotfsmonexited .onExited()} callback signature.
-     */
-    export type exitCallback = (toState: string, ...args?: any[]) => any;
-    /**
-     * {@link #statebotfsmonswitching .onSwitching()} /
-     * {@link #statebotfsmonswitched .onSwitched()} callback signature.
-     */
-    export type switchCallback = (toState: string, fromState: string, ...args?: any[]) => any;
-    /**
      * {@link #statebotassertroute|assertRoute()} options.
      */
     export type assertRouteOptions = {
@@ -80,10 +65,10 @@ declare module "statebot" {
          * a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/
          * `performTransitions()` methods will use it.
          *
-         * It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
+         * It should have the same signature as {@link https ://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
          *
-         * - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
-         * - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
+         * - Since Statebot 2.5.0 {@link https ://npmjs.com/mitt|mitt} is also compatible.
+         * - Since Statebot 2.6.0 {@link https ://npmjs.com/mitt|mitt} is used internally.
          */
         events?: any;
     };
@@ -92,7 +77,7 @@ declare module "statebot" {
      * permitted transitions between them.
      *
      * This is defined using a `string` or an `array` of strings, but
-     *  {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
+     *  {@link https ://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
      * are much more convenient.
      *
      * An arrow `->` configures a **permitted transition** between two states:

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.1] - 2021-09-04
+### Updated
+- Updated dependencies, tweaked README
+
 ## [2.8.0] - 2021-06-07
 ### Added
 - If a `performTransition` `then` method or `onTransitions` callback

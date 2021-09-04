@@ -610,18 +610,22 @@ Here are some charts I've used with Statebot:
 ### Web-server:
 
 ```js
-  // Static files
-  booting ->
-    image-meta -> templates -> pages
+  // Email config, static files
+  -> booting ->
+    email-config -> image-sizes -> templates -> pages
 
-  // If pages are ready, start the web-server
+  // If pages are ready, start webserver
   pages -> webserver
 
   // Problem...?
-  (booting | image-meta | templates | pages | webserver) ->
-    failed ->
-    // A watchdog will restart the web-server
-      report-and-quit
+        booting |
+   email-config |
+    image-sizes |
+      templates |
+          pages -> unrecoverable
+
+  // A watchdog will restart the web-server
+  unrecoverable ->  report-and-quit
 ```
 
 ### Email sender:

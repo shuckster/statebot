@@ -243,7 +243,7 @@ declare module "statebot" {
          * machine.canTransitionTo(['play', 'options'])
          * // true
          */
-        canTransitionTo: (...states: any[]) => any;
+        canTransitionTo: (...states: any[]) => boolean;
         /**
          * Returns the current state.
          *

@@ -100,7 +100,7 @@ var statebot = (function (exports) {
   }
 
   function _iterableToArrayLimit(arr, i) {
-    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
 
     if (_i == null) return;
     var _arr = [];
@@ -159,16 +159,17 @@ var statebot = (function (exports) {
       all: n = n || new Map(),
       on: function on(t, e) {
         var i = n.get(t);
-        i && i.push(e) || n.set(t, [e]);
+        i ? i.push(e) : n.set(t, [e]);
       },
       off: function off(t, e) {
         var i = n.get(t);
-        i && i.splice(i.indexOf(e) >>> 0, 1);
+        i && (e ? i.splice(i.indexOf(e) >>> 0, 1) : n.set(t, []));
       },
       emit: function emit(t, e) {
-        (n.get(t) || []).slice().map(function (n) {
+        var i = n.get(t);
+        i && i.slice().map(function (n) {
           n(e);
-        }), (n.get("*") || []).slice().map(function (n) {
+        }), (i = n.get("*")) && i.slice().map(function (n) {
           n(t, e);
         });
       }

@@ -10,6 +10,7 @@ export {
   isPojo,
   isString,
   isTemplateLiteral,
+  isUndefined,
   ArgTypeError,
 }
 
@@ -36,6 +37,10 @@ function isFunction (obj) {
 
 function isString (obj) {
   return typeof obj === 'string'
+}
+
+function isUndefined (obj) {
+  return obj === undefined
 }
 
 function isObject (obj) {

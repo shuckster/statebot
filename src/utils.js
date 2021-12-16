@@ -5,6 +5,7 @@
 
 export {
   Defer,
+  Definitions,
   Logger,
   Once,
   Pausables,
@@ -191,6 +192,39 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     countOf,
     toValue,
     refs
+  }
+}
+
+//
+// Definitions
+//
+
+function Definitions() {
+  const dictionary = {}
+
+  function undefine(word, definition) {
+    dictionary[word] = (dictionary[word] || []).filter(
+      (next) => next !== definition
+    )
+    if (dictionary[word].length === 0) {
+      delete dictionary[word]
+    }
+  }
+
+  function define(word, definition) {
+    dictionary[word] = dictionary[word] || []
+    dictionary[word].push(definition)
+    return () => undefine(word, definition)
+  }
+
+  function definitionsOf(word) {
+    return dictionary[word] || []
+  }
+
+  return {
+    define,
+    undefine,
+    definitionsOf,
   }
 }
 

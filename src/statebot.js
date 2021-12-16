@@ -164,6 +164,7 @@ import mitt from 'mitt'
 
 import {
   wrapEmitter,
+  Definitions,
   Logger,
   ReferenceCounter,
   Pausables,
@@ -249,6 +250,8 @@ function Statebot (name, options) {
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   )
+
+  const transitionsFromEvents = Definitions()
 
   const internalEvents = wrapEmitter(mitt())
   const emitInternalEvent = Pausable(internalEvents.emit)
@@ -388,7 +391,11 @@ function Statebot (name, options) {
             transitionNoOp(`Event not handled: "${eventName}"`)
           }
         })
-      ]
+      ].concat(
+        configs.map(({ fromState, toState }) =>
+          transitionsFromEvents.define(`${eventName}:${fromState}`, toState)
+        )
+      )
     }
 
     function runActionFor(state, actionFn, ...args) {
@@ -406,6 +413,61 @@ function Statebot (name, options) {
     function bindActionTo(state, actionFn) {
       return (...args) => runActionFor(state, actionFn, ...args)
     }
+  }
+
+  function _peek(eventName, stateObject, calledFromEmit = true) {
+    const err1 = argTypeError('peek', { eventName: isString }, eventName)
+    if (err1) {
+      throw new TypeError(err1)
+    }
+
+    const eventAndState = eventName + ':' + currentState()
+    const statesFromEvent = transitionsFromEvents.definitionsOf(eventAndState)
+
+    if (statesFromEvent.length > 1) {
+      const reason =
+        `${logPrefix}: Event "${eventName}" causes multiple transitions:\n` +
+        `  > From state: "${currentState()}"\n` +
+        `  > To states: "${statesFromEvent.join(', ')}"\n` +
+        `Check your performTransitions() config.`
+
+      throw new RangeError(reason)
+    }
+
+    if (calledFromEmit) {
+      return
+    }
+
+    if (statesFromEvent.length === 0) {
+      if (eventsHandled.countOf(eventName) === 0) {
+        _console.warn(`${logPrefix}: Event not handled: "${eventName}"`)
+      } else {
+        _console.warn(`${logPrefix}: Will not transition after emitting: "${eventName}"`)
+      }
+    }
+
+    const toState = statesFromEvent[0]
+
+    if (isUndefined(stateObject)) {
+      return toState ?? currentState()
+    }
+
+    const err2 = argTypeError('peek', { stateObject: isPojo }, stateObject)
+    if (err2) {
+      throw new TypeError(err2)
+    }
+
+    if (Object.prototype.hasOwnProperty.call(stateObject, toState)) {
+      const anyOrFn = stateObject[toState]
+      return isFunction(anyOrFn)
+        ? anyOrFn()
+        : anyOrFn
+    }
+    return null
+  }
+
+  function peek(eventName, stateObject) {
+    return _peek(eventName, stateObject, false)
   }
 
   function previousState () {
@@ -494,7 +556,7 @@ function Statebot (name, options) {
     if (err) {
       throw new TypeError(err)
     }
-
+    _peek(eventName)
     return events.emit(eventName, ...args)
   })
 
@@ -1574,6 +1636,66 @@ function Statebot (name, options) {
      * @returns {boolean}
      */
     paused,
+
+    /**
+     * Return the state the machine will be in after
+     * {@link #statebotfsmemit|.emit()}'ing the specified event.
+     *
+     * Works only after using
+     *  {@link #statebotfsmperformtransitions|.performTransitions()}.
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     * @param {string} eventName
+     * @param {object} [stateObject]
+     * If `stateObject` is undefined, `.peek()` defaults to returning
+     * {@link #statebotfsmcurrentstate|.currentState()}
+     * if the event will *NOT* trigger a transition.
+     *
+     * Otherwise, `stateObject` will be used as a key/value lookup,
+     * with `key` being the predicted state, and `value` being the
+     * corresponding literal or function to be run and its value
+     * returned.
+     * @returns {string|null|any}
+     * @example
+     *
+     * var machine = Statebot('peek-a-boo', {
+     *   chart: `
+     *     idle -> running
+     *   `
+     * })
+     *
+     * machine.performTransitions({
+     *   'idle -> running': {
+     *     on: 'start'
+     *   }
+     * })
+     *
+     * machine.peek('start')
+     * // "running"
+     *
+     * machine.peek('start', {
+     *   'running': () => 'will be in the running state'
+     * })
+     * // "will be in the running state"
+     *
+     * machine.peek('unknown')
+     * // "idle"
+     * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+     *
+     * machine.peek('unknown', {
+     *   'running': () => 'will be in the running state'
+     * })
+     * // null
+     * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+     *
+     * machine.emit('start')
+     * machine.peek('start')
+     * // "running"
+     * // Logs: Statebot[peek-a-boo]: Will not transition after emitting: "start"
+     */
+     peek,
 
     /**
      * Perform transitions when events happen.

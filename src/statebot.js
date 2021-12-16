@@ -416,7 +416,7 @@ function Statebot (name, options) {
     }
   }
 
-  function _peek(eventName, stateObject, calledFromEmit = true) {
+  function _peek (eventName, stateObject, calledInternally = true) {
     const err1 = argTypeError({ eventName: isString })('peek')(eventName)
     if (err1) {
       throw new TypeError(err1)
@@ -435,11 +435,7 @@ function Statebot (name, options) {
       throw new RangeError(reason)
     }
 
-    if (calledFromEmit) {
-      return
-    }
-
-    if (statesFromEvent.length === 0) {
+    if (!calledInternally && statesFromEvent.length === 0) {
       if (eventsHandled.countOf(eventName) === 0) {
         _console.warn(`${logPrefix}: Event not handled: "${eventName}"`)
       } else {

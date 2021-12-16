@@ -1,24 +1,33 @@
-
 //
 // RUNTIME TYPE CHECKING
 //
 
 export {
   isArray,
+  isArguments,
+  isBoolean,
   isEventEmitter,
   isFunction,
   isPojo,
   isString,
+  isAllStrings,
   isTemplateLiteral,
+  isNumber,
+  isThisValue,
+  isNull,
+  isUnset,
   isUndefined,
   ArgTypeError,
+  ObjTypeError
 }
 
 //
 // isType
 //
 
-function isEventEmitter (obj) {
+// isEventEmitter
+//
+function isEventEmitter(obj) {
   return (
     isObject(obj) &&
     isFunction(obj.emit) &&
@@ -27,34 +36,110 @@ function isEventEmitter (obj) {
   )
 }
 
-function isArray (obj) {
+isEventEmitter.displayName = 'isEventEmitter'
+
+// isUnset
+//
+function isUnset(obj) {
+  return isNull(obj) || isUndefined(obj)
+}
+
+isArray.displayName = 'isUnset'
+
+// isArray
+//
+function isArray(obj) {
   return Array.isArray(obj)
 }
 
-function isFunction (obj) {
+isArray.displayName = 'isArray'
+
+// isArguments
+//
+function isArguments(obj) {
+  return Object.prototype.toString.call(obj) === '[object Arguments]'
+}
+
+isArguments.displayName = 'isArguments'
+
+// isBoolean
+//
+function isBoolean(obj) {
+  return obj === true || obj === false
+}
+
+isBoolean.displayName = 'isBoolean'
+
+// isFunction
+//
+function isFunction(obj) {
   return typeof obj === 'function'
 }
 
-function isString (obj) {
+isFunction.displayName = 'isFunction'
+
+// isString
+//
+function isString(obj) {
   return typeof obj === 'string'
 }
 
-function isUndefined (obj) {
+isString.displayName = 'isString'
+
+// isAllStrings
+//
+function isAllStrings (...args) {
+  return args.every(isString)
+}
+
+isAllStrings.displayName = 'isAllStrings'
+
+// isUndefined
+//
+function isUndefined(obj) {
   return obj === undefined
 }
 
-function isObject (obj) {
-  return typeof obj === 'object'
+isUndefined.displayName = 'isUndefined'
+
+// isNull
+//
+function isNull(obj) {
+  return obj === null
 }
 
-function isPojo (obj) {
-  if (obj === null || (!isObject(obj))) {
+isNull.displayName = 'isNull'
+
+// isNumber
+//
+function isNumber(obj) {
+  return typeof obj === 'number'
+}
+
+isNumber.displayName = 'isNumber'
+
+// isObject
+//
+function isObject(obj) {
+  return typeof obj === 'object' && !isNull(obj)
+}
+
+isObject.displayName = 'isObject'
+
+// isPojo
+//
+function isPojo(obj) {
+  if (isNull(obj) || !isObject(obj) || isArguments(obj)) {
     return false
   }
   return Object.getPrototypeOf(obj) === Object.prototype
 }
 
-function isTemplateLiteral (obj) {
+isPojo.displayName = 'isPojo'
+
+// isTemplateLiteral
+//
+function isTemplateLiteral(obj) {
   if (isString(obj)) {
     return true
   }
@@ -64,6 +149,18 @@ function isTemplateLiteral (obj) {
   return obj.every(isString)
 }
 
+isTemplateLiteral.displayName = 'isTemplateLiteral'
+
+// isThisValue
+//
+function isThisValue(value) {
+  function inObject(obj) {
+    return obj === value
+  }
+  inObject.displayName = `isThisValue(${value})`
+  return inObject
+}
+
 //
 // ArgTypeError
 //
@@ -71,7 +168,8 @@ function isTemplateLiteral (obj) {
 const typeErrorStringIfFnReturnsFalse = (argName, argTypeFn, arg) => {
   return argTypeFn(arg)
     ? undefined
-    : `${argTypeFn.name}(${argName}) did not return true`
+    : (argTypeFn.displayName || argTypeFn.name) +
+        `(${argName}) did not return true`
 }
 
 const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
@@ -80,20 +178,23 @@ const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
     : `Argument "${argName}" should be a ${argType}`
 }
 
-const typeErrorStringFromArgument = (argMap, arg, index) => {
+const typeErrorStringFromArgument = argMap => (arg, index) => {
+  if (index >= argMap.length) {
+    return
+  }
+
   const { argName, argType } = argMap[index]
   if (isUndefined(arg)) {
     return `Argument undefined: "${argName}"`
   }
 
-  const permittedArgTypes = Array.isArray(argType)
-    ? argType
-    : [argType]
+  const permittedArgTypes = Array.isArray(argType) ? argType : [argType]
 
   const errorDescs = permittedArgTypes
-    .map(argType => isFunction(argType)
-      ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
-      : typeErrorStringIfTypeOfFails(argName, argType, arg)
+    .map(argType =>
+      isFunction(argType)
+        ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
+        : typeErrorStringIfTypeOfFails(argName, argType, arg)
     )
     .filter(isString)
 
@@ -104,7 +205,8 @@ const typeErrorStringFromArgument = (argMap, arg, index) => {
 
   if (shouldError) {
     return (
-      `${errorDescs.join('\n| ')}\n> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`
+      errorDescs.join('\n| ') +
+      `\n> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`
     )
   }
 }
@@ -113,40 +215,70 @@ const typeErrorStringFromArgument = (argMap, arg, index) => {
  * Helper for enforcing correct argument-types.
  *
  * @private
- * @param {string} errPrefix
+ * @param {string} namespace
  *
  * @example
  * const argTypeError = ArgTypeError('namespace#')
  *
  * function myFn (myArg1, myArg2) {
- *   const err = argTypeError('myFn',
- *     { myArg1: isString, myArg2: Boolean },
- *     myArg1, myArg2
- *   )
+ *   const err = argTypeError({
+ *     myArg1: isString,
+ *     myArg2: isBoolean
+ *   })('myFn')(myArg1, myArg2)
  *   if (err) {
  *     throw new TypeError(err)
  *   }
  * }
  */
 
-function ArgTypeError (errPrefix) {
-  return function (fnName, typeMap, ...args) {
-    const argMap = Object
-      .entries(typeMap)
-      .map(([argName, argType]) => ({ argName, argType }))
+function ArgTypeError(namespace) {
+  return typeMap => {
+    const argMap = Object.entries(typeMap).map(([argName, argType]) => ({
+      argName,
+      argType
+    }))
 
-    const err = args
-      .map((...args) => typeErrorStringFromArgument(argMap, ...args))
-      .filter(isString)
+    return fnName =>
+      (...args) => {
+        const processedArgs = Array.from(args, x =>
+          isArguments(x) ? Array.from(x) : x
+        ).flat(1)
 
-    if (!err.length) {
-      return
-    }
+        const err = processedArgs
+          .map(typeErrorStringFromArgument(argMap))
+          .filter(isString)
 
-    const signature = Object.keys(typeMap).join(', ')
-    return (
-      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
-      `${err.map(err => `| ${err}`).join('\n')}`
-    )
+        if (!err.length) {
+          return
+        }
+
+        const signature = Object.keys(typeMap).join(', ')
+        return (
+          `\n${namespace || ''}${fnName}(${signature}):\n` +
+          `${err.map(err => `| ${err}`).join('\n')}`
+        )
+      }
   }
+}
+
+function ObjTypeError(namespace) {
+  return typeMap => {
+    const keys = Object.keys(typeMap)
+    const objTypeError = ArgTypeError(namespace)(typeMap)
+    return fnName => obj => {
+      const values = valuesOf(obj, { keys })
+      const err = objTypeError(fnName)(...values)
+      return err
+    }
+  }
+}
+
+function valuesOf(obj, options) {
+  const { keys } = options
+  if (!Array.isArray(keys)) {
+    return Object.values(obj)
+  }
+  return keys.reduce((acc, key) => {
+    return [...acc, obj[key]]
+  }, [])
 }

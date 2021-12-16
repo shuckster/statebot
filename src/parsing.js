@@ -28,10 +28,9 @@ import { isTemplateLiteral, ArgTypeError } from './types'
 const argTypeError = ArgTypeError('statebot.')
 
 function decomposeRoute (templateLiteral) {
-  const err = argTypeError('decomposeRoute',
-    { templateLiteral: isTemplateLiteral },
-    templateLiteral
-  )
+  const err = argTypeError(
+    { templateLiteral: isTemplateLiteral }
+  )('decomposeRoute')(templateLiteral)
   if (err) {
     throw TypeError(err)
   }
@@ -68,10 +67,9 @@ function decomposeRoute (templateLiteral) {
  */
 
 function decomposeChart (chart) {
-  const err = argTypeError('decomposeChart',
-    { chart: isTemplateLiteral },
-    chart
-  )
+  const err = argTypeError(
+    { chart: isTemplateLiteral }
+  )('decomposeChart')(chart)
   if (err) {
     throw TypeError(err)
   }

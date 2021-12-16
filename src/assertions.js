@@ -51,10 +51,9 @@ const argTypeError = ArgTypeError('statebot.')
  */
 
 function routeIsPossible (machine, route) {
-  const err = argTypeError('routeIsPossible',
-    { machine: isStatebot, route: isTemplateLiteral },
-    machine, route
-  )
+  const err = argTypeError(
+    { machine: isStatebot, route: isTemplateLiteral }
+  )('routeIsPossible')(machine, route)
   if (err) {
     throw TypeError(err)
   }
@@ -137,10 +136,9 @@ let assertionId = 0
  */
 
 function assertRoute (machine, expectedRoute, options) {
-  const err = argTypeError('assertRoute',
-    { machine: isStatebot, expectedRoute: isTemplateLiteral },
-    machine, expectedRoute
-  )
+  const err = argTypeError(
+    { machine: isStatebot, expectedRoute: isTemplateLiteral }
+  )('assertRoute')(machine, expectedRoute)
   if (err) {
     throw TypeError(err)
   }

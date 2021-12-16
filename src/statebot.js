@@ -177,6 +177,7 @@ import {
   isFunction,
   isPojo,
   isString,
+  isAllStrings,
   isUndefined,
   ArgTypeError,
 } from './types'
@@ -416,7 +417,7 @@ function Statebot (name, options) {
   }
 
   function _peek(eventName, stateObject, calledFromEmit = true) {
-    const err1 = argTypeError('peek', { eventName: isString }, eventName)
+    const err1 = argTypeError({ eventName: isString })('peek')(eventName)
     if (err1) {
       throw new TypeError(err1)
     }
@@ -452,7 +453,7 @@ function Statebot (name, options) {
       return toState ?? currentState()
     }
 
-    const err2 = argTypeError('peek', { stateObject: isPojo }, stateObject)
+    const err2 = argTypeError({ stateObject: isPojo })('peek')(stateObject)
     if (err2) {
       throw new TypeError(err2)
     }
@@ -480,7 +481,9 @@ function Statebot (name, options) {
 
   function canTransitionTo (...states) {
     const testStates = states.flat()
-    const err = argTypeError('canTransitionTo', { state: isString }, testStates[0])
+    const err = argTypeError(
+      { states: isAllStrings }
+    )('canTransitionTo')(testStates)
     if (err) {
       throw new TypeError(err)
     }
@@ -498,7 +501,9 @@ function Statebot (name, options) {
       ? state
       : currentState()
 
-    const err = argTypeError('statesAvailableFromHere', { state: isString }, _state)
+    const err = argTypeError(
+      { state: isString }
+    )('statesAvailableFromHere')(_state)
     if (err) {
       throw new TypeError(err)
     }
@@ -541,7 +546,9 @@ function Statebot (name, options) {
   }
 
   function inState (...args) {
-    const err = argTypeError('inState', { state: [isString, isPojo] }, args[0])
+    const err = argTypeError(
+      { state: [isString, isPojo] }
+    )('inState')(args[0])
     if (err) {
       throw new TypeError(err)
     }
@@ -552,7 +559,9 @@ function Statebot (name, options) {
   }
 
   const emit = Pausable((eventName, ...args) => {
-    const err = argTypeError('emit', { eventName: isString }, eventName)
+    const err = argTypeError(
+      { eventName: isString }
+    )('emit')(eventName)
     if (err) {
       throw new TypeError(err)
     }
@@ -561,7 +570,9 @@ function Statebot (name, options) {
   })
 
   const enter = Pausable((state, ...args) => {
-    const err = argTypeError('enter', { state: isString }, state)
+    const err = argTypeError(
+      { state: isString }
+    )('enter')(state)
     if (err) {
       throw new TypeError(err)
     }
@@ -601,10 +612,9 @@ function Statebot (name, options) {
   })
 
   function onEvent (eventName, cb) {
-    const err = argTypeError('onEvent',
-      { eventName: isString, cb: isFunction },
-      eventName, cb
-    )
+    const err = argTypeError(
+      { eventName: isString, cb: isFunction }
+    )('onEvent')(eventName, cb)
     if (err) {
       throw new TypeError(err)
     }
@@ -618,7 +628,7 @@ function Statebot (name, options) {
     .reduce((obj, methodName) => ({
       ...obj,
       [methodName]: cb => {
-        const err = argTypeError(methodName, { cb: isFunction }, cb)
+        const err = argTypeError({ cb: isFunction })(methodName)(cb)
         if (err) {
           throw new TypeError(err)
         }
@@ -651,10 +661,9 @@ function Statebot (name, options) {
       return {
         ...obj,
         [methodName]: (state, cb) => {
-          const err = argTypeError(methodName,
-            { state: isString, cb: isFunction },
-            state, cb
-          )
+          const err = argTypeError(
+            { state: isString, cb: isFunction }
+          )(methodName)(state, cb)
           if (err) {
             throw new TypeError(err)
           }
@@ -683,7 +692,7 @@ function Statebot (name, options) {
     }, {})
 
   function Emit (eventName, ...curriedArgs) {
-    const err = argTypeError('Emit', { eventName: isString }, eventName)
+    const err = argTypeError({ eventName: isString })('Emit')(eventName)
     if (err) {
       throw new TypeError(err)
     }
@@ -692,7 +701,7 @@ function Statebot (name, options) {
   }
 
   function Enter (state, ...curriedArgs) {
-    const err = argTypeError('Enter', { state: isString }, state)
+    const err = argTypeError({ state: isString })('Enter')(state)
     if (err) {
       throw new TypeError(err)
     }
@@ -711,7 +720,7 @@ function Statebot (name, options) {
   }
 
   function InState (...args) {
-    const err = argTypeError('InState', { state: [isString, isPojo] }, args[0])
+    const err = argTypeError({ state: [isString, isPojo] })('InState')(args[0])
     if (err) {
       throw new TypeError(err)
     }

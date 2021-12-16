@@ -169,9 +169,11 @@ function decomposeRouteFromTokens (line) {
   return output
 }
 
-function decomposeTransitionsFromRoute ([fromStates, toStates]) {
-  return fromStates.reduce((acc, fromState) => [
-    ...acc,
-    ...toStates.map(toState => [fromState, toState])
-  ], [])
+function decomposeTransitionsFromRoute([fromStates, toStates]) {
+  return fromStates.reduce(
+    (acc, fromState) => (
+      acc.push(...toStates.map(toState => [fromState, toState])), acc
+    ),
+    []
+  )
 }

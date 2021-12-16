@@ -82,7 +82,7 @@ const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
 
 const typeErrorStringFromArgument = (argMap, arg, index) => {
   const { argName, argType } = argMap[index]
-  if (arg === undefined) {
+  if (isUndefined(arg)) {
     return `Argument undefined: "${argName}"`
   }
 

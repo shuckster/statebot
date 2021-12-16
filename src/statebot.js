@@ -176,6 +176,7 @@ import {
   isFunction,
   isPojo,
   isString,
+  isUndefined,
   ArgTypeError,
 } from './types'
 
@@ -218,7 +219,7 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {}
 
-  const events = options.events === undefined
+  const events = isUndefined(options.events)
     ? wrapEmitter(mitt())
     : isEventEmitter(options.events) && wrapEmitter(options.events)
 
@@ -431,7 +432,7 @@ function Statebot (name, options) {
   }
 
   function statesAvailableFromHere (state) {
-    const _state = state !== undefined
+    const _state = !isUndefined(state)
       ? state
       : currentState()
 
@@ -454,7 +455,7 @@ function Statebot (name, options) {
   function _inState (state, anyOrFn, ...fnArgs) {
     const conditionMatches = currentState() === state
 
-    if (anyOrFn === undefined) {
+    if (isUndefined(anyOrFn)) {
       return conditionMatches
     }
     if (!conditionMatches) {
@@ -669,7 +670,7 @@ function Statebot (name, options) {
     const lastState = previousState()
     const inState = currentState()
     const prevRoute =
-      `${lastState === undefined ? '[undefined]' : lastState}->${inState}`
+      `${isUndefined(lastState) ? '[undefined]' : lastState}->${inState}`
 
     const availableStates = statesAvailableFromHere()
     if (!availableStates.length) {

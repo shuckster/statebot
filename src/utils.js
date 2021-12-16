@@ -71,7 +71,7 @@ function wrapEmitter (events) {
 function uniq (input) {
   return input.reduce((acc, one) =>
     acc.indexOf(one) === -1
-      ? [...acc, one]
+      ? (acc.push(one), acc)
       : acc
     , []
   )

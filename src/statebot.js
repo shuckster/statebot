@@ -399,7 +399,7 @@ function Statebot (name, options) {
       )
     }
 
-    function runActionFor(state, actionFn, ...args) {
+    function runActionFor (state, actionFn, ...args) {
       const onExitingState = actionFn(...args)
       if (isFunction(onExitingState)) {
         const uninstall = Once(enterExitMethods[ON_EXITING](state, (toState) => {
@@ -411,7 +411,7 @@ function Statebot (name, options) {
       }
     }
 
-    function bindActionTo(state, actionFn) {
+    function bindActionTo (state, actionFn) {
       return (...args) => runActionFor(state, actionFn, ...args)
     }
   }
@@ -467,7 +467,7 @@ function Statebot (name, options) {
     return null
   }
 
-  function peek(eventName, stateObject) {
+  function peek (eventName, stateObject) {
     return _peek(eventName, stateObject, false)
   }
 

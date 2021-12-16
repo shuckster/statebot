@@ -913,7 +913,7 @@ function Statebot (name, options) {
      * machine.enter('saving')
      * // false
      *
-     * // [dialog]: Invalid transition "idle->saving", not switching
+     * // Statebot[dialog]: Invalid transition "idle->saving", not switching
      * // > Previous transition: "[undefined]->idle"
      * // > From "idle", valid states are: ["showing-modal"]
      *

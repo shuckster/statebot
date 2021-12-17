@@ -35,8 +35,8 @@ export {
  *
  *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
  *
- *  - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
- *  - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
+ *  - Since v2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+ *  - Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
  */
 
 /**
@@ -908,7 +908,7 @@ function Statebot (name, options) {
      *  {@link https://www.npmjs.com/package/events|events}
      * package for dealing with events in the browser.
      *
-     * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+     * Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is
      * used for both the browser and non-browser builds.
      *
      * @example
@@ -1675,7 +1675,7 @@ function Statebot (name, options) {
     paused,
 
     /**
-     * Return the state the machine will be in after
+     * Since v2.9.0: Return the state the machine will be in after
      * {@link #statebotfsmemit|.emit()}'ing the specified event.
      *
      * Works only after using

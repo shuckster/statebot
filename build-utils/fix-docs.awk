@@ -33,5 +33,11 @@ BEGIN {
     ")
   }
 
+  if ($0 ~ /<p>Write more robust and understandable programs.<\/p>/) {
+    sub(/<p>Write more robust and understandable programs.<\/p>/, "\n\
+<img src=\"./logo-full.png\" style=\"max-width: 255px; margin: 10px 0;\" />\n\
+<p>Write more robust and understandable programs.</p>\n")
+  }
+
   print
 }

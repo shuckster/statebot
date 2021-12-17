@@ -827,7 +827,7 @@ function Statebot (name, options) {
      * If more than one state is specified, `true` is returned only if
      * **ALL** states are available.
      *
-     * See also: {@link #statebotfsmpeek|.peek()}
+     * See also: {@link #statebotfsmpeek|.peek()}.
      *
      * @memberof statebotFsm
      * @instance
@@ -1687,7 +1687,7 @@ function Statebot (name, options) {
      * Works only after using
      *  {@link #statebotfsmperformtransitions|.performTransitions()}.
      *
-     * See also: {@link #statebotfsmcantransitionto|.canTransitionTo(state, { afterEmitting })}
+     * See also: {@link #statebotfsmcantransitionto|.canTransitionTo(state, .afterEmitting )}.
      *
      * @memberof statebotFsm
      * @instance

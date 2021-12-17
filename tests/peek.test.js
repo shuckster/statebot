@@ -41,6 +41,19 @@ const addBadHandlers = () => bot.performTransitions({
   },
 })
 
+test(`test basic canTransitionTo() throws with wrong args`, () => {
+  expect(() => bot.canTransitionTo(1)).toThrow()
+  expect(() => bot.canTransitionTo(undefined, null, 'string')).toThrow()
+  expect(() => bot.canTransitionTo('', {})).toThrow()
+  expect(() => bot.canTransitionTo('', {}, '')).toThrow()
+  expect(() => bot.canTransitionTo('', { afterEmitting: '' }, '')).toThrow()
+  expect(() => bot.canTransitionTo('', { afterEmitting: '' })).not.toThrow()
+  expect(() => bot.canTransitionTo('')).not.toThrow()
+  expect(() => bot.canTransitionTo([''])).not.toThrow()
+  expect(() => bot.canTransitionTo('', '')).not.toThrow()
+  expect(() => bot.canTransitionTo(['', ''])).not.toThrow()
+})
+
 test(`test basic peek() usage`, () => {
   const removeHandlers = addGoodHandlers()
 

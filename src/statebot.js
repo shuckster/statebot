@@ -478,7 +478,7 @@ function Statebot (name, options) {
   function _state_canTransitionTo (...states) {
     const err = argTypeError(
       { states: isAllStrings }
-    )('canTransitionTo')(states)
+    )('canTransitionTo')([states])
     if (err) {
       throw new TypeError(err)
     }
@@ -491,9 +491,13 @@ function Statebot (name, options) {
     return states.every(state => nextStates.includes(state))
   }
 
-  function canTransitionTo(...states) {
-    const testStates = states.flat(Infinity)
-    if (testStates.length === 2 && isString(testStates[0]) && isPojo(testStates[1])) {
+  function canTransitionTo (...states) {
+    const testStates = states.flat()
+    if (
+      testStates.length === 2 &&
+      isString(testStates[0]) &&
+      isPojo(testStates[1])
+    ) {
       const thisState = testStates[0]
       const { afterEmitting } = testStates[1]
       const err = argTypeError(

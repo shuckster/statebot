@@ -88,8 +88,8 @@ isString.displayName = 'isString'
 
 // isAllStrings
 //
-function isAllStrings (...args) {
-  return args.every(isString)
+function isAllStrings (arr) {
+  return isArray(arr) && arr.every(isString)
 }
 
 isAllStrings.displayName = 'isAllStrings'
@@ -240,9 +240,9 @@ function ArgTypeError(namespace) {
 
     return fnName =>
       (...args) => {
-        const processedArgs = Array.from(args, x =>
-          isArguments(x) ? Array.from(x) : x
-        ).flat(1)
+        const processedArgs = Array
+          .from(args, x => isArguments(x) ? Array.from(x) : x)
+          .flat(1)
 
         const err = processedArgs
           .map(typeErrorStringFromArgument(argMap))

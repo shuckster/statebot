@@ -49,14 +49,18 @@ test(`test basic peek() usage`, () => {
   expect(bot.peek('fail')).toBe('idle')
   expect(bot.peek('done')).toBe('idle')
 
+  expect(bot.canTransitionTo('pending', { afterEmitting: 'start' })).toBe(true)
   bot.emit('start')
+  expect(bot.canTransitionTo('pending', { afterEmitting: 'start' })).toBe(false)
 
   expect(bot.peek('start')).toBe('pending')
   expect(bot.peek('pass')).toBe('resolved')
   expect(bot.peek('fail')).toBe('rejected')
   expect(bot.peek('done')).toBe('pending')
 
+  expect(bot.canTransitionTo('resolved', { afterEmitting: 'pass' })).toBe(true)
   bot.emit('pass')
+  expect(bot.canTransitionTo('resolved', { afterEmitting: 'pass' })).toBe(false)
 
   expect(bot.peek('start')).toBe('resolved')
   expect(bot.peek('pass')).toBe('resolved')
@@ -66,7 +70,9 @@ test(`test basic peek() usage`, () => {
   expect(bot.peek('done', { finished: true })).toBe(true)
   expect(bot.peek('done', { resolved: true })).toBe(null)
 
+  expect(bot.canTransitionTo('finished', { afterEmitting: 'done' })).toBe(true)
   bot.emit('done')
+  expect(bot.canTransitionTo('finished', { afterEmitting: 'done' })).toBe(false)
 
   expect(bot.peek('done', {})).toBe(null)
   expect(bot.peek('done', { undefined })).toBe(undefined)
@@ -139,6 +145,7 @@ test(`test bad performTransitions() config`, () => {
 
   expect(bot.peek('start')).toBe('pending')
   expect(() => bot.peek('pass')).toThrow()
+  expect(() => bot.canTransitionTo('resolved', { afterEmitting: 'pass'})).toThrow()
   expect(bot.peek('fail')).toBe('pending')
   expect(bot.peek('done')).toBe('pending')
 
@@ -146,6 +153,7 @@ test(`test bad performTransitions() config`, () => {
 
   expect(bot.peek('start')).toBe('pending')
   expect(() => bot.peek('pass')).toThrow()
+  expect(() => bot.canTransitionTo('resolved', { afterEmitting: 'pass'})).toThrow()
   expect(bot.peek('fail')).toBe('pending')
   expect(bot.peek('done')).toBe('pending')
 

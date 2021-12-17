@@ -475,21 +475,40 @@ function Statebot (name, options) {
     return stateHistory[stateHistory.length - 1]
   }
 
-  function canTransitionTo (...states) {
-    const testStates = states.flat()
+  function _state_canTransitionTo (...states) {
     const err = argTypeError(
       { states: isAllStrings }
-    )('canTransitionTo')(testStates)
+    )('canTransitionTo')(states)
     if (err) {
       throw new TypeError(err)
     }
 
-    if (!testStates.length) {
+    if (!states.length) {
       return false
     }
 
     const nextStates = statesAvailableFromHere()
-    return testStates.every(state => nextStates.includes(state))
+    return states.every(state => nextStates.includes(state))
+  }
+
+  function canTransitionTo(...states) {
+    const testStates = states.flat(Infinity)
+    if (testStates.length === 2 && isString(testStates[0]) && isPojo(testStates[1])) {
+      const thisState = testStates[0]
+      const { afterEmitting } = testStates[1]
+      const err = argTypeError(
+        { thisState: isString, '{ afterEmitting }': isString }
+      )('canTransitionTo')(thisState, afterEmitting)
+      if (err) {
+        throw new TypeError(err)
+      }
+      return (
+        thisState !== currentState() &&
+        _peek(afterEmitting) === thisState
+      )
+    }
+
+    return _state_canTransitionTo(...testStates)
   }
 
   function statesAvailableFromHere (state) {
@@ -808,6 +827,13 @@ function Statebot (name, options) {
      * @instance
      * @function
      * @param {string|string[]} states
+     * @param {object} [options]
+     * @param {string} options.afterEmitting
+     * Since v2.9.0: Can test if a certain state will be entered after
+     * emitting an event. Use `{ afterEmitting: 'eventName' }` as the
+     * second argument. Works only after using
+     * {@link #statebotfsmperformtransitions|.performTransitions()}.
+     * See the updated example below.
      * @returns {boolean}
      * @example
      * var machine = Statebot('game-menus', {
@@ -833,6 +859,12 @@ function Statebot (name, options) {
      * machine.enter('menu')
      * machine.canTransitionTo(['play', 'options'])
      * // true
+     *
+     * // Since v2.9.0:
+     * machine.canTransitionTo('play', {
+     *   afterEmitting: 'startGame'
+     * })
+     * // false
      */
     canTransitionTo,
 

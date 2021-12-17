@@ -67,10 +67,10 @@ declare module "statebot" {
          *
          * It should have the same signature as {@link https ://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
          *
-         * - Since Statebot 2.5.0 {@link https ://npmjs.com/mitt|mitt} is also compatible.
-         * - Since Statebot 2.6.0 {@link https ://npmjs.com/mitt|mitt} is used internally.
+         * - Since v2.5.0 {@link https ://npmjs.com/mitt|mitt} is also compatible.
+         * - Since v2.6.0 {@link https ://npmjs.com/mitt|mitt} is used internally.
          */
-        events?: any;
+        events?: events;
     };
     /**
      * A description of all the states in a machine, plus all of the
@@ -213,10 +213,19 @@ declare module "statebot" {
          * If more than one state is specified, `true` is returned only if
          * **ALL** states are available.
          *
+         * See also: {@link #statebotfsmpeek|.peek()}.
+         *
          * @memberof statebotFsm
          * @instance
          * @function
          * @param {string|string[]} states
+         * @param {object} [options]
+         * @param {string} options.afterEmitting
+         * Since v2.9.0: Can test if a certain state will be entered after
+         * emitting an event. Use `{ afterEmitting: 'eventName' }` as the
+         * second argument. Works only after using
+         * {@link #statebotfsmperformtransitions|.performTransitions()}.
+         * See the updated example below.
          * @returns {boolean}
          * @example
          * var machine = Statebot('game-menus', {
@@ -242,6 +251,12 @@ declare module "statebot" {
          * machine.enter('menu')
          * machine.canTransitionTo(['play', 'options'])
          * // true
+         *
+         * // Since v2.9.0:
+         * machine.canTransitionTo('play', {
+         *   afterEmitting: 'startGame'
+         * })
+         * // false
          */
         canTransitionTo: (...states: any[]) => boolean;
         /**
@@ -283,7 +298,7 @@ declare module "statebot" {
          *  {@link https://www.npmjs.com/package/events|events}
          * package for dealing with events in the browser.
          *
-         * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+         * Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is
          * used for both the browser and non-browser builds.
          *
          * @example
@@ -385,7 +400,7 @@ declare module "statebot" {
          * machine.enter('saving')
          * // false
          *
-         * // [dialog]: Invalid transition "idle->saving", not switching
+         * // Statebot[dialog]: Invalid transition "idle->saving", not switching
          * // > Previous transition: "[undefined]->idle"
          * // > From "idle", valid states are: ["showing-modal"]
          *
@@ -1027,6 +1042,67 @@ declare module "statebot" {
          */
         paused: () => boolean;
         /**
+         * Since v2.9.0: Return the state the machine will be in after
+         * {@link #statebotfsmemit|.emit()}'ing the specified event.
+         *
+         * Works only after using
+         *  {@link #statebotfsmperformtransitions|.performTransitions()}.
+         *
+         * See also: {@link #statebotfsmcantransitionto|.canTransitionTo(state, .afterEmitting )}.
+         *
+         * @memberof statebotFsm
+         * @instance
+         * @function
+         * @param {string} eventName
+         * @param {object} [stateObject]
+         * If `stateObject` is undefined, `.peek()` defaults to returning
+         * {@link #statebotfsmcurrentstate|.currentState()}
+         * if the event will *NOT* trigger a transition.
+         *
+         * Otherwise, `stateObject` will be used as a key/value lookup,
+         * with `key` being the predicted state, and `value` being the
+         * corresponding literal or function to be run and its value
+         * returned.
+         * @returns {string|null|any}
+         * @example
+         *
+         * var machine = Statebot('peek-a-boo', {
+         *   chart: `
+         *     idle -> running
+         *   `
+         * })
+         *
+         * machine.performTransitions({
+         *   'idle -> running': {
+         *     on: 'start'
+         *   }
+         * })
+         *
+         * machine.peek('start')
+         * // "running"
+         *
+         * machine.peek('start', {
+         *   'running': () => 'will be in the running state'
+         * })
+         * // "will be in the running state"
+         *
+         * machine.peek('unknown')
+         * // "idle"
+         * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+         *
+         * machine.peek('unknown', {
+         *   'running': () => 'will be in the running state'
+         * })
+         * // null
+         * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+         *
+         * machine.emit('start')
+         * machine.peek('start')
+         * // "running"
+         * // Logs: Statebot[peek-a-boo]: Will not transition after emitting: "start"
+         */
+        peek: (eventName: any, stateObject: any) => any;
+        /**
          * Perform transitions when events happen.
          *
          * Use `then` to optionally add callbacks to those transitions.
@@ -1256,7 +1332,7 @@ declare module "statebot" {
      *
      * machine.enter('idle')
      */
-    export function assertRoute(machine: any, expectedRoute: string | string[], options?: assertRouteOptions): Promise<any>;
+    export function assertRoute(machine: statebotFsm, expectedRoute: string | string[], options?: assertRouteOptions): Promise<any>;
     /**
      * Decompose a {@link statebotChart} into an object of `states`, `routes`,
      * and `transitions`.
@@ -1325,5 +1401,5 @@ declare module "statebot" {
      * )
      * // false
      */
-    export function routeIsPossible(machine: any, route: string | string[]): boolean;
+    export function routeIsPossible(machine: statebotFsm, route: string | string[]): boolean;
 }

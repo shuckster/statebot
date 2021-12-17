@@ -1057,12 +1057,10 @@ declare module "statebot" {
          * @param {object} [stateObject]
          * If `stateObject` is undefined, `.peek()` defaults to returning
          * {@link #statebotfsmcurrentstate|.currentState()}
-         * if the event will *NOT* trigger a transition.
-         *
-         * Otherwise, `stateObject` will be used as a key/value lookup,
-         * with `key` being the predicted state, and `value` being the
-         * corresponding literal or function to be run and its value
-         * returned.
+         * if the event will *NOT* trigger a transition. Otherwise,
+         * `stateObject` will be used as a key/value lookup, with `key`
+         * being the predicted state, and `value` being the corresponding
+         * literal or function to be run and its value returned.
          * @returns {string|null|any}
          * @example
          *

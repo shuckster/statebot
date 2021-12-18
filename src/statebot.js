@@ -263,19 +263,19 @@ function Statebot (name, options) {
   }
 
   const statesHandled = ReferenceCounter(
-    name,
+    logPrefix,
     'states',
     'Listening for the following state-changes',
     [...states]
   )
   const routesHandled = ReferenceCounter(
-    name,
+    logPrefix,
     'transitions',
     'Listening for the following transitions',
     [...routes]
   )
   const eventsHandled = ReferenceCounter(
-    name,
+    logPrefix,
     'events',
     'Listening for the following events'
   )
@@ -289,7 +289,7 @@ function Statebot (name, options) {
 
     if (!isPojo(hitcherActions)) {
       throw new TypeError(
-        `Statebot[${name}]#${fnName}(): Expected an object, or a function that returns an object`
+        `${logPrefix}#${fnName}(): Expected an object, or a function that returns an object`
       )
     }
 
@@ -329,13 +329,13 @@ function Statebot (name, options) {
 
       if (invalidStates.length) {
         _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
+          `${logPrefix}#${fnName}(): Invalid states specified:\n` +
           invalidStates.map(state => `  > "${state}"`).join('\n')
         )
       }
       if (invalidRoutes.length) {
         _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
+          `${logPrefix}#${fnName}(): Invalid transitions specified:\n` +
           invalidRoutes.map(route => `  > "${route}"`).join('\n')
         )
       }

@@ -151,7 +151,7 @@ function Pausables (startPaused, runFnWhenPaused) {
 // ReferenceCounter
 //
 
-function ReferenceCounter (name, kind, description, ...expecting) {
+function ReferenceCounter (logPrefix, kind, description, ...expecting) {
   const _refs = [...expecting]
     .flat()
     .reduce((acc, ref) => ({ ...acc, [ref]: 0 }), {})
@@ -182,7 +182,7 @@ function ReferenceCounter (name, kind, description, ...expecting) {
   }
   function toValue () {
     return {
-      description: `Statebot[${name}]: ${description}:`,
+      description: `${logPrefix}: ${description}:`,
       table: table()
     }
   }

@@ -427,9 +427,9 @@ function Statebot (name, options) {
 
     if (statesFromEvent.length > 1) {
       const reason =
-        `${logPrefix}: Event "${eventName}" causes multiple transitions:\n` +
+        `${logPrefix}: Event "${eventName}" causes multiple transitions.\n` +
         `  > From state: "${currentState()}"\n` +
-        `  > To states: "${statesFromEvent.join(', ')}"\n` +
+        `  > To states: "${statesFromEvent.join(', ')}"\n\n` +
         `Check your performTransitions() config.`
 
       throw new RangeError(reason)

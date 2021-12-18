@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.1] - 2021-12-18
+### Fixed
+- Replace nullish coalescing `??` with ternary to fix Bundlephobia error.
+
 ## [2.9.0] - 2021-12-18
 ### Added
 - peek(eventName, stateObject?), tests, documentation

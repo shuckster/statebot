@@ -446,7 +446,7 @@ function Statebot (name, options) {
     const toState = statesFromEvent[0]
 
     if (isUndefined(stateObject)) {
-      return toState ?? currentState()
+      return isUndefined(toState) ? currentState() : toState
     }
 
     const err2 = argTypeError({ stateObject: isPojo })('peek')(stateObject)

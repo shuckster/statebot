@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.9.0] - 2021-12-17
+## [2.9.0] - 2021-12-18
 ### Added
 - peek(eventName, stateObject?), tests, documentation
 - canTransitionTo('state', { afterEvent: 'event' }), tests, documentation

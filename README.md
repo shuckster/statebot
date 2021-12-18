@@ -698,6 +698,13 @@ Of course, bug-fixes, forks, and integrations are very welcome! If you feel it h
 
 ## Credits
 
+With thanks to @szabeszg for the suggestion and [discussion](https://github.com/shuckster/statebot/discussions/2) around:
+
+- `nextState = peek(eventName)`
+- `canTransitionTo(state, { afterEmitting: event })`
+
+ 🙏
+
 Statebot was inspired by a trawl through Wikipedia and Google, which in turn was inspired by [XState](https://github.com/davidkpiano/xstate) by David Khourshid. You should check it out.
 
 Statebot integrates [events](https://www.npmjs.com/package/events) for the browser-build.

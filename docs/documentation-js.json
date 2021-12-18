@@ -490,6 +490,22 @@
                           "value": ".statesAvailableFromHere()"
                         }
                       ]
+                    },
+                    {
+                      "type": "text",
+                      "value": " / "
+                    },
+                    {
+                      "type": "link",
+                      "url": "#statebotfsmpeek",
+                      "title": null,
+                      "jsdoc": true,
+                      "children": [
+                        {
+                          "type": "text",
+                          "value": ".peek()"
+                        }
+                      ]
                     }
                   ]
                 },
@@ -1036,22 +1052,22 @@
           ],
           "loc": {
             "start": {
-              "line": 184,
+              "line": 187,
               "column": 0
             },
             "end": {
-              "line": 203,
+              "line": 206,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 205,
+                "line": 208,
                 "column": 0
               },
               "end": {
-                "line": 1751,
+                "line": 1917,
                 "column": 1
               }
             },
@@ -1212,22 +1228,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1818,
+              "line": 1984,
               "column": 0
             },
             "end": {
-              "line": 1831,
+              "line": 1997,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1833,
+                "line": 1999,
                 "column": 0
               },
               "end": {
-                "line": 1838,
+                "line": 2004,
                 "column": 1
               }
             },
@@ -1443,7 +1459,7 @@
                 "column": 0
               },
               "end": {
-                "line": 73,
+                "line": 72,
                 "column": 1
               }
             },
@@ -1720,22 +1736,22 @@
           ],
           "loc": {
             "start": {
-              "line": 98,
+              "line": 97,
               "column": 0
             },
             "end": {
-              "line": 137,
+              "line": 136,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 139,
+                "line": 138,
                 "column": 0
               },
               "end": {
-                "line": 267,
+                "line": 265,
                 "column": 1
               }
             },
@@ -1979,22 +1995,22 @@
           ],
           "loc": {
             "start": {
-              "line": 46,
+              "line": 45,
               "column": 0
             },
             "end": {
-              "line": 68,
+              "line": 67,
               "column": 3
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 70,
+                "line": 69,
                 "column": 0
               },
               "end": {
-                "line": 105,
+                "line": 103,
                 "column": 1
               }
             },
@@ -2148,7 +2164,7 @@
       },
       {
         "title": "property",
-        "description": "If you wish to have your Statebots listen to events coming from\n a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/\n `performTransitions()` methods will use it.\n\n It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.\n\n - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.\n - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.",
+        "description": "If you wish to have your Statebots listen to events coming from\n a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/\n `performTransitions()` methods will use it.\n\n It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.\n\n - Since v2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.\n - Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.",
         "lineNumber": 20,
         "type": {
           "type": "OptionalType",
@@ -2413,7 +2429,7 @@
                       "children": [
                         {
                           "type": "text",
-                          "value": "Since Statebot 2.5.0 "
+                          "value": "Since v2.5.0 "
                         },
                         {
                           "type": "link",
@@ -2445,7 +2461,7 @@
                       "children": [
                         {
                           "type": "text",
-                          "value": "Since Statebot 2.6.0 "
+                          "value": "Since v2.6.0 "
                         },
                         {
                           "type": "link",
@@ -2990,22 +3006,22 @@
     ],
     "loc": {
       "start": {
-        "line": 718,
+        "line": 809,
         "column": 2
       },
       "end": {
-        "line": 722,
+        "line": 813,
         "column": 5
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 724,
+          "line": 815,
           "column": 2
         },
         "end": {
-          "line": 1750,
+          "line": 1916,
           "column": 3
         }
       },
@@ -3089,6 +3105,31 @@
                     "value": " states are available."
                   }
                 ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "See also: "
+                  },
+                  {
+                    "type": "link",
+                    "url": "#statebotfsmpeek",
+                    "title": null,
+                    "jsdoc": true,
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": ".peek()"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "value": "."
+                  }
+                ]
               }
             ]
           },
@@ -3096,23 +3137,23 @@
             {
               "title": "memberof",
               "description": "statebotFsm",
-              "lineNumber": 7
+              "lineNumber": 9
             },
             {
               "title": "instance",
               "description": null,
-              "lineNumber": 8
+              "lineNumber": 10
             },
             {
               "title": "function",
               "description": null,
-              "lineNumber": 9,
+              "lineNumber": 11,
               "name": null
             },
             {
               "title": "param",
               "description": null,
-              "lineNumber": 10,
+              "lineNumber": 12,
               "type": {
                 "type": "UnionType",
                 "elements": [
@@ -3138,9 +3179,32 @@
               "name": "states"
             },
             {
+              "title": "param",
+              "description": null,
+              "lineNumber": 13,
+              "type": {
+                "type": "OptionalType",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "object"
+                }
+              },
+              "name": "options"
+            },
+            {
+              "title": "param",
+              "description": "Since v2.9.0: Can test if a certain state will be entered after\nemitting an event. Use `{ afterEmitting: 'eventName' }` as the\nsecond argument. Works only after using\n{@link #statebotfsmperformtransitions|.performTransitions()}.\nSee the updated example below.",
+              "lineNumber": 14,
+              "type": {
+                "type": "NameExpression",
+                "name": "string"
+              },
+              "name": "options.afterEmitting"
+            },
+            {
               "title": "returns",
               "description": null,
-              "lineNumber": 11,
+              "lineNumber": 20,
               "type": {
                 "type": "NameExpression",
                 "name": "boolean"
@@ -3148,28 +3212,28 @@
             },
             {
               "title": "example",
-              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n           play |\n        options |\n          sound |\n           quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true",
-              "lineNumber": 12
+              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n           play |\n        options |\n          sound |\n           quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true\n\n// Since v2.9.0:\nmachine.canTransitionTo('play', {\n  afterEmitting: 'startGame'\n})\n// false",
+              "lineNumber": 21
             }
           ],
           "loc": {
             "start": {
-              "line": 732,
+              "line": 823,
               "column": 4
             },
             "end": {
-              "line": 768,
+              "line": 874,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 769,
+                "line": 875,
                 "column": 4
               },
               "end": {
-                "line": 769,
+                "line": 875,
                 "column": 19
               }
             },
@@ -3178,7 +3242,7 @@
           "augments": [],
           "examples": [
             {
-              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n           play |\n        options |\n          sound |\n           quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true"
+              "description": "var machine = Statebot('game-menus', {\n  chart: `\n    loading ->\n      menu ->\n           play |\n        options |\n          sound |\n           quit\n\n    // Go back to menu\n    play | options | sound -> menu\n\n    // Can quit from main game, too\n    play -> quit\n  `\n})\n\nmachine.canTransitionTo('play')\n// false\n\nmachine.enter('menu')\nmachine.canTransitionTo(['play', 'options'])\n// true\n\n// Since v2.9.0:\nmachine.canTransitionTo('play', {\n  afterEmitting: 'startGame'\n})\n// false"
             }
           ],
           "implements": [],
@@ -3186,7 +3250,7 @@
             {
               "title": "param",
               "name": "states",
-              "lineNumber": 10,
+              "lineNumber": 12,
               "type": {
                 "type": "UnionType",
                 "elements": [
@@ -3209,6 +3273,67 @@
                   }
                 ]
               }
+            },
+            {
+              "title": "param",
+              "name": "options",
+              "lineNumber": 13,
+              "type": {
+                "type": "OptionalType",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "object"
+                }
+              },
+              "properties": [
+                {
+                  "title": "param",
+                  "name": "options.afterEmitting",
+                  "lineNumber": 14,
+                  "description": {
+                    "type": "root",
+                    "children": [
+                      {
+                        "type": "paragraph",
+                        "children": [
+                          {
+                            "type": "text",
+                            "value": "Since v2.9.0: Can test if a certain state will be entered after\nemitting an event. Use "
+                          },
+                          {
+                            "type": "inlineCode",
+                            "value": "{ afterEmitting: 'eventName' }"
+                          },
+                          {
+                            "type": "text",
+                            "value": " as the\nsecond argument. Works only after using\n"
+                          },
+                          {
+                            "type": "link",
+                            "url": "#statebotfsmperformtransitions",
+                            "title": null,
+                            "jsdoc": true,
+                            "children": [
+                              {
+                                "type": "text",
+                                "value": ".performTransitions()"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "value": ".\nSee the updated example below."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "NameExpression",
+                    "name": "string"
+                  }
+                }
+              ]
             }
           ],
           "properties": [],
@@ -3302,22 +3427,22 @@
           ],
           "loc": {
             "start": {
-              "line": 771,
+              "line": 877,
               "column": 4
             },
             "end": {
-              "line": 788,
+              "line": 894,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 789,
+                "line": 895,
                 "column": 4
               },
               "end": {
-                "line": 789,
+                "line": 895,
                 "column": 16
               }
             },
@@ -3464,7 +3589,7 @@
             },
             {
               "title": "returns",
-              "description": "Whether or not the event had listeners.\n\n See: {@link https://nodejs.org/api/events.html#events_emitter_emit_eventname_args|Node Events}\n for more information.\n\nStatebot imports `EventEmitter` from the\n {@link https://www.npmjs.com/package/events|events}\npackage for dealing with events in the browser.\n\nSince Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is\nused for both the browser and non-browser builds.",
+              "description": "Whether or not the event had listeners.\n\n See: {@link https://nodejs.org/api/events.html#events_emitter_emit_eventname_args|Node Events}\n for more information.\n\nStatebot imports `EventEmitter` from the\n {@link https://www.npmjs.com/package/events|events}\npackage for dealing with events in the browser.\n\nSince v2.6.0 {@link https://npmjs.com/mitt|mitt} is\nused for both the browser and non-browser builds.",
               "lineNumber": 10,
               "type": {
                 "type": "NameExpression",
@@ -3479,22 +3604,22 @@
           ],
           "loc": {
             "start": {
-              "line": 791,
+              "line": 897,
               "column": 4
             },
             "end": {
-              "line": 836,
+              "line": 942,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 837,
+                "line": 943,
                 "column": 4
               },
               "end": {
-                "line": 837,
+                "line": 943,
                 "column": 8
               }
             },
@@ -3624,7 +3749,7 @@
                     "children": [
                       {
                         "type": "text",
-                        "value": "Since Statebot 2.6.0 "
+                        "value": "Since v2.6.0 "
                       },
                       {
                         "type": "link",
@@ -3780,22 +3905,22 @@
           ],
           "loc": {
             "start": {
-              "line": 839,
+              "line": 945,
               "column": 4
             },
             "end": {
-              "line": 886,
+              "line": 992,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 887,
+                "line": 993,
                 "column": 4
               },
               "end": {
-                "line": 887,
+                "line": 993,
                 "column": 8
               }
             },
@@ -4021,28 +4146,28 @@
             },
             {
               "title": "example",
-              "description": "var machine = Statebot('dialog', {\n  chart: `\n    idle -> showing-modal -> (saving | idle)\n      saving -> idle\n  `\n})\n\nmachine.currentState()\n// \"idle\"\n\nmachine.enter('saving')\n// false\n\n// [dialog]: Invalid transition \"idle->saving\", not switching\n// > Previous transition: \"[undefined]->idle\"\n// > From \"idle\", valid states are: [\"showing-modal\"]\n\nmachine.enter('showing-modal')\n// true",
+              "description": "var machine = Statebot('dialog', {\n  chart: `\n    idle -> showing-modal -> (saving | idle)\n      saving -> idle\n  `\n})\n\nmachine.currentState()\n// \"idle\"\n\nmachine.enter('saving')\n// false\n\n// Statebot[dialog]: Invalid transition \"idle->saving\", not switching\n// > Previous transition: \"[undefined]->idle\"\n// > From \"idle\", valid states are: [\"showing-modal\"]\n\nmachine.enter('showing-modal')\n// true",
               "lineNumber": 12
             }
           ],
           "loc": {
             "start": {
-              "line": 889,
+              "line": 995,
               "column": 4
             },
             "end": {
-              "line": 921,
+              "line": 1027,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 922,
+                "line": 1028,
                 "column": 4
               },
               "end": {
-                "line": 922,
+                "line": 1028,
                 "column": 9
               }
             },
@@ -4051,7 +4176,7 @@
           "augments": [],
           "examples": [
             {
-              "description": "var machine = Statebot('dialog', {\n  chart: `\n    idle -> showing-modal -> (saving | idle)\n      saving -> idle\n  `\n})\n\nmachine.currentState()\n// \"idle\"\n\nmachine.enter('saving')\n// false\n\n// [dialog]: Invalid transition \"idle->saving\", not switching\n// > Previous transition: \"[undefined]->idle\"\n// > From \"idle\", valid states are: [\"showing-modal\"]\n\nmachine.enter('showing-modal')\n// true"
+              "description": "var machine = Statebot('dialog', {\n  chart: `\n    idle -> showing-modal -> (saving | idle)\n      saving -> idle\n  `\n})\n\nmachine.currentState()\n// \"idle\"\n\nmachine.enter('saving')\n// false\n\n// Statebot[dialog]: Invalid transition \"idle->saving\", not switching\n// > Previous transition: \"[undefined]->idle\"\n// > From \"idle\", valid states are: [\"showing-modal\"]\n\nmachine.enter('showing-modal')\n// true"
             }
           ],
           "implements": [],
@@ -4275,22 +4400,22 @@
           ],
           "loc": {
             "start": {
-              "line": 924,
+              "line": 1030,
               "column": 4
             },
             "end": {
-              "line": 958,
+              "line": 1064,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 959,
+                "line": 1065,
                 "column": 4
               },
               "end": {
-                "line": 959,
+                "line": 1065,
                 "column": 9
               }
             },
@@ -4498,22 +4623,22 @@
           ],
           "loc": {
             "start": {
-              "line": 961,
+              "line": 1067,
               "column": 4
             },
             "end": {
-              "line": 986,
+              "line": 1092,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 987,
+                "line": 1093,
                 "column": 4
               },
               "end": {
-                "line": 987,
+                "line": 1093,
                 "column": 36
               }
             },
@@ -4622,22 +4747,22 @@
           ],
           "loc": {
             "start": {
-              "line": 989,
+              "line": 1095,
               "column": 4
             },
             "end": {
-              "line": 1023,
+              "line": 1129,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1024,
+                "line": 1130,
                 "column": 4
               },
               "end": {
-                "line": 1024,
+                "line": 1130,
                 "column": 22
               }
             },
@@ -4749,22 +4874,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1026,
+              "line": 1132,
               "column": 4
             },
             "end": {
-              "line": 1047,
+              "line": 1153,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1048,
+                "line": 1154,
                 "column": 4
               },
               "end": {
-                "line": 1048,
+                "line": 1154,
                 "column": 28
               }
             },
@@ -5075,22 +5200,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1050,
+              "line": 1156,
               "column": 4
             },
             "end": {
-              "line": 1116,
+              "line": 1222,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1117,
+                "line": 1223,
                 "column": 4
               },
               "end": {
-                "line": 1117,
+                "line": 1223,
                 "column": 11
               }
             },
@@ -5463,22 +5588,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1119,
+              "line": 1225,
               "column": 4
             },
             "end": {
-              "line": 1170,
+              "line": 1276,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1171,
+                "line": 1277,
                 "column": 4
               },
               "end": {
-                "line": 1171,
+                "line": 1277,
                 "column": 11
               }
             },
@@ -5737,22 +5862,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1173,
+              "line": 1279,
               "column": 4
             },
             "end": {
-              "line": 1194,
+              "line": 1300,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1195,
+                "line": 1301,
                 "column": 4
               },
               "end": {
-                "line": 1195,
+                "line": 1301,
                 "column": 20
               }
             },
@@ -5909,22 +6034,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1197,
+              "line": 1303,
               "column": 4
             },
             "end": {
-              "line": 1227,
+              "line": 1333,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1228,
+                "line": 1334,
                 "column": 4
               },
               "end": {
-                "line": 1228,
+                "line": 1334,
                 "column": 43
               }
             },
@@ -6137,22 +6262,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1230,
+              "line": 1336,
               "column": 4
             },
             "end": {
-              "line": 1265,
+              "line": 1371,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1266,
+                "line": 1372,
                 "column": 4
               },
               "end": {
-                "line": 1266,
+                "line": 1372,
                 "column": 45
               }
             },
@@ -6352,22 +6477,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1279,
+              "line": 1385,
               "column": 4
             },
             "end": {
-              "line": 1316,
+              "line": 1422,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1317,
+                "line": 1423,
                 "column": 4
               },
               "end": {
-                "line": 1317,
+                "line": 1423,
                 "column": 11
               }
             },
@@ -6571,22 +6696,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1319,
+              "line": 1425,
               "column": 4
             },
             "end": {
-              "line": 1348,
+              "line": 1454,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1349,
+                "line": 1455,
                 "column": 4
               },
               "end": {
-                "line": 1349,
+                "line": 1455,
                 "column": 41
               }
             },
@@ -6799,22 +6924,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1351,
+              "line": 1457,
               "column": 4
             },
             "end": {
-              "line": 1386,
+              "line": 1492,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1387,
+                "line": 1493,
                 "column": 4
               },
               "end": {
-                "line": 1387,
+                "line": 1493,
                 "column": 43
               }
             },
@@ -7017,22 +7142,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1400,
+              "line": 1506,
               "column": 4
             },
             "end": {
-              "line": 1428,
+              "line": 1534,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1429,
+                "line": 1535,
                 "column": 4
               },
               "end": {
-                "line": 1429,
+                "line": 1535,
                 "column": 42
               }
             },
@@ -7212,22 +7337,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1431,
+              "line": 1537,
               "column": 4
             },
             "end": {
-              "line": 1459,
+              "line": 1565,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1460,
+                "line": 1566,
                 "column": 4
               },
               "end": {
-                "line": 1460,
+                "line": 1566,
                 "column": 44
               }
             },
@@ -7448,22 +7573,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1474,
+              "line": 1580,
               "column": 4
             },
             "end": {
-              "line": 1554,
+              "line": 1660,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1555,
+                "line": 1661,
                 "column": 4
               },
               "end": {
-                "line": 1555,
+                "line": 1661,
                 "column": 76
               }
             },
@@ -7736,22 +7861,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1557,
+              "line": 1663,
               "column": 4
             },
             "end": {
-              "line": 1564,
+              "line": 1670,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1565,
+                "line": 1671,
                 "column": 4
               },
               "end": {
-                "line": 1565,
+                "line": 1671,
                 "column": 9
               }
             },
@@ -7859,22 +7984,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1567,
+              "line": 1673,
               "column": 4
             },
             "end": {
-              "line": 1574,
+              "line": 1680,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1575,
+                "line": 1681,
                 "column": 4
               },
               "end": {
-                "line": 1575,
+                "line": 1681,
                 "column": 10
               }
             },
@@ -7925,6 +8050,344 @@
             }
           ],
           "namespace": "statebotFsm#paused"
+        },
+        {
+          "description": {
+            "type": "root",
+            "children": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "Since v2.9.0: Return the state the machine will be in after\n"
+                  },
+                  {
+                    "type": "link",
+                    "url": "#statebotfsmemit",
+                    "title": null,
+                    "jsdoc": true,
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": ".emit()"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "value": "'ing the specified event."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "Works only after using\n"
+                  },
+                  {
+                    "type": "link",
+                    "url": "#statebotfsmperformtransitions",
+                    "title": null,
+                    "jsdoc": true,
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": ".performTransitions()"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "value": "."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "See also: "
+                  },
+                  {
+                    "type": "link",
+                    "url": "#statebotfsmcantransitionto",
+                    "title": null,
+                    "jsdoc": true,
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": ".canTransitionTo(state, .afterEmitting )"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "value": "."
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            {
+              "title": "memberof",
+              "description": "statebotFsm",
+              "lineNumber": 9
+            },
+            {
+              "title": "instance",
+              "description": null,
+              "lineNumber": 10
+            },
+            {
+              "title": "function",
+              "description": null,
+              "lineNumber": 11,
+              "name": null
+            },
+            {
+              "title": "param",
+              "description": null,
+              "lineNumber": 12,
+              "type": {
+                "type": "NameExpression",
+                "name": "string"
+              },
+              "name": "eventName"
+            },
+            {
+              "title": "param",
+              "description": "If `stateObject` is undefined, `.peek()` defaults to returning\n{@link #statebotfsmcurrentstate|.currentState()}\nif the event will *NOT* trigger a transition. Otherwise,\n`stateObject` will be used as a key/value lookup, with `key`\nbeing the predicted state, and `value` being the corresponding\nliteral or function to be run and its value returned.",
+              "lineNumber": 13,
+              "type": {
+                "type": "OptionalType",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "object"
+                }
+              },
+              "name": "stateObject"
+            },
+            {
+              "title": "returns",
+              "description": null,
+              "lineNumber": 20,
+              "type": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  },
+                  {
+                    "type": "NullLiteral"
+                  },
+                  {
+                    "type": "NameExpression",
+                    "name": "any"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "example",
+              "description": "var machine = Statebot('peek-a-boo', {\n  chart: `\n    idle -> running\n  `\n})\n\nmachine.performTransitions({\n  'idle -> running': {\n    on: 'start'\n  }\n})\n\nmachine.peek('start')\n// \"running\"\n\nmachine.peek('start', {\n  'running': () => 'will be in the running state'\n})\n// \"will be in the running state\"\n\nmachine.peek('unknown')\n// \"idle\"\n// Logs: Statebot[peek-a-boo]: Event not handled: \"unknown\"\n\nmachine.peek('unknown', {\n  'running': () => 'will be in the running state'\n})\n// null\n// Logs: Statebot[peek-a-boo]: Event not handled: \"unknown\"\n\nmachine.emit('start')\nmachine.peek('start')\n// \"running\"\n// Logs: Statebot[peek-a-boo]: Will not transition after emitting: \"start\"",
+              "lineNumber": 21
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 1683,
+              "column": 4
+            },
+            "end": {
+              "line": 1740,
+              "column": 7
+            }
+          },
+          "context": {
+            "loc": {
+              "start": {
+                "line": 1741,
+                "column": 5
+              },
+              "end": {
+                "line": 1741,
+                "column": 9
+              }
+            },
+            "file": "/Users/mostly/Projects/statebot/statebot/src/statebot.js"
+          },
+          "augments": [],
+          "examples": [
+            {
+              "description": "var machine = Statebot('peek-a-boo', {\n  chart: `\n    idle -> running\n  `\n})\n\nmachine.performTransitions({\n  'idle -> running': {\n    on: 'start'\n  }\n})\n\nmachine.peek('start')\n// \"running\"\n\nmachine.peek('start', {\n  'running': () => 'will be in the running state'\n})\n// \"will be in the running state\"\n\nmachine.peek('unknown')\n// \"idle\"\n// Logs: Statebot[peek-a-boo]: Event not handled: \"unknown\"\n\nmachine.peek('unknown', {\n  'running': () => 'will be in the running state'\n})\n// null\n// Logs: Statebot[peek-a-boo]: Event not handled: \"unknown\"\n\nmachine.emit('start')\nmachine.peek('start')\n// \"running\"\n// Logs: Statebot[peek-a-boo]: Will not transition after emitting: \"start\""
+            }
+          ],
+          "implements": [],
+          "params": [
+            {
+              "title": "param",
+              "name": "eventName",
+              "lineNumber": 12,
+              "type": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            },
+            {
+              "title": "param",
+              "name": "stateObject",
+              "lineNumber": 13,
+              "description": {
+                "type": "root",
+                "children": [
+                  {
+                    "type": "paragraph",
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "If "
+                      },
+                      {
+                        "type": "inlineCode",
+                        "value": "stateObject"
+                      },
+                      {
+                        "type": "text",
+                        "value": " is undefined, "
+                      },
+                      {
+                        "type": "inlineCode",
+                        "value": ".peek()"
+                      },
+                      {
+                        "type": "text",
+                        "value": " defaults to returning\n"
+                      },
+                      {
+                        "type": "link",
+                        "url": "#statebotfsmcurrentstate",
+                        "title": null,
+                        "jsdoc": true,
+                        "children": [
+                          {
+                            "type": "text",
+                            "value": ".currentState()"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "value": "\nif the event will "
+                      },
+                      {
+                        "type": "emphasis",
+                        "children": [
+                          {
+                            "type": "text",
+                            "value": "NOT"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "value": " trigger a transition. Otherwise,\n"
+                      },
+                      {
+                        "type": "inlineCode",
+                        "value": "stateObject"
+                      },
+                      {
+                        "type": "text",
+                        "value": " will be used as a key/value lookup, with "
+                      },
+                      {
+                        "type": "inlineCode",
+                        "value": "key"
+                      },
+                      {
+                        "type": "text",
+                        "value": "\nbeing the predicted state, and "
+                      },
+                      {
+                        "type": "inlineCode",
+                        "value": "value"
+                      },
+                      {
+                        "type": "text",
+                        "value": " being the corresponding\nliteral or function to be run and its value returned."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": {
+                "type": "OptionalType",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "object"
+                }
+              }
+            }
+          ],
+          "properties": [],
+          "returns": [
+            {
+              "description": {
+                "type": "root",
+                "children": []
+              },
+              "title": "returns",
+              "type": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  },
+                  {
+                    "type": "NullLiteral"
+                  },
+                  {
+                    "type": "NameExpression",
+                    "name": "any"
+                  }
+                ]
+              }
+            }
+          ],
+          "sees": [],
+          "throws": [],
+          "todos": [],
+          "yields": [],
+          "memberof": "statebotFsm",
+          "scope": "instance",
+          "kind": "function",
+          "name": "peek",
+          "members": {
+            "global": [],
+            "inner": [],
+            "instance": [],
+            "events": [],
+            "static": []
+          },
+          "path": [
+            {
+              "name": "statebotFsm",
+              "kind": "typedef"
+            },
+            {
+              "name": "peek",
+              "kind": "function",
+              "scope": "instance"
+            }
+          ],
+          "namespace": "statebotFsm#peek"
         },
         {
           "description": {
@@ -8068,22 +8531,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1577,
+              "line": 1743,
               "column": 4
             },
             "end": {
-              "line": 1662,
+              "line": 1828,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1663,
+                "line": 1829,
                 "column": 4
               },
               "end": {
-                "line": 1663,
+                "line": 1829,
                 "column": 86
               }
             },
@@ -8327,22 +8790,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1665,
+              "line": 1831,
               "column": 4
             },
             "end": {
-              "line": 1686,
+              "line": 1852,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1687,
+                "line": 1853,
                 "column": 4
               },
               "end": {
-                "line": 1687,
+                "line": 1853,
                 "column": 17
               }
             },
@@ -8489,22 +8952,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1689,
+              "line": 1855,
               "column": 4
             },
             "end": {
-              "line": 1714,
+              "line": 1880,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1715,
+                "line": 1881,
                 "column": 4
               },
               "end": {
-                "line": 1715,
+                "line": 1881,
                 "column": 9
               }
             },
@@ -8599,22 +9062,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1717,
+              "line": 1883,
               "column": 4
             },
             "end": {
-              "line": 1723,
+              "line": 1889,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1724,
+                "line": 1890,
                 "column": 4
               },
               "end": {
-                "line": 1724,
+                "line": 1890,
                 "column": 10
               }
             },
@@ -8749,22 +9212,22 @@
           ],
           "loc": {
             "start": {
-              "line": 1726,
+              "line": 1892,
               "column": 4
             },
             "end": {
-              "line": 1748,
+              "line": 1914,
               "column": 7
             }
           },
           "context": {
             "loc": {
               "start": {
-                "line": 1749,
+                "line": 1915,
                 "column": 4
               },
               "end": {
-                "line": 1749,
+                "line": 1915,
                 "column": 27
               }
             },
@@ -8962,22 +9425,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1268,
+        "line": 1374,
         "column": 4
       },
       "end": {
-        "line": 1277,
+        "line": 1383,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1317,
+          "line": 1423,
           "column": 4
         },
         "end": {
-          "line": 1317,
+          "line": 1423,
           "column": 11
         }
       },
@@ -9159,22 +9622,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1389,
+        "line": 1495,
         "column": 4
       },
       "end": {
-        "line": 1398,
+        "line": 1504,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1429,
+          "line": 1535,
           "column": 4
         },
         "end": {
-          "line": 1429,
+          "line": 1535,
           "column": 42
         }
       },
@@ -9366,22 +9829,22 @@
     ],
     "loc": {
       "start": {
-        "line": 1462,
+        "line": 1568,
         "column": 4
       },
       "end": {
-        "line": 1472,
+        "line": 1578,
         "column": 7
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 1555,
+          "line": 1661,
           "column": 4
         },
         "end": {
-          "line": 1555,
+          "line": 1661,
           "column": 76
         }
       },
@@ -9617,22 +10080,22 @@
     ],
     "loc": {
       "start": {
-        "line": 77,
+        "line": 76,
         "column": 0
       },
       "end": {
-        "line": 96,
+        "line": 95,
         "column": 3
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 139,
+          "line": 138,
           "column": 0
         },
         "end": {
-          "line": 267,
+          "line": 265,
           "column": 1
         }
       },

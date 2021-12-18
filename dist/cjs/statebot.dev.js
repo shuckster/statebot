@@ -12,7 +12,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function mitt(n){return {all:n=n||new Map,on:function(t,e){var i=n.get(t);i?i.push(e):n.set(t,[e]);},off:function(t,e){var i=n.get(t);i&&(e?i.splice(i.indexOf(e)>>>0,1):n.set(t,[]));},emit:function(t,e){var i=n.get(t);i&&i.slice().map(function(n){n(e);}),(i=n.get("*"))&&i.slice().map(function(n){n(t,e);});}}}
 
-function isEventEmitter (obj) {
+function isEventEmitter(obj) {
   return (
     isObject(obj) &&
     isFunction(obj.emit) &&
@@ -20,25 +20,48 @@ function isEventEmitter (obj) {
     (isFunction(obj.removeListener) || isFunction(obj.off))
   )
 }
-function isArray (obj) {
+isEventEmitter.displayName = 'isEventEmitter';
+isArray.displayName = 'isUnset';
+function isArray(obj) {
   return Array.isArray(obj)
 }
-function isFunction (obj) {
+isArray.displayName = 'isArray';
+function isArguments(obj) {
+  return Object.prototype.toString.call(obj) === '[object Arguments]'
+}
+isArguments.displayName = 'isArguments';
+function isFunction(obj) {
   return typeof obj === 'function'
 }
-function isString (obj) {
+isFunction.displayName = 'isFunction';
+function isString(obj) {
   return typeof obj === 'string'
 }
-function isObject (obj) {
-  return typeof obj === 'object'
+isString.displayName = 'isString';
+function isAllStrings (arr) {
+  return isArray(arr) && arr.every(isString)
 }
-function isPojo (obj) {
-  if (obj === null || (!isObject(obj))) {
+isAllStrings.displayName = 'isAllStrings';
+function isUndefined(obj) {
+  return obj === undefined
+}
+isUndefined.displayName = 'isUndefined';
+function isNull(obj) {
+  return obj === null
+}
+isNull.displayName = 'isNull';
+function isObject(obj) {
+  return typeof obj === 'object' && !isNull(obj)
+}
+isObject.displayName = 'isObject';
+function isPojo(obj) {
+  if (isNull(obj) || !isObject(obj) || isArguments(obj)) {
     return false
   }
   return Object.getPrototypeOf(obj) === Object.prototype
 }
-function isTemplateLiteral (obj) {
+isPojo.displayName = 'isPojo';
+function isTemplateLiteral(obj) {
   if (isString(obj)) {
     return true
   }
@@ -47,28 +70,32 @@ function isTemplateLiteral (obj) {
   }
   return obj.every(isString)
 }
+isTemplateLiteral.displayName = 'isTemplateLiteral';
 const typeErrorStringIfFnReturnsFalse = (argName, argTypeFn, arg) => {
   return argTypeFn(arg)
     ? undefined
-    : `${argTypeFn.name}(${argName}) did not return true`
+    : (argTypeFn.displayName || argTypeFn.name) +
+        `(${argName}) did not return true`
 };
 const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
   return typeof arg === argType
     ? undefined
     : `Argument "${argName}" should be a ${argType}`
 };
-const typeErrorStringFromArgument = (argMap, arg, index) => {
+const typeErrorStringFromArgument = argMap => (arg, index) => {
+  if (index >= argMap.length) {
+    return
+  }
   const { argName, argType } = argMap[index];
-  if (arg === undefined) {
+  if (isUndefined(arg)) {
     return `Argument undefined: "${argName}"`
   }
-  const permittedArgTypes = Array.isArray(argType)
-    ? argType
-    : [argType];
+  const permittedArgTypes = Array.isArray(argType) ? argType : [argType];
   const errorDescs = permittedArgTypes
-    .map(argType => isFunction(argType)
-      ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
-      : typeErrorStringIfTypeOfFails(argName, argType, arg)
+    .map(argType =>
+      isFunction(argType)
+        ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
+        : typeErrorStringIfTypeOfFails(argName, argType, arg)
     )
     .filter(isString);
   const multipleTypesSpecified = permittedArgTypes.length > 1;
@@ -77,7 +104,8 @@ const typeErrorStringFromArgument = (argMap, arg, index) => {
     : errorDescs.length;
   if (shouldError) {
     return (
-      `${errorDescs.join('\n| ')}\n> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`
+      errorDescs.join('\n| ') +
+      `\n> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`
     )
   }
 };
@@ -85,37 +113,44 @@ const typeErrorStringFromArgument = (argMap, arg, index) => {
  * Helper for enforcing correct argument-types.
  *
  * @private
- * @param {string} errPrefix
+ * @param {string} namespace
  *
  * @example
  * const argTypeError = ArgTypeError('namespace#')
  *
  * function myFn (myArg1, myArg2) {
- *   const err = argTypeError('myFn',
- *     { myArg1: isString, myArg2: Boolean },
- *     myArg1, myArg2
- *   )
+ *   const err = argTypeError({
+ *     myArg1: isString,
+ *     myArg2: isBoolean
+ *   })('myFn')(myArg1, myArg2)
  *   if (err) {
  *     throw new TypeError(err)
  *   }
  * }
  */
-function ArgTypeError (errPrefix) {
-  return function (fnName, typeMap, ...args) {
-    const argMap = Object
-      .entries(typeMap)
-      .map(([argName, argType]) => ({ argName, argType }));
-    const err = args
-      .map((...args) => typeErrorStringFromArgument(argMap, ...args))
-      .filter(isString);
-    if (!err.length) {
-      return
-    }
-    const signature = Object.keys(typeMap).join(', ');
-    return (
-      `\n${errPrefix || ''}${fnName}(${signature}):\n` +
-      `${err.map(err => `| ${err}`).join('\n')}`
-    )
+function ArgTypeError(namespace) {
+  return typeMap => {
+    const argMap = Object.entries(typeMap).map(([argName, argType]) => ({
+      argName,
+      argType
+    }));
+    return fnName =>
+      (...args) => {
+        const processedArgs = Array
+          .from(args, x => isArguments(x) ? Array.from(x) : x)
+          .flat(1);
+        const err = processedArgs
+          .map(typeErrorStringFromArgument(argMap))
+          .filter(isString);
+        if (!err.length) {
+          return
+        }
+        const signature = Object.keys(typeMap).join(', ');
+        return (
+          `\n${namespace || ''}${fnName}(${signature}):\n` +
+          `${err.map(err => `| ${err}`).join('\n')}`
+        )
+      }
   }
 }
 
@@ -161,7 +196,7 @@ function wrapEmitter (events) {
 function uniq (input) {
   return input.reduce((acc, one) =>
     acc.indexOf(one) === -1
-      ? [...acc, one]
+      ? (acc.push(one), acc)
       : acc
     , []
   )
@@ -258,6 +293,30 @@ function ReferenceCounter (name, kind, description, ...expecting) {
     refs
   }
 }
+function Definitions() {
+  const dictionary = {};
+  function undefine(word, definition) {
+    dictionary[word] = (dictionary[word] || []).filter(
+      (next) => next !== definition
+    );
+    if (dictionary[word].length === 0) {
+      delete dictionary[word];
+    }
+  }
+  function define(word, definition) {
+    dictionary[word] = dictionary[word] || [];
+    dictionary[word].push(definition);
+    return () => undefine(word, definition)
+  }
+  function definitionsOf(word) {
+    return dictionary[word] || []
+  }
+  return {
+    define,
+    undefine,
+    definitionsOf,
+  }
+}
 function Logger (level, _console) {
   if (isString(level)) {
     level = ({
@@ -300,10 +359,9 @@ const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi;
 const rxComment = /(\/\/[^\n\r]*)/;
 const argTypeError$1 = ArgTypeError('statebot.');
 function decomposeRoute (templateLiteral) {
-  const err = argTypeError$1('decomposeRoute',
-    { templateLiteral: isTemplateLiteral },
-    templateLiteral
-  );
+  const err = argTypeError$1(
+    { templateLiteral: isTemplateLiteral }
+  )('decomposeRoute')(templateLiteral);
   if (err) {
     throw TypeError(err)
   }
@@ -336,10 +394,9 @@ function decomposeRoute (templateLiteral) {
  * // ]
  */
 function decomposeChart (chart) {
-  const err = argTypeError$1('decomposeChart',
-    { chart: isTemplateLiteral },
-    chart
-  );
+  const err = argTypeError$1(
+    { chart: isTemplateLiteral }
+  )('decomposeChart')(chart);
   if (err) {
     throw TypeError(err)
   }
@@ -415,11 +472,13 @@ function decomposeRouteFromTokens (line) {
   }, false);
   return output
 }
-function decomposeTransitionsFromRoute ([fromStates, toStates]) {
-  return fromStates.reduce((acc, fromState) => [
-    ...acc,
-    ...toStates.map(toState => [fromState, toState])
-  ], [])
+function decomposeTransitionsFromRoute([fromStates, toStates]) {
+  return fromStates.reduce(
+    (acc, fromState) => (
+      acc.push(...toStates.map(toState => [fromState, toState])), acc
+    ),
+    []
+  )
 }
 
 /**
@@ -449,8 +508,8 @@ function decomposeTransitionsFromRoute ([fromStates, toStates]) {
  *
  *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
  *
- *  - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
- *  - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
+ *  - Since v2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+ *  - Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
  */
 /**
  * A description of all the states in a machine, plus all of the
@@ -603,7 +662,7 @@ function Statebot (name, options) {
     logLevel = 3,
     historyLimit = 2
   } = options || {};
-  const events = options.events === undefined
+  const events = isUndefined(options.events)
     ? wrapEmitter(mitt())
     : isEventEmitter(options.events) && wrapEmitter(options.events);
   if (!events) {
@@ -625,6 +684,7 @@ function Statebot (name, options) {
   const { pause, resume, paused, Pausable } = Pausables(false, () =>
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
+  const transitionsFromEvents = Definitions();
   const internalEvents = wrapEmitter(mitt());
   const emitInternalEvent = Pausable(internalEvents.emit);
   function onInternalEvent (eventName, cb) {
@@ -734,9 +794,13 @@ function Statebot (name, options) {
             transitionNoOp(`Event not handled: "${eventName}"`);
           }
         })
-      ]
+      ].concat(
+        configs.map(({ fromState, toState }) =>
+          transitionsFromEvents.define(`${eventName}:${fromState}`, toState)
+        )
+      )
     }
-    function runActionFor(state, actionFn, ...args) {
+    function runActionFor (state, actionFn, ...args) {
       const onExitingState = actionFn(...args);
       if (isFunction(onExitingState)) {
         const uninstall = Once(enterExitMethods[ON_EXITING](state, (toState) => {
@@ -746,9 +810,50 @@ function Statebot (name, options) {
         allCleanupFns.push(uninstall);
       }
     }
-    function bindActionTo(state, actionFn) {
+    function bindActionTo (state, actionFn) {
       return (...args) => runActionFor(state, actionFn, ...args)
     }
+  }
+  function _peek (eventName, stateObject, calledInternally = true) {
+    const err1 = argTypeError({ eventName: isString })('peek')(eventName);
+    if (err1) {
+      throw new TypeError(err1)
+    }
+    const eventAndState = eventName + ':' + currentState();
+    const statesFromEvent = transitionsFromEvents.definitionsOf(eventAndState);
+    if (statesFromEvent.length > 1) {
+      const reason =
+        `${logPrefix}: Event "${eventName}" causes multiple transitions.\n` +
+        `  > From state: "${currentState()}"\n` +
+        `  > To states: "${statesFromEvent.join(', ')}"\n\n` +
+        `Check your performTransitions() config.`;
+      throw new RangeError(reason)
+    }
+    if (!calledInternally && statesFromEvent.length === 0) {
+      if (eventsHandled.countOf(eventName) === 0) {
+        _console.warn(`${logPrefix}: Event not handled: "${eventName}"`);
+      } else {
+        _console.warn(`${logPrefix}: Will not transition after emitting: "${eventName}"`);
+      }
+    }
+    const toState = statesFromEvent[0];
+    if (isUndefined(stateObject)) {
+      return toState ?? currentState()
+    }
+    const err2 = argTypeError({ stateObject: isPojo })('peek')(stateObject);
+    if (err2) {
+      throw new TypeError(err2)
+    }
+    if (Object.prototype.hasOwnProperty.call(stateObject, toState)) {
+      const anyOrFn = stateObject[toState];
+      return isFunction(anyOrFn)
+        ? anyOrFn()
+        : anyOrFn
+    }
+    return null
+  }
+  function peek (eventName, stateObject) {
+    return _peek(eventName, stateObject, false)
   }
   function previousState () {
     return stateHistory[stateHistory.length - 2]
@@ -756,23 +861,48 @@ function Statebot (name, options) {
   function currentState () {
     return stateHistory[stateHistory.length - 1]
   }
-  function canTransitionTo (...states) {
-    const testStates = states.flat();
-    const err = argTypeError('canTransitionTo', { state: isString }, testStates[0]);
+  function _state_canTransitionTo (...states) {
+    const err = argTypeError(
+      { states: isAllStrings }
+    )('canTransitionTo')([states]);
     if (err) {
       throw new TypeError(err)
     }
-    if (!testStates.length) {
+    if (!states.length) {
       return false
     }
     const nextStates = statesAvailableFromHere();
-    return testStates.every(state => nextStates.includes(state))
+    return states.every(state => nextStates.includes(state))
+  }
+  function canTransitionTo (...states) {
+    const testStates = states.flat();
+    if (
+      testStates.length === 2 &&
+      isString(testStates[0]) &&
+      isPojo(testStates[1])
+    ) {
+      const thisState = testStates[0];
+      const { afterEmitting } = testStates[1];
+      const err = argTypeError(
+        { thisState: isString, '{ afterEmitting }': isString }
+      )('canTransitionTo')(thisState, afterEmitting);
+      if (err) {
+        throw new TypeError(err)
+      }
+      return (
+        thisState !== currentState() &&
+        _peek(afterEmitting) === thisState
+      )
+    }
+    return _state_canTransitionTo(...testStates)
   }
   function statesAvailableFromHere (state) {
-    const _state = state !== undefined
+    const _state = !isUndefined(state)
       ? state
       : currentState();
-    const err = argTypeError('statesAvailableFromHere', { state: isString }, _state);
+    const err = argTypeError(
+      { state: isString }
+    )('statesAvailableFromHere')(_state);
     if (err) {
       throw new TypeError(err)
     }
@@ -787,7 +917,7 @@ function Statebot (name, options) {
   }
   function _inState (state, anyOrFn, ...fnArgs) {
     const conditionMatches = currentState() === state;
-    if (anyOrFn === undefined) {
+    if (isUndefined(anyOrFn)) {
       return conditionMatches
     }
     if (!conditionMatches) {
@@ -807,7 +937,9 @@ function Statebot (name, options) {
       : null
   }
   function inState (...args) {
-    const err = argTypeError('inState', { state: [isString, isPojo] }, args[0]);
+    const err = argTypeError(
+      { state: [isString, isPojo] }
+    )('inState')(args[0]);
     if (err) {
       throw new TypeError(err)
     }
@@ -816,14 +948,19 @@ function Statebot (name, options) {
       : _inState(...args)
   }
   const emit = Pausable((eventName, ...args) => {
-    const err = argTypeError('emit', { eventName: isString }, eventName);
+    const err = argTypeError(
+      { eventName: isString }
+    )('emit')(eventName);
     if (err) {
       throw new TypeError(err)
     }
+    _peek(eventName);
     return events.emit(eventName, ...args)
   });
   const enter = Pausable((state, ...args) => {
-    const err = argTypeError('enter', { state: isString }, state);
+    const err = argTypeError(
+      { state: isString }
+    )('enter')(state);
     if (err) {
       throw new TypeError(err)
     }
@@ -853,10 +990,9 @@ function Statebot (name, options) {
     return true
   });
   function onEvent (eventName, cb) {
-    const err = argTypeError('onEvent',
-      { eventName: isString, cb: isFunction },
-      eventName, cb
-    );
+    const err = argTypeError(
+      { eventName: isString, cb: isFunction }
+    )('onEvent')(eventName, cb);
     if (err) {
       throw new TypeError(err)
     }
@@ -868,7 +1004,7 @@ function Statebot (name, options) {
     .reduce((obj, methodName) => ({
       ...obj,
       [methodName]: cb => {
-        const err = argTypeError(methodName, { cb: isFunction }, cb);
+        const err = argTypeError({ cb: isFunction })(methodName)(cb);
         if (err) {
           throw new TypeError(err)
         }
@@ -897,10 +1033,9 @@ function Statebot (name, options) {
       return {
         ...obj,
         [methodName]: (state, cb) => {
-          const err = argTypeError(methodName,
-            { state: isString, cb: isFunction },
-            state, cb
-          );
+          const err = argTypeError(
+            { state: isString, cb: isFunction }
+          )(methodName)(state, cb);
           if (err) {
             throw new TypeError(err)
           }
@@ -925,14 +1060,14 @@ function Statebot (name, options) {
       }
     }, {});
   function Emit (eventName, ...curriedArgs) {
-    const err = argTypeError('Emit', { eventName: isString }, eventName);
+    const err = argTypeError({ eventName: isString })('Emit')(eventName);
     if (err) {
       throw new TypeError(err)
     }
     return (...args) => emit(eventName, ...[...curriedArgs, ...args])
   }
   function Enter (state, ...curriedArgs) {
-    const err = argTypeError('Enter', { state: isString }, state);
+    const err = argTypeError({ state: isString })('Enter')(state);
     if (err) {
       throw new TypeError(err)
     }
@@ -947,7 +1082,7 @@ function Statebot (name, options) {
       inState(stateObject, ...[...curriedFnArgs, ...fnArgs])
   }
   function InState (...args) {
-    const err = argTypeError('InState', { state: [isString, isPojo] }, args[0]);
+    const err = argTypeError({ state: [isString, isPojo] })('InState')(args[0]);
     if (err) {
       throw new TypeError(err)
     }
@@ -964,7 +1099,7 @@ function Statebot (name, options) {
     const lastState = previousState();
     const inState = currentState();
     const prevRoute =
-      `${lastState === undefined ? '[undefined]' : lastState}->${inState}`;
+      `${isUndefined(lastState) ? '[undefined]' : lastState}->${inState}`;
     const availableStates = statesAvailableFromHere();
     if (!availableStates.length) {
       _console.info(
@@ -1023,10 +1158,19 @@ function Statebot (name, options) {
      * If more than one state is specified, `true` is returned only if
      * **ALL** states are available.
      *
+     * See also: {@link #statebotfsmpeek|.peek()}.
+     *
      * @memberof statebotFsm
      * @instance
      * @function
      * @param {string|string[]} states
+     * @param {object} [options]
+     * @param {string} options.afterEmitting
+     * Since v2.9.0: Can test if a certain state will be entered after
+     * emitting an event. Use `{ afterEmitting: 'eventName' }` as the
+     * second argument. Works only after using
+     * {@link #statebotfsmperformtransitions|.performTransitions()}.
+     * See the updated example below.
      * @returns {boolean}
      * @example
      * var machine = Statebot('game-menus', {
@@ -1052,6 +1196,12 @@ function Statebot (name, options) {
      * machine.enter('menu')
      * machine.canTransitionTo(['play', 'options'])
      * // true
+     *
+     * // Since v2.9.0:
+     * machine.canTransitionTo('play', {
+     *   afterEmitting: 'startGame'
+     * })
+     * // false
      */
     canTransitionTo,
     /**
@@ -1093,7 +1243,7 @@ function Statebot (name, options) {
      *  {@link https://www.npmjs.com/package/events|events}
      * package for dealing with events in the browser.
      *
-     * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+     * Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is
      * used for both the browser and non-browser builds.
      *
      * @example
@@ -1195,7 +1345,7 @@ function Statebot (name, options) {
      * machine.enter('saving')
      * // false
      *
-     * // [dialog]: Invalid transition "idle->saving", not switching
+     * // Statebot[dialog]: Invalid transition "idle->saving", not switching
      * // > Previous transition: "[undefined]->idle"
      * // > From "idle", valid states are: ["showing-modal"]
      *
@@ -1837,6 +1987,65 @@ function Statebot (name, options) {
      */
     paused,
     /**
+     * Since v2.9.0: Return the state the machine will be in after
+     * {@link #statebotfsmemit|.emit()}'ing the specified event.
+     *
+     * Works only after using
+     *  {@link #statebotfsmperformtransitions|.performTransitions()}.
+     *
+     * See also: {@link #statebotfsmcantransitionto|.canTransitionTo(state, .afterEmitting )}.
+     *
+     * @memberof statebotFsm
+     * @instance
+     * @function
+     * @param {string} eventName
+     * @param {object} [stateObject]
+     * If `stateObject` is undefined, `.peek()` defaults to returning
+     * {@link #statebotfsmcurrentstate|.currentState()}
+     * if the event will *NOT* trigger a transition. Otherwise,
+     * `stateObject` will be used as a key/value lookup, with `key`
+     * being the predicted state, and `value` being the corresponding
+     * literal or function to be run and its value returned.
+     * @returns {string|null|any}
+     * @example
+     *
+     * var machine = Statebot('peek-a-boo', {
+     *   chart: `
+     *     idle -> running
+     *   `
+     * })
+     *
+     * machine.performTransitions({
+     *   'idle -> running': {
+     *     on: 'start'
+     *   }
+     * })
+     *
+     * machine.peek('start')
+     * // "running"
+     *
+     * machine.peek('start', {
+     *   'running': () => 'will be in the running state'
+     * })
+     * // "will be in the running state"
+     *
+     * machine.peek('unknown')
+     * // "idle"
+     * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+     *
+     * machine.peek('unknown', {
+     *   'running': () => 'will be in the running state'
+     * })
+     * // null
+     * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+     *
+     * machine.emit('start')
+     * machine.peek('start')
+     * // "running"
+     * // Logs: Statebot[peek-a-boo]: Will not transition after emitting: "start"
+     */
+     peek,
+    /**
      * Perform transitions when events happen.
      *
      * Use `then` to optionally add callbacks to those transitions.
@@ -2111,10 +2320,9 @@ const argTypeError = ArgTypeError('statebot.');
  * // false
  */
 function routeIsPossible (machine, route) {
-  const err = argTypeError('routeIsPossible',
-    { machine: isStatebot, route: isTemplateLiteral },
-    machine, route
-  );
+  const err = argTypeError(
+    { machine: isStatebot, route: isTemplateLiteral }
+  )('routeIsPossible')(machine, route);
   if (err) {
     throw TypeError(err)
   }
@@ -2192,10 +2400,9 @@ let assertionId = 0;
  * machine.enter('idle')
  */
 function assertRoute (machine, expectedRoute, options) {
-  const err = argTypeError('assertRoute',
-    { machine: isStatebot, expectedRoute: isTemplateLiteral },
-    machine, expectedRoute
-  );
+  const err = argTypeError(
+    { machine: isStatebot, expectedRoute: isTemplateLiteral }
+  )('assertRoute')(machine, expectedRoute);
   if (err) {
     throw TypeError(err)
   }

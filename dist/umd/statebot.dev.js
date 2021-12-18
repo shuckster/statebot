@@ -11,21 +11,16 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.statebot = {}));
-}(this, (function (exports) { 'use strict';
+})(this, (function (exports) { 'use strict';
 
   function ownKeys(object, enumerableOnly) {
     var keys = Object.keys(object);
 
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
-
-      if (enumerableOnly) {
-        symbols = symbols.filter(function (sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      }
-
-      keys.push.apply(keys, symbols);
+      enumerableOnly && (symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      })), keys.push.apply(keys, symbols);
     }
 
     return keys;
@@ -33,19 +28,12 @@
 
   function _objectSpread2(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
+      var source = null != arguments[i] ? arguments[i] : {};
+      i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
 
     return target;
@@ -54,17 +42,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
   }
 
   function _defineProperty(obj, key, value) {
@@ -183,29 +165,67 @@
     return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
   }
 
+  isEventEmitter.displayName = 'isEventEmitter';
+
+  isArray.displayName = 'isUnset';
+
   function isArray(obj) {
     return Array.isArray(obj);
   }
+
+  isArray.displayName = 'isArray';
+
+  function isArguments(obj) {
+    return Object.prototype.toString.call(obj) === '[object Arguments]';
+  }
+
+  isArguments.displayName = 'isArguments';
 
   function isFunction(obj) {
     return typeof obj === 'function';
   }
 
+  isFunction.displayName = 'isFunction';
+
   function isString(obj) {
     return typeof obj === 'string';
   }
 
-  function isObject(obj) {
-    return _typeof(obj) === 'object';
+  isString.displayName = 'isString';
+
+  function isAllStrings(arr) {
+    return isArray(arr) && arr.every(isString);
   }
 
+  isAllStrings.displayName = 'isAllStrings';
+
+  function isUndefined(obj) {
+    return obj === undefined;
+  }
+
+  isUndefined.displayName = 'isUndefined';
+
+  function isNull(obj) {
+    return obj === null;
+  }
+
+  isNull.displayName = 'isNull';
+
+  function isObject(obj) {
+    return _typeof(obj) === 'object' && !isNull(obj);
+  }
+
+  isObject.displayName = 'isObject';
+
   function isPojo(obj) {
-    if (obj === null || !isObject(obj)) {
+    if (isNull(obj) || !isObject(obj) || isArguments(obj)) {
       return false;
     }
 
     return Object.getPrototypeOf(obj) === Object.prototype;
   }
+
+  isPojo.displayName = 'isPojo';
 
   function isTemplateLiteral(obj) {
     if (isString(obj)) {
@@ -219,48 +239,56 @@
     return obj.every(isString);
   }
 
+  isTemplateLiteral.displayName = 'isTemplateLiteral';
+
   var typeErrorStringIfFnReturnsFalse = function typeErrorStringIfFnReturnsFalse(argName, argTypeFn, arg) {
-    return argTypeFn(arg) ? undefined : "".concat(argTypeFn.name, "(").concat(argName, ") did not return true");
+    return argTypeFn(arg) ? undefined : (argTypeFn.displayName || argTypeFn.name) + "(".concat(argName, ") did not return true");
   };
 
   var typeErrorStringIfTypeOfFails = function typeErrorStringIfTypeOfFails(argName, argType, arg) {
     return _typeof(arg) === argType ? undefined : "Argument \"".concat(argName, "\" should be a ").concat(argType);
   };
 
-  var typeErrorStringFromArgument = function typeErrorStringFromArgument(argMap, arg, index) {
-    var _argMap$index = argMap[index],
-        argName = _argMap$index.argName,
-        argType = _argMap$index.argType;
+  var typeErrorStringFromArgument = function typeErrorStringFromArgument(argMap) {
+    return function (arg, index) {
+      if (index >= argMap.length) {
+        return;
+      }
 
-    if (arg === undefined) {
-      return "Argument undefined: \"".concat(argName, "\"");
-    }
+      var _argMap$index = argMap[index],
+          argName = _argMap$index.argName,
+          argType = _argMap$index.argType;
 
-    var permittedArgTypes = Array.isArray(argType) ? argType : [argType];
-    var errorDescs = permittedArgTypes.map(function (argType) {
-      return isFunction(argType) ? typeErrorStringIfFnReturnsFalse(argName, argType, arg) : typeErrorStringIfTypeOfFails(argName, argType, arg);
-    }).filter(isString);
-    var multipleTypesSpecified = permittedArgTypes.length > 1;
-    var shouldError = multipleTypesSpecified ? errorDescs.length > 1 : errorDescs.length;
+      if (isUndefined(arg)) {
+        return "Argument undefined: \"".concat(argName, "\"");
+      }
 
-    if (shouldError) {
-      return "".concat(errorDescs.join('\n| '), "\n> typeof ").concat(argName, " === ").concat(_typeof(arg), "(").concat(JSON.stringify(arg), ")");
-    }
+      var permittedArgTypes = Array.isArray(argType) ? argType : [argType];
+      var errorDescs = permittedArgTypes.map(function (argType) {
+        return isFunction(argType) ? typeErrorStringIfFnReturnsFalse(argName, argType, arg) : typeErrorStringIfTypeOfFails(argName, argType, arg);
+      }).filter(isString);
+      var multipleTypesSpecified = permittedArgTypes.length > 1;
+      var shouldError = multipleTypesSpecified ? errorDescs.length > 1 : errorDescs.length;
+
+      if (shouldError) {
+        return errorDescs.join('\n| ') + "\n> typeof ".concat(argName, " === ").concat(_typeof(arg), "(").concat(JSON.stringify(arg), ")");
+      }
+    };
   };
   /**
    * Helper for enforcing correct argument-types.
    *
    * @private
-   * @param {string} errPrefix
+   * @param {string} namespace
    *
    * @example
    * const argTypeError = ArgTypeError('namespace#')
    *
    * function myFn (myArg1, myArg2) {
-   *   const err = argTypeError('myFn',
-   *     { myArg1: isString, myArg2: Boolean },
-   *     myArg1, myArg2
-   *   )
+   *   const err = argTypeError({
+   *     myArg1: isString,
+   *     myArg2: isBoolean
+   *   })('myFn')(myArg1, myArg2)
    *   if (err) {
    *     throw new TypeError(err)
    *   }
@@ -268,8 +296,8 @@
    */
 
 
-  function ArgTypeError(errPrefix) {
-    return function (fnName, typeMap) {
+  function ArgTypeError(namespace) {
+    return function (typeMap) {
       var argMap = Object.entries(typeMap).map(function (_ref) {
         var _ref2 = _slicedToArray(_ref, 2),
             argName = _ref2[0],
@@ -280,27 +308,27 @@
           argType: argType
         };
       });
+      return function (fnName) {
+        return function () {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
 
-      for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-        args[_key - 2] = arguments[_key];
-      }
+          var processedArgs = Array.from(args, function (x) {
+            return isArguments(x) ? Array.from(x) : x;
+          }).flat(1);
+          var err = processedArgs.map(typeErrorStringFromArgument(argMap)).filter(isString);
 
-      var err = args.map(function () {
-        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-          args[_key2] = arguments[_key2];
-        }
+          if (!err.length) {
+            return;
+          }
 
-        return typeErrorStringFromArgument.apply(void 0, [argMap].concat(args));
-      }).filter(isString);
-
-      if (!err.length) {
-        return;
-      }
-
-      var signature = Object.keys(typeMap).join(', ');
-      return "\n".concat(errPrefix || '').concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
-        return "| ".concat(err);
-      }).join('\n'));
+          var signature = Object.keys(typeMap).join(', ');
+          return "\n".concat(namespace || '').concat(fnName, "(").concat(signature, "):\n") + "".concat(err.map(function (err) {
+            return "| ".concat(err);
+          }).join('\n'));
+        };
+      };
     };
   }
 
@@ -367,7 +395,7 @@
 
   function uniq(input) {
     return input.reduce(function (acc, one) {
-      return acc.indexOf(one) === -1 ? [].concat(_toConsumableArray(acc), [one]) : acc;
+      return acc.indexOf(one) === -1 ? (acc.push(one), acc) : acc;
     }, []);
   }
 
@@ -511,6 +539,38 @@
     };
   }
 
+  function Definitions() {
+    var dictionary = {};
+
+    function undefine(word, definition) {
+      dictionary[word] = (dictionary[word] || []).filter(function (next) {
+        return next !== definition;
+      });
+
+      if (dictionary[word].length === 0) {
+        delete dictionary[word];
+      }
+    }
+
+    function define(word, definition) {
+      dictionary[word] = dictionary[word] || [];
+      dictionary[word].push(definition);
+      return function () {
+        return undefine(word, definition);
+      };
+    }
+
+    function definitionsOf(word) {
+      return dictionary[word] || [];
+    }
+
+    return {
+      define: define,
+      undefine: undefine,
+      definitionsOf: definitionsOf
+    };
+  }
+
   function Logger(level, _console) {
     if (isString(level)) {
       level = {
@@ -574,9 +634,9 @@
   var argTypeError$1 = ArgTypeError('statebot.');
 
   function decomposeRoute(templateLiteral) {
-    var err = argTypeError$1('decomposeRoute', {
+    var err = argTypeError$1({
       templateLiteral: isTemplateLiteral
-    }, templateLiteral);
+    })('decomposeRoute')(templateLiteral);
 
     if (err) {
       throw TypeError(err);
@@ -613,9 +673,9 @@
 
 
   function decomposeChart(chart) {
-    var err = argTypeError$1('decomposeChart', {
+    var err = argTypeError$1({
       chart: isTemplateLiteral
-    }, chart);
+    })('decomposeChart')(chart);
 
     if (err) {
       throw TypeError(err);
@@ -708,9 +768,9 @@
         toStates = _ref2[1];
 
     return fromStates.reduce(function (acc, fromState) {
-      return [].concat(_toConsumableArray(acc), _toConsumableArray(toStates.map(function (toState) {
+      return acc.push.apply(acc, _toConsumableArray(toStates.map(function (toState) {
         return [fromState, toState];
-      })));
+      }))), acc;
     }, []);
   }
 
@@ -742,8 +802,8 @@
    *
    *  It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
    *
-   *  - Since Statebot 2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
-   *  - Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
+   *  - Since v2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+   *  - Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
    */
 
   /**
@@ -902,7 +962,7 @@
         _ref$historyLimit = _ref.historyLimit,
         historyLimit = _ref$historyLimit === void 0 ? 2 : _ref$historyLimit;
 
-    var events = options.events === undefined ? wrapEmitter(mitt()) : isEventEmitter(options.events) && wrapEmitter(options.events);
+    var events = isUndefined(options.events) ? wrapEmitter(mitt()) : isEventEmitter(options.events) && wrapEmitter(options.events);
 
     if (!events) {
       throw new TypeError("\n".concat(logPrefix, ": Invalid event-emitter specified in options"));
@@ -938,6 +998,7 @@
         paused = _Pausables.paused,
         Pausable = _Pausables.Pausable;
 
+    var transitionsFromEvents = Definitions();
     var internalEvents = wrapEmitter(mitt());
     var emitInternalEvent = Pausable(internalEvents.emit);
 
@@ -1061,7 +1122,11 @@
           if (!eventWasHandled) {
             transitionNoOp("Event not handled: \"".concat(eventName, "\""));
           }
-        })];
+        })].concat(configs.map(function (_ref8) {
+          var fromState = _ref8.fromState,
+              toState = _ref8.toState;
+          return transitionsFromEvents.define("".concat(eventName, ":").concat(fromState), toState);
+        }));
       }
 
       function runActionFor(state, actionFn) {
@@ -1091,6 +1156,58 @@
       }
     }
 
+    function _peek(eventName, stateObject) {
+      var calledInternally = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      var err1 = argTypeError({
+        eventName: isString
+      })('peek')(eventName);
+
+      if (err1) {
+        throw new TypeError(err1);
+      }
+
+      var eventAndState = eventName + ':' + currentState();
+      var statesFromEvent = transitionsFromEvents.definitionsOf(eventAndState);
+
+      if (statesFromEvent.length > 1) {
+        var reason = "".concat(logPrefix, ": Event \"").concat(eventName, "\" causes multiple transitions.\n") + "  > From state: \"".concat(currentState(), "\"\n") + "  > To states: \"".concat(statesFromEvent.join(', '), "\"\n\n") + "Check your performTransitions() config.";
+        throw new RangeError(reason);
+      }
+
+      if (!calledInternally && statesFromEvent.length === 0) {
+        if (eventsHandled.countOf(eventName) === 0) {
+          _console.warn("".concat(logPrefix, ": Event not handled: \"").concat(eventName, "\""));
+        } else {
+          _console.warn("".concat(logPrefix, ": Will not transition after emitting: \"").concat(eventName, "\""));
+        }
+      }
+
+      var toState = statesFromEvent[0];
+
+      if (isUndefined(stateObject)) {
+        return toState !== null && toState !== void 0 ? toState : currentState();
+      }
+
+      var err2 = argTypeError({
+        stateObject: isPojo
+      })('peek')(stateObject);
+
+      if (err2) {
+        throw new TypeError(err2);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(stateObject, toState)) {
+        var anyOrFn = stateObject[toState];
+        return isFunction(anyOrFn) ? anyOrFn() : anyOrFn;
+      }
+
+      return null;
+    }
+
+    function peek(eventName, stateObject) {
+      return _peek(eventName, stateObject, false);
+    }
+
     function previousState() {
       return stateHistory[stateHistory.length - 2];
     }
@@ -1099,36 +1216,60 @@
       return stateHistory[stateHistory.length - 1];
     }
 
-    function canTransitionTo() {
+    function _state_canTransitionTo() {
       for (var _len4 = arguments.length, states = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         states[_key4] = arguments[_key4];
       }
 
-      var testStates = states.flat();
-      var err = argTypeError('canTransitionTo', {
-        state: isString
-      }, testStates[0]);
+      var err = argTypeError({
+        states: isAllStrings
+      })('canTransitionTo')([states]);
 
       if (err) {
         throw new TypeError(err);
       }
 
-      if (!testStates.length) {
+      if (!states.length) {
         return false;
       }
 
       var nextStates = statesAvailableFromHere();
-      return testStates.every(function (state) {
+      return states.every(function (state) {
         return nextStates.includes(state);
       });
     }
 
-    function statesAvailableFromHere(state) {
-      var _state = state !== undefined ? state : currentState();
+    function canTransitionTo() {
+      for (var _len5 = arguments.length, states = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        states[_key5] = arguments[_key5];
+      }
 
-      var err = argTypeError('statesAvailableFromHere', {
+      var testStates = states.flat();
+
+      if (testStates.length === 2 && isString(testStates[0]) && isPojo(testStates[1])) {
+        var thisState = testStates[0];
+        var afterEmitting = testStates[1].afterEmitting;
+        var err = argTypeError({
+          thisState: isString,
+          '{ afterEmitting }': isString
+        })('canTransitionTo')(thisState, afterEmitting);
+
+        if (err) {
+          throw new TypeError(err);
+        }
+
+        return thisState !== currentState() && _peek(afterEmitting) === thisState;
+      }
+
+      return _state_canTransitionTo.apply(void 0, _toConsumableArray(testStates));
+    }
+
+    function statesAvailableFromHere(state) {
+      var _state = !isUndefined(state) ? state : currentState();
+
+      var err = argTypeError({
         state: isString
-      }, _state);
+      })('statesAvailableFromHere')(_state);
 
       if (err) {
         throw new TypeError(err);
@@ -1149,7 +1290,7 @@
     function _inState(state, anyOrFn) {
       var conditionMatches = currentState() === state;
 
-      if (anyOrFn === undefined) {
+      if (isUndefined(anyOrFn)) {
         return conditionMatches;
       }
 
@@ -1158,8 +1299,8 @@
       }
 
       if (isFunction(anyOrFn)) {
-        for (var _len5 = arguments.length, fnArgs = new Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
-          fnArgs[_key5 - 2] = arguments[_key5];
+        for (var _len6 = arguments.length, fnArgs = new Array(_len6 > 2 ? _len6 - 2 : 0), _key6 = 2; _key6 < _len6; _key6++) {
+          fnArgs[_key6 - 2] = arguments[_key6];
         }
 
         return anyOrFn.apply(void 0, fnArgs);
@@ -1169,24 +1310,24 @@
     }
 
     function _inStateObject(stateObject) {
-      var match = Object.entries(stateObject).find(function (_ref8) {
-        var _ref9 = _slicedToArray(_ref8, 1),
-            state = _ref9[0];
+      var match = Object.entries(stateObject).find(function (_ref9) {
+        var _ref10 = _slicedToArray(_ref9, 1),
+            state = _ref10[0];
 
         return _inState(state);
       });
 
-      for (var _len6 = arguments.length, fnArgs = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-        fnArgs[_key6 - 1] = arguments[_key6];
+      for (var _len7 = arguments.length, fnArgs = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+        fnArgs[_key7 - 1] = arguments[_key7];
       }
 
       return match ? _inState.apply(void 0, _toConsumableArray(match.concat(fnArgs))) : null;
     }
 
     function inState() {
-      var err = argTypeError('inState', {
+      var err = argTypeError({
         state: [isString, isPojo]
-      }, arguments.length <= 0 ? undefined : arguments[0]);
+      })('inState')(arguments.length <= 0 ? undefined : arguments[0]);
 
       if (err) {
         throw new TypeError(err);
@@ -1196,24 +1337,26 @@
     }
 
     var emit = Pausable(function (eventName) {
-      var err = argTypeError('emit', {
+      var err = argTypeError({
         eventName: isString
-      }, eventName);
+      })('emit')(eventName);
 
       if (err) {
         throw new TypeError(err);
       }
 
-      for (var _len7 = arguments.length, args = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
-        args[_key7 - 1] = arguments[_key7];
+      _peek(eventName);
+
+      for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+        args[_key8 - 1] = arguments[_key8];
       }
 
       return events.emit.apply(events, [eventName].concat(args));
     });
     var enter = Pausable(function (state) {
-      var err = argTypeError('enter', {
+      var err = argTypeError({
         state: isString
-      }, state);
+      })('enter')(state);
 
       if (err) {
         throw new TypeError(err);
@@ -1247,8 +1390,8 @@
         stateHistory.shift();
       }
 
-      for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
-        args[_key8 - 1] = arguments[_key8];
+      for (var _len9 = arguments.length, args = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
+        args[_key9 - 1] = arguments[_key9];
       }
 
       emitInternalEvent.apply(void 0, [INTERNAL_EVENTS[ON_SWITCHING], toState, inState].concat(args));
@@ -1258,10 +1401,10 @@
     });
 
     function onEvent(eventName, cb) {
-      var err = argTypeError('onEvent', {
+      var err = argTypeError({
         eventName: isString,
         cb: isFunction
-      }, eventName, cb);
+      })('onEvent')(eventName, cb);
 
       if (err) {
         throw new TypeError(err);
@@ -1275,9 +1418,9 @@
 
     var switchMethods = Object.keys(INTERNAL_EVENTS).reduce(function (obj, methodName) {
       return _objectSpread2(_objectSpread2({}, obj), {}, _defineProperty({}, methodName, function (cb) {
-        var err = argTypeError(methodName, {
+        var err = argTypeError({
           cb: isFunction
-        }, cb);
+        })(methodName)(cb);
 
         if (err) {
           throw new TypeError(err);
@@ -1299,10 +1442,10 @@
       var name = methodName.slice(2);
       var eventName = name.toLowerCase();
       return _objectSpread2(_objectSpread2({}, obj), {}, _defineProperty({}, methodName, function (state, cb) {
-        var err = argTypeError(methodName, {
+        var err = argTypeError({
           state: isString,
           cb: isFunction
-        }, state, cb);
+        })(methodName)(state, cb);
 
         if (err) {
           throw new TypeError(err);
@@ -1310,8 +1453,8 @@
 
         var decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase("".concat(state, ":").concat(eventName))];
         var removeEvent = switchMethods[switchMethod](function (toState, fromState) {
-          for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key9 = 2; _key9 < _len9; _key9++) {
-            args[_key9 - 2] = arguments[_key9];
+          for (var _len10 = arguments.length, args = new Array(_len10 > 2 ? _len10 - 2 : 0), _key10 = 2; _key10 < _len10; _key10++) {
+            args[_key10 - 2] = arguments[_key10];
           }
 
           if (name.indexOf('Exit') === 0) {
@@ -1330,21 +1473,21 @@
     }, {});
 
     function Emit(eventName) {
-      for (var _len10 = arguments.length, curriedArgs = new Array(_len10 > 1 ? _len10 - 1 : 0), _key10 = 1; _key10 < _len10; _key10++) {
-        curriedArgs[_key10 - 1] = arguments[_key10];
+      for (var _len11 = arguments.length, curriedArgs = new Array(_len11 > 1 ? _len11 - 1 : 0), _key11 = 1; _key11 < _len11; _key11++) {
+        curriedArgs[_key11 - 1] = arguments[_key11];
       }
 
-      var err = argTypeError('Emit', {
+      var err = argTypeError({
         eventName: isString
-      }, eventName);
+      })('Emit')(eventName);
 
       if (err) {
         throw new TypeError(err);
       }
 
       return function () {
-        for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-          args[_key11] = arguments[_key11];
+        for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+          args[_key12] = arguments[_key12];
         }
 
         return emit.apply(void 0, [eventName].concat([].concat(curriedArgs, args)));
@@ -1352,21 +1495,21 @@
     }
 
     function Enter(state) {
-      for (var _len12 = arguments.length, curriedArgs = new Array(_len12 > 1 ? _len12 - 1 : 0), _key12 = 1; _key12 < _len12; _key12++) {
-        curriedArgs[_key12 - 1] = arguments[_key12];
+      for (var _len13 = arguments.length, curriedArgs = new Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
+        curriedArgs[_key13 - 1] = arguments[_key13];
       }
 
-      var err = argTypeError('Enter', {
+      var err = argTypeError({
         state: isString
-      }, state);
+      })('Enter')(state);
 
       if (err) {
         throw new TypeError(err);
       }
 
       return function () {
-        for (var _len13 = arguments.length, args = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-          args[_key13] = arguments[_key13];
+        for (var _len14 = arguments.length, args = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+          args[_key14] = arguments[_key14];
         }
 
         return enter.apply(void 0, [state].concat([].concat(curriedArgs, args)));
@@ -1374,13 +1517,13 @@
     }
 
     function _InState(state, anyOrFn) {
-      for (var _len14 = arguments.length, curriedFnArgs = new Array(_len14 > 2 ? _len14 - 2 : 0), _key14 = 2; _key14 < _len14; _key14++) {
-        curriedFnArgs[_key14 - 2] = arguments[_key14];
+      for (var _len15 = arguments.length, curriedFnArgs = new Array(_len15 > 2 ? _len15 - 2 : 0), _key15 = 2; _key15 < _len15; _key15++) {
+        curriedFnArgs[_key15 - 2] = arguments[_key15];
       }
 
       return function () {
-        for (var _len15 = arguments.length, fnArgs = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
-          fnArgs[_key15] = arguments[_key15];
+        for (var _len16 = arguments.length, fnArgs = new Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+          fnArgs[_key16] = arguments[_key16];
         }
 
         return inState.apply(void 0, [state, anyOrFn].concat([].concat(curriedFnArgs, fnArgs)));
@@ -1388,13 +1531,13 @@
     }
 
     function _InStateObject(stateObject) {
-      for (var _len16 = arguments.length, curriedFnArgs = new Array(_len16 > 1 ? _len16 - 1 : 0), _key16 = 1; _key16 < _len16; _key16++) {
-        curriedFnArgs[_key16 - 1] = arguments[_key16];
+      for (var _len17 = arguments.length, curriedFnArgs = new Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
+        curriedFnArgs[_key17 - 1] = arguments[_key17];
       }
 
       return function () {
-        for (var _len17 = arguments.length, fnArgs = new Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
-          fnArgs[_key17] = arguments[_key17];
+        for (var _len18 = arguments.length, fnArgs = new Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+          fnArgs[_key18] = arguments[_key18];
         }
 
         return inState.apply(void 0, [stateObject].concat([].concat(curriedFnArgs, fnArgs)));
@@ -1402,9 +1545,9 @@
     }
 
     function InState() {
-      var err = argTypeError('InState', {
+      var err = argTypeError({
         state: [isString, isPojo]
-      }, arguments.length <= 0 ? undefined : arguments[0]);
+      })('InState')(arguments.length <= 0 ? undefined : arguments[0]);
 
       if (err) {
         throw new TypeError(err);
@@ -1423,7 +1566,7 @@
     function transitionNoOp(message) {
       var lastState = previousState();
       var inState = currentState();
-      var prevRoute = "".concat(lastState === undefined ? '[undefined]' : lastState, "->").concat(inState);
+      var prevRoute = "".concat(isUndefined(lastState) ? '[undefined]' : lastState, "->").concat(inState);
       var availableStates = statesAvailableFromHere();
 
       if (!availableStates.length) {
@@ -1486,10 +1629,19 @@
        * If more than one state is specified, `true` is returned only if
        * **ALL** states are available.
        *
+       * See also: {@link #statebotfsmpeek|.peek()}.
+       *
        * @memberof statebotFsm
        * @instance
        * @function
        * @param {string|string[]} states
+       * @param {object} [options]
+       * @param {string} options.afterEmitting
+       * Since v2.9.0: Can test if a certain state will be entered after
+       * emitting an event. Use `{ afterEmitting: 'eventName' }` as the
+       * second argument. Works only after using
+       * {@link #statebotfsmperformtransitions|.performTransitions()}.
+       * See the updated example below.
        * @returns {boolean}
        * @example
        * var machine = Statebot('game-menus', {
@@ -1515,6 +1667,12 @@
        * machine.enter('menu')
        * machine.canTransitionTo(['play', 'options'])
        * // true
+       *
+       * // Since v2.9.0:
+       * machine.canTransitionTo('play', {
+       *   afterEmitting: 'startGame'
+       * })
+       * // false
        */
       canTransitionTo: canTransitionTo,
 
@@ -1558,7 +1716,7 @@
        *  {@link https://www.npmjs.com/package/events|events}
        * package for dealing with events in the browser.
        *
-       * Since Statebot 2.6.0 {@link https://npmjs.com/mitt|mitt} is
+       * Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is
        * used for both the browser and non-browser builds.
        *
        * @example
@@ -1662,7 +1820,7 @@
        * machine.enter('saving')
        * // false
        *
-       * // [dialog]: Invalid transition "idle->saving", not switching
+       * // Statebot[dialog]: Invalid transition "idle->saving", not switching
        * // > Previous transition: "[undefined]->idle"
        * // > From "idle", valid states are: ["showing-modal"]
        *
@@ -2335,6 +2493,66 @@
       paused: paused,
 
       /**
+       * Since v2.9.0: Return the state the machine will be in after
+       * {@link #statebotfsmemit|.emit()}'ing the specified event.
+       *
+       * Works only after using
+       *  {@link #statebotfsmperformtransitions|.performTransitions()}.
+       *
+       * See also: {@link #statebotfsmcantransitionto|.canTransitionTo(state, .afterEmitting )}.
+       *
+       * @memberof statebotFsm
+       * @instance
+       * @function
+       * @param {string} eventName
+       * @param {object} [stateObject]
+       * If `stateObject` is undefined, `.peek()` defaults to returning
+       * {@link #statebotfsmcurrentstate|.currentState()}
+       * if the event will *NOT* trigger a transition. Otherwise,
+       * `stateObject` will be used as a key/value lookup, with `key`
+       * being the predicted state, and `value` being the corresponding
+       * literal or function to be run and its value returned.
+       * @returns {string|null|any}
+       * @example
+       *
+       * var machine = Statebot('peek-a-boo', {
+       *   chart: `
+       *     idle -> running
+       *   `
+       * })
+       *
+       * machine.performTransitions({
+       *   'idle -> running': {
+       *     on: 'start'
+       *   }
+       * })
+       *
+       * machine.peek('start')
+       * // "running"
+       *
+       * machine.peek('start', {
+       *   'running': () => 'will be in the running state'
+       * })
+       * // "will be in the running state"
+       *
+       * machine.peek('unknown')
+       * // "idle"
+       * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+       *
+       * machine.peek('unknown', {
+       *   'running': () => 'will be in the running state'
+       * })
+       * // null
+       * // Logs: Statebot[peek-a-boo]: Event not handled: "unknown"
+       *
+       * machine.emit('start')
+       * machine.peek('start')
+       * // "running"
+       * // Logs: Statebot[peek-a-boo]: Will not transition after emitting: "start"
+       */
+      peek: peek,
+
+      /**
        * Perform transitions when events happen.
        *
        * Use `then` to optionally add callbacks to those transitions.
@@ -2515,10 +2733,10 @@
   function decomposeHitcherActions(hitcherActions) {
     var transitionsForEvents = {};
     var transitionsOnly = [];
-    Object.entries(hitcherActions).map(function (_ref10) {
-      var _ref11 = _slicedToArray(_ref10, 2),
-          routeChart = _ref11[0],
-          actionFnOrConfigObj = _ref11[1];
+    Object.entries(hitcherActions).map(function (_ref11) {
+      var _ref12 = _slicedToArray(_ref11, 2),
+          routeChart = _ref12[0],
+          actionFnOrConfigObj = _ref12[1];
 
       if (isFunction(actionFnOrConfigObj)) {
         transitionsOnly.push({
@@ -2579,10 +2797,10 @@
         allRoutes.push.apply(allRoutes, _toConsumableArray(routes));
       }
 
-      return [].concat(_toConsumableArray(acc), _toConsumableArray(transitions.map(function (_ref12) {
-        var _ref13 = _slicedToArray(_ref12, 2),
-            fromState = _ref13[0],
-            toState = _ref13[1];
+      return [].concat(_toConsumableArray(acc), _toConsumableArray(transitions.map(function (_ref13) {
+        var _ref14 = _slicedToArray(_ref13, 2),
+            fromState = _ref14[0],
+            toState = _ref14[1];
 
         return {
           fromState: fromState,
@@ -2650,10 +2868,10 @@
    */
 
   function routeIsPossible(machine, route) {
-    var err = argTypeError('routeIsPossible', {
+    var err = argTypeError({
       machine: isStatebot,
       route: isTemplateLiteral
-    }, machine, route);
+    })('routeIsPossible')(machine, route);
 
     if (err) {
       throw TypeError(err);
@@ -2737,10 +2955,10 @@
    */
 
   function assertRoute(machine, expectedRoute, options) {
-    var err = argTypeError('assertRoute', {
+    var err = argTypeError({
       machine: isStatebot,
       expectedRoute: isTemplateLiteral
-    }, machine, expectedRoute);
+    })('assertRoute')(machine, expectedRoute);
 
     if (err) {
       throw TypeError(err);
@@ -2977,5 +3195,5 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=statebot.dev.js.map

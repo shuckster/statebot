@@ -22,7 +22,7 @@ function help() {
     '  .onSwitching() / .onSwitched()\n' +
     '\n' +
     'Status:\n' +
-    '  .canTransitionTo() / .statesAvailableFromHere()\n' +
+    '  .canTransitionTo() / .statesAvailableFromHere() / .peek()\n' +
     '  .currentState() / .previousState() / .history()\n' +
     '  .inState() / .InState()\n' +
     '  .info() / .inspect() / .name()\n' +

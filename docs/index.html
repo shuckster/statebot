@@ -238,6 +238,12 @@
 							</a>
 							
 							<a
+									href='#statebotfsmpeek'
+									class='button-indent regular block'>
+								<code>#peek</code>
+							</a>
+							
+							<a
 									href='#statebotfsmperformtransitions'
 									class='button-indent regular block'>
 								<code>#performTransitions</code>
@@ -345,8 +351,10 @@
 		</a>
 	</h3>
 
-	<img src="./logo-full.png" style="max-width: 255px; margin: 10px 0;" />
+	
+<img src="./logo-full.png" style="max-width: 255px; margin: 10px 0;" />
 <p>Write more robust and understandable programs.</p>
+
 <p>Statebot hopes to make <a href="https://en.wikipedia.org/wiki/Finite-state_machine">Finite State Machines</a> (FSMs) a little more accessible.</p>
 <p>You're reading the documentation. Other exits are:</p>
 <ul>
@@ -360,54 +368,11 @@ is <a href="../LICENSE">MIT licensed</a>.</p>
 <h3>Jump right in</h3>
 <p>Play around with an example that uses React in <a href="https://codesandbox.io/s/statebot-react-ot3xe?file=/src/Loader.js">this CodeSandbox</a>.</p>
 <p>You can install Statebot into your <code>npm</code> project:</p>
-<pre class='hljs'>npm i statebot</pre>
-<pre class='hljs'><span class="hljs-keyword">import</span> statebot <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;statebot&#x27;</span></pre>
 <p>Or non-<code>npm</code> project:</p>
-<pre class='hljs'>&lt;script src=<span class="hljs-string">&quot;https://unpkg.com/statebot@2.8.1/dist/browser/statebot.min.js&quot;</span>&gt;&lt;/script&gt;</pre>
-<pre class='hljs'><span class="hljs-keyword">const</span> { Statebot } = statebot
-<span class="hljs-comment">// Make machines with Statebot()</span>
-
-<span class="hljs-keyword">const</span> { isStatebot, routeIsPossible, assertRoute } = statebot
-<span class="hljs-comment">// These are assertion helpers you can use for testing</span></pre>
 <h3>Open the developer-console :)</h3>
 <p>I've included Statebot in this page. Open the developer-console to
 follow along with the examples below:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;promise-like&#x27;</span>, {
-  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
-    // This one will behave a bit like a Promise
-    idle -&gt; pending -&gt;
-      resolved | rejected
-
-    // ...and we&#x27;re done
-    resolved -&gt; done
-    rejected -&gt; done
-  `</span>,
-  <span class="hljs-attr">startIn</span>: <span class="hljs-string">&#x27;idle&#x27;</span>
-})
-
-machine.canTransitionTo(<span class="hljs-string">&#x27;pending&#x27;</span>)
-<span class="hljs-comment">// true</span>
-
-machine.enter(<span class="hljs-string">&#x27;pending&#x27;</span>)
-machine.statesAvailableFromHere()
-<span class="hljs-comment">// [&quot;resolved&quot;, &quot;rejected&quot;]</span></pre>
 <p>We can hook-up events with <a href="#statebotfsmperformtransitions">.performTransitions()</a>:</p>
-<pre class='hljs'>machine.performTransitions({
- <span class="hljs-string">&#x27;pending -&gt; resolved&#x27;</span>: {
-   <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;data-loaded&#x27;</span>
- },
- <span class="hljs-string">&#x27;pending -&gt; rejected&#x27;</span>: {
-   <span class="hljs-attr">on</span>: [<span class="hljs-string">&#x27;timeout&#x27;</span>, <span class="hljs-string">&#x27;data-error&#x27;</span>],
-   <span class="hljs-attr">then</span>: <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
-     <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">&#x27;Uh oh...&#x27;</span>, msg)
-   }
- },
- <span class="hljs-string">&#x27;resolved | rejected -&gt; done&#x27;</span>: {
-   <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;thats-all-folks&#x27;</span>
- }
-})
-
-machine.emit(<span class="hljs-string">&#x27;data-error&#x27;</span>, <span class="hljs-string">&#x27;Did you hear that?&#x27;</span>)</pre>
 <p>Here's the API:</p>
 <table>
 <thead>
@@ -420,7 +385,7 @@ machine.emit(<span class="hljs-string">&#x27;data-error&#x27;</span>, <span clas
 <tbody>
 <tr>
 <td><a href="#statebotfsmperformtransitions">.performTransitions()</a> / <a href="#statebotfsmonevent">.onEvent()</a></td>
-<td><a href="#statebotfsmcantransitionto">.canTransitionTo()</a> / <a href="#statebotfsmstatesavailablefromhere">.statesAvailableFromHere()</a></td>
+<td><a href="#statebotfsmcantransitionto">.canTransitionTo()</a> / <a href="#statebotfsmstatesavailablefromhere">.statesAvailableFromHere()</a> / <a href="#statebotfsmpeek">.peek()</a></td>
 <td><a href="#statebotfsmemit">.emit()</a> / <a href="#emit-eventname-curriedargs">.Emit()</a></td>
 </tr>
 <tr>
@@ -445,7 +410,6 @@ machine.emit(<span class="hljs-string">&#x27;data-error&#x27;</span>, <span clas
 </tr>
 </tbody>
 </table>
-<img src="./logo-small.png" style="max-width: 75px; margin: 15px 0 0 5px;" />
 
 	
 
@@ -1093,8 +1057,8 @@ a shared EventEmitter, you can pass it in here. The
  methods will use it.
 <p>It should have the same signature as <a href="https://nodejs.org/api/events.html#events_class_eventemitter">EventEmitter</a>.</p>
 <ul>
-<li>Since Statebot 2.5.0 <a href="https://npmjs.com/mitt">mitt</a> is also compatible.</li>
-<li>Since Statebot 2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is used internally.</li>
+<li>Since v2.5.0 <a href="https://npmjs.com/mitt">mitt</a> is also compatible.</li>
+<li>Since v2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is used internally.</li>
 </ul>
 </td>
 		</tr>
@@ -1147,66 +1111,20 @@ are much more convenient.</p>
 <pre><code>from-state -> to-state
 </code></pre>
 <p>It's the only operator needed to build any chart:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
-  pending -&gt; resolved
-  pending -&gt; rejected
-  resolved -&gt; done
-  rejected -&gt; done
-`</span></pre>
 <p>The "OR" operator <code>|</code> can help us remove some redundancy from the above example:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
-  pending -&gt; resolved | rejected
-  resolved | rejected -&gt; done
-`</span></pre>
 <p>In both charts, <code>pending</code> can transition to <code>resolved</code> or <code>rejected</code>, and
 <code>resolved</code> or <code>rejected</code> can both transition to <code>done</code>.</p>
 <p>We can streamline this even further:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
-  pending -&gt; (resolved | rejected) -&gt; done
-`</span></pre>
 <p>Again, this is exactly equivalent to the previous two examples.</p>
 <p>Notice in this one that we have parentheses <code>(</code> <code>)</code> surrounding <code>resolved</code>
 and <code>rejected</code>. They are actually completely ignored by the parser, and
 you can use them as you please to help make your charts more readable.</p>
 <p>A chart works exactly the same without them:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
-  pending -&gt; resolved | rejected -&gt; done
-`</span></pre>
 <p>Charts can also be split across multiple-lines:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
-  pending -&gt;
-  resolved |
-  rejected -&gt;
-  done
-`</span></pre>
 <p>Notice that all white-space is ignored on either side of the <code>-></code>
 and <code>|</code>.</p>
 <p><code>// Comments of this kind are allowed, too:</code></p>
-<pre class='hljs'><span class="hljs-keyword">var</span> promiseLikeChart = <span class="hljs-string">`
-  pending -&gt; // Where do we go from here?
-    (resolved | rejected) -&gt; // Ah, yes
-
-  // And now we&#x27;re all finished
-  done
-`</span></pre>
 <p>Finally, here's a more full example:</p>
-<pre class='hljs'><span class="hljs-keyword">var</span> dragDropChart = <span class="hljs-string">`
-  idle -&gt;
-    drag-detect -&gt;
-      (dragging | clicked)
-
-  // Just a click, bail-out!
-  clicked -&gt; idle
-
-  // Drag detected!
-  dragging -&gt;
-    drag-wait -&gt; dragged -&gt; drag-wait
-
-  // Drag finished...
-  (drag-wait | dragged) -&gt;
-    (drag-done | drag-cancel) -&gt;
-      idle
-`</span></pre>
 
 	
 	<p>
@@ -1304,7 +1222,7 @@ and <code>|</code>.</p>
 		<a class='black' href='#statebotfsmcantransitionto'>
 			<code>
 				canTransitionTo
-				<span class='gray'>(states)</span>
+				<span class='gray'>(states, options?)</span>
 			</code>
 		</a>
 	</h3>
@@ -1313,6 +1231,7 @@ and <code>|</code>.</p>
 the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 <p>If more than one state is specified, <code>true</code> is returned only if
 <strong>ALL</strong> states are available.</p>
+<p>See also: <a href="#statebotfsmpeek">.peek()</a>.</p>
 
 	
 
@@ -1339,6 +1258,38 @@ the <a href="#statebotfsmcurrentstate">.currentState()</a>.</p>
 			</td>
 			<td class='col-6'></td>
 		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>options</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+  <td class='col-2 strong'>options.afterEmitting</td>
+  <td class="col-2 quiet">
+    <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+    
+  </td>
+  <td class='col-8'>Since v2.9.0: Can test if a certain state will be entered after
+emitting an event. Use 
+<code>{ afterEmitting: 'eventName' }</code>
+ as the
+second argument. Works only after using
+
+<a href="#statebotfsmperformtransitions">.performTransitions()</a>
+.
+See the updated example below.
+</td>
+</tr>
+
+
+		
 		
 		
 	</table>
@@ -1384,7 +1335,13 @@ machine.canTransitionTo(<span class="hljs-string">&#x27;play&#x27;</span>)
 
 machine.enter(<span class="hljs-string">&#x27;menu&#x27;</span>)
 machine.canTransitionTo([<span class="hljs-string">&#x27;play&#x27;</span>, <span class="hljs-string">&#x27;options&#x27;</span>])
-<span class="hljs-comment">// true</span></code></pre>
+<span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// Since v2.9.0:</span>
+machine.canTransitionTo(<span class="hljs-string">&#x27;play&#x27;</span>, {
+  <span class="hljs-attr">afterEmitting</span>: <span class="hljs-string">&#x27;startGame&#x27;</span>
+})
+<span class="hljs-comment">// false</span></code></pre>
 	
 	
 
@@ -1539,7 +1496,7 @@ for more information.</p>
 <p>Statebot imports <code>EventEmitter</code> from the
 <a href="https://www.npmjs.com/package/events">events</a>
 package for dealing with events in the browser.</p>
-<p>Since Statebot 2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is
+<p>Since v2.6.0 <a href="https://npmjs.com/mitt">mitt</a> is
 used for both the browser and non-browser builds.</p>
 </span>
 	
@@ -1808,7 +1765,7 @@ machine.currentState()
 machine.enter(<span class="hljs-string">&#x27;saving&#x27;</span>)
 <span class="hljs-comment">// false</span>
 
-<span class="hljs-comment">// [dialog]: Invalid transition &quot;idle-&gt;saving&quot;, not switching</span>
+<span class="hljs-comment">// Statebot[dialog]: Invalid transition &quot;idle-&gt;saving&quot;, not switching</span>
 <span class="hljs-comment">// &gt; Previous transition: &quot;[undefined]-&gt;idle&quot;</span>
 <span class="hljs-comment">// &gt; From &quot;idle&quot;, valid states are: [&quot;showing-modal&quot;]</span>
 
@@ -3534,6 +3491,153 @@ the machine is <a href="#statebotfsmresume">.resume()</a>'d.</p>
 
 	
 
+	
+
+	
+
+	
+
+	
+
+	
+</section>
+
+  
+    <section id='statebotfsmpeek'class='mt2 mb2 px3 py1 keyline-top'>
+
+	<div class='right py2'>
+		
+		
+	</div>
+
+	<h3 class='regular'>
+		<a class='black' href='#statebotfsmpeek'>
+			<code>
+				peek
+				<span class='gray'>(eventName, stateObject?)</span>
+			</code>
+		</a>
+	</h3>
+
+	<p>Since v2.9.0: Return the state the machine will be in after
+<a href="#statebotfsmemit">.emit()</a>'ing the specified event.</p>
+<p>Works only after using
+<a href="#statebotfsmperformtransitions">.performTransitions()</a>.</p>
+<p>See also: <a href="#statebotfsmcantransitionto">.canTransitionTo(state, .afterEmitting )</a>.</p>
+
+	
+
+	
+	
+	
+	
+	
+	
+
+	
+	<table class='table-light mt3 rounded keyline-all keyline-light overflow-hidden bg-cloudy-light'>
+		<thead class='fill-light'>
+		<th class='col-3 small caps quiet'>parameter</th>
+		<th class='col-3 small caps quiet'>type</th>
+		<th class='col-6 small caps quiet'>description</th>
+		</thead>
+		
+		<tr>
+			<td class='col-3 strong'><code>eventName</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+				
+			</td>
+			<td class='col-6'></td>
+		</tr>
+		
+		
+		<tr>
+			<td class='col-3 strong'><code>stateObject</code></td>
+			<td class='col-3 quiet'>
+				<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
+				
+			</td>
+			<td class='col-6'>If 
+<code>stateObject</code>
+ is undefined, 
+<code>.peek()</code>
+ defaults to returning
+
+<a href="#statebotfsmcurrentstate">.currentState()</a>
+
+if the event will 
+<em>NOT</em>
+ trigger a transition. Otherwise,
+
+<code>stateObject</code>
+ will be used as a key/value lookup, with 
+<code>key</code>
+
+being the predicted state, and 
+<code>value</code>
+ being the corresponding
+literal or function to be run and its value returned.
+</td>
+		</tr>
+		
+		
+	</table>
+	
+
+	
+
+	
+	
+	<h4 class='caps quiet mb1 mt3'>Returns</h4>
+	<code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null | any)</code>
+	:
+	<span class='force-inline'></span>
+	
+	
+	
+
+	
+
+	
+	<h4 class='caps quiet mb1 mt3'>Examples</h4>
+	
+	
+	<pre class='p1 overflow-auto round fill-light'><code><span class="hljs-keyword">var</span> machine = Statebot(<span class="hljs-string">&#x27;peek-a-boo&#x27;</span>, {
+  <span class="hljs-attr">chart</span>: <span class="hljs-string">`
+    idle -&gt; running
+  `</span>
+})
+
+machine.performTransitions({
+  <span class="hljs-string">&#x27;idle -&gt; running&#x27;</span>: {
+    <span class="hljs-attr">on</span>: <span class="hljs-string">&#x27;start&#x27;</span>
+  }
+})
+
+machine.peek(<span class="hljs-string">&#x27;start&#x27;</span>)
+<span class="hljs-comment">// &quot;running&quot;</span>
+
+machine.peek(<span class="hljs-string">&#x27;start&#x27;</span>, {
+  <span class="hljs-string">&#x27;running&#x27;</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;will be in the running state&#x27;</span>
+})
+<span class="hljs-comment">// &quot;will be in the running state&quot;</span>
+
+machine.peek(<span class="hljs-string">&#x27;unknown&#x27;</span>)
+<span class="hljs-comment">// &quot;idle&quot;</span>
+<span class="hljs-comment">// Logs: Statebot[peek-a-boo]: Event not handled: &quot;unknown&quot;</span>
+
+machine.peek(<span class="hljs-string">&#x27;unknown&#x27;</span>, {
+  <span class="hljs-string">&#x27;running&#x27;</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;will be in the running state&#x27;</span>
+})
+<span class="hljs-comment">// null</span>
+<span class="hljs-comment">// Logs: Statebot[peek-a-boo]: Event not handled: &quot;unknown&quot;</span>
+
+machine.emit(<span class="hljs-string">&#x27;start&#x27;</span>)
+machine.peek(<span class="hljs-string">&#x27;start&#x27;</span>)
+<span class="hljs-comment">// &quot;running&quot;</span>
+<span class="hljs-comment">// Logs: Statebot[peek-a-boo]: Will not transition after emitting: &quot;start&quot;</span></code></pre>
+	
 	
 
 	

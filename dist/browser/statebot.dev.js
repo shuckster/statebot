@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.9.0
+ * v2.9.1
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -1182,7 +1182,7 @@ var statebot = (function (exports) {
       var toState = statesFromEvent[0];
 
       if (isUndefined(stateObject)) {
-        return toState !== null && toState !== void 0 ? toState : currentState();
+        return isUndefined(toState) ? currentState() : toState;
       }
 
       var err2 = argTypeError({

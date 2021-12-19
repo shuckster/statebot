@@ -173,6 +173,7 @@ import {
 
 import {
   isArray,
+  isNumber,
   isEventEmitter,
   isFunction,
   isPojo,
@@ -1999,6 +2000,6 @@ function expandTransitions (configs, canWarn) {
 function isStatebot (object) {
   return (
     isPojo(object) &&
-    typeof object.__STATEBOT__ === 'number'
+    isNumber(object.__STATEBOT__)
   )
 }

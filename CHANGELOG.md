@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.2] - 2021-12-20
+### Fixed
+- Fix WebPack error: "Default condition should be last one"
+
 ## [2.9.1] - 2021-12-18
 ### Fixed
 - Replace nullish coalescing `??` with ternary to fix Bundlephobia error.

@@ -16,10 +16,10 @@
   "main": "index.js",
   "module": "dist/esm/statebot.js",
   "exports": {
-    "default": "./index.js",
     "import": "./dist/esm/statebot.js",
     "browser": "./dist/browser/statebot.dev.js",
-    "require": "./index.js"
+    "require": "./index.js",
+    "default": "./index.js"
   },
   "files": [
     "dist/**/*.js",

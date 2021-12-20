@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.9.1
+ * v2.9.2
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -50,6 +50,10 @@ function isNull(obj) {
   return obj === null
 }
 isNull.displayName = 'isNull';
+function isNumber(obj) {
+  return typeof obj === 'number'
+}
+isNumber.displayName = 'isNumber';
 function isObject(obj) {
   return typeof obj === 'object' && !isNull(obj)
 }
@@ -251,7 +255,7 @@ function Pausables (startPaused, runFnWhenPaused) {
     resume: () => { paused = false; },
   }
 }
-function ReferenceCounter (name, kind, description, ...expecting) {
+function ReferenceCounter (logPrefix, kind, description, ...expecting) {
   const _refs = [...expecting]
     .flat()
     .reduce((acc, ref) => ({ ...acc, [ref]: 0 }), {});
@@ -281,7 +285,7 @@ function ReferenceCounter (name, kind, description, ...expecting) {
   }
   function toValue () {
     return {
-      description: `Statebot[${name}]: ${description}:`,
+      description: `${logPrefix}: ${description}:`,
       table: table()
     }
   }
@@ -692,19 +696,19 @@ function Statebot (name, options) {
     return () => internalEvents.off(eventName, cb)
   }
   const statesHandled = ReferenceCounter(
-    name,
+    logPrefix,
     'states',
     'Listening for the following state-changes',
     [...states]
   );
   const routesHandled = ReferenceCounter(
-    name,
+    logPrefix,
     'transitions',
     'Listening for the following transitions',
     [...routes]
   );
   const eventsHandled = ReferenceCounter(
-    name,
+    logPrefix,
     'events',
     'Listening for the following events'
   );
@@ -715,7 +719,7 @@ function Statebot (name, options) {
         : isPojo(hitcher) ? hitcher : null;
     if (!isPojo(hitcherActions)) {
       throw new TypeError(
-        `Statebot[${name}]#${fnName}(): Expected an object, or a function that returns an object`
+        `${logPrefix}#${fnName}(): Expected an object, or a function that returns an object`
       )
     }
     const allStates = [];
@@ -741,13 +745,13 @@ function Statebot (name, options) {
       const invalidRoutes = allRoutes.filter(route => !routes.includes(route));
       if (invalidStates.length) {
         _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid states specified:\n` +
+          `${logPrefix}#${fnName}(): Invalid states specified:\n` +
           invalidStates.map(state => `  > "${state}"`).join('\n')
         );
       }
       if (invalidRoutes.length) {
         _console.warn(
-          `Statebot[${name}]#${fnName}(): Invalid transitions specified:\n` +
+          `${logPrefix}#${fnName}(): Invalid transitions specified:\n` +
           invalidRoutes.map(route => `  > "${route}"`).join('\n')
         );
       }
@@ -2285,7 +2289,7 @@ function expandTransitions (configs, canWarn) {
 function isStatebot (object) {
   return (
     isPojo(object) &&
-    typeof object.__STATEBOT__ === 'number'
+    isNumber(object.__STATEBOT__)
   )
 }
 

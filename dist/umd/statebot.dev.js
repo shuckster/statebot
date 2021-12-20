@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v2.9.1
+ * v2.9.2
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -210,6 +210,12 @@
   }
 
   isNull.displayName = 'isNull';
+
+  function isNumber(obj) {
+    return typeof obj === 'number';
+  }
+
+  isNumber.displayName = 'isNumber';
 
   function isObject(obj) {
     return _typeof(obj) === 'object' && !isNull(obj);
@@ -480,7 +486,7 @@
     };
   }
 
-  function ReferenceCounter(name, kind, description) {
+  function ReferenceCounter(logPrefix, kind, description) {
     for (var _len4 = arguments.length, expecting = new Array(_len4 > 3 ? _len4 - 3 : 0), _key4 = 3; _key4 < _len4; _key4++) {
       expecting[_key4 - 3] = arguments[_key4];
     }
@@ -525,7 +531,7 @@
 
     function toValue() {
       return {
-        description: "Statebot[".concat(name, "]: ").concat(description, ":"),
+        description: "".concat(logPrefix, ": ").concat(description, ":"),
         table: table()
       };
     }
@@ -1009,9 +1015,9 @@
       };
     }
 
-    var statesHandled = ReferenceCounter(_name, 'states', 'Listening for the following state-changes', _toConsumableArray(states));
-    var routesHandled = ReferenceCounter(_name, 'transitions', 'Listening for the following transitions', _toConsumableArray(routes));
-    var eventsHandled = ReferenceCounter(_name, 'events', 'Listening for the following events');
+    var statesHandled = ReferenceCounter(logPrefix, 'states', 'Listening for the following state-changes', _toConsumableArray(states));
+    var routesHandled = ReferenceCounter(logPrefix, 'transitions', 'Listening for the following transitions', _toConsumableArray(routes));
+    var eventsHandled = ReferenceCounter(logPrefix, 'events', 'Listening for the following events');
 
     function applyHitcher(hitcher, fnName) {
       var hitcherActions = isFunction(hitcher) ? hitcher({
@@ -1022,7 +1028,7 @@
       }) : isPojo(hitcher) ? hitcher : null;
 
       if (!isPojo(hitcherActions)) {
-        throw new TypeError("Statebot[".concat(_name, "]#").concat(fnName, "(): Expected an object, or a function that returns an object"));
+        throw new TypeError("".concat(logPrefix, "#").concat(fnName, "(): Expected an object, or a function that returns an object"));
       }
 
       var allStates = [];
@@ -1047,13 +1053,13 @@
         });
 
         if (invalidStates.length) {
-          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid states specified:\n") + invalidStates.map(function (state) {
+          _console.warn("".concat(logPrefix, "#").concat(fnName, "(): Invalid states specified:\n") + invalidStates.map(function (state) {
             return "  > \"".concat(state, "\"");
           }).join('\n'));
         }
 
         if (invalidRoutes.length) {
-          _console.warn("Statebot[".concat(_name, "]#").concat(fnName, "(): Invalid transitions specified:\n") + invalidRoutes.map(function (route) {
+          _console.warn("".concat(logPrefix, "#").concat(fnName, "(): Invalid transitions specified:\n") + invalidRoutes.map(function (route) {
             return "  > \"".concat(route, "\"");
           }).join('\n'));
         }
@@ -2833,7 +2839,7 @@
 
 
   function isStatebot(object) {
-    return isPojo(object) && typeof object.__STATEBOT__ === 'number';
+    return isPojo(object) && isNumber(object.__STATEBOT__);
   }
 
   var argTypeError = ArgTypeError('statebot.');

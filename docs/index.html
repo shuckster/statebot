@@ -368,11 +368,60 @@ is <a href="../LICENSE">MIT licensed</a>.</p>
 <h3>Jump right in</h3>
 <p>Play around with an example that uses React in <a href="https://codesandbox.io/s/statebot-react-ot3xe?file=/src/Loader.js">this CodeSandbox</a>.</p>
 <p>You can install Statebot into your <code>npm</code> project:</p>
+<pre><code>npm i statebot
+</code></pre>
+<pre><code>import statebot from 'statebot'
+</code></pre>
 <p>Or non-<code>npm</code> project:</p>
+<pre><code>&#x3C;script src="https://unpkg.com/statebot@2.9.2/dist/browser/statebot.min.js">&#x3C;/script>
+</code></pre>
+<pre><code>const { Statebot } = statebot
+// Make machines with Statebot()
+
+const { isStatebot, routeIsPossible, assertRoute } = statebot
+// These are assertion helpers you can use for testing
+</code></pre>
 <h3>Open the developer-console :)</h3>
 <p>I've included Statebot in this page. Open the developer-console to
 follow along with the examples below:</p>
+<pre><code>var machine = Statebot('promise-like', {
+  chart: `
+    // This one will behave a bit like a Promise
+    idle -> pending ->
+      resolved | rejected
+
+    // ...and we're done
+    resolved -> done
+    rejected -> done
+  `,
+  startIn: 'idle'
+})
+
+machine.canTransitionTo('pending')
+// true
+
+machine.enter('pending')
+machine.statesAvailableFromHere()
+// ["resolved", "rejected"]
+</code></pre>
 <p>We can hook-up events with <a href="#statebotfsmperformtransitions">.performTransitions()</a>:</p>
+<pre><code>machine.performTransitions({
+ 'pending -> resolved': {
+   on: 'data-loaded'
+ },
+ 'pending -> rejected': {
+   on: ['timeout', 'data-error'],
+   then: (msg) => {
+     console.warn('Uh oh...', msg)
+   }
+ },
+ 'resolved | rejected -> done': {
+   on: 'thats-all-folks'
+ }
+})
+
+machine.emit('data-error', 'Did you hear that?')
+</code></pre>
 <p>Here's the API:</p>
 <table>
 <thead>

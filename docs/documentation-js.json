@@ -280,13 +280,13 @@
         },
         {
           "type": "code",
-          "lang": "sh",
+          "lang": null,
           "meta": null,
           "value": "npm i statebot"
         },
         {
           "type": "code",
-          "lang": "js",
+          "lang": null,
           "meta": null,
           "value": "import statebot from 'statebot'"
         },
@@ -309,13 +309,13 @@
         },
         {
           "type": "code",
-          "lang": "js",
+          "lang": null,
           "meta": null,
           "value": "<script src=\"https://unpkg.com/statebot@2.9.2/dist/browser/statebot.min.js\"></script>"
         },
         {
           "type": "code",
-          "lang": "js",
+          "lang": null,
           "meta": null,
           "value": "const { Statebot } = statebot\n// Make machines with Statebot()\n\nconst { isStatebot, routeIsPossible, assertRoute } = statebot\n// These are assertion helpers you can use for testing"
         },
@@ -340,7 +340,7 @@
         },
         {
           "type": "code",
-          "lang": "js",
+          "lang": null,
           "meta": null,
           "value": "var machine = Statebot('promise-like', {\n  chart: `\n    // This one will behave a bit like a Promise\n    idle -> pending ->\n      resolved | rejected\n\n    // ...and we're done\n    resolved -> done\n    rejected -> done\n  `,\n  startIn: 'idle'\n})\n\nmachine.canTransitionTo('pending')\n// true\n\nmachine.enter('pending')\nmachine.statesAvailableFromHere()\n// [\"resolved\", \"rejected\"]"
         },
@@ -371,7 +371,7 @@
         },
         {
           "type": "code",
-          "lang": "js",
+          "lang": null,
           "meta": null,
           "value": "machine.performTransitions({\n 'pending -> resolved': {\n   on: 'data-loaded'\n },\n 'pending -> rejected': {\n   on: ['timeout', 'data-error'],\n   then: (msg) => {\n     console.warn('Uh oh...', msg)\n   }\n },\n 'resolved | rejected -> done': {\n   on: 'thats-all-folks'\n }\n})\n\nmachine.emit('data-error', 'Did you hear that?')"
         },

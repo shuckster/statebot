@@ -30,21 +30,21 @@ import { decomposeChart } from './parsing'
  *
  * You can install Statebot into your `npm` project:
  *
- * ```sh
+ * ```
  * npm i statebot
  * ```
  *
- * ```js
+ * ```
  * import statebot from 'statebot'
  * ```
  *
  * Or non-`npm` project:
  *
- * ```js
+ * ```
  * <script src="https://unpkg.com/statebot@2.9.2/dist/browser/statebot.min.js"></script>
  * ```
  *
- * ```js
+ * ```
  * const { Statebot } = statebot
  * // Make machines with Statebot()
  *
@@ -57,7 +57,7 @@ import { decomposeChart } from './parsing'
  * I've included Statebot in this page. Open the developer-console to
  * follow along with the examples below:
  *
- * ```js
+ * ```
  * var machine = Statebot('promise-like', {
  *   chart: `
  *     // This one will behave a bit like a Promise
@@ -81,7 +81,7 @@ import { decomposeChart } from './parsing'
  *
  * We can hook-up events with {@link #statebotfsmperformtransitions .performTransitions()}:
  *
- * ```js
+ * ```
  * machine.performTransitions({
  *  'pending -> resolved': {
  *    on: 'data-loaded'

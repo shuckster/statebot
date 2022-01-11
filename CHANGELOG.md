@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.3] - 2022-01-11
+### Fixed
+- Fix esbuild error by re-ordering package.json exports
+
 ## [2.9.2] - 2021-12-20
 ### Fixed
 - Fix WebPack error: "Default condition should be last one"

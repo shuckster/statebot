@@ -1098,7 +1098,7 @@
         {
           "type": "code",
           "lang": "html",
-          "value": "<script src=\"https://unpkg.com/statebot@2.9.2/dist/browser/statebot.min.js\"></script>",
+          "value": "<script src=\"https://unpkg.com/statebot@2.9.3/dist/browser/statebot.min.js\"></script>",
           "position": {
             "start": {
               "line": 31,

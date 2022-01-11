@@ -39,7 +39,7 @@ import { decomposeChart } from './parsing'
  * Or non-`npm` project:
  *
  * ```html
- * <script src="https://unpkg.com/statebot@2.9.2/dist/browser/statebot.min.js"></script>
+ * <script src="https://unpkg.com/statebot@2.9.3/dist/browser/statebot.min.js"></script>
  * ```
  *
  * ```js

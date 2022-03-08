@@ -1,6 +1,6 @@
 declare module "statebot" {
     /**
-     * {@link #statebotassertroute|assertRoute()} options.
+     * {@link  #statebotassertroute|assertRoute()} options.
      */
     export type assertRouteOptions = {
         /**
@@ -28,7 +28,7 @@ declare module "statebot" {
         timeoutInMs?: number;
         /**
          * Normally we want logs for assertions, right? Well, you can tune
-         * them just like you can with {@link #statebotoptions|statebotOptions}.
+         * them just like you can with {@link  #statebotoptions|statebotOptions}.
          */
         logLevel?: number;
     };
@@ -57,7 +57,7 @@ declare module "statebot" {
         logLevel?: number;
         /**
          * Limit how much history the state-machine keeps. Accessed via
-         * {@link #statebotfsmhistory|statebotFsm#history()}.
+         * {@link  #statebotfsmhistory|statebotFsm#history()}.
          */
         historyLimit?: number;
         /**
@@ -65,10 +65,10 @@ declare module "statebot" {
          * a shared EventEmitter, you can pass it in here. The `emit()`/`onEvent()`/
          * `performTransitions()` methods will use it.
          *
-         * It should have the same signature as {@link https ://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
+         * It should have the same signature as {@link https://nodejs.org/api/events.html#events_class_eventemitter|EventEmitter}.
          *
-         * - Since v2.5.0 {@link https ://npmjs.com/mitt|mitt} is also compatible.
-         * - Since v2.6.0 {@link https ://npmjs.com/mitt|mitt} is used internally.
+         * - Since v2.5.0 {@link https://npmjs.com/mitt|mitt} is also compatible.
+         * - Since v2.6.0 {@link https://npmjs.com/mitt|mitt} is used internally.
          */
         events?: events;
     };
@@ -77,7 +77,7 @@ declare module "statebot" {
      * permitted transitions between them.
      *
      * This is defined using a `string` or an `array` of strings, but
-     *  {@link https ://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
+     *  {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals|Template Literals}
      * are much more convenient.
      *
      * An arrow `->` configures a **permitted transition** between two states:

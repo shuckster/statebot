@@ -1,6 +1,6 @@
-<p align="center">
+<h1 align="center">
   <img src="./docs/logo-full.png" width="255" alt="Statebot" />
-</p>
+</h1>
 
 <p align="center">
   <a href="https://github.com/shuckster/statebot/blob/master/LICENSE">
@@ -19,8 +19,6 @@
       src="https://img.shields.io/npm/v/statebot?style=plastic"
     /></a>
 </p>
-
-Write more robust and understandable programs:
 
 Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible by focussing on their organisational benefits in a simplified way:
 

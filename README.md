@@ -1,8 +1,8 @@
-# Statebot
+<p align="center">
+  <img src="./docs/logo-full.png" width="255" alt="Statebot" />
+</p>
 
-<img src="./docs/logo-full.png" width="255" />
-
-<p>
+<p align="center">
   <a href="https://github.com/shuckster/statebot/blob/master/LICENSE">
     <img
       alt="MIT license"

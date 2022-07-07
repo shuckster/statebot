@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2022-07-07
+
+### BREAKING CHANGES
+
+Imports updated:
+
+- `routeIsPossible` / `assertRoute` now come from 'statebot/assert'
+- React/Mithril Hooks can be imported from 'statebot/hooks/react' and 'statebot/hooks/mithril'. There are no longer separate packages for these.
+
+### Updated
+
+- Documentation now built with Typedoc
+- Typedefs are now manually updated instead of generated from jsdoc
+
 ## [2.9.3] - 2022-01-11
 ### Fixed
 - Fix esbuild error by re-ordering package.json exports

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "./index.d.ts",
+      "./assert/index.d.ts",
+      "./hooks/react/index.d.ts",
+      "./hooks/mithril/index.d.ts"
+    ],
+    "out": "docs"
+  }
+}

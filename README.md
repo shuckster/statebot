@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./docs/logo-full.png" width="255" alt="Statebot" />
+  statebot 🤖
 </h1>
 
 <p align="center">
@@ -20,7 +20,7 @@
     /></a>
 </p>
 
-Statebot hopes to make [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) a little more accessible by focussing on their organisational benefits in a simplified way:
+Describe the states and allowed transitions of a program using a flowchart-like syntax. Switch to states directly, or by wiring-up events. Statebot is an [FSM](https://en.wikipedia.org/wiki/Finite-state_machine).
 
 ```js
 import { Statebot } from 'statebot'
@@ -468,7 +468,7 @@ const machine = Statebot('example', {
 `assertRoute` can be used to test if an FSM traced a particular route:
 
 ```js
-const { assertRoute } = require('statebot')
+const { assertRoute } = require('statebot/assert')
 
 assertRoute(
   machine, 'pending -> resolved -> done',
@@ -507,7 +507,7 @@ The method itself produces output using `console.table`:
 You can also check if a certain route can be followed with `routeIsPossible`:
 
 ```js
-const { routeIsPossible } = require('statebot')
+const { routeIsPossible } = require('statebot/assert')
 
 routeIsPossible(machine, 'pending -> resolved -> pending')
 // false
@@ -698,7 +698,7 @@ Of course, bug-fixes, forks, and integrations are very welcome! If you feel it h
 
 ## Credits
 
-With thanks to @szabeszg for the suggestion and [discussion](https://github.com/shuckster/statebot/discussions/2) around:
+With thanks to \@szabeszg for the suggestion and [discussion](https://github.com/shuckster/statebot/discussions/2) around:
 
 - `nextState = peek(eventName)`
 - `canTransitionTo(state, { afterEmitting: event })`
@@ -715,8 +715,6 @@ Statebot integrates [events](https://www.npmjs.com/package/events) for the brows
 The Statebot logo uses the "You're Gone" font from [Typodermic Fonts](https://typodermicfonts.com/youre-gone/). The logo was made with [Acorn](https://flyingmeat.com/acorn/). The documentation is written in [JSDoc](https://jsdoc.app/) and is built with [documentation.js](http://documentation.js.org/).
 
 Statebot was written by [Conan Theobald](https://github.com/shuckster/).
-
-<img src="./docs/logo-small.png" width="75" />
 
 ## License
 

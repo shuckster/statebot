@@ -51,6 +51,7 @@
     "build:browser": "rollup --config ./build-config/rollup.config.browser.js",
     "build:node": "rollup --config ./build-config/rollup.config.node.js",
     "build:esm": "rollup --config ./build-config/rollup.config.esm.js",
+    "build:assert": "rollup --config ./build-config/rollup.config.assert.js",
     "build:docs": "typedoc"
   },
   "devDependencies": {

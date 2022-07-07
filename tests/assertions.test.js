@@ -1,6 +1,6 @@
 
 const { Statebot } = require('../src/statebot')
-const { routeIsPossible } = require('../src/assertions')
+const { routeIsPossible } = require('../assert')
 
 const bot = Statebot('chart-with-backtracking', {
   chart: `

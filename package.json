@@ -1,7 +1,7 @@
 {
   "name": "statebot",
   "description": "Write more robust and understandable programs.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "Conan Theobald",
   "license": "MIT",
   "keywords": [

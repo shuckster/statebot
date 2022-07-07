@@ -1,6 +1,6 @@
 {
   "name": "statebot",
-  "description": "Write more robust and understandable programs.",
+  "description": "Describe the states and allowed transitions of a program using a flowchart-like syntax. Switch to states directly, or by wiring-up events. Statebot is an FSM.",
   "version": "3.0.1",
   "author": "Conan Theobald",
   "license": "MIT",

@@ -22,17 +22,19 @@
       "default": "./dist/cjs/statebot.dev.js"
     },
     "./assert": {
-      "types": "./index.d.ts",
+      "types": "./assert/index.d.ts",
       "import": "./assert/index.js",
       "require": "./assert/index.cjs",
       "default": "./assert/index.cjs"
     },
     "./hooks/react": {
+      "types": "./hooks/react/index.d.ts",
       "import": "./hooks/react/index.js",
       "require": "./hooks/react/index.js",
       "default": "./hooks/react/index.js"
     },
     "./hooks/mithril": {
+      "types": "./hooks/mithril/index.d.ts",
       "import": "./hooks/mithril/index.js",
       "require": "./hooks/mithril/index.js",
       "default": "./hooks/mithril/index.js"

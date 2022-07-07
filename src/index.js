@@ -4,7 +4,6 @@
 //
 
 import { Statebot, isStatebot } from './statebot'
-import { assertRoute, routeIsPossible } from './assertions'
 import { decomposeChart } from './parsing'
 
 /**
@@ -116,7 +115,5 @@ import { decomposeChart } from './parsing'
 export {
   Statebot,
   isStatebot,
-  routeIsPossible,
-  assertRoute,
   decomposeChart
 }

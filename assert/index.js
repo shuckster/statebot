@@ -8,47 +8,17 @@ export {
   assertRoute
 }
 
-import { isStatebot } from './statebot'
-import { decomposeRoute } from './parsing'
-import { isTemplateLiteral, ArgTypeError } from './types'
+import { isStatebot } from '../src/statebot'
+import { decomposeRoute } from '../src/parsing'
+import { isTemplateLiteral, ArgTypeError } from '../src/types'
 import {
   Defer,
   Once,
   Revokable,
   Logger,
-} from './utils'
+} from '../src/utils'
 
 const argTypeError = ArgTypeError('statebot.')
-
-/**
- * Assert that a certain route can be followed by a
- * {@link #statebotfsm|statebotFsm}.
- *
- * This merely tests that a certain path can be taken through a
- * state-machine. It doesn't assert that the states are moved-through
- * while the machine is working, as with
- * {@link #statebotassertroute|assertRoute()}.
- *
- * @memberof statebot
- * @function
- * @param {statebotFsm} machine
- *  The machine to test the route on.
- * @param {string|string[]} route
- *  The route to test as an arrow-delimited string:
- *
- *  `
- *  "idle -> pending -> success -> done"
- *  `
- * @returns {boolean}
- *
- * @example
- * var machine = Statebot(...)
- *
- * routeIsPossible(machine,
- *   'walking -> falling -> splatting -> walking'
- * )
- * // false
- */
 
 function routeIsPossible (machine, route) {
   const err = argTypeError(
@@ -72,68 +42,6 @@ function routeIsPossible (machine, route) {
 }
 
 let assertionId = 0
-
-/**
- * {@link #statebotassertroute|assertRoute()} options.
- * @typedef {Object} assertRouteOptions
- * @property {string} [description]
- *  Describe the success-condition for this assertion.
- * @property {string} [fromState=""]
- *  Wait for the machine to be in this state before assertion begins.
- * @property {function} [run]
- *  Run this function just before starting the assertion.
- * @property {number} [permittedDeviations=0]
- *  If we hit an unexpected state during assertion, this is a "deviation".
- *  It might be that the FSM will come back to the expected state again
- *  after a certain number of these. For example, if your FSM has a
- *  "retry" route configured, this number can account for it.
- * @property {number} [timeoutInMs=1000]
- *  Permitted length of time for the entire assertion, in milliseconds.
- * @property {number} [logLevel=3]
- *  Normally we want logs for assertions, right? Well, you can tune
- *  them just like you can with {@link #statebotoptions|statebotOptions}.
- */
-
-/**
- * Assert that a {@link #statebotfsm|statebotFsm} traced the route specified.
- *
- * Whereas {@link #statebotrouteispossible|routeIsPossible()} only checks
- * that a particular route can be followed, `assertRoute` will hook-into
- * a machine and wait for it to trace the specified path within a
- * timeout period.
- *
- * @memberof statebot
- * @function
- * @async
- * @param {statebotFsm} machine
- *  The machine to run the assertion on.
- * @param {string|string[]} expectedRoute
- *  The expected route as an arrow-delimited string:
- *
- *  `
- *  "idle -> pending -> success -> done"
- *  `
- * @param {assertRouteOptions} [options]
- * @returns {Promise}
- *
- * @example
- * var machine = Statebot(...)
- *
- * assertRoute(
- *   machine, 'prepare -> debounce -> sending -> done -> idle',
- *   {
- *     description: 'Email sent with no issues',
- *     fromState: 'idle',
- *     timeoutInMs: 1000 * 20,
- *     permittedDeviations: 0,
- *     logLevel: 3
- *   }
- * )
- * .then(() => console.log('Assertion passed!'))
- * .catch(err => console.error(`Whoops: ${err}`))
- *
- * machine.enter('idle')
- */
 
 function assertRoute (machine, expectedRoute, options) {
   const err = argTypeError(

@@ -43,7 +43,7 @@
     "email": "bugs+statebot@conans.co.uk"
   },
   "scripts": {
-    "lint": "pnpx eslint src/*.js tests/*.js",
+    "lint": "eslint src/*.js tests/*.js",
     "test": "jest --bail",
     "test:watch": "jest --watchAll",
     "build:all": "concurrently \"pnpm run build:browser\" \"pnpm run build:node\" \"pnpm run build:esm\" \"pnpm run build:assert\" \"pnpm run build:docs\"",

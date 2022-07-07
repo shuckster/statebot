@@ -42,30 +42,6 @@ function decomposeRoute (templateLiteral) {
   return route
 }
 
-/**
- * Decompose a {@link statebotChart} into an object of `states`, `routes`,
- * and `transitions`.
- *
- * Statebot() uses this internally to parse charts. Exposed for debugging.
- *
- * @memberof statebot
- * @function
- * @param {statebotChart} chart
- * @returns {Object}
- *
- * @example
- * var { states, routes, transitions } = decomposeChart`
- *   pending ->
- *     success | failure
- * `
- * // states = ['pending', 'success', 'failure']
- * // routes = [ 'pending->success', 'pending->failure']
- * // transitions = [
- * //   ['pending', 'success'],
- * //   ['pending', 'failure']
- * // ]
- */
-
 function decomposeChart (chart) {
   const err = argTypeError(
     { chart: isTemplateLiteral }

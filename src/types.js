@@ -211,26 +211,6 @@ const typeErrorStringFromArgument = argMap => (arg, index) => {
   }
 }
 
-/**
- * Helper for enforcing correct argument-types.
- *
- * @private
- * @param {string} namespace
- *
- * @example
- * const argTypeError = ArgTypeError('namespace#')
- *
- * function myFn (myArg1, myArg2) {
- *   const err = argTypeError({
- *     myArg1: isString,
- *     myArg2: isBoolean
- *   })('myFn')(myArg1, myArg2)
- *   if (err) {
- *     throw new TypeError(err)
- *   }
- * }
- */
-
 function ArgTypeError(namespace) {
   return typeMap => {
     const argMap = Object.entries(typeMap).map(([argName, argType]) => ({

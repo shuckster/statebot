@@ -1,7 +1,7 @@
 {
   "name": "statebot",
   "description": "Write more robust and understandable programs.",
-  "version": "2.9.3",
+  "version": "3.0.0",
   "author": "Conan Theobald",
   "license": "MIT",
   "keywords": [
@@ -39,14 +39,12 @@
     }
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.map",
-    "assert/**/*.js",
-    "hooks/**/*.js",
+    "dist/**/*",
+    "assert/**/*",
+    "hooks/**/*",
     "CHANGELOG.md",
     "README.md",
     "LICENSE",
-    "index.js",
     "index.d.ts"
   ],
   "engines": {

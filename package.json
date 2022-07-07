@@ -39,9 +39,9 @@
     }
   },
   "files": [
-    "dist/**/*",
-    "assert/**/*",
-    "hooks/**/*",
+    "dist",
+    "assert",
+    "hooks",
     "CHANGELOG.md",
     "README.md",
     "LICENSE",

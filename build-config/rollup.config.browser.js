@@ -12,7 +12,7 @@ import { banner, terserConfig } from './rollup.common.js'
 const eslintComment = '/* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */'
 
 export default {
-  input: 'src/index.js',
+  input: 'src/browser.js',
   output: [
     {
       file: 'dist/browser/statebot.dev.js',

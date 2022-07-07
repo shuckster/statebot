@@ -19,11 +19,5 @@ export default {
       sourcemap: true
     }
   ],
-  plugins: [
-    json(),
-    builtins(),
-    resolve(),
-    commonjs(),
-    cleanup({ comments: 'jsdoc' })
-  ]
+  plugins: [json(), builtins(), resolve(), commonjs(), cleanup()]
 }

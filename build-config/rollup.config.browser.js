@@ -9,7 +9,8 @@ import { terser } from 'rollup-plugin-terser'
 import pkg from '../package.json'
 import { banner, terserConfig } from './rollup.common.js'
 
-const eslintComment = '/* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */'
+const eslintComment =
+  '/* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */'
 
 export default {
   input: 'src/browser.js',
@@ -52,7 +53,7 @@ export default {
     builtins(),
     resolve(),
     commonjs(),
-    cleanup({ comments: 'jsdoc' }),
+    cleanup(),
     babel({ babelHelpers: 'bundled' })
   ]
 }

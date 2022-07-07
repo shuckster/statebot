@@ -51,7 +51,6 @@
     "build:browser": "rollup --config ./build-config/rollup.config.browser.js",
     "build:node": "rollup --config ./build-config/rollup.config.node.js",
     "build:esm": "rollup --config ./build-config/rollup.config.esm.js",
-    "build:typedefs-from-esm-build": "pnpx tsc --emitDeclarationOnly --allowJs --declaration --outFile ./index.d.ts ./dist/esm/statebot.js",
     "build:docs:all": "concurrently \"pnpm run build:docs:html\" \"pnpm run build:docs:json\"",
     "build:docs:html": "documentation build ./src/index.js -f html -o ./docs/ --theme node_modules/documentation-theme-light ; ./build-utils/fix-docs.sh",
     "build:docs:json": "documentation build ./src/index.js -f json -o ./docs/documentation-js.json",

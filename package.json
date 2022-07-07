@@ -13,17 +13,36 @@
     "fsm"
   ],
   "types": "index.d.ts",
-  "main": "index.js",
+  "main": "./dist/cjs/statebot.dev.js",
   "module": "dist/esm/statebot.js",
   "exports": {
-    "import": "./dist/esm/statebot.js",
-    "require": "./index.js",
-    "browser": "./dist/browser/statebot.dev.js",
-    "default": "./index.js"
+    ".": {
+      "import": "./dist/esm/statebot.js",
+      "require": "./dist/cjs/statebot.dev.js",
+      "default": "./dist/cjs/statebot.dev.js"
+    },
+    "./assert": {
+      "types": "./index.d.ts",
+      "import": "./assert/index.js",
+      "require": "./assert/index.cjs",
+      "default": "./assert/index.cjs"
+    },
+    "./hooks/react": {
+      "import": "./hooks/react/index.js",
+      "require": "./hooks/react/index.js",
+      "default": "./hooks/react/index.js"
+    },
+    "./hooks/mithril": {
+      "import": "./hooks/mithril/index.js",
+      "require": "./hooks/mithril/index.js",
+      "default": "./hooks/mithril/index.js"
+    }
   },
   "files": [
     "dist/**/*.js",
     "dist/**/*.map",
+    "assert/**/*.js",
+    "hooks/**/*.js",
     "CHANGELOG.md",
     "README.md",
     "LICENSE",

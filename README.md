@@ -71,6 +71,7 @@ setInterval(machine.Emit('timer'), 2000)
 It's less than 6K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
+- [Github Repo](https://github.com/shuckster/statebot)
 
 There are Hooks for these frameworks, too:
 

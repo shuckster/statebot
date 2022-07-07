@@ -712,7 +712,7 @@ Statebot integrates [events](https://www.npmjs.com/package/events) for the brows
 - Since Statebot 2.5.0 [mitt](https://npmjs.com/mitt) is also compatible.
 - Since Statebot 2.6.0 mitt is used internally.
 
-The Statebot logo uses the "You're Gone" font from [Typodermic Fonts](https://typodermicfonts.com/youre-gone/). The logo was made with [Acorn](https://flyingmeat.com/acorn/). The documentation is written in [JSDoc](https://jsdoc.app/) and is built with [documentation.js](http://documentation.js.org/).
+The Statebot logo uses the "You're Gone" font from [Typodermic Fonts](https://typodermicfonts.com/youre-gone/). The logo was made with [Acorn](https://flyingmeat.com/acorn/). The documentation is written in [JSDoc](https://jsdoc.app/) and is built with [Typedoc](https://typedoc.org/).
 
 Statebot was written by [Conan Theobald](https://github.com/shuckster/).
 

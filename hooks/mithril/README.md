@@ -159,7 +159,7 @@ const LoadingButton = withHooks(props => {
 
 ## useStatebotEvent
 
-To hook-into [onEvent](https://shuckster.github.io/statebot/#statebotfsmonevent), [onEntering](https://shuckster.github.io/statebot/#statebotfsmonentering)/[ed](https://shuckster.github.io/statebot/#statebotfsmonentered), [onExiting](https://shuckster.github.io/statebot/#statebotfsmonexiting)/[ed](https://shuckster.github.io/statebot/#statebotfsmonexited), [onSwitching](https://shuckster.github.io/statebot/#statebotfsmonswitching)/[ed](https://shuckster.github.io/statebot/#statebotfsmonswitched) with side-effects cleanup, `useStatebotEvent`:
+To hook-into [onEvent](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onEvent), [onEntering](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onEntering)/[ed](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onEntered), [onExiting](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onExiting)/[ed](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onExited), [onSwitching](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onSwitching)/[ed](https://zansh.in/statebot/interfaces/index.TStatebotFsm.html#onSwitched) with side-effects cleanup, `useStatebotEvent`:
 
 ```jsx
 import m from 'mithril'

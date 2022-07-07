@@ -5,7 +5,7 @@ React Hooks for Statebot.
 - [Statebot](https://github.com/shuckster/statebot) is a Finite State Machine library.
 - [React](https://reactjs.org/) is a JavaScript library for building user interfaces.
 
-For a Mithril version, see: [statebot-mithril-hooks](https://github.com/shuckster/statebot-mithril-hooks)
+For a Mithril version, see: [statebot/hooks/mithril](https://github.com/shuckster/statebot/tree/master/hooks/mithril)
 
 - [Examples](#examples)
   - [useStatebot](#usestatebot)

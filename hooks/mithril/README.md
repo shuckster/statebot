@@ -6,7 +6,7 @@ Mithril Hooks for Statebot.
 - [Mithril](https://mithril.js.org/) is an [SPA](https://en.wikipedia.org/wiki/Single-page_application) framework.
 - [mithril-hooks](https://github.com/ArthurClemens/mithril-hooks) bring React-like Hooks to Mithril.
 
-For React itself, see: [statebot-react-hooks](https://github.com/shuckster/statebot-react-hooks)
+For React itself, see: [statebot/hooks/react](https://github.com/shuckster/statebot/tree/master/hooks/react)
 
 - [Examples](#examples)
   - [useStatebot](#usestatebot)

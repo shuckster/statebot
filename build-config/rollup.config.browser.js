@@ -16,7 +16,7 @@ export default {
   input: 'src/browser.js',
   output: [
     {
-      file: 'dist/browser/statebot.dev.js',
+      file: 'dist/browser/statebot.js',
       banner: banner(pkg, `/* exported statebot */\n${eslintComment}`),
       format: 'iife',
       name: 'statebot',
@@ -32,7 +32,7 @@ export default {
       plugins: [terser(terserConfig)]
     },
     {
-      file: 'dist/umd/statebot.dev.js',
+      file: 'dist/umd/statebot.js',
       banner: banner(pkg, `/* global define, globalThis */\n${eslintComment}`),
       format: 'umd',
       name: 'statebot',

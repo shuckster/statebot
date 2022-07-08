@@ -13,13 +13,13 @@
     "fsm"
   ],
   "types": "index.d.ts",
-  "main": "./dist/cjs/statebot.dev.js",
+  "main": "./dist/cjs/statebot.js",
   "module": "dist/esm/statebot.js",
   "exports": {
     ".": {
       "import": "./dist/esm/statebot.js",
-      "require": "./dist/cjs/statebot.dev.js",
-      "default": "./dist/cjs/statebot.dev.js"
+      "require": "./dist/cjs/statebot.js",
+      "default": "./dist/cjs/statebot.js"
     },
     "./assert": {
       "types": "./assert/index.d.ts",

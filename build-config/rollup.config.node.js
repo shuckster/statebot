@@ -12,7 +12,7 @@ export default {
   external: ['mitt'],
   output: [
     {
-      file: 'dist/cjs/statebot.dev.js',
+      file: 'dist/cjs/statebot.js',
       banner: banner(pkg),
       format: 'cjs',
       sourcemap: true

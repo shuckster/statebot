@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.3] - 2022-07-07
+
+### Updated
+
+- Exclude mitt from cjs/esm build: It's specified as a regular dependency now
+- Remove .dev from build filenames
+- Tweak README as JSDoc lives in index.d.ts now
+
 ## [3.0.2] - 2022-07-07
 
 ### Fixed

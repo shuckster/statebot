@@ -16,6 +16,7 @@ specifiers:
   eslint-plugin-promise: ^6.0.0
   jest: ^28.1.2
   mitt: ^3.0.0
+  rimraf: ^3.0.2
   rollup: ^2.75.7
   rollup-plugin-cleanup: ^3.2.1
   rollup-plugin-node-builtins: ^2.1.2
@@ -41,6 +42,7 @@ devDependencies:
   eslint-plugin-node: 11.1.0_eslint@8.19.0
   eslint-plugin-promise: 6.0.0_eslint@8.19.0
   jest: 28.1.2
+  rimraf: 3.0.2
   rollup: 2.75.7
   rollup-plugin-cleanup: 3.2.1_rollup@2.75.7
   rollup-plugin-node-builtins: 2.1.2

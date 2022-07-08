@@ -5,10 +5,13 @@
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
-/* exported statebot */
+/* global define, globalThis */
 /* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */
-var statebot = (function (exports) {
-  'use strict';
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.statebot = {}));
+})(this, (function (exports) { 'use strict';
 
   function mitt (n) {
     return {
@@ -1708,7 +1711,5 @@ var statebot = (function (exports) {
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-  return exports;
-
-})({});
-//# sourceMappingURL=statebot.dev.js.map
+}));
+//# sourceMappingURL=statebot.js.map

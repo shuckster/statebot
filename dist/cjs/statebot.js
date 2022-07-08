@@ -10,7 +10,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function mitt(n){return {all:n=n||new Map,on:function(t,e){var i=n.get(t);i?i.push(e):n.set(t,[e]);},off:function(t,e){var i=n.get(t);i&&(e?i.splice(i.indexOf(e)>>>0,1):n.set(t,[]));},emit:function(t,e){var i=n.get(t);i&&i.slice().map(function(n){n(e);}),(i=n.get("*"))&&i.slice().map(function(n){n(t,e);});}}}
+var mitt = require('mitt');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var mitt__default = /*#__PURE__*/_interopDefaultLegacy(mitt);
 
 function isEventEmitter(obj) {
   return (
@@ -448,7 +452,7 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {};
   const events = isUndefined(options.events)
-    ? wrapEmitter(mitt())
+    ? wrapEmitter(mitt__default["default"]())
     : isEventEmitter(options.events) && wrapEmitter(options.events);
   if (!events) {
     throw new TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
@@ -470,7 +474,7 @@ function Statebot (name, options) {
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
   const transitionsFromEvents = Definitions();
-  const internalEvents = wrapEmitter(mitt());
+  const internalEvents = wrapEmitter(mitt__default["default"]());
   const emitInternalEvent = Pausable(internalEvents.emit);
   function onInternalEvent (eventName, cb) {
     internalEvents.on(eventName, cb);
@@ -1018,4 +1022,4 @@ function isStatebot (object) {
 exports.Statebot = Statebot;
 exports.decomposeChart = decomposeChart;
 exports.isStatebot = isStatebot;
-//# sourceMappingURL=statebot.dev.js.map
+//# sourceMappingURL=statebot.js.map

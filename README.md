@@ -68,7 +68,7 @@ setInterval(machine.Emit('timer'), 2000)
 
 [CodeSandbox](https://codesandbox.io/s/statebot-traffic-lights-kin5y) of the above example.
 
-It's less than 6K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
+It's less than 5K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 - [Github Repo](https://github.com/shuckster/statebot)

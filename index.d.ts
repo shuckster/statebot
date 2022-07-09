@@ -219,7 +219,7 @@ declare module 'statebot' {
      * // false
      * ```
      */
-    canTransitionTo: (
+    canTransitionTo(
       stateOrStates: string | string[],
       options?: {
         /**
@@ -228,7 +228,7 @@ declare module 'statebot' {
          */
         afterEmitting: string
       }
-    ) => boolean
+    ): boolean
 
     /**
      * Returns the current state.
@@ -248,7 +248,7 @@ declare module 'statebot' {
      * // "suspended"
      * ```
      */
-    currentState: () => string
+    currentState(): string
 
     /**
      * Immediately emits an event, firing any listeners added using
@@ -285,7 +285,7 @@ declare module 'statebot' {
      * // "sending"
      * ```
      */
-    emit: (eventName: string, ...args: any[]) => boolean
+    emit(eventName: string, ...args: any[]): boolean
 
     /**
      * Creates a function that emits the specified event.
@@ -334,10 +334,7 @@ declare module 'statebot' {
      * // "prepare-to-stop"
      * ```
      */
-    Emit: (
-      eventName: string,
-      ...curriedArgs: any[]
-    ) => (...args: any[]) => boolean
+    Emit(eventName: string, ...curriedArgs: any[]): (...args: any[]) => boolean
 
     /**
      * Immediately changes to the specified state, so long as it is
@@ -372,7 +369,7 @@ declare module 'statebot' {
      * // true
      * ```
      */
-    enter: (state: string, ...args: any[]) => boolean
+    enter(state: string, ...args: any[]): boolean
 
     /**
      * Creates a function that changes to the specified state, so long
@@ -408,7 +405,7 @@ declare module 'statebot' {
      * // "item-clicked"
      * ```
      */
-    Enter: (state: string, ...curriedArgs: any[]) => (...args: any[]) => boolean
+    Enter(state: string, ...curriedArgs: any[]): (...args: any[]) => boolean
 
     /**
      * Returns all states the machine has been in so far, up to a limit set
@@ -437,7 +434,7 @@ declare module 'statebot' {
      * // ["failure", "loading", "success", "done"]
      * ```
      */
-    history: () => string[]
+    history(): string[]
 
     /**
      * Print information about the current machine to the console.
@@ -476,7 +473,7 @@ declare module 'statebot' {
      * // (No information)
      * ```
      */
-    info: () => void
+    info(): void
 
     /**
      * Get information about the current machine.
@@ -503,7 +500,7 @@ declare module 'statebot' {
      * // and the value being the number of listeners attached.
      * ```
      */
-    inspect: () => { states: any[]; transitions: any[]; events: any[] }
+    inspect(): { states: any[]; transitions: any[]; events: any[] }
 
     /**
      * Checks if the {@link TStatebotFsm.currentState}
@@ -569,11 +566,9 @@ declare module 'statebot' {
      * //   so no console.log either.
      * ```
      */
-    inState: (
-      state: string | object,
-      outputWhenTrue?: any,
-      ...fnArgs: any[]
-    ) => any
+    inState(state: string): boolean
+    inState(state: string, outputWhenTrue?: any, ...fnArgs: any[]): any
+    inState(state: object): any
 
     /**
      * Returns a function which, when run, tests that
@@ -628,10 +623,9 @@ declare module 'statebot' {
      * //   so no console.log either.
      * ```
      */
-    InState: (
-      state: string | object,
-      outputWhenTrue?: any
-    ) => (...fnArgs: any[]) => any
+    InState(state: string): (...fnArgs: any[]) => boolean
+    InState(state: string, outputWhenTrue?: any): (...fnArgs: any[]) => any
+    InState(state: object): () => any
 
     /**
      * Returns the name of the state-machine.
@@ -656,7 +650,7 @@ declare module 'statebot' {
      * // "Ay, there’s the rub."
      * ```
      */
-    name: () => string
+    name(): string
 
     /**
      * Adds a listener that runs a callback immediately **AFTER** the
@@ -690,10 +684,10 @@ declare module 'statebot' {
      * // Entered from: receiving
      * ```
      */
-    onEntered: (
+    onEntered(
       state: string,
       cb: (fromState?: string, ...args: any[]) => void
-    ) => TListenersRemover
+    ): TListenersRemover
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -735,10 +729,10 @@ declare module 'statebot' {
      * // We made it!
      * ```
      */
-    onEntering: (
+    onEntering(
       state: string,
       cb: (fromState?: string, ...args: any[]) => void
-    ) => TListenersRemover
+    ): TListenersRemover
 
     /**
      * Adds a listener that runs a callback immediately after the specified
@@ -779,10 +773,7 @@ declare module 'statebot' {
      * setInterval(machine.Emit('timer'), 2000)
      * ```
      */
-    onEvent: (
-      eventName: string,
-      cb: (...args: any[]) => void
-    ) => TListenersRemover
+    onEvent(eventName: string, cb: (...args: any[]) => void): TListenersRemover
 
     /**
      * Adds a listener that runs a callback immediately **AFTER** the
@@ -815,10 +806,10 @@ declare module 'statebot' {
      * // We are heading to: sending
      * ```
      */
-    onExited: (
+    onExited(
       state: string,
       cb: (toState?: string, ...args: any[]) => void
-    ) => TListenersRemover
+    ): TListenersRemover
 
     /**
      * Adds a listener that runs a callback immediately **BEFORE** the
@@ -857,10 +848,10 @@ declare module 'statebot' {
      * // Peace out!
      * ```
      */
-    onExiting: (
+    onExiting(
       state: string,
       cb: (toState?: string, ...args: any[]) => void
-    ) => TListenersRemover
+    ): TListenersRemover
 
     /**
      * Adds a listener that runs a callback immediately after **ANY**
@@ -892,9 +883,9 @@ declare module 'statebot' {
      * // We went from "idle" to "receiving"
      * ```
      */
-    onSwitched: (
+    onSwitched(
       cb: (toState?: string, fromState?: string, ...args: any[]) => void
-    ) => TListenersRemover
+    ): TListenersRemover
 
     /**
      * Adds a listener that runs a callback immediately before **ANY**
@@ -926,9 +917,9 @@ declare module 'statebot' {
      * // Going from "idle" to "receiving"
      * ```
      */
-    onSwitching: (
+    onSwitching(
       cb: (toState?: string, fromState?: string, ...args: any[]) => void
-    ) => TListenersRemover
+    ): TListenersRemover
 
     /**
      * Run callbacks when transitions happen.
@@ -1010,18 +1001,18 @@ declare module 'statebot' {
      * // etc...
      * ```
      */
-    onTransitions: (transitions: object | Function) => Function
+    onTransitions(transitions: object | Function): Function
 
     /**
      * Pause the machine. {@link TStatebotFsm.emit} and {@link TStatebotFsm.enter} will be no-ops until
      * the machine is {@link TStatebotFsm.resume}'d.
      */
-    pause: () => void
+    pause(): void
 
     /**
      * Returns `true` if the machine is {@link TStatebotFsm.pause}'d
      */
-    paused: () => boolean
+    paused(): boolean
 
     /**
      * Return the state the machine will be in after {@link TStatebotFsm.emit}'ing
@@ -1082,7 +1073,7 @@ declare module 'statebot' {
      * // Logs: Statebot[peek-a-boo]: Will not transition after emitting: "start"
      * ```
      */
-    peek: (eventName: string, stateObject?: any) => any
+    peek(eventName: string, stateObject?: any): any
 
     /**
      * Perform transitions when events happen.
@@ -1169,7 +1160,7 @@ declare module 'statebot' {
      * }
      * ```
      */
-    performTransitions: (transitions: object | Function) => Function
+    performTransitions(transitions: object | Function): Function
 
     /**
      * Returns the previous state.
@@ -1194,7 +1185,7 @@ declare module 'statebot' {
      * // "idle"
      * ```
      */
-    previousState: () => string | undefined
+    previousState(): string | undefined
 
     /**
      * Returns the state-machine to its starting-state and clears the
@@ -1222,12 +1213,12 @@ declare module 'statebot' {
      * // "page-1"
      * ```
      */
-    reset: () => void
+    reset(): void
 
     /**
      * Resume a {@link TStatebotFsm.pause}'d machine.
      */
-    resume: () => void
+    resume(): void
 
     /**
      * Return an `array` of states accessible from the state specified.
@@ -1253,7 +1244,7 @@ declare module 'statebot' {
      * // ["done"]
      * ```
      */
-    statesAvailableFromHere: (state?: string) => string[]
+    statesAvailableFromHere(state?: string): string[]
   }
 
   /**

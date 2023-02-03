@@ -30,14 +30,14 @@
     "./hooks/react": {
       "types": "./hooks/react/index.d.ts",
       "import": "./hooks/react/index.mjs",
-      "require": "./hooks/react/index.js",
-      "default": "./hooks/react/index.js"
+      "require": "./hooks/react/index.mjs",
+      "default": "./hooks/react/index.mjs"
     },
     "./hooks/mithril": {
       "types": "./hooks/mithril/index.d.ts",
       "import": "./hooks/mithril/index.mjs",
-      "require": "./hooks/mithril/index.js",
-      "default": "./hooks/mithril/index.js"
+      "require": "./hooks/mithril/index.mjs",
+      "default": "./hooks/mithril/index.mjs"
     }
   },
   "files": [

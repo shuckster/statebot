@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.6] - 2023-02-03
+
+### Changed
+
+- Most .js extensions are now .mjs. Hopefully this fixes compatibility with newer Jest versions
+
 ## [3.0.5] - 2022-07-09
 
 ### Updated

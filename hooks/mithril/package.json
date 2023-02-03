@@ -1,7 +1,7 @@
 {
   "type": "module",
-  "main": "index.js",
-  "module": "index.js",
+  "main": "index.mjs",
+  "module": "index.mjs",
   "peerDependencies": {
     "mithril-hooks": "^0.7 || ^0.6 || ^0.5.6",
     "statebot": "^2"

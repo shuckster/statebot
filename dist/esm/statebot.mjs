@@ -1012,4 +1012,4 @@ function isStatebot (object) {
 }
 
 export { Statebot, decomposeChart, isStatebot };
-//# sourceMappingURL=statebot.js.map
+//# sourceMappingURL=statebot.mjs.map

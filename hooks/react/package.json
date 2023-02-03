@@ -1,7 +1,7 @@
 {
   "type": "module",
-  "main": "index.js",
-  "module": "index.js",
+  "main": "index.mjs",
+  "module": "index.mjs",
   "peerDependencies": {
     "react": "^18 || ^17 || ^16.8",
     "statebot": "^2"

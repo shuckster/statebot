@@ -12,7 +12,7 @@ export default {
   external: ['mitt'],
   output: [
     {
-      file: 'dist/esm/statebot.js',
+      file: 'dist/esm/statebot.mjs',
       banner: banner(pkg),
       format: 'es',
       name: 'statebot',

@@ -14,28 +14,28 @@
   ],
   "types": "index.d.ts",
   "main": "./dist/cjs/statebot.js",
-  "module": "dist/esm/statebot.js",
+  "module": "dist/esm/statebot.mjs",
   "exports": {
     ".": {
-      "import": "./dist/esm/statebot.js",
+      "import": "./dist/esm/statebot.mjs",
       "require": "./dist/cjs/statebot.js",
       "default": "./dist/cjs/statebot.js"
     },
     "./assert": {
       "types": "./assert/index.d.ts",
-      "import": "./assert/index.js",
+      "import": "./assert/index.mjs",
       "require": "./assert/index.cjs",
       "default": "./assert/index.cjs"
     },
     "./hooks/react": {
       "types": "./hooks/react/index.d.ts",
-      "import": "./hooks/react/index.js",
+      "import": "./hooks/react/index.mjs",
       "require": "./hooks/react/index.js",
       "default": "./hooks/react/index.js"
     },
     "./hooks/mithril": {
       "types": "./hooks/mithril/index.d.ts",
-      "import": "./hooks/mithril/index.js",
+      "import": "./hooks/mithril/index.mjs",
       "require": "./hooks/mithril/index.js",
       "default": "./hooks/mithril/index.js"
     }

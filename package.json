@@ -17,6 +17,7 @@
   "module": "dist/esm/statebot.mjs",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./dist/esm/statebot.mjs",
       "require": "./dist/cjs/statebot.js",
       "default": "./dist/cjs/statebot.js"

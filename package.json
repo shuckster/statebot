@@ -23,7 +23,7 @@
     },
     "./assert": {
       "types": "./assert/index.d.ts",
-      "import": "./assert/index.mjs",
+      "import": "./assert/index.js",
       "require": "./assert/index.cjs",
       "default": "./assert/index.cjs"
     },

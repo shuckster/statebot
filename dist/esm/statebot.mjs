@@ -324,8 +324,8 @@ function Logger (level, _console) {
 
 const rxCRLF = /[\r\n]/;
 const cxPipe = '|';
-const cxArrow = '->';
-const rxOperators = [cxPipe, cxArrow]
+const cxArrow$1 = '->';
+const rxOperators = [cxPipe, cxArrow$1]
   .map(rxUnsafe => rxUnsafe.replace('|', '\\|'))
   .join('|');
 const rxLineContinuations = new RegExp(`(${rxOperators})$`);
@@ -350,25 +350,25 @@ function decomposeChart (chart) {
     if (route.includes('')) {
       emptyStateFound = true;
     }
-    return route.join(cxArrow)
+    return route.join(cxArrow$1)
   });
   const filteredRoutes = uniq(routeKeys);
   const filteredStates = uniq(linesOfTokens.flat(3));
   return {
-    transitions: filteredRoutes.map(route => route.split(cxArrow)),
+    transitions: filteredRoutes.map(route => route.split(cxArrow$1)),
     routes: filteredRoutes,
     states: !emptyStateFound
       ? filteredStates.filter(Boolean)
       : filteredStates
   }
 }
-function linesFrom (strOrArr) {
+function linesFrom$1 (strOrArr) {
   return [strOrArr]
     .flat()
     .reduce((acc, line) => [...acc, ...line.split(rxCRLF)], [])
 }
 function condensedLines (strOrArr) {
-  const input = linesFrom(strOrArr);
+  const input = linesFrom$1(strOrArr);
   const output = [];
   let previousLineHasContinuation = false;
   const condenseLine = (condensedLine, line) => {
@@ -396,7 +396,7 @@ function condensedLines (strOrArr) {
 function tokenisedLines (lines) {
   return lines
     .map(line => line
-      .split(cxArrow)
+      .split(cxArrow$1)
       .map(str => str.split(cxPipe))
     )
 }
@@ -689,7 +689,7 @@ function Statebot (name, options) {
     }
     return routes.reduce((acc, route) => {
       const [fromState, toState] = route
-        .split(cxArrow)
+        .split(cxArrow$1)
         .map(state => state.trim());
       return (fromState === _state)
         ? [...acc, toState]
@@ -1011,5 +1011,27 @@ function isStatebot (object) {
   )
 }
 
-export { Statebot, decomposeChart, isStatebot };
+const { cxArrow, linesFrom } = require('./parsing.js');
+const rxFrontMatter = /---[\r\n]+[\w\W]*---[\r\n]+[\r\n\s]*/m;
+const rxMermaidHeader = /stateDiagram(-v2)?[\r\n\s]*/g;
+const rxMermaidDirection = /direction\s+(TB|TD|BT|RL|LR)[\r\n\s]*/g;
+const rxMermaidComment = /%%/g;
+const rxMermaidArrow = /-->/g;
+const rxMermaidStartState = /\[\*\]\s*-->/g;
+const rxMermaidStopState = /-->\s*\[\*\]/g;
+const rxMermaidPreviewVsts = /::: ?mermaid([\s\S]*?):::/g;
+function mermaid(mmd) {
+  return linesFrom(mmd)
+    .join('\n')
+    .replace(rxMermaidPreviewVsts, '$1')
+    .replace(rxFrontMatter, '')
+    .replace(rxMermaidHeader, '')
+    .replace(rxMermaidDirection, '')
+    .replace(rxMermaidComment, '//')
+    .replace(rxMermaidStartState, '__START__ -->')
+    .replace(rxMermaidStopState, '--> __STOP__')
+    .replace(rxMermaidArrow, cxArrow)
+}
+
+export { Statebot, decomposeChart, isStatebot, mermaid };
 //# sourceMappingURL=statebot.mjs.map

@@ -73,6 +73,8 @@ const fsm = Statebot('traffic-lights', {
 })
 ```
 
+> **Note:** Mermaid start `[*] -->` and stop `--> [*]` states will become `__START__` and `__STOP__` Statebot states respectively.
+
 ## [3.0.7] - 2023-02-03
 
 ### Fixed

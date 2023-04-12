@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v3.1.1
+ * v3.1.2
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -1313,7 +1313,7 @@
   const {
     cxArrow,
     linesFrom
-  } = require('./parsing.js');
+  } = require('./parsing');
   const rxFrontMatter = /---[\r\n]+[\w\W]*---[\r\n]+[\r\n\s]*/m;
   const rxMermaidHeader = /stateDiagram(-v2)?[\r\n\s]*/g;
   const rxMermaidDirection = /direction\s+(TB|TD|BT|RL|LR)[\r\n\s]*/g;

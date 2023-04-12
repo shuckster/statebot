@@ -7,6 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2023-04-13
+
+### Added
+
+- `mermaid` helper function to allow Mermaid state-diagrams to be used with Statebot:
+
+```js
+import { Statebot, mermaid } from 'statebot'
+
+const fsm = Statebot('traffic-lights', {
+  chart: mermaid`
+    stateDiagram
+    direction LR
+      go --> prepareToStop
+        prepareToStop --> stop
+
+      %% ...gotta keep that traffic flowing
+      stop --> prepareToGo
+        prepareToGo --> go
+  `
+})
+```
+
+Front-matter is ignored:
+
+```js
+import { Statebot, mermaid } from 'statebot'
+
+const fsm = Statebot('traffic-lights', {
+  chart: mermaid`
+    ---
+    title: Traffic lights
+    ---
+    stateDiagram
+    direction LR
+      go --> prepareToStop
+        prepareToStop --> stop
+
+      %% ...gotta keep that traffic flowing
+      stop --> prepareToGo
+        prepareToGo --> go
+  `
+})
+```
+
+`:::` blocks are also ignored, which is useful because the Mermaid Preview extension for VS Code will display a chart when the cursor is placed between the blocks:
+
+```js
+import { Statebot, mermaid as mmd } from 'statebot'
+
+const fsm = Statebot('traffic-lights', {
+  chart: mmd`
+    ::: mermaid
+    stateDiagram
+    direction LR
+      go --> prepareToStop
+        prepareToStop --> stop
+
+      %% ...gotta keep that traffic flowing
+      stop --> prepareToGo
+        prepareToGo --> go
+    :::
+  `
+})
+```
+
 ## [3.0.7] - 2023-02-03
 
 ### Fixed

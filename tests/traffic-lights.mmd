@@ -1,0 +1,8 @@
+stateDiagram
+direction LR
+  go --> prepareToStop
+    prepareToStop --> stop
+
+  %% ...gotta keep that traffic flowing
+  stop --> prepareToGo
+    prepareToGo --> go

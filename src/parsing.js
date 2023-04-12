@@ -78,7 +78,7 @@ function decomposeChart (chart) {
   }
 }
 
-function linesFrom (strOrArr) {
+export function linesFrom (strOrArr) {
   return [strOrArr]
     .flat()
     .reduce((acc, line) => [...acc, ...line.split(rxCRLF)], [])

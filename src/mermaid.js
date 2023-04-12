@@ -1,4 +1,4 @@
-const { cxArrow, linesFrom } = require('./parsing.js')
+const { cxArrow, linesFrom } = require('./parsing')
 
 const rxFrontMatter = /---[\r\n]+[\w\W]*---[\r\n]+[\r\n\s]*/m
 const rxMermaidHeader = /stateDiagram(-v2)?[\r\n\s]*/g

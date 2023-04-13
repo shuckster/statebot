@@ -1,4 +1,4 @@
-const { cxArrow, linesFrom } = require('./parsing')
+import { cxArrow, linesFrom } from './parsing'
 
 const rxFrontMatter = /---[\r\n]+[\w\W]*---[\r\n]+[\r\n\s]*/m
 const rxMermaidHeader = /stateDiagram(-v2)?[\r\n\s]*/g

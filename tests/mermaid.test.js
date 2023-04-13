@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const { mermaid } = require('../src/mermaid.js')
-const { decomposeChart } = require('../src/parsing.js')
+const { mermaid } = require('../src/mermaid')
+const { decomposeChart } = require('../src/parsing')
 
 function readFile(fileName) {
   return fs.readFileSync(path.join(__dirname, fileName), 'utf8')

@@ -1,7 +1,7 @@
 
 const { Statebot } = require('../src/statebot')
 const { decomposeChart, decomposeRoute } = require('../src/parsing')
-const { routeIsPossible } = require('../assert')
+const { routeIsPossible } = require('../assert/index.cjs')
 
 const SEMANTICALLY_IDENTICAL_CHARTS = [
   {

@@ -8,7 +8,7 @@ import pkg from '../package.json'
 import { banner } from './rollup.common.js'
 
 export default {
-  input: 'assert/index.js',
+  input: 'assert/index.mjs',
   output: [
     {
       file: 'assert/index.cjs',

@@ -1,7 +1,7 @@
 
 /*
  * Statebot
- * v3.1.2
+ * v3.1.3
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
@@ -332,8 +332,8 @@ function Logger (level, _console) {
 
 const rxCRLF = /[\r\n]/;
 const cxPipe = '|';
-const cxArrow$1 = '->';
-const rxOperators = [cxPipe, cxArrow$1]
+const cxArrow = '->';
+const rxOperators = [cxPipe, cxArrow]
   .map(rxUnsafe => rxUnsafe.replace('|', '\\|'))
   .join('|');
 const rxLineContinuations = new RegExp(`(${rxOperators})$`);
@@ -358,25 +358,25 @@ function decomposeChart (chart) {
     if (route.includes('')) {
       emptyStateFound = true;
     }
-    return route.join(cxArrow$1)
+    return route.join(cxArrow)
   });
   const filteredRoutes = uniq(routeKeys);
   const filteredStates = uniq(linesOfTokens.flat(3));
   return {
-    transitions: filteredRoutes.map(route => route.split(cxArrow$1)),
+    transitions: filteredRoutes.map(route => route.split(cxArrow)),
     routes: filteredRoutes,
     states: !emptyStateFound
       ? filteredStates.filter(Boolean)
       : filteredStates
   }
 }
-function linesFrom$1 (strOrArr) {
+function linesFrom (strOrArr) {
   return [strOrArr]
     .flat()
     .reduce((acc, line) => [...acc, ...line.split(rxCRLF)], [])
 }
 function condensedLines (strOrArr) {
-  const input = linesFrom$1(strOrArr);
+  const input = linesFrom(strOrArr);
   const output = [];
   let previousLineHasContinuation = false;
   const condenseLine = (condensedLine, line) => {
@@ -404,7 +404,7 @@ function condensedLines (strOrArr) {
 function tokenisedLines (lines) {
   return lines
     .map(line => line
-      .split(cxArrow$1)
+      .split(cxArrow)
       .map(str => str.split(cxPipe))
     )
 }
@@ -697,7 +697,7 @@ function Statebot (name, options) {
     }
     return routes.reduce((acc, route) => {
       const [fromState, toState] = route
-        .split(cxArrow$1)
+        .split(cxArrow)
         .map(state => state.trim());
       return (fromState === _state)
         ? [...acc, toState]
@@ -1019,7 +1019,6 @@ function isStatebot (object) {
   )
 }
 
-const { cxArrow, linesFrom } = require('./parsing');
 const rxFrontMatter = /---[\r\n]+[\w\W]*---[\r\n]+[\r\n\s]*/m;
 const rxMermaidHeader = /stateDiagram(-v2)?[\r\n\s]*/g;
 const rxMermaidDirection = /direction\s+(TB|TD|BT|RL|LR)[\r\n\s]*/g;

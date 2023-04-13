@@ -66,7 +66,23 @@ function redrawTrafficLights() {
 setInterval(machine.Emit('timer'), 2000)
 ```
 
+[CodeSandbox](https://codesandbox.io/s/statebot-traffic-lights-kin5y) of the above example.
+
 [Since v3.1.0](https://github.com/shuckster/statebot/blob/master/CHANGELOG.md#310---2023-04-13), [Mermaid state-diagram](https://mermaid.js.org/syntax/stateDiagram.html) support:
+
+```mermaid
+---
+title: Traffic Lights
+---
+stateDiagram
+direction LR
+  go --> prepareToStop
+    prepareToStop --> stop
+
+  %% ...gotta keep that traffic flowing
+  stop --> prepareToGo
+    prepareToGo --> go
+```
 
 ```js
 import { Statebot, mermaid } from 'statebot'
@@ -84,8 +100,6 @@ const machine = Statebot('traffic-lights', {
   `
 })
 ```
-
-[CodeSandbox](https://codesandbox.io/s/statebot-traffic-lights-kin5y) of the above example.
 
 It's less than 5K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 

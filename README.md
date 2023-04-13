@@ -101,7 +101,7 @@ const machine = Statebot('traffic-lights', {
 })
 ```
 
-It's less than 5K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
+It's around 5K gzipped, runs in Node and the browser, and is a [shell-script](https://github.com/shuckster/statebot-sh/) too.
 
 - [Full documentation](https://shuckster.github.io/statebot/)
 - [Github Repo](https://github.com/shuckster/statebot)

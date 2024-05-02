@@ -544,7 +544,7 @@ function Statebot (name, options) {
 
           return () => {
             removeEvent()
-            decreaseRefCounts.map(fn => fn())
+            decreaseRefCounts.forEach(fn => fn())
           }
         }
       }

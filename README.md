@@ -134,7 +134,7 @@ npm i statebot
 ```
 
 ```js
-<script src="https://unpkg.com/statebot@3.1.3/dist/browser/statebot.min.js"></script>
+<script src="https://unpkg.com/statebot@4.0.0/dist/browser/statebot.min.js"></script>
 ```
 
 ## Quick Start:

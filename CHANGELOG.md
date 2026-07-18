@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-07-18
+
+### BREAKING CHANGES
+
+- Browser builds no longer pass through Babel; output targets
+  **ES2018**. Very old browsers may need a separate transpile step.
+- `dist/umd/*` is no longer a classic UMD wrapper. It is an **IIFE**
+  that sets the `statebot` global (same idea as the browser build).
+  AMD / CommonJS consumers of the UMD path should switch to the package
+  CJS/ESM exports, or load `dist/browser/statebot.min.js` as a script
+  tag.
+
+Package import paths (`statebot`, `statebot/assert`, hooks) and the FSM
+runtime API are unchanged.
+
+### Changed
+
+- Migrated build from Rollup + Babel to
+  [esbuild](https://esbuild.github.io/) (same pattern as
+  [add-javascript](https://github.com/shuckster/add-javascript))
+- Source relative imports use explicit `.js` / `.mjs` extensions
+  (Node-native resolution)
+
+### Updated
+
+- Dev toolchain: ESLint 10 (flat config), TypeDoc, TypeScript 6, and
+  other dependencies
+- Tests now use Node's built-in test runner (`node:test` /
+  `node:assert`) instead of Jest
+- Regenerated docs with TypeDoc 0.28
+
 ## [3.1.3] - 2023-04-13
 
 ### Fixed
@@ -29,12 +60,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `mermaid` helper function to allow Mermaid state-diagrams to be used with Statebot:
+- `mermaid` helper function to allow Mermaid state-diagrams to be used
+  with Statebot:
 
 ```js
-import { Statebot, mermaid } from 'statebot'
+import { mermaid, Statebot } from "statebot";
 
-const fsm = Statebot('traffic-lights', {
+const fsm = Statebot("traffic-lights", {
   chart: mermaid`
     stateDiagram
     direction LR
@@ -44,16 +76,16 @@ const fsm = Statebot('traffic-lights', {
       %% ...gotta keep that traffic flowing
       stop --> prepareToGo
         prepareToGo --> go
-  `
-})
+  `,
+});
 ```
 
 Front-matter is ignored:
 
 ```js
-import { Statebot, mermaid } from 'statebot'
+import { mermaid, Statebot } from "statebot";
 
-const fsm = Statebot('traffic-lights', {
+const fsm = Statebot("traffic-lights", {
   chart: mermaid`
     ---
     title: Traffic lights
@@ -66,16 +98,18 @@ const fsm = Statebot('traffic-lights', {
       %% ...gotta keep that traffic flowing
       stop --> prepareToGo
         prepareToGo --> go
-  `
-})
+  `,
+});
 ```
 
-`:::` blocks are also ignored, which is useful because the Mermaid Preview extension for VS Code will display a chart when the cursor is placed between the blocks:
+`:::` blocks are also ignored, which is useful because the Mermaid
+Preview extension for VS Code will display a chart when the cursor is
+placed between the blocks:
 
 ```js
-import { Statebot, mermaid as mmd } from 'statebot'
+import { mermaid as mmd, Statebot } from "statebot";
 
-const fsm = Statebot('traffic-lights', {
+const fsm = Statebot("traffic-lights", {
   chart: mmd`
     ::: mermaid
     stateDiagram
@@ -87,11 +121,12 @@ const fsm = Statebot('traffic-lights', {
       stop --> prepareToGo
         prepareToGo --> go
     :::
-  `
-})
+  `,
+});
 ```
 
-> **Note:** Mermaid start `[*] -->` and stop `--> [*]` states will become `__START__` and `__STOP__` Statebot states respectively.
+> **Note:** Mermaid start `[*] -->` and stop `--> [*]` states will
+> become `__START__` and `__STOP__` Statebot states respectively.
 
 ## [3.0.7] - 2023-02-03
 
@@ -103,7 +138,8 @@ const fsm = Statebot('traffic-lights', {
 
 ### Changed
 
-- Most .js extensions are now .mjs. Hopefully this fixes compatibility with newer Jest versions
+- Most .js extensions are now .mjs. Hopefully this fixes compatibility
+  with newer Jest versions
 
 ## [3.0.5] - 2022-07-09
 
@@ -121,7 +157,8 @@ const fsm = Statebot('traffic-lights', {
 
 ### Updated
 
-- Exclude mitt from cjs/esm build: It's specified as a regular dependency now
+- Exclude mitt from cjs/esm build: It's specified as a regular
+  dependency now
 - Remove .dev from build filenames
 - Tweak README as JSDoc lives in index.d.ts now
 
@@ -144,7 +181,9 @@ const fsm = Statebot('traffic-lights', {
 Imports updated:
 
 - `routeIsPossible` / `assertRoute` now come from 'statebot/assert'
-- React/Mithril Hooks can be imported from 'statebot/hooks/react' and 'statebot/hooks/mithril'. There are no longer separate packages for these.
+- React/Mithril Hooks can be imported from 'statebot/hooks/react' and
+  'statebot/hooks/mithril'. There are no longer separate packages for
+  these.
 
 ### Updated
 
@@ -167,14 +206,16 @@ Imports updated:
 
 ### Fixed
 
-- Replace nullish coalescing `??` with ternary to fix Bundlephobia error.
+- Replace nullish coalescing `??` with ternary to fix Bundlephobia
+  error.
 
 ## [2.9.0] - 2021-12-18
 
 ### Added
 
 - peek(eventName, stateObject?), tests, documentation
-- canTransitionTo('state', { afterEvent: 'event' }), tests, documentation
+- canTransitionTo('state', { afterEvent: 'event' }), tests,
+  documentation
 
 ### Updated
 
@@ -225,17 +266,17 @@ Imports updated:
 - inState/InState now supports an object for config as well as a string:
 
 ```js
-inState('idle')
+inState("idle");
 // true | false
 
-inState('idle', 'waiting')
+inState("idle", "waiting");
 // "waiting" | null
 
 inState({
-  idle: 'hold up',
-  success: () => 'fn-result',
-  done: <JSX />
-})
+  idle: "hold up",
+  success: () => "fn-result",
+  done: <JSX />,
+});
 // "hold up" | "fn-result" | <JSX /> | null
 ```
 
@@ -249,7 +290,8 @@ inState({
 
 ### Fixed
 
-- Revert previous argument-defaults tweak, as it bugged Enter(). Fixed, regression test added
+- Revert previous argument-defaults tweak, as it bugged Enter(). Fixed,
+  regression test added
 
 ### Added
 
@@ -264,7 +306,8 @@ inState({
 ### Updated
 
 - Add code-comments to make CodeFactor happy with documentation page
-- Remove argument-defaults to reduce compiled/minified code-size slightly
+- Remove argument-defaults to reduce compiled/minified code-size
+  slightly
 
 ## [2.6.0] - 2020-12-30
 
@@ -277,7 +320,8 @@ inState({
 
 ### Fixed
 
-- Custom event-emitter support broken in previous commit (emit not working)
+- Custom event-emitter support broken in previous commit (emit not
+  working)
 
 ## [2.5.0] - 2020-08-10
 
@@ -307,7 +351,8 @@ inState({
 
 ### Updated
 
-- Put an example at the top of the README to get to the point more quickly :P
+- Put an example at the top of the README to get to the point more
+  quickly :P
 
 ## [2.3.9] - 2020-07-14
 
@@ -337,13 +382,15 @@ inState({
 
 - .DS_Store snuck into dist/
 - Build index.d.ts automatically, fixing broken autocompletion
-- ESM build renamed from .mjs to .js, since tsc won't read it to build index.d.ts otherwise
+- ESM build renamed from .mjs to .js, since tsc won't read it to build
+  index.d.ts otherwise
 
 ## [2.3.6] - 2020-07-06
 
 ### Changed
 
-- Use ES6 import/export syntax in source-files (slightly small dist/ files resulted)
+- Use ES6 import/export syntax in source-files (slightly small dist/
+  files resulted)
 - Put dev source-maps in their own files
 
 ### Added
@@ -443,8 +490,8 @@ inState({
 - Updated disallowed characters for cross-env compatibility of charts.
 
   This was a tiny change to Statebot, but will break any charts using
-  the characters now excluded (probably none at this point!) Still,
-  it's good to show semver willing, eh? ;)
+  the characters now excluded (probably none at this point!) Still, it's
+  good to show semver willing, eh? ;)
 
 ### Added
 

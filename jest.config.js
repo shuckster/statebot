@@ -6,5 +6,9 @@ module.exports = {
   roots: [
     "<rootDir>/tests"
   ],
-  testEnvironment: "node"
+  testEnvironment: "node",
+  transform: {
+    "^.+\\.[jt]sx?$": "babel-jest",
+    "^.+\\.mjs$": "babel-jest"
+  }
 }

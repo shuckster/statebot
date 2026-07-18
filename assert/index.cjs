@@ -1,144 +1,163 @@
-
 /*
  * Statebot
  * v3.1.3
  * https://shuckster.github.io/statebot/
  * License: MIT
  */
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-'use strict';
+// assert/index.mjs
+var index_exports = {};
+__export(index_exports, {
+  assertRoute: () => assertRoute,
+  routeIsPossible: () => routeIsPossible
+});
+module.exports = __toCommonJS(index_exports);
 
-isArray.displayName = 'isUnset';
+// src/types.js
+function isEventEmitter(obj) {
+  return isObject(obj) && isFunction(obj.emit) && (isFunction(obj.addListener) || isFunction(obj.on)) && (isFunction(obj.removeListener) || isFunction(obj.off));
+}
+isEventEmitter.displayName = "isEventEmitter";
+isArray.displayName = "isUnset";
 function isArray(obj) {
-  return Array.isArray(obj)
+  return Array.isArray(obj);
 }
-isArray.displayName = 'isArray';
+isArray.displayName = "isArray";
 function isArguments(obj) {
-  return Object.prototype.toString.call(obj) === '[object Arguments]'
+  return Object.prototype.toString.call(obj) === "[object Arguments]";
 }
-isArguments.displayName = 'isArguments';
+isArguments.displayName = "isArguments";
+function isBoolean(obj) {
+  return obj === true || obj === false;
+}
+isBoolean.displayName = "isBoolean";
 function isFunction(obj) {
-  return typeof obj === 'function'
+  return typeof obj === "function";
 }
-isFunction.displayName = 'isFunction';
+isFunction.displayName = "isFunction";
 function isString(obj) {
-  return typeof obj === 'string'
+  return typeof obj === "string";
 }
-isString.displayName = 'isString';
+isString.displayName = "isString";
+function isAllStrings(arr) {
+  return isArray(arr) && arr.every(isString);
+}
+isAllStrings.displayName = "isAllStrings";
 function isUndefined(obj) {
-  return obj === undefined
+  return obj === void 0;
 }
-isUndefined.displayName = 'isUndefined';
+isUndefined.displayName = "isUndefined";
 function isNull(obj) {
-  return obj === null
+  return obj === null;
 }
-isNull.displayName = 'isNull';
+isNull.displayName = "isNull";
 function isNumber(obj) {
-  return typeof obj === 'number'
+  return typeof obj === "number";
 }
-isNumber.displayName = 'isNumber';
+isNumber.displayName = "isNumber";
 function isObject(obj) {
-  return typeof obj === 'object' && !isNull(obj)
+  return typeof obj === "object" && !isNull(obj);
 }
-isObject.displayName = 'isObject';
+isObject.displayName = "isObject";
 function isPojo(obj) {
   if (isNull(obj) || !isObject(obj) || isArguments(obj)) {
-    return false
+    return false;
   }
-  return Object.getPrototypeOf(obj) === Object.prototype
+  return Object.getPrototypeOf(obj) === Object.prototype;
 }
-isPojo.displayName = 'isPojo';
+isPojo.displayName = "isPojo";
 function isTemplateLiteral(obj) {
   if (isString(obj)) {
-    return true
+    return true;
   }
   if (!isArray(obj)) {
-    return false
+    return false;
   }
-  return obj.every(isString)
+  return obj.every(isString);
 }
-isTemplateLiteral.displayName = 'isTemplateLiteral';
-const typeErrorStringIfFnReturnsFalse = (argName, argTypeFn, arg) => {
-  return argTypeFn(arg)
-    ? undefined
-    : (argTypeFn.displayName || argTypeFn.name) +
-        `(${argName}) did not return true`
+isTemplateLiteral.displayName = "isTemplateLiteral";
+var typeErrorStringIfFnReturnsFalse = (argName, argTypeFn, arg) => {
+  return argTypeFn(arg) ? void 0 : (argTypeFn.displayName || argTypeFn.name) + `(${argName}) did not return true`;
 };
-const typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
-  return typeof arg === argType
-    ? undefined
-    : `Argument "${argName}" should be a ${argType}`
+var typeErrorStringIfTypeOfFails = (argName, argType, arg) => {
+  return typeof arg === argType ? void 0 : `Argument "${argName}" should be a ${argType}`;
 };
-const typeErrorStringFromArgument = argMap => (arg, index) => {
+var typeErrorStringFromArgument = (argMap) => (arg, index) => {
   if (index >= argMap.length) {
-    return
+    return;
   }
   const { argName, argType } = argMap[index];
   if (isUndefined(arg)) {
-    return `Argument undefined: "${argName}"`
+    return `Argument undefined: "${argName}"`;
   }
   const permittedArgTypes = Array.isArray(argType) ? argType : [argType];
-  const errorDescs = permittedArgTypes
-    .map(argType =>
-      isFunction(argType)
-        ? typeErrorStringIfFnReturnsFalse(argName, argType, arg)
-        : typeErrorStringIfTypeOfFails(argName, argType, arg)
-    )
-    .filter(isString);
+  const errorDescs = permittedArgTypes.map(
+    (argType2) => isFunction(argType2) ? typeErrorStringIfFnReturnsFalse(argName, argType2, arg) : typeErrorStringIfTypeOfFails(argName, argType2, arg)
+  ).filter(isString);
   const multipleTypesSpecified = permittedArgTypes.length > 1;
-  const shouldError = multipleTypesSpecified
-    ? errorDescs.length > 1
-    : errorDescs.length;
+  const shouldError = multipleTypesSpecified ? errorDescs.length > 1 : errorDescs.length;
   if (shouldError) {
-    return (
-      errorDescs.join('\n| ') +
-      `\n> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`
-    )
+    return errorDescs.join("\n| ") + `
+> typeof ${argName} === ${typeof arg}(${JSON.stringify(arg)})`;
   }
 };
 function ArgTypeError(namespace) {
-  return typeMap => {
+  return (typeMap) => {
     const argMap = Object.entries(typeMap).map(([argName, argType]) => ({
       argName,
       argType
     }));
-    return fnName =>
-      (...args) => {
-        const processedArgs = Array
-          .from(args, x => isArguments(x) ? Array.from(x) : x)
-          .flat(1);
-        const err = processedArgs
-          .map(typeErrorStringFromArgument(argMap))
-          .filter(isString);
-        if (!err.length) {
-          return
-        }
-        const signature = Object.keys(typeMap).join(', ');
-        return (
-          `\n${namespace}${fnName}(${signature}):\n` +
-          `${err.map(err => `| ${err}`).join('\n')}`
-        )
+    return (fnName) => (...args) => {
+      const processedArgs = Array.from(args, (x) => isArguments(x) ? Array.from(x) : x).flat(1);
+      const err = processedArgs.map(typeErrorStringFromArgument(argMap)).filter(isString);
+      if (!err.length) {
+        return;
       }
-  }
+      const signature = Object.keys(typeMap).join(", ");
+      return `
+${namespace || ""}${fnName}(${signature}):
+${err.map((err2) => `| ${err2}`).join("\n")}`;
+    };
+  };
 }
 
-function defer (fn, ...args) {
+// src/utils.js
+function defer(fn, ...args) {
   const timer = setTimeout(fn, 0, ...args);
-  return () => { clearTimeout(timer); }
+  return () => {
+    clearTimeout(timer);
+  };
 }
-function Defer (fn) {
-  return (...args) => defer(fn, ...args)
+function Defer(fn) {
+  return (...args) => defer(fn, ...args);
 }
-function Once (fn) {
+function Once(fn) {
   const { revoke, fn: _fn } = Revokable(fn);
   let result;
-  return function (...args) {
+  return function(...args) {
     result = _fn(...args);
     revoke();
-    return result
-  }
+    return result;
+  };
 }
-function Revokable (fn) {
+function Revokable(fn) {
   let revoked = false;
   let result;
   return {
@@ -146,156 +165,165 @@ function Revokable (fn) {
       if (!revoked) {
         result = fn(...args);
       }
-      return result
+      return result;
     },
     revoke: () => {
       revoked = true;
     }
-  }
+  };
 }
-function Logger (level, _console) {
+function Logger(level, _console) {
   if (isString(level)) {
-    level = ({
+    level = {
       info: 3,
       log: 2,
       warn: 1,
       none: 0
-    })[level] || 3;
+    }[level] || 3;
   }
-  function canWarn () {
-    return level >= 1
+  function canWarn() {
+    return level >= 1;
   }
-  function canLog () {
-    return level >= 2
+  function canLog() {
+    return level >= 2;
   }
-  function canInfo () {
-    return level >= 3
+  function canInfo() {
+    return level >= 3;
   }
-  const { info, table, log, warn, error } = console;
+  const { info, table, log, warn, error } = _console || console;
   return {
     canWarn,
     canLog,
     canInfo,
-    info: (...args) => { canInfo() && info(...args); },
-    table: (...args) => { canLog() && table(...args); },
-    log: (...args) => { canLog() && log(...args); },
-    warn: (...args) => { canWarn() && warn(...args); },
-    error: (...args) => { error(...args); }
-  }
+    info: (...args) => {
+      canInfo() && info(...args);
+    },
+    table: (...args) => {
+      canLog() && table(...args);
+    },
+    log: (...args) => {
+      canLog() && log(...args);
+    },
+    warn: (...args) => {
+      canWarn() && warn(...args);
+    },
+    error: (...args) => {
+      error(...args);
+    }
+  };
 }
 
-const rxCRLF = /[\r\n]/;
-const cxPipe = '|';
-const cxArrow = '->';
-const rxOperators = [cxPipe, cxArrow]
-  .map(rxUnsafe => rxUnsafe.replace('|', '\\|'))
-  .join('|');
-const rxLineContinuations = new RegExp(`(${rxOperators})$`);
-const rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi;
-const rxComment = /(\/\/[^\n\r]*)/;
-const argTypeError$1 = ArgTypeError('statebot.');
-function decomposeRoute (templateLiteral) {
-  const err = argTypeError$1(
+// src/parsing.js
+var rxCRLF = /[\r\n]/;
+var cxPipe = "|";
+var cxArrow = "->";
+var rxOperators = [cxPipe, cxArrow].map((rxUnsafe) => rxUnsafe.replace("|", "\\|")).join("|");
+var rxLineContinuations = new RegExp(`(${rxOperators})$`);
+var rxDisallowedCharacters = /[^a-z0-9!@#$%^&*:_+=<>|~.\x2D]/gi;
+var rxComment = /(\/\/[^\n\r]*)/;
+var argTypeError = ArgTypeError("statebot.");
+function decomposeRoute(templateLiteral) {
+  const err = argTypeError(
     { templateLiteral: isTemplateLiteral }
-  )('decomposeRoute')(templateLiteral);
+  )("decomposeRoute")(templateLiteral);
   if (err) {
-    throw TypeError(err)
+    throw TypeError(err);
   }
   const lines = condensedLines(templateLiteral);
   const linesOfTokens = tokenisedLines(lines);
   const route = linesOfTokens.flat(2);
-  return route
+  return route;
 }
-function linesFrom (strOrArr) {
-  return [strOrArr]
-    .flat()
-    .reduce((acc, line) => [...acc, ...line.split(rxCRLF)], [])
+function linesFrom(strOrArr) {
+  return [strOrArr].flat().reduce((acc, line) => [...acc, ...line.split(rxCRLF)], []);
 }
-function condensedLines (strOrArr) {
+function condensedLines(strOrArr) {
   const input = linesFrom(strOrArr);
   const output = [];
   let previousLineHasContinuation = false;
   const condenseLine = (condensedLine, line) => {
-    const sanitisedLine = line
-      .replace(rxComment, '')
-      .replace(rxDisallowedCharacters, '');
+    const sanitisedLine = line.replace(rxComment, "").replace(rxDisallowedCharacters, "");
     if (!sanitisedLine) {
-      return condensedLine
+      return condensedLine;
     }
-    previousLineHasContinuation = rxLineContinuations
-      .test(sanitisedLine);
+    previousLineHasContinuation = rxLineContinuations.test(sanitisedLine);
     if (previousLineHasContinuation) {
-      return condensedLine + sanitisedLine
+      return condensedLine + sanitisedLine;
     }
     output.push(condensedLine + sanitisedLine);
-    return ''
+    return "";
   };
-  const finalCondensedLine = input
-    .reduce(condenseLine, '');
+  const finalCondensedLine = input.reduce(condenseLine, "");
   if (previousLineHasContinuation || finalCondensedLine) {
-    return [...output, finalCondensedLine]
+    return [...output, finalCondensedLine];
   }
-  return [...output]
+  return [...output];
 }
-function tokenisedLines (lines) {
-  return lines
-    .map(line => line
-      .split(cxArrow)
-      .map(str => str.split(cxPipe))
-    )
+function tokenisedLines(lines) {
+  return lines.map(
+    (line) => line.split(cxArrow).map((str) => str.split(cxPipe))
+  );
 }
 
-function isStatebot (object) {
-  return (
-    isPojo(object) &&
-    isNumber(object.__STATEBOT__)
-  )
+// src/statebot.js
+var ON_SWITCHING = "onSwitching";
+var ON_SWITCHED = "onSwitched";
+var INTERNAL_EVENTS = {
+  [ON_SWITCHING]: "(ANY)state:changing",
+  [ON_SWITCHED]: "(ANY)state:changed"
+};
+function isStatebot(object) {
+  return isPojo(object) && isNumber(object.__STATEBOT__);
 }
 
-const argTypeError = ArgTypeError('statebot.');
-function routeIsPossible (machine, route) {
-  const err = argTypeError(
+// assert/index.mjs
+var argTypeError2 = ArgTypeError("statebot.");
+function routeIsPossible(machine, route) {
+  const err = argTypeError2(
     { machine: isStatebot, route: isTemplateLiteral }
-  )('routeIsPossible')(machine, route);
+  )("routeIsPossible")(machine, route);
   if (err) {
-    throw TypeError(err)
+    throw TypeError(err);
   }
   const _route = decomposeRoute(route);
   return _route.every((state, index) => {
     if (index === _route.length - 1) {
-      return true
+      return true;
     } else {
       const nextState = _route[index + 1];
       const availableStates = machine.statesAvailableFromHere(state);
       const passes = availableStates.includes(nextState);
-      return passes
+      return passes;
     }
-  })
+  });
 }
-let assertionId = 0;
-function assertRoute (machine, expectedRoute, options) {
-  const err = argTypeError(
+var assertionId = 0;
+function assertRoute(machine, expectedRoute, options) {
+  const err = argTypeError2(
     { machine: isStatebot, expectedRoute: isTemplateLiteral }
-  )('assertRoute')(machine, expectedRoute);
+  )("assertRoute")(machine, expectedRoute);
   if (err) {
-    throw TypeError(err)
+    throw TypeError(err);
   }
   assertionId += 1;
   const {
-    description = 'Assertion complete',
-    fromState = '',
-    run = () => {},
+    description = "Assertion complete",
+    fromState = "",
+    run = () => {
+    },
     permittedDeviations = 0,
-    timeoutInMs = 1000,
+    timeoutInMs = 1e3,
     logLevel = 3
   } = options || {};
-  const console = Logger(logLevel);
+  const console2 = Logger(logLevel);
   const prefix = `Statebot[${machine.name()}]: aId<${assertionId}>`;
   const route = decomposeRoute(expectedRoute);
-  console.log(`\n${prefix}: Asserting route: [${route.join(' > ')}]`);
-  console.log(`${prefix}: > Assertion will start from state: "${fromState}"`);
+  console2.log(`
+${prefix}: Asserting route: [${route.join(" > ")}]`);
+  console2.log(`${prefix}: > Assertion will start from state: "${fromState}"`);
   const fromStateActionFn = Defer(run);
-  let removeFromStateActionFn = () => { };
+  let removeFromStateActionFn = () => {
+  };
   const totalTimeTaken = TimeTaken();
   let stateTimeTaken = TimeTaken();
   let assertionTimeoutTimer;
@@ -304,28 +332,29 @@ function assertRoute (machine, expectedRoute, options) {
   let unexpected = false;
   const consumeRoute = [...route];
   const report = Table(
-    ['state', 'expected', 'info', 'took'],
-    ['center', 'center', 'left', 'right']
+    ["state", "expected", "info", "took"],
+    ["center", "center", "left", "right"]
   );
-  const finaliseReport = Once(err => {
-    addRow('', '', '', 'TOTAL: ' + totalTimeTaken());
+  const finaliseReport = Once((err2) => {
+    addRow("", "", "", "TOTAL: " + totalTimeTaken());
     report.lock();
-    console.log(`\n${prefix}: ${description}: [${err ? 'FAILED' : 'SUCCESS'}]`);
-    console.table(report.content());
-    return err
+    console2.log(`
+${prefix}: ${description}: [${err2 ? "FAILED" : "SUCCESS"}]`);
+    console2.table(report.content());
+    return err2;
   });
   const { addRow } = report;
-  function enteredState (state) {
+  function enteredState(state) {
     if (pending) {
-      addRow(state, '-', 'PENDING');
+      addRow(state, "-", "PENDING");
     } else {
       const expectedState = consumeRoute[0];
       if (expectedState === state) {
-        addRow(state, expectedState, unexpected ? 'REALIGNED' : 'OKAY', stateTimeTaken());
+        addRow(state, expectedState, unexpected ? "REALIGNED" : "OKAY", stateTimeTaken());
         unexpected = false;
         consumeRoute.shift();
       } else {
-        addRow(state, expectedState, 'WRONG STATE', stateTimeTaken());
+        addRow(state, expectedState, "WRONG STATE", stateTimeTaken());
         unexpected = true;
         deviations += 1;
       }
@@ -334,8 +363,8 @@ function assertRoute (machine, expectedRoute, options) {
   }
   return new Promise((resolve, reject) => {
     if (consumeRoute.length === 0) {
-      reject(finaliseReport(new Error('NO ROUTE TO TEST')));
-      return
+      reject(finaliseReport(new Error("NO ROUTE TO TEST")));
+      return;
     }
     const clearTimeoutAndResolve = (...args) => {
       clearTimeout(assertionTimeoutTimer);
@@ -343,13 +372,13 @@ function assertRoute (machine, expectedRoute, options) {
       removeOnSwitchingListener();
       resolve(...args);
     };
-    const clearTimeoutAndReject = err => {
+    const clearTimeoutAndReject = (err2) => {
       clearTimeout(assertionTimeoutTimer);
       removeFromStateActionFn();
       removeOnSwitchingListener();
-      reject(err);
+      reject(err2);
     };
-    const bailout = message => {
+    const bailout = (message) => {
       while (consumeRoute.length) {
         const expectedState = consumeRoute.shift();
         addRow(machine.currentState(), `(${expectedState})`, message);
@@ -361,10 +390,10 @@ function assertRoute (machine, expectedRoute, options) {
       pending = false;
       removeFromStateActionFn = fromStateActionFn();
     }
-    const { revoke, fn } = Revokable(state => {
+    const { revoke, fn } = Revokable((state) => {
       assertionTimeoutTimer = setTimeout(() => {
         revoke();
-        bailout('TIMEOUT');
+        bailout("TIMEOUT");
       }, timeoutInMs);
       enteredState(state);
       if (pending && state === fromState) {
@@ -373,7 +402,7 @@ function assertRoute (machine, expectedRoute, options) {
       }
       if (deviations > permittedDeviations) {
         revoke();
-        bailout('TOO MANY DEVIATIONS');
+        bailout("TOO MANY DEVIATIONS");
       }
       if (consumeRoute.length <= 0) {
         revoke();
@@ -381,84 +410,87 @@ function assertRoute (machine, expectedRoute, options) {
       }
     });
     const removeOnSwitchingListener = machine.onSwitching(fn);
-  })
+  });
 }
-function Table (columns, alignments) {
+function Table(columns, alignments) {
   columns = columns || [];
   alignments = alignments || [];
   const table = [];
-  const alignment = columns.map((_, index) => alignments[index] || 'center');
+  const alignment = columns.map((_, index) => alignments[index] || "center");
   let locked = false;
-  function lock () {
+  function lock() {
     locked = true;
   }
-  function addRow (...args) {
+  function addRow(...args) {
     if (locked) {
-      return
+      return;
     }
     const obj = columns.reduce((acc, col, index) => {
-      const row = args[index] || '';
+      const row = args[index] || "";
       return {
         ...acc,
         [col]: row
-      }
+      };
     }, {});
     table.push(obj);
   }
-  function colSizes () {
+  function colSizes() {
     return table.reduce(
       (acc, row) => columns.map(
         (col, index) => Math.max(row[col].length, acc[index])
-      ), columns.map(() => 0)
-    )
+      ),
+      columns.map(() => 0)
+    );
   }
-  function content () {
+  function content() {
     const sizes = colSizes();
-    function formatField (value, index) {
+    function formatField(value, index) {
       const size = sizes[index];
       const align = alignment[index];
-      if (align === 'left') {
-        return value.padEnd(size)
+      if (align === "left") {
+        return value.padEnd(size);
       }
-      if (align === 'right') {
-        return value.padStart(size)
+      if (align === "right") {
+        return value.padStart(size);
       }
-      return value
+      return value;
     }
     const output = table.reduce((acc, row) => {
-      const formattedRow = columns.reduce((acc, col, index) => ({
-        ...acc,
+      const formattedRow = columns.reduce((acc2, col, index) => ({
+        ...acc2,
         [col]: formatField(row[col], index)
       }), {});
-      return [...acc, formattedRow]
+      return [...acc, formattedRow];
     }, []);
-    return output
+    return output;
   }
   return {
-    lock: lock,
-    addRow: addRow,
-    content: content
-  }
+    lock,
+    addRow,
+    content
+  };
 }
-function TimeTaken () {
+function TimeTaken() {
   const startTime = Date.now();
-  function fmt (num, digits) {
-    return num.toFixed(digits).replace(/\.0+$/, '')
+  function fmt(num, digits) {
+    return num.toFixed(digits).replace(/\.0+$/, "");
   }
-  return function () {
+  return function() {
     const duration = Date.now() - startTime;
     if (duration < 500) {
-      return `${fmt(duration)} ms`
-    } else if (duration < 5000) {
-      return `${fmt(duration / 1000, 2)} s `
-    } else if (duration < 60000) {
-      return `${fmt(duration / 1000, 1)} s `
+      return `${fmt(duration)} ms`;
+    } else if (duration < 5e3) {
+      return `${fmt(duration / 1e3, 2)} s `;
+    } else if (duration < 6e4) {
+      return `${fmt(duration / 1e3, 1)} s `;
     } else {
-      return `${fmt(duration / 1000 / 60, 1)} m `
+      return `${fmt(duration / 1e3 / 60, 1)} m `;
     }
-  }
+  };
 }
-
-exports.assertRoute = assertRoute;
-exports.routeIsPossible = routeIsPossible;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  assertRoute,
+  routeIsPossible
+});
 //# sourceMappingURL=index.cjs.map

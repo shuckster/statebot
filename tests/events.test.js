@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 
 const bot = Statebot('test-events-only', {
@@ -95,6 +97,6 @@ test(`expecting this many callbacks to have run`, () => {
   bot.emit('done')
   bot.emit('done')
 
-  expect(callCount).toEqual(EXPECTED_CALL_COUNT)
+  assert.deepEqual(callCount, EXPECTED_CALL_COUNT)
 })
 

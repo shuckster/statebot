@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 
 const EXPECTED_CALL_COUNT = 20
@@ -12,7 +14,7 @@ test(`expecting this many callbacks to have run`, () => {
   bot.emit('step')
   cleanup()
 
-  expect(callCount()).toEqual(EXPECTED_CALL_COUNT)
+  assert.deepEqual(callCount(), EXPECTED_CALL_COUNT)
 })
 
 test(`still expecting this many callbacks to have run`, () => {
@@ -20,7 +22,7 @@ test(`still expecting this many callbacks to have run`, () => {
   bot.emit('step')
   bot.emit('step')
 
-  expect(callCount()).toEqual(EXPECTED_CALL_COUNT)
+  assert.deepEqual(callCount(), EXPECTED_CALL_COUNT)
 })
 
 function initStatebot () {

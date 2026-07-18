@@ -1,3 +1,5 @@
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const mitt = require('mitt')
 const EventEmitter = require('events')
 const { Statebot } = require('../src/statebot')
@@ -46,7 +48,7 @@ const EXPECTED_CALL_ORDER = [
 
 test(`Throws if bad event-emitter passed-in`, () => {
 
-  expect(() => initStatebotWithEventEmitter({})).toThrow()
+  assert.throws(() => initStatebotWithEventEmitter({}))
 })
 
 test(`EventEmitter: expecting callbacks to appear in the correct order`, () => {
@@ -79,9 +81,8 @@ test(`EventEmitter: expecting callbacks to appear in the correct order`, () => {
   bot.emit('done')
   bot.emit('done')
 
-  expect(calls.length).toEqual(EXPECTED_CALL_ORDER.length)
-  expect(calls).toEqual(expect.arrayContaining(EXPECTED_CALL_ORDER))
-  expect(calls.join('/')).toEqual(EXPECTED_CALL_ORDER.join('/'))
+  assert.equal(calls.length, EXPECTED_CALL_ORDER.length)
+  assert.deepEqual(calls, EXPECTED_CALL_ORDER)
 })
 
 test(`mitt: expecting callbacks to appear in the correct order`, () => {
@@ -114,9 +115,8 @@ test(`mitt: expecting callbacks to appear in the correct order`, () => {
   bot.emit('done')
   bot.emit('done')
 
-  expect(calls.length).toEqual(EXPECTED_CALL_ORDER.length)
-  expect(calls).toEqual(expect.arrayContaining(EXPECTED_CALL_ORDER))
-  expect(calls.join('/')).toEqual(EXPECTED_CALL_ORDER.join('/'))
+  assert.equal(calls.length, EXPECTED_CALL_ORDER.length)
+  assert.deepEqual(calls, EXPECTED_CALL_ORDER)
 })
 
 function initStatebotWithEventEmitter(events) {

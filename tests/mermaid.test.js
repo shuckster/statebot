@@ -1,3 +1,5 @@
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const fs = require('fs')
 const path = require('path')
 const { mermaid } = require('../src/mermaid')
@@ -80,16 +82,15 @@ function compact(str) {
     .replace(rxStartOfLineWhitespace, '')
 }
 
-test.each(tests)(
-  'mermaid: can parse to Statebot chart',
-  ({ mmd, expected }) => {
+tests.forEach(({ mmd, expected }, index) => {
+  test(`mermaid: can parse to Statebot chart [${index}]`, () => {
     const parsedMmd = mermaid(mmd)
-    expect(compact(parsedMmd)).toEqual(compact(expected))
+    assert.deepEqual(compact(parsedMmd), compact(expected))
     const mmdDecomposed = decomposeChart(parsedMmd)
     const sbDecomposed = decomposeChart(expected)
-    expect(mmdDecomposed).toEqual(sbDecomposed)
-  }
-)
+    assert.deepEqual(mmdDecomposed, sbDecomposed)
+  })
+})
 
 test('mermaid: template literal test', () => {
   const parsedMmd = mermaid`
@@ -115,8 +116,8 @@ test('mermaid: template literal test', () => {
       prepareToGo -> go
   `
 
-  expect(compact(parsedMmd)).toEqual(compact(expectedChart))
+  assert.deepEqual(compact(parsedMmd), compact(expectedChart))
   const mmdDecomposed = decomposeChart(parsedMmd)
   const sbDecomposed = decomposeChart(expectedChart)
-  expect(mmdDecomposed).toEqual(sbDecomposed)
+  assert.deepEqual(mmdDecomposed, sbDecomposed)
 })

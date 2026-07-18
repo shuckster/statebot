@@ -8,8 +8,6 @@
 
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 isArray.displayName = 'isUnset';
 function isArray(obj) {
   return Array.isArray(obj)
@@ -117,7 +115,7 @@ function ArgTypeError(namespace) {
         }
         const signature = Object.keys(typeMap).join(', ');
         return (
-          `\n${namespace || ''}${fnName}(${signature}):\n` +
+          `\n${namespace}${fnName}(${signature}):\n` +
           `${err.map(err => `| ${err}`).join('\n')}`
         )
       }
@@ -173,7 +171,7 @@ function Logger (level, _console) {
   function canInfo () {
     return level >= 3
   }
-  const { info, table, log, warn, error } = _console || console;
+  const { info, table, log, warn, error } = console;
   return {
     canWarn,
     canLog,

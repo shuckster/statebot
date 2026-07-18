@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 
 const bot = Statebot('test-peek', {
@@ -42,54 +44,54 @@ const addBadHandlers = () => bot.performTransitions({
 })
 
 test(`test basic canTransitionTo() throws with wrong args`, () => {
-  expect(() => bot.canTransitionTo(1)).toThrow()
-  expect(() => bot.canTransitionTo(undefined, null, 'string')).toThrow()
-  expect(() => bot.canTransitionTo('', {})).toThrow()
-  expect(() => bot.canTransitionTo('', {}, '')).toThrow()
-  expect(() => bot.canTransitionTo('', { afterEmitting: '' }, '')).toThrow()
-  expect(() => bot.canTransitionTo('', { afterEmitting: '' })).not.toThrow()
-  expect(() => bot.canTransitionTo('')).not.toThrow()
-  expect(() => bot.canTransitionTo([''])).not.toThrow()
-  expect(() => bot.canTransitionTo('', '')).not.toThrow()
-  expect(() => bot.canTransitionTo(['', ''])).not.toThrow()
+  assert.throws(() => bot.canTransitionTo(1))
+  assert.throws(() => bot.canTransitionTo(undefined, null, 'string'))
+  assert.throws(() => bot.canTransitionTo('', {}))
+  assert.throws(() => bot.canTransitionTo('', {}, ''))
+  assert.throws(() => bot.canTransitionTo('', { afterEmitting: '' }, ''))
+  assert.doesNotThrow(() => bot.canTransitionTo('', { afterEmitting: '' }))
+  assert.doesNotThrow(() => bot.canTransitionTo(''))
+  assert.doesNotThrow(() => bot.canTransitionTo(['']))
+  assert.doesNotThrow(() => bot.canTransitionTo('', ''))
+  assert.doesNotThrow(() => bot.canTransitionTo(['', '']))
 })
 
 test(`test basic peek() usage`, () => {
   const removeHandlers = addGoodHandlers()
 
-  expect(bot.peek('start')).toBe('pending')
-  expect(bot.peek('pass')).toBe('idle')
-  expect(bot.peek('fail')).toBe('idle')
-  expect(bot.peek('done')).toBe('idle')
+  assert.equal(bot.peek('start'), 'pending')
+  assert.equal(bot.peek('pass'), 'idle')
+  assert.equal(bot.peek('fail'), 'idle')
+  assert.equal(bot.peek('done'), 'idle')
 
-  expect(bot.canTransitionTo('pending', { afterEmitting: 'start' })).toBe(true)
+  assert.equal(bot.canTransitionTo('pending', { afterEmitting: 'start' }), true)
   bot.emit('start')
-  expect(bot.canTransitionTo('pending', { afterEmitting: 'start' })).toBe(false)
+  assert.equal(bot.canTransitionTo('pending', { afterEmitting: 'start' }), false)
 
-  expect(bot.peek('start')).toBe('pending')
-  expect(bot.peek('pass')).toBe('resolved')
-  expect(bot.peek('fail')).toBe('rejected')
-  expect(bot.peek('done')).toBe('pending')
+  assert.equal(bot.peek('start'), 'pending')
+  assert.equal(bot.peek('pass'), 'resolved')
+  assert.equal(bot.peek('fail'), 'rejected')
+  assert.equal(bot.peek('done'), 'pending')
 
-  expect(bot.canTransitionTo('resolved', { afterEmitting: 'pass' })).toBe(true)
+  assert.equal(bot.canTransitionTo('resolved', { afterEmitting: 'pass' }), true)
   bot.emit('pass')
-  expect(bot.canTransitionTo('resolved', { afterEmitting: 'pass' })).toBe(false)
+  assert.equal(bot.canTransitionTo('resolved', { afterEmitting: 'pass' }), false)
 
-  expect(bot.peek('start')).toBe('resolved')
-  expect(bot.peek('pass')).toBe('resolved')
-  expect(bot.peek('fail')).toBe('resolved')
-  expect(bot.peek('done')).toBe('finished')
+  assert.equal(bot.peek('start'), 'resolved')
+  assert.equal(bot.peek('pass'), 'resolved')
+  assert.equal(bot.peek('fail'), 'resolved')
+  assert.equal(bot.peek('done'), 'finished')
 
-  expect(bot.peek('done', { finished: true })).toBe(true)
-  expect(bot.peek('done', { resolved: true })).toBe(null)
+  assert.equal(bot.peek('done', { finished: true }), true)
+  assert.equal(bot.peek('done', { resolved: true }), null)
 
-  expect(bot.canTransitionTo('finished', { afterEmitting: 'done' })).toBe(true)
+  assert.equal(bot.canTransitionTo('finished', { afterEmitting: 'done' }), true)
   bot.emit('done')
-  expect(bot.canTransitionTo('finished', { afterEmitting: 'done' })).toBe(false)
+  assert.equal(bot.canTransitionTo('finished', { afterEmitting: 'done' }), false)
 
-  expect(bot.peek('done', {})).toBe(null)
-  expect(bot.peek('done', { undefined })).toBe(undefined)
-  expect(bot.peek('done', { undefined: () => null })).toBe(null)
+  assert.equal(bot.peek('done', {}), null)
+  assert.equal(bot.peek('done', { undefined }), undefined)
+  assert.equal(bot.peek('done', { undefined: () => null }), null)
 
   bot.reset()
   removeHandlers()
@@ -103,10 +105,10 @@ test(`test extended peek() usage`, () => {
     'pending': () => 'pending',
   }
 
-  expect(bot.peek('start', peekConfig1)).toBe('pending')
-  expect(bot.peek('pass', peekConfig1)).toBe('idle')
-  expect(bot.peek('fail', peekConfig1)).toBe('idle')
-  expect(bot.peek('done', peekConfig1)).toBe('idle')
+  assert.equal(bot.peek('start', peekConfig1), 'pending')
+  assert.equal(bot.peek('pass', peekConfig1), 'idle')
+  assert.equal(bot.peek('fail', peekConfig1), 'idle')
+  assert.equal(bot.peek('done', peekConfig1), 'idle')
 
   bot.emit('start')
 
@@ -116,10 +118,10 @@ test(`test extended peek() usage`, () => {
     'rejected': () => 'rejected',
   }
 
-  expect(bot.peek('start', peekConfig2)).toBe('pending')
-  expect(bot.peek('pass', peekConfig2)).toBe('resolved')
-  expect(bot.peek('fail', peekConfig2)).toBe('rejected')
-  expect(bot.peek('done', peekConfig2)).toBe('pending')
+  assert.equal(bot.peek('start', peekConfig2), 'pending')
+  assert.equal(bot.peek('pass', peekConfig2), 'resolved')
+  assert.equal(bot.peek('fail', peekConfig2), 'rejected')
+  assert.equal(bot.peek('done', peekConfig2), 'pending')
 
   bot.emit('pass')
 
@@ -128,19 +130,19 @@ test(`test extended peek() usage`, () => {
     'finished': () => 'finished',
   }
 
-  expect(bot.peek('start', peekConfig3)).toBe('resolved')
-  expect(bot.peek('pass', peekConfig3)).toBe('resolved')
-  expect(bot.peek('fail', peekConfig3)).toBe('resolved')
-  expect(bot.peek('done', peekConfig3)).toBe('finished')
+  assert.equal(bot.peek('start', peekConfig3), 'resolved')
+  assert.equal(bot.peek('pass', peekConfig3), 'resolved')
+  assert.equal(bot.peek('fail', peekConfig3), 'resolved')
+  assert.equal(bot.peek('done', peekConfig3), 'finished')
 
-  expect(bot.peek('done', { finished: true })).toBe(true)
-  expect(bot.peek('done', { resolved: true })).toBe(null)
+  assert.equal(bot.peek('done', { finished: true }), true)
+  assert.equal(bot.peek('done', { resolved: true }), null)
 
   bot.emit('done')
 
-  expect(bot.peek('done', {})).toBe(null)
-  expect(bot.peek('done', { undefined })).toBe(undefined)
-  expect(bot.peek('done', { undefined: () => null })).toBe(null)
+  assert.equal(bot.peek('done', {}), null)
+  assert.equal(bot.peek('done', { undefined }), undefined)
+  assert.equal(bot.peek('done', { undefined: () => null }), null)
 
   bot.reset()
   removeHandlers()
@@ -149,35 +151,35 @@ test(`test extended peek() usage`, () => {
 test(`test bad performTransitions() config`, () => {
   const removeHandlers = addBadHandlers()
 
-  expect(bot.peek('start')).toBe('pending')
-  expect(bot.peek('pass')).toBe('idle')
-  expect(bot.peek('fail')).toBe('idle')
-  expect(bot.peek('done')).toBe('idle')
+  assert.equal(bot.peek('start'), 'pending')
+  assert.equal(bot.peek('pass'), 'idle')
+  assert.equal(bot.peek('fail'), 'idle')
+  assert.equal(bot.peek('done'), 'idle')
 
   bot.emit('start')
 
-  expect(bot.peek('start')).toBe('pending')
-  expect(() => bot.peek('pass')).toThrow()
-  expect(() => bot.canTransitionTo('resolved', { afterEmitting: 'pass'})).toThrow()
-  expect(bot.peek('fail')).toBe('pending')
-  expect(bot.peek('done')).toBe('pending')
+  assert.equal(bot.peek('start'), 'pending')
+  assert.throws(() => bot.peek('pass'))
+  assert.throws(() => bot.canTransitionTo('resolved', { afterEmitting: 'pass'}))
+  assert.equal(bot.peek('fail'), 'pending')
+  assert.equal(bot.peek('done'), 'pending')
 
-  expect(() => bot.emit('pass')).toThrow()
+  assert.throws(() => bot.emit('pass'))
 
-  expect(bot.peek('start')).toBe('pending')
-  expect(() => bot.peek('pass')).toThrow()
-  expect(() => bot.canTransitionTo('resolved', { afterEmitting: 'pass'})).toThrow()
-  expect(bot.peek('fail')).toBe('pending')
-  expect(bot.peek('done')).toBe('pending')
+  assert.equal(bot.peek('start'), 'pending')
+  assert.throws(() => bot.peek('pass'))
+  assert.throws(() => bot.canTransitionTo('resolved', { afterEmitting: 'pass'}))
+  assert.equal(bot.peek('fail'), 'pending')
+  assert.equal(bot.peek('done'), 'pending')
 
-  expect(bot.peek('done', { finished: true })).toBe(null)
-  expect(bot.peek('done', { resolved: true })).toBe(null)
+  assert.equal(bot.peek('done', { finished: true }), null)
+  assert.equal(bot.peek('done', { resolved: true }), null)
 
   bot.emit('done')
 
-  expect(bot.peek('done', {})).toBe(null)
-  expect(bot.peek('done', { undefined })).toBe(undefined)
-  expect(bot.peek('done', { undefined: () => null })).toBe(null)
+  assert.equal(bot.peek('done', {}), null)
+  assert.equal(bot.peek('done', { undefined }), undefined)
+  assert.equal(bot.peek('done', { undefined: () => null }), null)
 
   bot.reset()
   removeHandlers()

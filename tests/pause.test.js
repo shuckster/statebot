@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 
 const bot = Statebot('pause-and-resume-should-work', {
@@ -41,7 +43,7 @@ const EXPECTED_CALL_COUNT_AFTER_RESUMING = 36
 const EXPECTED_CALL_COUNT_AFTER_CLEANUP = 36
 
 test(`expecting not to be paused by default`, () => {
-  expect(false).toEqual(bot.paused())
+  assert.deepEqual(false, bot.paused())
 })
 
 test(`expecting this many callbacks to have run`, () => {
@@ -49,35 +51,35 @@ test(`expecting this many callbacks to have run`, () => {
   bot.emit('step')
   bot.emit('step')
 
-  expect(callCount).toEqual(EXPECTED_CALL_COUNT)
+  assert.deepEqual(callCount, EXPECTED_CALL_COUNT)
 })
 
 test(`still expecting this many callbacks to have run`, () => {
   bot.pause()
 
-  expect(true).toEqual(bot.paused())
+  assert.deepEqual(true, bot.paused())
 
   bot.emit('step')
   bot.emit('step')
   bot.emit('step')
 
-  expect(callCount).toEqual(EXPECTED_CALL_COUNT_AFTER_PAUSING)
+  assert.deepEqual(callCount, EXPECTED_CALL_COUNT_AFTER_PAUSING)
 })
 
 test(`expecting a few more callbacks to have run after resuming`, () => {
   bot.resume()
 
-  expect(false).toEqual(bot.paused())
+  assert.deepEqual(false, bot.paused())
 
   bot.emit('step')
   bot.emit('step')
   bot.emit('step')
 
-  expect(callCount).toEqual(EXPECTED_CALL_COUNT_AFTER_RESUMING)
+  assert.deepEqual(callCount, EXPECTED_CALL_COUNT_AFTER_RESUMING)
 })
 
 test(`expecting NO more callbacks to have run after cleanup`, () => {
   cleanupFns.forEach(fn => fn())
 
-  expect(callCount).toEqual(EXPECTED_CALL_COUNT_AFTER_CLEANUP)
+  assert.deepEqual(callCount, EXPECTED_CALL_COUNT_AFTER_CLEANUP)
 })

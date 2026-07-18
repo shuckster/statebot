@@ -120,17 +120,11 @@
   };
   function ArgTypeError(namespace) {
     return typeMap => {
-      const argMap = Object.entries(typeMap).map(_ref => {
-        let [argName, argType] = _ref;
-        return {
-          argName,
-          argType
-        };
-      });
-      return fnName => function () {
-        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
+      const argMap = Object.entries(typeMap).map(([argName, argType]) => ({
+        argName,
+        argType
+      }));
+      return fnName => (...args) => {
         const processedArgs = Array.from(args, x => isArguments(x) ? Array.from(x) : x).flat(1);
         const err = processedArgs.map(typeErrorStringFromArgument(argMap)).filter(isString);
         if (!err.length) {
@@ -143,31 +137,15 @@
   }
 
   function wrapEmitter(events) {
-    const emit = function (eventName) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-      return events.emit(eventName, args);
-    };
-    const addListener = events.addListener ? function () {
-      return events.addListener(...arguments);
-    } : function () {
-      return events.on(...arguments);
-    };
-    const removeListener = events.removeListener ? function () {
-      return events.removeListener(...arguments);
-    } : function () {
-      return events.off(...arguments);
-    };
+    const emit = (eventName, ...args) => events.emit(eventName, args);
+    const addListener = events.addListener ? (...args) => events.addListener(...args) : (...args) => events.on(...args);
+    const removeListener = events.removeListener ? (...args) => events.removeListener(...args) : (...args) => events.off(...args);
     const wrapMap = new Map();
     function on(eventName, fn) {
       let fnMeta = wrapMap.get(fn);
       if (!fnMeta) {
         fnMeta = {
-          handleEvent: function () {
-            let args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-            return fn(...[args].flat());
-          },
+          handleEvent: (args = []) => fn(...[args].flat()),
           refCount: 0
         };
         wrapMap.set(fn, fnMeta);
@@ -195,22 +173,14 @@
   function uniq(input) {
     return input.reduce((acc, one) => acc.indexOf(one) === -1 ? (acc.push(one), acc) : acc, []);
   }
-  function defer(fn) {
-    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-      args[_key2 - 1] = arguments[_key2];
-    }
+  function defer(fn, ...args) {
     const timer = setTimeout(fn, 0, ...args);
     return () => {
       clearTimeout(timer);
     };
   }
   function Defer(fn) {
-    return function () {
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
-      return defer(fn, ...args);
-    };
+    return (...args) => defer(fn, ...args);
   }
   function Once(fn) {
     const {
@@ -218,8 +188,8 @@
       fn: _fn
     } = Revokable(fn);
     let result;
-    return function () {
-      result = _fn(...arguments);
+    return function (...args) {
+      result = _fn(...args);
       revoke();
       return result;
     };
@@ -228,9 +198,9 @@
     let revoked = false;
     let result;
     return {
-      fn: function () {
+      fn: (...args) => {
         if (!revoked) {
-          result = fn(...arguments);
+          result = fn(...args);
         }
         return result;
       },
@@ -241,14 +211,14 @@
   }
   function Pausables(startPaused, runFnWhenPaused) {
     runFnWhenPaused = runFnWhenPaused || function () {};
-    let paused = !!startPaused;
+    let paused = false;
     function Pausable(fn) {
-      return function () {
+      return (...args) => {
         if (paused) {
           runFnWhenPaused();
           return false;
         }
-        return fn(...arguments);
+        return fn(...args);
       };
     }
     return {
@@ -262,10 +232,7 @@
       }
     };
   }
-  function ReferenceCounter(logPrefix, kind, description) {
-    for (var _len4 = arguments.length, expecting = new Array(_len4 > 3 ? _len4 - 3 : 0), _key4 = 3; _key4 < _len4; _key4++) {
-      expecting[_key4 - 3] = arguments[_key4];
-    }
+  function ReferenceCounter(logPrefix, kind, description, ...expecting) {
     const _refs = [...expecting].flat().reduce((acc, ref) => ({
       ...acc,
       [ref]: 0
@@ -289,8 +256,7 @@
       };
     }
     function table() {
-      return Object.keys(_refs).sort().map(key => [key, _refs[key]]).map(_ref => {
-        let [ref, count] = _ref;
+      return Object.keys(_refs).sort((a, b) => a - b).map(key => [key, _refs[key]]).map(([ref, count]) => {
         return {
           [kind]: ref,
           refs: count || 'None'
@@ -362,20 +328,20 @@
       canWarn,
       canLog,
       canInfo,
-      info: function () {
-        canInfo() && info(...arguments);
+      info: (...args) => {
+        canInfo() && info(...args);
       },
-      table: function () {
-        canLog() && table(...arguments);
+      table: (...args) => {
+        canLog() && table(...args);
       },
-      log: function () {
-        canLog() && log(...arguments);
+      log: (...args) => {
+        canLog() && log(...args);
       },
-      warn: function () {
-        canWarn() && warn(...arguments);
+      warn: (...args) => {
+        canWarn() && warn(...args);
       },
-      error: function () {
-        error(...arguments);
+      error: (...args) => {
+        error(...args);
       }
     };
   }
@@ -465,8 +431,7 @@
     }, false);
     return output;
   }
-  function decomposeTransitionsFromRoute(_ref) {
-    let [fromStates, toStates] = _ref;
+  function decomposeTransitionsFromRoute([fromStates, toStates]) {
     return fromStates.reduce((acc, fromState) => (acc.push(...toStates.map(toState => [fromState, toState])), acc), []);
   }
 
@@ -572,8 +537,7 @@
         const route = `${fromState}->${toState}`;
         return [routesHandled.increase(route), onInternalEvent(route, bindActionTo(toState, action))];
       }
-      function decomposeTransitionsForEvent(acc, _ref) {
-        let [eventName, transitionsAndAction] = _ref;
+      function decomposeTransitionsForEvent(acc, [eventName, transitionsAndAction]) {
         const {
           states,
           routes,
@@ -588,25 +552,20 @@
           [eventName]: configs
         };
       }
-      function ifStateThenEnterState(_ref2) {
-        let {
-          fromState,
-          toState,
-          action,
-          args
-        } = _ref2;
+      function ifStateThenEnterState({
+        fromState,
+        toState,
+        action,
+        args
+      }) {
         return inState(fromState, () => {
           enter(toState, ...args);
           isFunction(action) && runActionFor(toState, action, ...args);
           return true;
         });
       }
-      function createEventHandlerForTransition(_ref3) {
-        let [eventName, configs] = _ref3;
-        return [eventsHandled.increase(eventName), onEvent(eventName, function () {
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
+      function createEventHandlerForTransition([eventName, configs]) {
+        return [eventsHandled.increase(eventName), onEvent(eventName, (...args) => {
           const eventWasHandled = configs.map(config => ({
             ...config,
             args
@@ -614,18 +573,12 @@
           if (!eventWasHandled) {
             transitionNoOp(`Event not handled: "${eventName}"`);
           }
-        })].concat(configs.map(_ref4 => {
-          let {
-            fromState,
-            toState
-          } = _ref4;
-          return transitionsFromEvents.define(`${eventName}:${fromState}`, toState);
-        }));
+        })].concat(configs.map(({
+          fromState,
+          toState
+        }) => transitionsFromEvents.define(`${eventName}:${fromState}`, toState)));
       }
-      function runActionFor(state, actionFn) {
-        for (var _len2 = arguments.length, args = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-          args[_key2 - 2] = arguments[_key2];
-        }
+      function runActionFor(state, actionFn, ...args) {
         const onExitingState = actionFn(...args);
         if (isFunction(onExitingState)) {
           const uninstall = Once(enterExitMethods[ON_EXITING](state, toState => {
@@ -636,16 +589,10 @@
         }
       }
       function bindActionTo(state, actionFn) {
-        return function () {
-          for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-            args[_key3] = arguments[_key3];
-          }
-          return runActionFor(state, actionFn, ...args);
-        };
+        return (...args) => runActionFor(state, actionFn, ...args);
       }
     }
-    function _peek(eventName, stateObject) {
-      let calledInternally = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+    function _peek(eventName, stateObject, calledInternally = true) {
       const err1 = argTypeError({
         eventName: isString
       })('peek')(eventName);
@@ -690,10 +637,7 @@
     function currentState() {
       return stateHistory[stateHistory.length - 1];
     }
-    function _state_canTransitionTo() {
-      for (var _len4 = arguments.length, states = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        states[_key4] = arguments[_key4];
-      }
+    function _state_canTransitionTo(...states) {
       const err = argTypeError({
         states: isAllStrings
       })('canTransitionTo')([states]);
@@ -706,10 +650,7 @@
       const nextStates = statesAvailableFromHere();
       return states.every(state => nextStates.includes(state));
     }
-    function canTransitionTo() {
-      for (var _len5 = arguments.length, states = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        states[_key5] = arguments[_key5];
-      }
+    function canTransitionTo(...states) {
       const testStates = states.flat();
       if (testStates.length === 2 && isString(testStates[0]) && isPojo(testStates[1])) {
         const thisState = testStates[0];
@@ -740,7 +681,7 @@
         return fromState === _state ? [...acc, toState] : acc;
       }, []);
     }
-    function _inState(state, anyOrFn) {
+    function _inState(state, anyOrFn, ...fnArgs) {
       const conditionMatches = currentState() === state;
       if (isUndefined(anyOrFn)) {
         return conditionMatches;
@@ -749,33 +690,24 @@
         return null;
       }
       if (isFunction(anyOrFn)) {
-        for (var _len6 = arguments.length, fnArgs = new Array(_len6 > 2 ? _len6 - 2 : 0), _key6 = 2; _key6 < _len6; _key6++) {
-          fnArgs[_key6 - 2] = arguments[_key6];
-        }
         return anyOrFn(...fnArgs);
       }
       return anyOrFn;
     }
-    function _inStateObject(stateObject) {
-      const match = Object.entries(stateObject).find(_ref5 => {
-        let [state] = _ref5;
-        return _inState(state);
-      });
-      for (var _len7 = arguments.length, fnArgs = new Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
-        fnArgs[_key7 - 1] = arguments[_key7];
-      }
+    function _inStateObject(stateObject, ...fnArgs) {
+      const match = Object.entries(stateObject).find(([state]) => _inState(state));
       return match ? _inState(...match.concat(fnArgs)) : null;
     }
-    function inState() {
+    function inState(...args) {
       const err = argTypeError({
         state: [isString, isPojo]
-      })('inState')(arguments.length <= 0 ? undefined : arguments[0]);
+      })('inState')(args[0]);
       if (err) {
         throw new TypeError(err);
       }
-      return isPojo(arguments.length <= 0 ? undefined : arguments[0]) ? _inStateObject(...arguments) : _inState(...arguments);
+      return isPojo(args[0]) ? _inStateObject(...args) : _inState(...args);
     }
-    const emit = function (eventName) {
+    const emit = (eventName, ...args) => {
       const err = argTypeError({
         eventName: isString
       })('emit')(eventName);
@@ -783,12 +715,9 @@
         throw new TypeError(err);
       }
       _peek(eventName);
-      for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
-        args[_key8 - 1] = arguments[_key8];
-      }
       return events.emit(eventName, ...args);
     };
-    const enter = function (state) {
+    const enter = (state, ...args) => {
       const err = argTypeError({
         state: isString
       })('enter')(state);
@@ -814,9 +743,6 @@
       stateHistory.push(toState);
       if (stateHistory.length > stateHistoryLimit) {
         stateHistory.shift();
-      }
-      for (var _len9 = arguments.length, args = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
-        args[_key9 - 1] = arguments[_key9];
       }
       emitInternalEvent(INTERNAL_EVENTS[ON_SWITCHING], toState, inState, ...args);
       emitInternalEvent(nextRoute, ...args);
@@ -866,10 +792,7 @@
             throw new TypeError(err);
           }
           const decreaseRefCounts = [statesHandled.increase(state), statesHandled.increase(`${state}:${eventName}`)];
-          const removeEvent = switchMethods[switchMethod](function (toState, fromState) {
-            for (var _len10 = arguments.length, args = new Array(_len10 > 2 ? _len10 - 2 : 0), _key10 = 2; _key10 < _len10; _key10++) {
-              args[_key10 - 2] = arguments[_key10];
-            }
+          const removeEvent = switchMethods[switchMethod]((toState, fromState, ...args) => {
             if (name.indexOf('Exit') === 0) {
               state === fromState && cb(toState, ...args);
             } else {
@@ -878,75 +801,43 @@
           });
           return () => {
             removeEvent();
-            decreaseRefCounts.map(fn => fn());
+            decreaseRefCounts.forEach(fn => fn());
           };
         }
       };
     }, {});
-    function Emit(eventName) {
-      for (var _len11 = arguments.length, curriedArgs = new Array(_len11 > 1 ? _len11 - 1 : 0), _key11 = 1; _key11 < _len11; _key11++) {
-        curriedArgs[_key11 - 1] = arguments[_key11];
-      }
+    function Emit(eventName, ...curriedArgs) {
       const err = argTypeError({
         eventName: isString
       })('Emit')(eventName);
       if (err) {
         throw new TypeError(err);
       }
-      return function () {
-        for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-          args[_key12] = arguments[_key12];
-        }
-        return emit(eventName, ...[...curriedArgs, ...args]);
-      };
+      return (...args) => emit(eventName, ...[...curriedArgs, ...args]);
     }
-    function Enter(state) {
-      for (var _len13 = arguments.length, curriedArgs = new Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
-        curriedArgs[_key13 - 1] = arguments[_key13];
-      }
+    function Enter(state, ...curriedArgs) {
       const err = argTypeError({
         state: isString
       })('Enter')(state);
       if (err) {
         throw new TypeError(err);
       }
-      return function () {
-        for (var _len14 = arguments.length, args = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-          args[_key14] = arguments[_key14];
-        }
-        return enter(state, ...[...curriedArgs, ...args]);
-      };
+      return (...args) => enter(state, ...[...curriedArgs, ...args]);
     }
-    function _InState(state, anyOrFn) {
-      for (var _len15 = arguments.length, curriedFnArgs = new Array(_len15 > 2 ? _len15 - 2 : 0), _key15 = 2; _key15 < _len15; _key15++) {
-        curriedFnArgs[_key15 - 2] = arguments[_key15];
-      }
-      return function () {
-        for (var _len16 = arguments.length, fnArgs = new Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
-          fnArgs[_key16] = arguments[_key16];
-        }
-        return inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs]);
-      };
+    function _InState(state, anyOrFn, ...curriedFnArgs) {
+      return (...fnArgs) => inState(state, anyOrFn, ...[...curriedFnArgs, ...fnArgs]);
     }
-    function _InStateObject(stateObject) {
-      for (var _len17 = arguments.length, curriedFnArgs = new Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
-        curriedFnArgs[_key17 - 1] = arguments[_key17];
-      }
-      return function () {
-        for (var _len18 = arguments.length, fnArgs = new Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-          fnArgs[_key18] = arguments[_key18];
-        }
-        return inState(stateObject, ...[...curriedFnArgs, ...fnArgs]);
-      };
+    function _InStateObject(stateObject, ...curriedFnArgs) {
+      return (...fnArgs) => inState(stateObject, ...[...curriedFnArgs, ...fnArgs]);
     }
-    function InState() {
+    function InState(...args) {
       const err = argTypeError({
         state: [isString, isPojo]
-      })('InState')(arguments.length <= 0 ? undefined : arguments[0]);
+      })('InState')(args[0]);
       if (err) {
         throw new TypeError(err);
       }
-      return isPojo(arguments.length <= 0 ? undefined : arguments[0]) ? _InStateObject(...arguments) : _InState(...arguments);
+      return isPojo(args[0]) ? _InStateObject(...args) : _InState(...args);
     }
     function reset() {
       _console.warn(`${logPrefix}: State-machine reset!`);
@@ -1024,8 +915,7 @@
   function decomposeHitcherActions(hitcherActions) {
     const transitionsForEvents = {};
     const transitionsOnly = [];
-    Object.entries(hitcherActions).map(_ref6 => {
-      let [routeChart, actionFnOrConfigObj] = _ref6;
+    Object.entries(hitcherActions).map(([routeChart, actionFnOrConfigObj]) => {
       if (isFunction(actionFnOrConfigObj)) {
         transitionsOnly.push({
           routeChart,
@@ -1081,14 +971,11 @@
         allStates.push(...states);
         allRoutes.push(...routes);
       }
-      return [...acc, ...transitions.map(_ref7 => {
-        let [fromState, toState] = _ref7;
-        return {
-          fromState,
-          toState,
-          action
-        };
-      })];
+      return [...acc, ...transitions.map(([fromState, toState]) => ({
+        fromState,
+        toState,
+        action
+      }))];
     }, []);
     return {
       configs: _configs,
@@ -1186,11 +1073,11 @@
         reject(finaliseReport(new Error('NO ROUTE TO TEST')));
         return;
       }
-      const clearTimeoutAndResolve = function () {
+      const clearTimeoutAndResolve = (...args) => {
         clearTimeout(assertionTimeoutTimer);
         removeFromStateActionFn();
         removeOnSwitchingListener();
-        resolve(...arguments);
+        resolve(...args);
       };
       const clearTimeoutAndReject = err => {
         clearTimeout(assertionTimeoutTimer);
@@ -1244,10 +1131,7 @@
     function lock() {
       locked = true;
     }
-    function addRow() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
+    function addRow(...args) {
       if (locked) {
         return;
       }
@@ -1322,13 +1206,12 @@
     return linesFrom(mmd).join('\n').replace(rxMermaidPreviewVsts, '$1').replace(rxFrontMatter, '').replace(rxMermaidHeader, '').replace(rxMermaidDirection, '').replace(rxMermaidComment, '//').replace(rxMermaidStartState, '__START__ -->').replace(rxMermaidStopState, '--> __STOP__').replace(rxMermaidArrow, cxArrow);
   }
 
-  const makeHooks = _ref => {
-    let {
-      Statebot,
-      useEffect,
-      useState,
-      useMemo
-    } = _ref;
+  const makeHooks = ({
+    Statebot,
+    useEffect,
+    useState,
+    useMemo
+  }) => {
     if (![useEffect, useState, useMemo].every(x => typeof x === 'function')) {
       console.warn('Statebot Hooks unavailable: React or Mithril not found');
     }
@@ -1381,17 +1264,17 @@
     function useStatebotEvent(bot, eventName, stateOrFn, maybeFn) {
       useEffect(() => {
         let done = false;
-        function onSwitchFn() {
+        function onSwitchFn(...args) {
           if (done) {
             return;
           }
-          stateOrFn(...arguments);
+          stateOrFn(...args);
         }
-        function onEnterOrExitFn() {
+        function onEnterOrExitFn(...args) {
           if (done) {
             return;
           }
-          maybeFn(...arguments);
+          maybeFn(...args);
         }
         const args = typeof maybeFn === 'function' ? [stateOrFn, onEnterOrExitFn] : [onSwitchFn];
         const removeListener = bot[eventName](...args);
@@ -1433,8 +1316,6 @@
   exports.useStatebot = useStatebot;
   exports.useStatebotEvent = useStatebotEvent;
   exports.useStatebotFactory = useStatebotFactory;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
 //# sourceMappingURL=statebot.js.map

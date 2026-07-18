@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 const { routeIsPossible } = require('../assert/index.cjs')
 
@@ -27,11 +29,11 @@ const ROUTES_WITH_BACKTRACKING = [
 ]
 
 test(`routeIsPossible() expects at least two arguments`, () => {
-  expect(() => routeIsPossible()).toThrow()
+  assert.throws(() => routeIsPossible())
 })
 
 ROUTES_WITH_BACKTRACKING.forEach(route => {
   test(`bot should be able to trace this route:\n${route}`, () => {
-    expect(true).toEqual(routeIsPossible(bot, route))
+    assert.deepEqual(true, routeIsPossible(bot, route))
   })
 })

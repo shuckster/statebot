@@ -1,4 +1,4 @@
-import { cxArrow, linesFrom } from './parsing'
+import { cxArrow, linesFrom } from './parsing.js'
 
 const rxFrontMatter = /---[\r\n]+[\w\W]*---[\r\n]+[\r\n\s]*/m
 const rxMermaidHeader = /stateDiagram(-v2)?[\r\n\s]*/g

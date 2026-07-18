@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 
 const bot = Statebot('test-enter-only', {
@@ -83,6 +85,6 @@ test(`enter states with correct number of arguments passed-down`, () => {
   enterOne()
   enterOne()
 
-  expect(callCount).toEqual(EXPECTED_ENTER_ARITY_COUNT)
+  assert.deepEqual(callCount, EXPECTED_ENTER_ARITY_COUNT)
 })
 

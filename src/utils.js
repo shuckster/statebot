@@ -15,7 +15,7 @@ export {
   wrapEmitter,
 }
 
-import { isString } from './types'
+import { isString } from './types.js'
 
 function wrapEmitter (events) {
   const emit = (eventName, ...args) =>

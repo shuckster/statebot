@@ -11,6 +11,18 @@
       "./hooks/react/index.d.ts",
       "./hooks/mithril/index.d.ts"
     ],
-    "out": "docs"
+    "out": "docs",
+    "highlightLanguages": [
+      "javascript",
+      "js",
+      "jsx",
+      "typescript",
+      "ts",
+      "tsx",
+      "json",
+      "bash",
+      "shell",
+      "mermaid"
+    ]
   }
 }

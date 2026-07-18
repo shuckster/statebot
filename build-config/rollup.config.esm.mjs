@@ -1,11 +1,13 @@
-import builtins from 'rollup-plugin-node-builtins'
+import { createRequire } from 'node:module'
 import cleanup from 'rollup-plugin-cleanup'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
 
-import pkg from '../package.json'
-import { banner } from './rollup.common.js'
+import { banner } from './rollup.common.mjs'
+
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json')
 
 export default {
   input: 'src/index.js',
@@ -20,5 +22,5 @@ export default {
       sourcemap: true
     }
   ],
-  plugins: [json(), builtins(), resolve(), commonjs(), cleanup()]
+  plugins: [json(), resolve(), commonjs(), cleanup()]
 }

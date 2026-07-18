@@ -1,11 +1,13 @@
+import { createRequire } from 'node:module'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
-import builtins from 'rollup-plugin-node-builtins'
 import cleanup from 'rollup-plugin-cleanup'
 
-import pkg from '../package.json'
-import { banner } from './rollup.common.js'
+import { banner } from './rollup.common.mjs'
+
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json')
 
 export default {
   input: 'assert/index.mjs',
@@ -19,7 +21,6 @@ export default {
   ],
   plugins: [
     json(),
-    builtins(),
     resolve({ preferBuiltins: false }),
     commonjs(),
     cleanup()

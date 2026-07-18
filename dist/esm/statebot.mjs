@@ -208,7 +208,7 @@ function Revokable (fn) {
 }
 function Pausables (startPaused, runFnWhenPaused) {
   runFnWhenPaused = runFnWhenPaused || function () {};
-  let paused = !!startPaused;
+  let paused = false;
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
@@ -244,7 +244,8 @@ function ReferenceCounter (logPrefix, kind, description, ...expecting) {
     return { ..._refs }
   }
   function table () {
-    return Object.keys(_refs).sort()
+    return Object.keys(_refs)
+      .sort((a, b) => a - b)
       .map(key => [key, _refs[key]])
       .map(([ref, count]) => {
         return {
@@ -835,7 +836,7 @@ function Statebot (name, options) {
           );
           return () => {
             removeEvent();
-            decreaseRefCounts.map(fn => fn());
+            decreaseRefCounts.forEach(fn => fn());
           }
         }
       }

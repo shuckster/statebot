@@ -8,15 +8,15 @@ export {
   assertRoute
 }
 
-import { isStatebot } from '../src/statebot'
-import { decomposeRoute } from '../src/parsing'
-import { isTemplateLiteral, ArgTypeError } from '../src/types'
+import { isStatebot } from '../src/statebot.js'
+import { decomposeRoute } from '../src/parsing.js'
+import { isTemplateLiteral, ArgTypeError } from '../src/types.js'
 import {
   Defer,
   Once,
   Revokable,
   Logger,
-} from '../src/utils'
+} from '../src/utils.js'
 
 const argTypeError = ArgTypeError('statebot.')
 

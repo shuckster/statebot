@@ -1,13 +1,15 @@
+import { createRequire } from 'node:module'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
-import builtins from 'rollup-plugin-node-builtins'
 import cleanup from 'rollup-plugin-cleanup'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 
-import pkg from '../package.json'
-import { banner, terserConfig } from './rollup.common.js'
+import { banner, terserConfig } from './rollup.common.mjs'
+
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json')
 
 const eslintComment =
   '/* eslint-disable no-func-assign, no-unsafe-finally, no-unused-vars */'
@@ -50,7 +52,6 @@ export default {
   ],
   plugins: [
     json(),
-    builtins(),
     resolve(),
     commonjs(),
     cleanup(),

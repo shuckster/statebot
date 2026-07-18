@@ -1,3 +1,5 @@
+const { test, mock } = require('node:test')
+const assert = require('node:assert/strict')
 const { makeHooks } = require('../hooks/make-hooks.mjs')
 
 function makeUseEffect() {
@@ -10,8 +12,8 @@ function makeUseEffect() {
 }
 
 test('useStatebot listens for state changes and cleans up listeners', () => {
-  const setState = jest.fn()
-  const offSwitched = jest.fn()
+  const setState = mock.fn()
+  const offSwitched = mock.fn()
   let onSwitched
 
   const bot = {
@@ -24,32 +26,32 @@ test('useStatebot listens for state changes and cleans up listeners', () => {
 
   const { useEffect, cleanups } = makeUseEffect()
   const { useStatebot } = makeHooks({
-    Statebot: jest.fn(),
+    Statebot: mock.fn(),
     useEffect,
     useState: (initial) => [initial, setState],
     useMemo: (cb) => cb(),
   })
 
-  expect(useStatebot(bot)).toBe('idle')
+  assert.equal(useStatebot(bot), 'idle')
   onSwitched('loading')
-  expect(setState).toHaveBeenCalledWith('loading')
+  assert.deepEqual(setState.mock.calls[0].arguments, ['loading'])
 
   cleanups[0]()
   onSwitched('done')
 
-  expect(setState).toHaveBeenCalledTimes(1)
-  expect(offSwitched).toHaveBeenCalledTimes(1)
+  assert.equal(setState.mock.callCount(), 1)
+  assert.equal(offSwitched.mock.callCount(), 1)
 })
 
 test('useStatebotFactory wires transitions and cleans up created listeners', () => {
-  const offPerformTransitions = jest.fn()
-  const offOnTransitions = jest.fn()
-  const offSwitched = jest.fn()
-  const pause = jest.fn()
-  const setState = jest.fn()
-  const Statebot = jest.fn((name, config) => {
-    expect(name).toBe('loading-button')
-    expect(config).toEqual({ chart: 'idle -> loading -> idle' })
+  const offPerformTransitions = mock.fn()
+  const offOnTransitions = mock.fn()
+  const offSwitched = mock.fn()
+  const pause = mock.fn()
+  const setState = mock.fn()
+  const Statebot = mock.fn((name, config) => {
+    assert.equal(name, 'loading-button')
+    assert.deepEqual(config, { chart: 'idle -> loading -> idle' })
     return {
       currentState: () => 'idle',
       onSwitched: () => offSwitched,
@@ -73,37 +75,37 @@ test('useStatebotFactory wires transitions and cleans up created listeners', () 
     onTransitions: { b: 2 },
   })
 
-  expect(state).toBe('idle')
-  expect(typeof bot).toBe('object')
-  expect(Statebot).toHaveBeenCalledTimes(1)
+  assert.equal(state, 'idle')
+  assert.equal(typeof bot, 'object')
+  assert.equal(Statebot.mock.callCount(), 1)
 
   cleanups.forEach((cb) => cb())
 
-  expect(pause).toHaveBeenCalledTimes(1)
-  expect(offPerformTransitions).toHaveBeenCalledTimes(1)
-  expect(offOnTransitions).toHaveBeenCalledTimes(1)
-  expect(offSwitched).toHaveBeenCalledTimes(1)
+  assert.equal(pause.mock.callCount(), 1)
+  assert.equal(offPerformTransitions.mock.callCount(), 1)
+  assert.equal(offOnTransitions.mock.callCount(), 1)
+  assert.equal(offSwitched.mock.callCount(), 1)
 })
 
 test('useStatebotEvent supports state-specific and generic callbacks with cleanup', () => {
-  const cbStateSpecific = jest.fn()
-  const cbGeneric = jest.fn()
-  const offEntered = jest.fn()
-  const offSwitched = jest.fn()
+  const cbStateSpecific = mock.fn()
+  const cbGeneric = mock.fn()
+  const offEntered = mock.fn()
+  const offSwitched = mock.fn()
   let onEntered
   let onSwitched
 
   const { useEffect, cleanups } = makeUseEffect()
   const { useStatebotEvent } = makeHooks({
-    Statebot: jest.fn(),
+    Statebot: mock.fn(),
     useEffect,
-    useState: () => ['idle', jest.fn()],
+    useState: () => ['idle', mock.fn()],
     useMemo: (cb) => cb(),
   })
 
   const bot = {
     onEntered: (state, cb) => {
-      expect(state).toBe('loading')
+      assert.equal(state, 'loading')
       onEntered = cb
       return offEntered
     },
@@ -119,16 +121,16 @@ test('useStatebotEvent supports state-specific and generic callbacks with cleanu
   onEntered('loading')
   onSwitched('done')
 
-  expect(cbStateSpecific).toHaveBeenCalledWith('loading')
-  expect(cbGeneric).toHaveBeenCalledWith('done')
+  assert.deepEqual(cbStateSpecific.mock.calls[0].arguments, ['loading'])
+  assert.deepEqual(cbGeneric.mock.calls[0].arguments, ['done'])
 
   cleanups.forEach((cb) => cb())
 
   onEntered('idle')
   onSwitched('idle')
 
-  expect(cbStateSpecific).toHaveBeenCalledTimes(1)
-  expect(cbGeneric).toHaveBeenCalledTimes(1)
-  expect(offEntered).toHaveBeenCalledTimes(1)
-  expect(offSwitched).toHaveBeenCalledTimes(1)
+  assert.equal(cbStateSpecific.mock.callCount(), 1)
+  assert.equal(cbGeneric.mock.callCount(), 1)
+  assert.equal(offEntered.mock.callCount(), 1)
+  assert.equal(offSwitched.mock.callCount(), 1)
 })

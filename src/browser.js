@@ -2,10 +2,10 @@
 // STATEBOT EXPORTS
 //
 
-import { Statebot, isStatebot } from './statebot'
-import { assertRoute, routeIsPossible } from '../assert'
-import { decomposeChart } from './parsing'
-import { mermaid } from './mermaid'
+import { Statebot, isStatebot } from './statebot.js'
+import { assertRoute, routeIsPossible } from '../assert/index.mjs'
+import { decomposeChart } from './parsing.js'
+import { mermaid } from './mermaid.js'
 import { makeHooks } from '../hooks/make-hooks.mjs'
 
 const { useEffect, useState, useMemo } = (global =>

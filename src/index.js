@@ -3,9 +3,9 @@
 // STATEBOT EXPORTS
 //
 
-import { Statebot, isStatebot } from './statebot'
-import { decomposeChart } from './parsing'
-import { mermaid } from './mermaid'
+import { Statebot, isStatebot } from './statebot.js'
+import { decomposeChart } from './parsing.js'
+import { mermaid } from './mermaid.js'
 
 export {
   Statebot,

@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 
 const bot = Statebot('simple', {
@@ -15,15 +17,15 @@ const bot = Statebot('simple', {
 test(`inState() expects at least one argument`, () => {
   bot.reset()
 
-  expect(() => bot.inState()).toThrow()
+  assert.throws(() => bot.inState())
 })
 
 test(`inState() returns true/false when passed a string`, () => {
   bot.reset()
 
-  expect(true).toEqual(bot.inState('idle'))
-  expect(false).toEqual(bot.inState('done'))
-  expect(false).toEqual(bot.inState('-'))
+  assert.deepEqual(true, bot.inState('idle'))
+  assert.deepEqual(false, bot.inState('done'))
+  assert.deepEqual(false, bot.inState('-'))
 })
 
 // inState('string', 'result-if-in-state')
@@ -31,9 +33,9 @@ test(`inState() returns true/false when passed a string`, () => {
 test(`inState() returns literal or null`, () => {
   bot.reset()
 
-  expect('okay').toEqual(bot.inState('idle', 'okay'))
-  expect(null).toEqual(bot.inState('done', 'okay'))
-  expect(null).toEqual(bot.inState('-', 'okay'))
+  assert.deepEqual('okay', bot.inState('idle', 'okay'))
+  assert.deepEqual(null, bot.inState('done', 'okay'))
+  assert.deepEqual(null, bot.inState('-', 'okay'))
 })
 
 test(`inState() returns fn-result or null`, () => {
@@ -41,9 +43,9 @@ test(`inState() returns fn-result or null`, () => {
 
   const Good = () => 'good'
 
-  expect('good').toEqual(bot.inState('idle', Good))
-  expect(null).toEqual(bot.inState('done', Good))
-  expect(null).toEqual(bot.inState('-', Good))
+  assert.deepEqual('good', bot.inState('idle', Good))
+  assert.deepEqual(null, bot.inState('done', Good))
+  assert.deepEqual(null, bot.inState('-', Good))
 })
 
 test(`inState() returns fn-result or null with arguments`, () => {
@@ -51,8 +53,8 @@ test(`inState() returns fn-result or null with arguments`, () => {
 
   const K = arg => arg
 
-  expect('arg-result').toEqual(bot.inState('idle', K, 'arg-result'))
-  expect(null).toEqual(bot.inState('-', K, 'arg-result'))
+  assert.deepEqual('arg-result', bot.inState('idle', K, 'arg-result'))
+  assert.deepEqual(null, bot.inState('-', K, 'arg-result'))
 })
 
 // inState(object)
@@ -69,19 +71,19 @@ test(`inState() can work with an object`, () => {
   }
 
   // idle
-  expect('one').toEqual(bot.inState(stateObject))
+  assert.deepEqual('one', bot.inState(stateObject))
   // failure
   bot.enter('failure')
-  expect('two').toEqual(bot.inState(stateObject))
+  assert.deepEqual('two', bot.inState(stateObject))
   // done
   bot.enter('done')
-  expect('arg-result').toEqual(bot.inState(stateObject, 'arg-result'))
+  assert.deepEqual('arg-result', bot.inState(stateObject, 'arg-result'))
 
   bot.reset()
 
   // success
   bot.enter('success')
-  expect('three').toEqual(bot.inState(stateObject))
+  assert.deepEqual('three', bot.inState(stateObject))
 
   const noResults = {
     'not-found-1': 'one',
@@ -91,7 +93,7 @@ test(`inState() can work with an object`, () => {
   }
 
   // no states found in object keys
-  expect(null).toEqual(bot.inState(noResults))
+  assert.deepEqual(null, bot.inState(noResults))
 })
 
 // InState(object)
@@ -109,19 +111,19 @@ test(`InState() can work with an object`, () => {
   const stateToValue = bot.InState(stateObject)
 
   // idle
-  expect('one').toEqual(stateToValue())
+  assert.deepEqual('one', stateToValue())
   // failure
   bot.enter('failure')
-  expect('two').toEqual(stateToValue())
+  assert.deepEqual('two', stateToValue())
   // done
   bot.enter('done')
-  expect('arg-result').toEqual(stateToValue('arg-result'))
+  assert.deepEqual('arg-result', stateToValue('arg-result'))
 
   bot.reset()
 
   // success
   bot.enter('success')
-  expect('three').toEqual(stateToValue())
+  assert.deepEqual('three', stateToValue())
 
   const noResults = {
     'not-found-1': 'one',
@@ -132,7 +134,7 @@ test(`InState() can work with an object`, () => {
   const stateToNoValue = bot.InState(noResults)
 
   // no states found in object keys
-  expect(null).toEqual(stateToNoValue())
+  assert.deepEqual(null, stateToNoValue())
 })
 
 // statesAvailableFromHere()
@@ -140,18 +142,18 @@ test(`InState() can work with an object`, () => {
 test(`statesAvailableFromHere() does the right thing`, () => {
   bot.reset()
 
-  expect(['failure', 'success']).toEqual(bot.statesAvailableFromHere())
-  expect(['done']).toEqual(bot.statesAvailableFromHere('failure'))
-  expect(['done']).toEqual(bot.statesAvailableFromHere('success'))
+  assert.deepEqual(['failure', 'success'], bot.statesAvailableFromHere())
+  assert.deepEqual(['done'], bot.statesAvailableFromHere('failure'))
+  assert.deepEqual(['done'], bot.statesAvailableFromHere('success'))
 
   bot.enter('failure')
-  expect(['done']).toEqual(bot.statesAvailableFromHere())
+  assert.deepEqual(['done'], bot.statesAvailableFromHere())
 
   bot.reset()
   bot.enter('success')
-  expect(['done']).toEqual(bot.statesAvailableFromHere())
-  expect([]).toEqual(bot.statesAvailableFromHere('done'))
+  assert.deepEqual(['done'], bot.statesAvailableFromHere())
+  assert.deepEqual([], bot.statesAvailableFromHere('done'))
 
   bot.enter('done')
-  expect([]).toEqual(bot.statesAvailableFromHere())
+  assert.deepEqual([], bot.statesAvailableFromHere())
 })

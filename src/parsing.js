@@ -22,8 +22,8 @@ export {
   decomposeRoute
 }
 
-import { uniq } from './utils'
-import { isTemplateLiteral, ArgTypeError } from './types'
+import { uniq } from './utils.js'
+import { isTemplateLiteral, ArgTypeError } from './types.js'
 
 const argTypeError = ArgTypeError('statebot.')
 

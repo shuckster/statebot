@@ -29,7 +29,7 @@ import {
   ReferenceCounter,
   Pausables,
   Once,
-} from './utils'
+} from './utils.js'
 
 import {
   isArray,
@@ -41,9 +41,9 @@ import {
   isAllStrings,
   isUndefined,
   ArgTypeError,
-} from './types'
+} from './types.js'
 
-import { decomposeChart, cxArrow } from './parsing'
+import { decomposeChart, cxArrow } from './parsing.js'
 
 function Statebot (name, options) {
   if (!isString(name)) {

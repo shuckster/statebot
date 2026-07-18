@@ -8,13 +8,7 @@
 
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var mitt = require('mitt');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var mitt__default = /*#__PURE__*/_interopDefaultLegacy(mitt);
 
 function isEventEmitter(obj) {
   return (
@@ -216,7 +210,7 @@ function Revokable (fn) {
 }
 function Pausables (startPaused, runFnWhenPaused) {
   runFnWhenPaused = runFnWhenPaused || function () {};
-  let paused = !!startPaused;
+  let paused = false;
   function Pausable (fn) {
     return (...args) => {
       if (paused) {
@@ -252,7 +246,8 @@ function ReferenceCounter (logPrefix, kind, description, ...expecting) {
     return { ..._refs }
   }
   function table () {
-    return Object.keys(_refs).sort()
+    return Object.keys(_refs)
+      .sort((a, b) => a - b)
       .map(key => [key, _refs[key]])
       .map(([ref, count]) => {
         return {
@@ -452,7 +447,7 @@ function Statebot (name, options) {
     historyLimit = 2
   } = options || {};
   const events = isUndefined(options.events)
-    ? wrapEmitter(mitt__default["default"]())
+    ? wrapEmitter(mitt())
     : isEventEmitter(options.events) && wrapEmitter(options.events);
   if (!events) {
     throw new TypeError(`\n${logPrefix}: Invalid event-emitter specified in options`)
@@ -474,7 +469,7 @@ function Statebot (name, options) {
     _console.warn(`${logPrefix}: Ignoring callback, paused`)
   );
   const transitionsFromEvents = Definitions();
-  const internalEvents = wrapEmitter(mitt__default["default"]());
+  const internalEvents = wrapEmitter(mitt());
   const emitInternalEvent = Pausable(internalEvents.emit);
   function onInternalEvent (eventName, cb) {
     internalEvents.on(eventName, cb);
@@ -843,7 +838,7 @@ function Statebot (name, options) {
           );
           return () => {
             removeEvent();
-            decreaseRefCounts.map(fn => fn());
+            decreaseRefCounts.forEach(fn => fn());
           }
         }
       }

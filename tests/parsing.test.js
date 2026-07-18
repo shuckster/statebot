@@ -1,4 +1,6 @@
 
+const { test } = require('node:test')
+const assert = require('node:assert/strict')
 const { Statebot } = require('../src/statebot')
 const { decomposeChart, decomposeRoute } = require('../src/parsing')
 const { routeIsPossible } = require('../assert/index.cjs')
@@ -102,25 +104,18 @@ SEMANTICALLY_IDENTICAL_CHARTS.forEach(chartTests => {
     const { states, routes, transitions } = decomposeChart(chartToTest)
 
     test(`${description} :: Semantically identical charts produce the same states/routes\n${chartToTest}\n`, () => {
+      // Order-independent equality (same members, same length)
+      assert.equal(states.length, decomposeTo.states.length)
+      assert.deepEqual([...states].sort(), [...decomposeTo.states].sort())
 
-      // States
-      expect(states.length)
-        .toEqual(decomposeTo.states.length)
-      expect(states)
-        .toEqual(expect.arrayContaining(decomposeTo.states))
+      assert.equal(routes.length, decomposeTo.routes.length)
+      assert.deepEqual([...routes].sort(), [...decomposeTo.routes].sort())
 
-      // Routes
-      expect(routes.length)
-        .toEqual(decomposeTo.routes.length)
-      expect(routes)
-        .toEqual(expect.arrayContaining(decomposeTo.routes))
-
-      // Transitions
-      expect(transitions.length)
-        .toEqual(decomposeTo.transitions.length)
-      expect(transitions)
-        .toEqual(expect.arrayContaining(decomposeTo.transitions))
-
+      assert.equal(transitions.length, decomposeTo.transitions.length)
+      assert.deepEqual(
+        transitions.map(t => t.join('->')).sort(),
+        decomposeTo.transitions.map(t => t.join('->')).sort()
+      )
     })
 
     if (!assertions) {
@@ -132,13 +127,13 @@ SEMANTICALLY_IDENTICAL_CHARTS.forEach(chartTests => {
 
     possibleRoutes.forEach(route => {
       test(`${description} :: route possible :: ${route}`, () => {
-        expect(true).toEqual(routeIsPossible(bot, route))
+        assert.deepEqual(true, routeIsPossible(bot, route))
       })
     })
 
     impossibleRoutes.forEach(route => {
       test(`${description} :: route not possible :: ${route}`, () => {
-        expect(false).toEqual(routeIsPossible(bot, route))
+        assert.deepEqual(false, routeIsPossible(bot, route))
       })
     })
   })
@@ -180,7 +175,7 @@ CHARTS_WITH_EMPTY_STRINGS_FOR_STATES_SHOULD_BE_FINE.forEach(regressionTest => {
   const { states } = decomposeChart(chart)
 
   test(`decomposeChart() :: empty-strings are valid states\n${chart}`, () => {
-    expect(states).toEqual(testStates)
+    assert.deepEqual(states, testStates)
   })
 })
 
@@ -199,6 +194,6 @@ const DECOMPOSED_ROUTES = [
 
 DECOMPOSED_ROUTES.forEach(({ route, expectedStates, description }) => {
   test(`decomposeRoute() :: ${description}\n${route}`,
-    () => expect(decomposeRoute(route)).toEqual(expectedStates)
+    () => assert.deepEqual(decomposeRoute(route), expectedStates)
   )
 })
